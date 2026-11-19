@@ -1,0 +1,123 @@
+{
+  "type": "purchase",
+  "number": "PB-STOCK-001",
+  "date": "23-10-2026",
+  "dueDate": "06-11-2026",
+  "exchangeRate": 1,
+  "applyApplicableTaxes": false,
+  "roundOffApplicable": false,
+  "updateAccountDetails": false,
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-vendor-three",
+    "name": "API Doc Vendor Three",
+    "customerName": "API Doc Vendor Three",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "billingDetails": {
+      "name": "API Doc Vendor Three",
+      "address": [
+        "addr"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Vendor Three",
+      "address": [
+        "addr"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "entries": [
+    {
+      "date": "23-10-2026",
+      "description": "Buy gadgets",
+      "voucherType": "purchase",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "purchases",
+            "name": "Purchases"
+          },
+          "amount": {
+            "amountForAccount": 200,
+            "amountForCompany": 200
+          },
+          "stock": {
+            "name": "API Doc Gadget",
+            "uniqueName": "apidoc-gadget",
+            "quantity": 2,
+            "rate": {
+              "rateForAccount": 100
+            },
+            "stockUnit": {
+              "code": "pcs",
+              "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+            },
+            "variant": {
+              "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2",
+              "name": "API Doc Gadget"
+            }
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "warehouse": {
+    "name": "Gidd warehouse",
+    "uniqueName": "xbq1792673424418"
+  },
+  "templateDetails": {
+    "other": {}
+  }
+}

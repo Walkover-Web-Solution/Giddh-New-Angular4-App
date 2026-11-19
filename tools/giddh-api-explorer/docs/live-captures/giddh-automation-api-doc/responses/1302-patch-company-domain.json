@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Domain not found with uniqueName placeholder.",
+  "code": "INVALID_REQUEST"
+}

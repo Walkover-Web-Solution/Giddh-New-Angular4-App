@@ -1,0 +1,214 @@
+{
+  "status": "success",
+  "body": {
+    "number": "261023-4",
+    "type": "sales",
+    "uniqueName": "vkbcg1792733290253",
+    "isCustomInvoiceNo": false,
+    "isTouristSchemeApplicable": false,
+    "mergePB": false,
+    "passportNumber": null,
+    "withPay": false,
+    "forNewSubscription": false,
+    "subVoucher": null,
+    "attachedFiles": [],
+    "attachedFileName": null,
+    "roundOffApplicable": false,
+    "updateAccountDetails": false,
+    "copyBillingAddressToShippingAddress": true,
+    "readDetailsFromAccount": null,
+    "tallyUniqueId": null,
+    "templateDetails": null,
+    "entryUniqueNames": [],
+    "ecommerceDetails": null,
+    "balanceTotal": {
+      "amountForAccount": 80.0,
+      "amountForCompany": 80.0
+    },
+    "gainLoss": 0.0,
+    "status": "UNPAID",
+    "subTotal": {
+      "amountForAccount": 80.0,
+      "amountForCompany": 80.0
+    },
+    "discountTotal": null,
+    "taxTotal": null,
+    "roundOffTotal": null,
+    "otherTaxTotal": null,
+    "voucherTotal": {
+      "amountForAccount": 80.0,
+      "amountForCompany": 80.0
+    },
+    "grandTotal": {
+      "amountForAccount": 80.0,
+      "amountForCompany": 80.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Eighty Only",
+      "amountForCompany": "Eighty Only"
+    },
+    "ewayBillDetails": null,
+    "roundOffAccount": null,
+    "items": [],
+    "referenceVoucher": null,
+    "deposits": null,
+    "deposit": null,
+    "adjustments": [],
+    "valuesInAccountCurrency": true,
+    "exchangeRate": 1.0,
+    "purchaseOrders": null,
+    "purchaseOrderDetails": null,
+    "isEInvoiceGenerated": false,
+    "paymentLink": null,
+    "viewInvoiceLink": "https://testportal.giddh.com/GiddhAutomationAPIDOC/in/invoice/preview?source=_link&voucherUniqueName=vkbcg1792733290253&companyUniqueName=giddhain1792673422178091xos&accountUniqueName=apidoc-customer-three",
+    "generateEInvoice": null,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "documentItems": [],
+    "invoiceStatus": null,
+    "multiCurrency": false,
+    "encodedData": null,
+    "token": null,
+    "salesPerson": {},
+    "fileExtention": null,
+    "fileName": null,
+    "recurrencePreviewRequest": null,
+    "recurringVoucherUniqueName": null,
+    "gstUnitMap": null,
+    "date": "23-10-2026",
+    "cashVoucher": false,
+    "dueDate": "06-11-2026",
+    "einvoiceGenerated": false,
+    "touristSchemeApplicable": false,
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      }
+    },
+    "account": {
+      "name": "API Doc Customer Three",
+      "uniqueName": "apidoc-customer-three",
+      "customerName": "API Doc Customer Three",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Customer Three",
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Customer Three",
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "placeOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "hkuyk1792733290200",
+        "description": "CN adjust target",
+        "date": "23-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Sales",
+              "uniqueName": "sales"
+            },
+            "amount": {
+              "amountForAccount": 80.0,
+              "amountForCompany": 80.0
+            },
+            "taxableValue": {
+              "amountForAccount": 80.0,
+              "amountForCompany": 80.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 80.0,
+          "amountForCompany": 80.0
+        },
+        "entryTotal": {
+          "amountForAccount": 80.0,
+          "amountForCompany": 80.0
+        },
+        "grandTotal": {
+          "amountForAccount": 80.0,
+          "amountForCompany": 80.0
+        },
+        "salesPerson": {},
+        "usedQuantity": 0
+      }
+    ],
+    "warehouse": null
+  }
+}

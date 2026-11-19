@@ -1,0 +1,207 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "voucherNumber": "DR-261022-2",
+        "account": {
+          "name": "API Doc Vendor Two",
+          "uniqueName": "apidoc-vendor-two",
+          "customerName": "API Doc Vendor Two",
+          "email": "vendor.two@example.com",
+          "mobileNumber": "919876543230",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D2ZN",
+            "gstNumber": "23AAACC1206D2ZN",
+            "address": [
+              "API Doc Vendor Two address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D2ZN",
+            "gstNumber": "23AAACC1206D2ZN",
+            "address": [
+              "API Doc Vendor Two address"
+            ]
+          }
+        },
+        "uniqueName": "wbljg1792675104958",
+        "balanceStatus": "PAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 15.0,
+          "amountForCompany": 15.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "adjustments": [
+          {
+            "voucherType": "purchase",
+            "subVoucher": null,
+            "voucherNumber": "PB-API-001",
+            "unadjustedAmount": {
+              "amountForAccount": 65.0,
+              "amountForCompany": 65.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 80.0,
+              "amountForCompany": 80.0
+            },
+            "uniqueName": "no1km1792675126040",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 15.0,
+              "amountForCompany": 15.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "DR-261022-1",
+        "account": {
+          "name": "API Doc Vendor Two",
+          "uniqueName": "apidoc-vendor-two",
+          "customerName": "API Doc Vendor Two",
+          "email": "vendor.two@example.com",
+          "mobileNumber": "919876543230",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D2ZN",
+            "gstNumber": "23AAACC1206D2ZN",
+            "address": [
+              "API Doc Vendor Two address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D2ZN",
+            "gstNumber": "23AAACC1206D2ZN",
+            "address": [
+              "API Doc Vendor Two address"
+            ]
+          }
+        },
+        "uniqueName": "flni01792675104491",
+        "balanceStatus": "PAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 40.0,
+          "amountForCompany": 40.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "adjustments": [
+          {
+            "voucherType": "purchase",
+            "subVoucher": null,
+            "voucherNumber": "PB-API-001",
+            "unadjustedAmount": {
+              "amountForAccount": 40.0,
+              "amountForCompany": 40.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 80.0,
+              "amountForCompany": 80.0
+            },
+            "uniqueName": "no1km1792675126040",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 40.0,
+              "amountForCompany": 40.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      }
+    ],
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "fromDate": "01-04-2026",
+    "toDate": "31-03-2027"
+  }
+}

@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"bwhPELQ82D9F","description":"POST /company/{companyUniqueName}/uk/payment/initiate. Part of the Initiate APIs in Giddh. Requires Auth-Key or Session-Id.","params":{}}

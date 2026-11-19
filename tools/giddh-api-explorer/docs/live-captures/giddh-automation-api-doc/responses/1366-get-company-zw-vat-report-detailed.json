@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "body": {
+    "sections": [
+      {
+        "section": "Output VAT Total",
+        "order": 1,
+        "vatTotal": 0.0,
+        "sections": []
+      },
+      {
+        "section": "Input VAT Total",
+        "order": 2,
+        "vatTotal": 0.0,
+        "sections": []
+      },
+      {
+        "section": "VAT Amount Payable/Refundable",
+        "order": 3,
+        "vatTotal": 0.0,
+        "sections": []
+      }
+    ],
+    "currency": {
+      "code": "BWP",
+      "symbol": "P"
+    },
+    "currencyList": [
+      "Dollar",
+      "Cents"
+    ],
+    "page": 1,
+    "count": 3,
+    "totalPages": 1,
+    "totalItems": 3,
+    "from": "01-04-2026",
+    "to": "31-03-2027"
+  }
+}

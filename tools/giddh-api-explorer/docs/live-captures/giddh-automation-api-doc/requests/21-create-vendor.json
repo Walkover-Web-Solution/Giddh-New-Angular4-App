@@ -1,0 +1,25 @@
+{
+  "name": "API Doc Vendor One",
+  "uniqueName": "apidoc-vendor-one",
+  "email": "vendor.one@example.com",
+  "mobileNo": "919876543211",
+  "mobileCode": "91",
+  "openingBalanceType": "CREDIT",
+  "openingBalance": 0,
+  "openingBalanceDate": "01-04-2026",
+  "currency": "INR",
+  "country": {
+    "countryCode": "IN"
+  },
+  "addresses": [
+    {
+      "stateCode": "MP",
+      "stateName": "Madhya Pradesh",
+      "address": "Vendor address line 1",
+      "gstNumber": "23AAACC1206D2ZN",
+      "pinCode": "484224",
+      "isDefault": true,
+      "isComposite": false
+    }
+  ]
+}

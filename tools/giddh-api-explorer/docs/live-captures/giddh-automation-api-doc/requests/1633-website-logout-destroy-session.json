@@ -1,0 +1,8 @@
+{
+  "method": "DELETE",
+  "path": "/users/divyanshu@whozzat.com/destroy-session",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website",
+  "note": "BLACKLIST for automation. Website logout redirects to region login. Session-Id required."
+}

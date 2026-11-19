@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "fromBatchUniqueName and toBatchUniqueName are mandatory.",
+  "code": "INVALID_REQUEST"
+}

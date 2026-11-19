@@ -1,0 +1,14 @@
+{
+  "status": "complete",
+  "updateMethod": "user-docstar MCP update_endpoint",
+  "orgId": "83427",
+  "collectionId": "-Jey39dCAAyx",
+  "rootParentId": "u9XDYe5Zc_ds",
+  "total": 720,
+  "recordedOk": 720,
+  "nextIndex": 720,
+  "failedCount": 0,
+  "failed": [],
+  "note": "production v2 reapply complete — publish_pages org 83427 collection -Jey39dCAAyx root u9XDYe5Zc_ds + all patch endpointIds",
+  "completedAt": "2026-10-29T08:22:53.220Z"
+}

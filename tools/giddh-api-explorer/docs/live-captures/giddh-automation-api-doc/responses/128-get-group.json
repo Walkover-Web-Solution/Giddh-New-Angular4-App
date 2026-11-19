@@ -1,0 +1,46 @@
+{
+  "status": "success",
+  "body": {
+    "tagNames": null,
+    "rowNum": null,
+    "name": "API Doc Custom Assets",
+    "fixed": false,
+    "applicableTaxes": [],
+    "description": "Live capture custom group",
+    "closingBalanceTriggerAmountType": null,
+    "closingBalanceTriggerAmount": null,
+    "category": "assets",
+    "emails": [],
+    "createdAt": "23-10-2026 05:26:02",
+    "customFields": null,
+    "synonyms": null,
+    "updatedBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "inheritedDiscounts": [],
+    "updatedAt": "23-10-2026 05:26:02",
+    "hsnNumber": null,
+    "ssnNumber": null,
+    "createdBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "applicableDiscounts": [],
+    "uniqueName": "apidoc-custom-assets",
+    "parentGroups": [
+      {
+        "name": "Current Assets",
+        "uniqueName": "currentassets"
+      }
+    ]
+  }
+}

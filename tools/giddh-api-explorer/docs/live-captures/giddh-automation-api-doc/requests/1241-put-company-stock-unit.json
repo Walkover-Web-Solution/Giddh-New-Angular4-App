@@ -1,0 +1,8 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/stock-unit/WfqOHXSFugRFzJ8HDrLT",
+  "body": {
+    "name": "temp",
+    "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT"
+  }
+}

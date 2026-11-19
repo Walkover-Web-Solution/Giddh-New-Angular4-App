@@ -1,0 +1,183 @@
+{
+  "orgId": "83427",
+  "endpointId": "Ofhv2LnwOaBh",
+  "description": "Get Daybook Export V3With Export Settings. Part of the Daybook V2 APIs in Giddh. Requires Auth-Key or Session-Id.",
+  "params": {
+    "from": {
+      "checked": "true",
+      "value": "",
+      "description": "Range start date (dd-MM-yyyy).",
+      "required": "false"
+    },
+    "to": {
+      "checked": "true",
+      "value": "",
+      "description": "Range end date (dd-MM-yyyy).",
+      "required": "false"
+    },
+    "format": {
+      "checked": "true",
+      "value": "xlsx",
+      "description": "Response or export format. Default: xlsx.",
+      "required": "false"
+    },
+    "type": {
+      "checked": "true",
+      "value": "view-detailed",
+      "description": "Voucher or entity type discriminator for the list. Default: view-detailed.",
+      "required": "false"
+    },
+    "fileType": {
+      "checked": "true",
+      "value": "base64",
+      "description": "Output file type. Default: base64.",
+      "required": "false"
+    },
+    "sort": {
+      "checked": "true",
+      "value": "desc",
+      "description": "Sort direction. Allowed values: asc, desc. Default: desc.",
+      "required": "false"
+    },
+    "branchUniqueName": {
+      "checked": "true",
+      "value": "",
+      "description": "Branch uniqueName; omit for default company branch behaviour.",
+      "required": "false"
+    }
+  },
+  "body": {
+    "type": "JSON",
+    "raw": {
+      "rawType": "JSON",
+      "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+    }
+  },
+  "bodyDescription": {
+    "groupUniqueNames": {
+      "type": "array",
+      "description": "Array of group unique names values.",
+      "value": []
+    },
+    "accountUniqueNames": {
+      "type": "array",
+      "description": "Array of account unique names values.",
+      "value": []
+    },
+    "salesPersonUniqueNames": {
+      "type": "array",
+      "description": "Array of sales person unique names values.",
+      "value": []
+    },
+    "includeSalesPersons": {
+      "type": "boolean",
+      "description": "When true, applies the include sales persons filter or flag.",
+      "value": false
+    },
+    "includeAmount": {
+      "type": "boolean",
+      "description": "When true, applies the include amount filter or flag.",
+      "value": false
+    },
+    "amount": {
+      "type": "number",
+      "description": "Monetary amount in company currency unless noted.",
+      "value": 0
+    },
+    "amountGreaterThan": {
+      "type": "boolean",
+      "description": "When true, applies the amount greater than filter or flag.",
+      "value": false
+    },
+    "amountLessThan": {
+      "type": "boolean",
+      "description": "When true, applies the amount less than filter or flag.",
+      "value": false
+    },
+    "amountEqualTo": {
+      "type": "boolean",
+      "description": "When true, applies the amount equal to filter or flag.",
+      "value": false
+    },
+    "includeDescription": {
+      "type": "boolean",
+      "description": "When true, applies the include description filter or flag.",
+      "value": false
+    },
+    "description": {
+      "type": "string",
+      "description": "Free-text description.",
+      "value": "string"
+    },
+    "vouchers": {
+      "type": "array",
+      "description": "Array of vouchers values.",
+      "value": []
+    },
+    "includeVouchers": {
+      "type": "boolean",
+      "description": "When true, applies the include vouchers filter or flag.",
+      "value": false
+    },
+    "includeParticulars": {
+      "type": "boolean",
+      "description": "When true, applies the include particulars filter or flag.",
+      "value": false
+    },
+    "particulars": {
+      "type": "array",
+      "description": "Array of particulars values.",
+      "value": []
+    },
+    "isInvoiceGenerated": {
+      "type": "boolean",
+      "description": "When true, applies the is invoice generated filter or flag.",
+      "value": false
+    },
+    "includeTag": {
+      "type": "boolean",
+      "description": "When true, applies the include tag filter or flag.",
+      "value": false
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tag names (array).",
+      "value": []
+    },
+    "chequeNumber": {
+      "type": "string",
+      "description": "Cheque number.",
+      "value": "string"
+    },
+    "dateOnCheque": {
+      "type": "string",
+      "description": "Date on cheque.",
+      "value": "string"
+    },
+    "inventory": {
+      "type": "string",
+      "description": "Inventory.",
+      "value": "string"
+    },
+    "cancelledEntries": {
+      "type": "boolean",
+      "description": "When true, applies the cancelled entries filter or flag.",
+      "value": false
+    },
+    "balanceTypeAsSign": {
+      "type": "boolean",
+      "description": "When true, applies the balance type as sign filter or flag.",
+      "value": false
+    },
+    "chequeDate": {
+      "type": "string",
+      "description": "Cheque date.",
+      "value": "01-04-2025"
+    },
+    "selectAllFields": {
+      "type": "array",
+      "description": "Array of select all fields values.",
+      "value": []
+    }
+  }
+}

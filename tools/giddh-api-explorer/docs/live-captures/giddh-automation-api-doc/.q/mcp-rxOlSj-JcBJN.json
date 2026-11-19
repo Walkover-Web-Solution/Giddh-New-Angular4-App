@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"rxOlSj-JcBJN","description":"Verify Domain. Part of the Verify Domain APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"domainUniqueName":{"checked":"true","value":"","description":"Domain unique name query parameter. Required."}},"body":{"type":"none"}}}

@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "name": "Giddh Automation API DOC",
+        "uniqueName": "giddhautomationapidoc",
+        "alias": "Gidd",
+        "warehouses": [
+          {
+            "name": "Gidd warehouse",
+            "isArchived": false,
+            "uniqueName": "xbq1792673424418",
+            "taxNumber": "23AAACC1206D2ZN"
+          }
+        ],
+        "isCompany": false,
+        "isArchived": false,
+        "isConsolidatedBranch": false
+      },
+      {
+        "name": "Giddh Automation API DOC",
+        "uniqueName": "giddhain1792673422178091xos",
+        "warehouses": [
+          {
+            "name": "Gidd warehouse",
+            "isArchived": false,
+            "uniqueName": "xbq1792673424418",
+            "taxNumber": "23AAACC1206D2ZN"
+          }
+        ],
+        "isCompany": true
+      }
+    ],
+    "size": 2
+  }
+}

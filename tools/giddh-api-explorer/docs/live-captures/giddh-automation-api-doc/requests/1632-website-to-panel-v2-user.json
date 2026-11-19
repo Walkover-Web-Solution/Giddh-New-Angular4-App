@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "path": "/v2/user",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website",
+  "note": "Header Session-Id: <SESSION redacted>. Origin books.giddh.com. Query t/z/lang optional."
+}

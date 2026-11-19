@@ -1,0 +1,972 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "voucherNumber": "261023-6",
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three",
+          "customerName": "API Doc Customer Three",
+          "email": "customer.three@example.com",
+          "mobileNumber": "919876543221",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          }
+        },
+        "uniqueName": "zzguo1792733957208",
+        "balanceStatus": "UNPAID",
+        "voucherDate": "23-10-2026",
+        "grandTotal": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "balanceDue": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "07-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261023-5",
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three",
+          "customerName": "API Doc Customer Three",
+          "email": "customer.three@example.com",
+          "mobileNumber": "919876543221",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          }
+        },
+        "uniqueName": "vitmq1792733952798",
+        "balanceStatus": "UNPAID",
+        "voucherDate": "23-10-2026",
+        "grandTotal": {
+          "amountForAccount": 99.0,
+          "amountForCompany": 99.0
+        },
+        "balanceDue": {
+          "amountForAccount": 99.0,
+          "amountForCompany": 99.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "07-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 99.0,
+          "amountForCompany": 99.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261023-4",
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three",
+          "customerName": "API Doc Customer Three",
+          "email": "customer.three@example.com",
+          "mobileNumber": "919876543221",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          }
+        },
+        "uniqueName": "vkbcg1792733290253",
+        "balanceStatus": "PAID",
+        "voucherDate": "23-10-2026",
+        "grandTotal": {
+          "amountForAccount": 80.0,
+          "amountForCompany": 80.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "gainLoss": 0.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "06-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [
+          {
+            "voucherType": "credit note",
+            "subVoucher": null,
+            "voucherNumber": "CR-261023-1",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 80.0,
+              "amountForCompany": 80.0
+            },
+            "uniqueName": "xmh271792733290665",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 80.0,
+              "amountForCompany": 80.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "23-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261023-3",
+        "account": {
+          "name": "API Doc Walk-in Customer",
+          "uniqueName": "apidoc-customer-b2c",
+          "customerName": "API Doc Walk-in Customer",
+          "email": "walkin@example.com",
+          "mobileNumber": "919876543222",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Walk-in Customer address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Walk-in Customer address"
+            ]
+          }
+        },
+        "uniqueName": "jtovv1792733166464",
+        "balanceStatus": "CANCEL",
+        "voucherDate": "23-10-2026",
+        "grandTotal": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "balanceDue": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "06-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261023-2",
+        "account": {
+          "name": "Cash",
+          "uniqueName": "cash",
+          "customerName": "Cash",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "",
+            "gstNumber": "23AAACC1206D2ZN",
+            "pincode": "484224",
+            "address": [
+              "My new address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "",
+            "gstNumber": "23AAACC1206D2ZN",
+            "pincode": "484224",
+            "address": [
+              "My new address"
+            ]
+          }
+        },
+        "uniqueName": "lfptf1792730980051",
+        "balanceStatus": "PAID",
+        "voucherDate": "23-10-2026",
+        "grandTotal": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "gainLoss": 0.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "isCashInvoice": true,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": true
+      },
+      {
+        "voucherNumber": "261023-1",
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two",
+          "customerName": "API Doc Customer Two",
+          "email": "customer.two@example.com",
+          "mobileNumber": "919876543220",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "API Doc Customer Two address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "API Doc Customer Two address"
+            ]
+          }
+        },
+        "uniqueName": "bvvvm1792730977197",
+        "balanceStatus": "PAID",
+        "voucherDate": "23-10-2026",
+        "grandTotal": {
+          "amountForAccount": 300.0,
+          "amountForCompany": 300.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "gainLoss": 0.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "06-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [
+          {
+            "voucherType": "receipt",
+            "subVoucher": null,
+            "voucherNumber": "RCPT-261023-1",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 300.0,
+              "amountForCompany": 300.0
+            },
+            "uniqueName": "ncwkd1792731015079",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 300.0,
+              "amountForCompany": 300.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "23-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261022-5",
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one",
+          "customerName": "API Doc Customer One",
+          "email": "customer.one@example.com",
+          "mobileNumber": "919876543210",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "Customer address line 1"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "Customer address line 1"
+            ]
+          }
+        },
+        "uniqueName": "iiy341792675102708",
+        "balanceStatus": "PAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 500.0,
+          "amountForCompany": 500.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "gainLoss": 0.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "05-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [
+          {
+            "voucherType": "receipt",
+            "subVoucher": null,
+            "voucherNumber": "RCPT-261022-2",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 200.0,
+              "amountForCompany": 200.0
+            },
+            "uniqueName": "xinxa1792675103110",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 200.0,
+              "amountForCompany": 200.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          },
+          {
+            "voucherType": "receipt",
+            "subVoucher": null,
+            "voucherNumber": "RCPT-261023-2",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 300.0,
+              "amountForCompany": 300.0
+            },
+            "uniqueName": "f4bjw1792733243977",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 300.0,
+              "amountForCompany": 300.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "23-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261022-4",
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three",
+          "customerName": "API Doc Customer Three",
+          "email": "customer.three@example.com",
+          "mobileNumber": "919876543221",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "address": [
+              "API Doc Customer Three address"
+            ]
+          }
+        },
+        "uniqueName": "zqosy1792675102358",
+        "balanceStatus": "UNPAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 175.5,
+          "amountForCompany": 175.5
+        },
+        "balanceDue": {
+          "amountForAccount": 175.5,
+          "amountForCompany": 175.5
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "05-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 175.5,
+          "amountForCompany": 175.5
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261022-3",
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two",
+          "customerName": "API Doc Customer Two",
+          "email": "customer.two@example.com",
+          "mobileNumber": "919876543220",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "API Doc Customer Two address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "API Doc Customer Two address"
+            ]
+          }
+        },
+        "uniqueName": "rrftm1792675101875",
+        "balanceStatus": "PARTIAL-PAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 250.0,
+          "amountForCompany": 250.0
+        },
+        "balanceDue": {
+          "amountForAccount": 175.0,
+          "amountForCompany": 175.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "20-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 175.0,
+          "amountForCompany": 175.0
+        },
+        "status": "NA",
+        "adjustments": [
+          {
+            "voucherType": "credit note",
+            "subVoucher": null,
+            "voucherNumber": "CR-261022-1",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 50.0,
+              "amountForCompany": 50.0
+            },
+            "uniqueName": "fpzy81792675103770",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 50.0,
+              "amountForCompany": 50.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          },
+          {
+            "voucherType": "credit note",
+            "subVoucher": null,
+            "voucherNumber": "CR-261022-2",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 25.0,
+              "amountForCompany": 25.0
+            },
+            "uniqueName": "5pdez1792675104092",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 25.0,
+              "amountForCompany": 25.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261022-2",
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one",
+          "customerName": "API Doc Customer One",
+          "email": "customer.one@example.com",
+          "mobileNumber": "919876543210",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "Customer address line 1"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "Customer address line 1"
+            ]
+          }
+        },
+        "uniqueName": "llvtc1792674364760",
+        "balanceStatus": "UNPAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "balanceDue": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "05-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      },
+      {
+        "voucherNumber": "261022-1",
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one",
+          "customerName": "API Doc Customer One",
+          "email": "customer.one@example.com",
+          "mobileNumber": "919876543210",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "Customer address line 1"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D1ZM",
+            "gstNumber": "23AAACC1206D1ZM",
+            "address": [
+              "Customer address line 1"
+            ]
+          }
+        },
+        "uniqueName": "5zkmf1792674363694",
+        "balanceStatus": "PAID",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "gainLoss": 0.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "05-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [
+          {
+            "voucherType": "receipt",
+            "subVoucher": null,
+            "voucherNumber": "RCPT-261022-1",
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            },
+            "uniqueName": "vwvyr1792674404154",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          }
+        ],
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      }
+    ],
+    "page": 1,
+    "count": 11,
+    "totalPages": 1,
+    "totalItems": 11,
+    "fromDate": "01-04-2026",
+    "toDate": "23-10-2026"
+  }
+}

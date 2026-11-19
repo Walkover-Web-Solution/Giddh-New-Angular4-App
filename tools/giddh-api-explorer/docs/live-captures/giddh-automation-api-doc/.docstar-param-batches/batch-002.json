@@ -1,0 +1,2228 @@
+[
+  {
+    "endpointId": "gp88iao75REK",
+    "name": "Add Due Amount Range",
+    "catalogKey": "POST /company/{companyUniqueName}/due-days-range",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "gp88iao75REK",
+      "description": "Add Due Amount Range. Part of the Due Days Range APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "vendorCustomerType": {
+          "checked": "true",
+          "value": "CUSTOMER",
+          "description": "Vendor customer type query parameter. Default: CUSTOMER. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "dMYl-XuflTAt",
+    "name": "Add Payment Method",
+    "catalogKey": "POST /v2/subscription/add-payment-method",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "dMYl-XuflTAt",
+      "description": "Add Payment Method. Part of the Add Payment Method APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"planUniqueName\": \"string\",\n  \"balance\": 0,\n  \"userUniqueName\": \"string\",\n  \"expireDate\": \"string\",\n  \"status\": \"string\",\n  \"subscriptionId\": \"string\",\n  \"duration\": \"string\",\n  \"licenceKey\": \"string\",\n  \"promoCode\": \"string\",\n  \"addOnTransactions\": 0,\n  \"paymentProvider\": \"CASHFREE\",\n  \"billingAccount\": \"string\",\n  \"returnUrl\": \"string\",\n  \"affiliateId\": \"string\",\n  \"trialExtendedDays\": 0,\n  \"paymentId\": \"string\",\n  \"amountPaid\": 0,\n  \"razorpaySignature\": \"string\",\n  \"razorpayOrderId\": \"string\",\n  \"payuTransactionId\": \"string\",\n  \"paymentIntentId\": \"string\",\n  \"paypalOrderId\": \"string\",\n  \"payNow\": false,\n  \"taxTotal\": 0,\n  \"bankDetails\": \"string\",\n  \"razorpayAuthType\": \"CARD\",\n  \"countryCode\": \"string\",\n  \"prePaid\": false,\n  \"prepaidUniqueName\": \"string\",\n  \"includeNextBill\": false,\n  \"googlePayPurchaseToken\": \"string\",\n  \"providerPlanName\": \"string\",\n  \"autoPay\": false,\n  \"renew\": false,\n  \"walletAmount\": 0,\n  \"reactivateFromSubscriptionId\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "planUniqueName": {
+          "type": "string",
+          "description": "Plan unique name. Optional.",
+          "value": "string"
+        },
+        "balance": {
+          "type": "number",
+          "description": "Balance. Optional.",
+          "value": 0
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "expireDate": {
+          "type": "string",
+          "description": "Expire date. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Subscription id. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration. Mandatory.",
+          "value": "string"
+        },
+        "licenceKey": {
+          "type": "string",
+          "description": "Licence key. Optional.",
+          "value": "string"
+        },
+        "promoCode": {
+          "type": "string",
+          "description": "Promo code. Optional.",
+          "value": "string"
+        },
+        "addOnTransactions": {
+          "type": "string",
+          "description": "Add on transactions. Optional.",
+          "value": 0
+        },
+        "paymentProvider": {
+          "type": "string",
+          "description": "Payment provider. Allowed values: CASHFREE, STRIPE, RAZORPAY, GOCARDLESS, PAYPAL, APPLE, GOOGLEPAY_ANDROID, PAYU. Optional.",
+          "value": "CASHFREE",
+          "allowedValues": [
+            "CASHFREE",
+            "STRIPE",
+            "RAZORPAY",
+            "GOCARDLESS",
+            "PAYPAL",
+            "APPLE",
+            "GOOGLEPAY_ANDROID",
+            "PAYU"
+          ]
+        },
+        "billingAccount": {
+          "type": "string",
+          "description": "Billing account. Optional.",
+          "value": "string"
+        },
+        "returnUrl": {
+          "type": "string",
+          "description": "Return url. Optional.",
+          "value": "string"
+        },
+        "affiliateId": {
+          "type": "string",
+          "description": "Affiliate id. Optional.",
+          "value": "string"
+        },
+        "trialExtendedDays": {
+          "type": "number",
+          "description": "Trial extended days. Optional.",
+          "value": 0
+        },
+        "paymentId": {
+          "type": "string",
+          "description": "Payment id. Optional.",
+          "value": "string"
+        },
+        "amountPaid": {
+          "type": "number",
+          "description": "Amount paid. Optional.",
+          "value": 0
+        },
+        "razorpaySignature": {
+          "type": "string",
+          "description": "Razorpay signature. Optional.",
+          "value": "string"
+        },
+        "razorpayOrderId": {
+          "type": "string",
+          "description": "Razorpay order id. Optional.",
+          "value": "string"
+        },
+        "payuTransactionId": {
+          "type": "string",
+          "description": "Payu transaction id. Optional.",
+          "value": "string"
+        },
+        "paymentIntentId": {
+          "type": "string",
+          "description": "Payment intent id. Optional.",
+          "value": "string"
+        },
+        "paypalOrderId": {
+          "type": "string",
+          "description": "Paypal order id. Optional.",
+          "value": "string"
+        },
+        "payNow": {
+          "type": "boolean",
+          "description": "When true, applies the pay now filter or flag. Optional.",
+          "value": false
+        },
+        "taxTotal": {
+          "type": "number",
+          "description": "Tax total. Optional.",
+          "value": 0
+        },
+        "bankDetails": {
+          "type": "string",
+          "description": "Bank details. Optional.",
+          "value": "string"
+        },
+        "razorpayAuthType": {
+          "type": "string",
+          "description": "Razorpay auth type. Allowed values: CARD, NETBANKING, AADHAAR, UPI. Optional.",
+          "value": "CARD",
+          "allowedValues": [
+            "CARD",
+            "NETBANKING",
+            "AADHAAR",
+            "UPI"
+          ]
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "prePaid": {
+          "type": "boolean",
+          "description": "When true, applies the pre paid filter or flag. Optional.",
+          "value": false
+        },
+        "prepaidUniqueName": {
+          "type": "string",
+          "description": "Prepaid unique name. Optional.",
+          "value": "string"
+        },
+        "includeNextBill": {
+          "type": "boolean",
+          "description": "When true, applies the include next bill filter or flag. Optional.",
+          "value": false
+        },
+        "googlePayPurchaseToken": {
+          "type": "string",
+          "description": "Google pay purchase token. Optional.",
+          "value": "string"
+        },
+        "providerPlanName": {
+          "type": "string",
+          "description": "Provider plan name. Optional.",
+          "value": "string"
+        },
+        "autoPay": {
+          "type": "boolean",
+          "description": "When true, applies the auto pay filter or flag. Optional.",
+          "value": false
+        },
+        "renew": {
+          "type": "boolean",
+          "description": "When true, applies the renew filter or flag. Optional.",
+          "value": false
+        },
+        "walletAmount": {
+          "type": "number",
+          "description": "Wallet amount. Optional.",
+          "value": 0
+        },
+        "reactivateFromSubscriptionId": {
+          "type": "string",
+          "description": "Reactivate from subscription id. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "uj7nf3_GLGIZ",
+    "name": "Add Paypal Account",
+    "catalogKey": "POST /company/{companyUniqueName}/paypal",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "uj7nf3_GLGIZ",
+      "description": "Add Paypal Account. Part of the Paypal APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "VW7AWYqi-UOe",
+    "name": "Add Payu User",
+    "catalogKey": "POST /company/{companyUniqueName}/payu",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "VW7AWYqi-UOe",
+      "description": "Add Payu User. Part of the Payu APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "XmclOvPAHE1v",
+    "name": "Add Razor Pay Account",
+    "catalogKey": "POST /company/{companyUniqueName}/razorpay",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "XmclOvPAHE1v",
+      "description": "Add Razor Pay Account. Part of the Razorpay APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "MvZUlDOnU1UJ",
+    "name": "Add Recurring Voucher",
+    "catalogKey": "POST /company/{companyUniqueName}/recurring-voucher",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "MvZUlDOnU1UJ",
+      "description": "Add Recurring Voucher. Part of the Recurring Voucher APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherNumber\": \"string\",\n  \"duration\": \"string\",\n  \"nextCronDate\": \"string\",\n  \"cronEndDate\": \"string\",\n  \"voucherType\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherNumber": {
+          "type": "string",
+          "description": "Voucher number. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration. Optional.",
+          "value": "string"
+        },
+        "nextCronDate": {
+          "type": "string",
+          "description": "Next cron date. Optional.",
+          "value": "string"
+        },
+        "cronEndDate": {
+          "type": "string",
+          "description": "Cron end date. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "fTXBLZz_WT6B",
+    "name": "Add Transporter",
+    "catalogKey": "POST /company/{companyUniqueName}/transporters",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "fTXBLZz_WT6B",
+      "description": "Add Transporter. Part of the Transporters APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "BTUcw19frMWw",
+    "name": "Add Wallet Amount",
+    "catalogKey": "POST /v2/subscription/add-wallet-amount",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "BTUcw19frMWw",
+      "description": "Add Wallet Amount. Part of the Add Wallet Amount APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"planUniqueName\": \"string\",\n  \"balance\": 0,\n  \"userUniqueName\": \"string\",\n  \"expireDate\": \"string\",\n  \"status\": \"string\",\n  \"subscriptionId\": \"string\",\n  \"duration\": \"string\",\n  \"licenceKey\": \"string\",\n  \"promoCode\": \"string\",\n  \"addOnTransactions\": 0,\n  \"paymentProvider\": \"CASHFREE\",\n  \"billingAccount\": \"string\",\n  \"returnUrl\": \"string\",\n  \"affiliateId\": \"string\",\n  \"trialExtendedDays\": 0,\n  \"paymentId\": \"string\",\n  \"amountPaid\": 0,\n  \"razorpaySignature\": \"string\",\n  \"razorpayOrderId\": \"string\",\n  \"payuTransactionId\": \"string\",\n  \"paymentIntentId\": \"string\",\n  \"paypalOrderId\": \"string\",\n  \"payNow\": false,\n  \"taxTotal\": 0,\n  \"bankDetails\": \"string\",\n  \"razorpayAuthType\": \"CARD\",\n  \"countryCode\": \"string\",\n  \"prePaid\": false,\n  \"prepaidUniqueName\": \"string\",\n  \"includeNextBill\": false,\n  \"googlePayPurchaseToken\": \"string\",\n  \"providerPlanName\": \"string\",\n  \"autoPay\": false,\n  \"renew\": false,\n  \"walletAmount\": 0,\n  \"reactivateFromSubscriptionId\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "planUniqueName": {
+          "type": "string",
+          "description": "Plan unique name. Optional.",
+          "value": "string"
+        },
+        "balance": {
+          "type": "number",
+          "description": "Balance. Optional.",
+          "value": 0
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "expireDate": {
+          "type": "string",
+          "description": "Expire date. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Subscription id. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration. Mandatory.",
+          "value": "string"
+        },
+        "licenceKey": {
+          "type": "string",
+          "description": "Licence key. Optional.",
+          "value": "string"
+        },
+        "promoCode": {
+          "type": "string",
+          "description": "Promo code. Optional.",
+          "value": "string"
+        },
+        "addOnTransactions": {
+          "type": "string",
+          "description": "Add on transactions. Optional.",
+          "value": 0
+        },
+        "paymentProvider": {
+          "type": "string",
+          "description": "Payment provider. Allowed values: CASHFREE, STRIPE, RAZORPAY, GOCARDLESS, PAYPAL, APPLE, GOOGLEPAY_ANDROID, PAYU. Optional.",
+          "value": "CASHFREE",
+          "allowedValues": [
+            "CASHFREE",
+            "STRIPE",
+            "RAZORPAY",
+            "GOCARDLESS",
+            "PAYPAL",
+            "APPLE",
+            "GOOGLEPAY_ANDROID",
+            "PAYU"
+          ]
+        },
+        "billingAccount": {
+          "type": "string",
+          "description": "Billing account. Optional.",
+          "value": "string"
+        },
+        "returnUrl": {
+          "type": "string",
+          "description": "Return url. Optional.",
+          "value": "string"
+        },
+        "affiliateId": {
+          "type": "string",
+          "description": "Affiliate id. Optional.",
+          "value": "string"
+        },
+        "trialExtendedDays": {
+          "type": "number",
+          "description": "Trial extended days. Optional.",
+          "value": 0
+        },
+        "paymentId": {
+          "type": "string",
+          "description": "Payment id. Optional.",
+          "value": "string"
+        },
+        "amountPaid": {
+          "type": "number",
+          "description": "Amount paid. Optional.",
+          "value": 0
+        },
+        "razorpaySignature": {
+          "type": "string",
+          "description": "Razorpay signature. Optional.",
+          "value": "string"
+        },
+        "razorpayOrderId": {
+          "type": "string",
+          "description": "Razorpay order id. Optional.",
+          "value": "string"
+        },
+        "payuTransactionId": {
+          "type": "string",
+          "description": "Payu transaction id. Optional.",
+          "value": "string"
+        },
+        "paymentIntentId": {
+          "type": "string",
+          "description": "Payment intent id. Optional.",
+          "value": "string"
+        },
+        "paypalOrderId": {
+          "type": "string",
+          "description": "Paypal order id. Optional.",
+          "value": "string"
+        },
+        "payNow": {
+          "type": "boolean",
+          "description": "When true, applies the pay now filter or flag. Optional.",
+          "value": false
+        },
+        "taxTotal": {
+          "type": "number",
+          "description": "Tax total. Optional.",
+          "value": 0
+        },
+        "bankDetails": {
+          "type": "string",
+          "description": "Bank details. Optional.",
+          "value": "string"
+        },
+        "razorpayAuthType": {
+          "type": "string",
+          "description": "Razorpay auth type. Allowed values: CARD, NETBANKING, AADHAAR, UPI. Optional.",
+          "value": "CARD",
+          "allowedValues": [
+            "CARD",
+            "NETBANKING",
+            "AADHAAR",
+            "UPI"
+          ]
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "prePaid": {
+          "type": "boolean",
+          "description": "When true, applies the pre paid filter or flag. Optional.",
+          "value": false
+        },
+        "prepaidUniqueName": {
+          "type": "string",
+          "description": "Prepaid unique name. Optional.",
+          "value": "string"
+        },
+        "includeNextBill": {
+          "type": "boolean",
+          "description": "When true, applies the include next bill filter or flag. Optional.",
+          "value": false
+        },
+        "googlePayPurchaseToken": {
+          "type": "string",
+          "description": "Google pay purchase token. Optional.",
+          "value": "string"
+        },
+        "providerPlanName": {
+          "type": "string",
+          "description": "Provider plan name. Optional.",
+          "value": "string"
+        },
+        "autoPay": {
+          "type": "boolean",
+          "description": "When true, applies the auto pay filter or flag. Optional.",
+          "value": false
+        },
+        "renew": {
+          "type": "boolean",
+          "description": "When true, applies the renew filter or flag. Optional.",
+          "value": false
+        },
+        "walletAmount": {
+          "type": "number",
+          "description": "Wallet amount. Optional.",
+          "value": 0
+        },
+        "reactivateFromSubscriptionId": {
+          "type": "string",
+          "description": "Reactivate from subscription id. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "YRWaWqt69hWr",
+    "name": "Adjust Advance Receipt Entry With Invoice",
+    "catalogKey": "POST /company/{companyUniqueName}/advance-receipt/adjust",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "YRWaWqt69hWr",
+      "description": "/. Part of the Adjust APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "invoiceUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Invoice unique name query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"adjustments\": [],\n  \"tdsTaxUniqueName\": \"string\",\n  \"tdsAmount\": \"string\",\n  \"description\": \"string\",\n  \"totalAdjustmentAmount\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "adjustments": {
+          "type": "array",
+          "description": "Array of adjustments values. Optional.",
+          "value": []
+        },
+        "tdsTaxUniqueName": {
+          "type": "string",
+          "description": "Tds tax unique name. Optional.",
+          "value": "string"
+        },
+        "tdsAmount": {
+          "type": "string",
+          "description": "Tds amount. Optional.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "totalAdjustmentAmount": {
+          "type": "number",
+          "description": "Total adjustment amount. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "_ri7g9jTPGBx",
+    "name": "Adjust Voucher",
+    "catalogKey": "POST /company/{companyUniqueName}/vouchers/{voucherUniqueName}/adjust",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "_ri7g9jTPGBx",
+      "description": "Adjust Vouchers. Part of the Adjust APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherType\": \"string\",\n  \"subVoucher\": \"REVERSE_CHARGE\",\n  \"voucherNumber\": \"string\",\n  \"unadjustedAmount\": \"string\",\n  \"voucherTotal\": \"string\",\n  \"uniqueName\": \"string\",\n  \"currency\": \"string\",\n  \"exchangeRate\": 0,\n  \"amount\": \"string\",\n  \"voucherBalanceType\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "subVoucher": {
+          "type": "string",
+          "description": "Sub voucher. Allowed values: REVERSE_CHARGE, ADVANCE_RECEIPT, EXPORT. Optional.",
+          "value": "REVERSE_CHARGE",
+          "allowedValues": [
+            "REVERSE_CHARGE",
+            "ADVANCE_RECEIPT",
+            "EXPORT"
+          ]
+        },
+        "voucherNumber": {
+          "type": "string",
+          "description": "Voucher number. Optional.",
+          "value": "string"
+        },
+        "unadjustedAmount": {
+          "type": "string",
+          "description": "Unadjusted amount. Optional.",
+          "value": "string"
+        },
+        "voucherTotal": {
+          "type": "string",
+          "description": "Voucher total. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency. Optional.",
+          "value": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "description": "Exchange rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "string",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": "string"
+        },
+        "voucherBalanceType": {
+          "type": "string",
+          "description": "Voucher balance type. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "kftm_fbrSEtD",
+    "name": "Also it add plan info to subscription if user selects plan without selecting …",
+    "catalogKey": "POST /v2/subscription",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "kftm_fbrSEtD",
+      "description": "Also it add plan info to subscription if user selects plan without selecting payment method and later. Part of the Subscription APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "companyUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Company uniqueName. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"planUniqueName\": \"string\",\n  \"balance\": 0,\n  \"userUniqueName\": \"string\",\n  \"expireDate\": \"string\",\n  \"status\": \"string\",\n  \"subscriptionId\": \"string\",\n  \"duration\": \"string\",\n  \"licenceKey\": \"string\",\n  \"promoCode\": \"string\",\n  \"addOnTransactions\": 0,\n  \"paymentProvider\": \"CASHFREE\",\n  \"billingAccount\": \"string\",\n  \"returnUrl\": \"string\",\n  \"affiliateId\": \"string\",\n  \"trialExtendedDays\": 0,\n  \"paymentId\": \"string\",\n  \"amountPaid\": 0,\n  \"razorpaySignature\": \"string\",\n  \"razorpayOrderId\": \"string\",\n  \"payuTransactionId\": \"string\",\n  \"paymentIntentId\": \"string\",\n  \"paypalOrderId\": \"string\",\n  \"payNow\": false,\n  \"taxTotal\": 0,\n  \"bankDetails\": \"string\",\n  \"razorpayAuthType\": \"CARD\",\n  \"countryCode\": \"string\",\n  \"prePaid\": false,\n  \"prepaidUniqueName\": \"string\",\n  \"includeNextBill\": false,\n  \"googlePayPurchaseToken\": \"string\",\n  \"providerPlanName\": \"string\",\n  \"autoPay\": false,\n  \"renew\": false,\n  \"walletAmount\": 0,\n  \"reactivateFromSubscriptionId\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "planUniqueName": {
+          "type": "string",
+          "description": "Plan unique name. Optional.",
+          "value": "string"
+        },
+        "balance": {
+          "type": "number",
+          "description": "Balance. Optional.",
+          "value": 0
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "expireDate": {
+          "type": "string",
+          "description": "Expire date. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Subscription id. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration. Mandatory.",
+          "value": "string"
+        },
+        "licenceKey": {
+          "type": "string",
+          "description": "Licence key. Optional.",
+          "value": "string"
+        },
+        "promoCode": {
+          "type": "string",
+          "description": "Promo code. Optional.",
+          "value": "string"
+        },
+        "addOnTransactions": {
+          "type": "string",
+          "description": "Add on transactions. Optional.",
+          "value": 0
+        },
+        "paymentProvider": {
+          "type": "string",
+          "description": "Payment provider. Allowed values: CASHFREE, STRIPE, RAZORPAY, GOCARDLESS, PAYPAL, APPLE, GOOGLEPAY_ANDROID, PAYU. Optional.",
+          "value": "CASHFREE",
+          "allowedValues": [
+            "CASHFREE",
+            "STRIPE",
+            "RAZORPAY",
+            "GOCARDLESS",
+            "PAYPAL",
+            "APPLE",
+            "GOOGLEPAY_ANDROID",
+            "PAYU"
+          ]
+        },
+        "billingAccount": {
+          "type": "string",
+          "description": "Billing account. Optional.",
+          "value": "string"
+        },
+        "returnUrl": {
+          "type": "string",
+          "description": "Return url. Optional.",
+          "value": "string"
+        },
+        "affiliateId": {
+          "type": "string",
+          "description": "Affiliate id. Optional.",
+          "value": "string"
+        },
+        "trialExtendedDays": {
+          "type": "number",
+          "description": "Trial extended days. Optional.",
+          "value": 0
+        },
+        "paymentId": {
+          "type": "string",
+          "description": "Payment id. Optional.",
+          "value": "string"
+        },
+        "amountPaid": {
+          "type": "number",
+          "description": "Amount paid. Optional.",
+          "value": 0
+        },
+        "razorpaySignature": {
+          "type": "string",
+          "description": "Razorpay signature. Optional.",
+          "value": "string"
+        },
+        "razorpayOrderId": {
+          "type": "string",
+          "description": "Razorpay order id. Optional.",
+          "value": "string"
+        },
+        "payuTransactionId": {
+          "type": "string",
+          "description": "Payu transaction id. Optional.",
+          "value": "string"
+        },
+        "paymentIntentId": {
+          "type": "string",
+          "description": "Payment intent id. Optional.",
+          "value": "string"
+        },
+        "paypalOrderId": {
+          "type": "string",
+          "description": "Paypal order id. Optional.",
+          "value": "string"
+        },
+        "payNow": {
+          "type": "boolean",
+          "description": "When true, applies the pay now filter or flag. Optional.",
+          "value": false
+        },
+        "taxTotal": {
+          "type": "number",
+          "description": "Tax total. Optional.",
+          "value": 0
+        },
+        "bankDetails": {
+          "type": "string",
+          "description": "Bank details. Optional.",
+          "value": "string"
+        },
+        "razorpayAuthType": {
+          "type": "string",
+          "description": "Razorpay auth type. Allowed values: CARD, NETBANKING, AADHAAR, UPI. Optional.",
+          "value": "CARD",
+          "allowedValues": [
+            "CARD",
+            "NETBANKING",
+            "AADHAAR",
+            "UPI"
+          ]
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "prePaid": {
+          "type": "boolean",
+          "description": "When true, applies the pre paid filter or flag. Optional.",
+          "value": false
+        },
+        "prepaidUniqueName": {
+          "type": "string",
+          "description": "Prepaid unique name. Optional.",
+          "value": "string"
+        },
+        "includeNextBill": {
+          "type": "boolean",
+          "description": "When true, applies the include next bill filter or flag. Optional.",
+          "value": false
+        },
+        "googlePayPurchaseToken": {
+          "type": "string",
+          "description": "Google pay purchase token. Optional.",
+          "value": "string"
+        },
+        "providerPlanName": {
+          "type": "string",
+          "description": "Provider plan name. Optional.",
+          "value": "string"
+        },
+        "autoPay": {
+          "type": "boolean",
+          "description": "When true, applies the auto pay filter or flag. Optional.",
+          "value": false
+        },
+        "renew": {
+          "type": "boolean",
+          "description": "When true, applies the renew filter or flag. Optional.",
+          "value": false
+        },
+        "walletAmount": {
+          "type": "number",
+          "description": "Wallet amount. Optional.",
+          "value": 0
+        },
+        "reactivateFromSubscriptionId": {
+          "type": "string",
+          "description": "Reactivate from subscription id. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "J46j-LhakoGg",
+    "name": "Api for updates Job work inventory entry description",
+    "catalogKey": "PATCH /company/{companyUniqueName}/inventory-users/{inventoryUserUniqueName}/inventory-entries/{inventoryEntryUniqueName:.+}/description",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "J46j-LhakoGg",
+      "description": "Api for updates Job work inventory entry description. Part of the Description APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "jKX9v5VSDTet",
+    "name": "Apply Action",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/{uniqueName}/action",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "jKX9v5VSDTet",
+      "description": "Apply Action. Part of the Action APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"action\": \"string\",\n  \"status\": \"string\",\n  \"statusCode\": \"string\",\n  \"businessDocumentType\": \"DC\",\n  \"reason\": \"string\",\n  \"remarks\": \"string\",\n  \"uniqueNames\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "statusCode": {
+          "type": "string",
+          "description": "Status code. Optional.",
+          "value": "string"
+        },
+        "businessDocumentType": {
+          "type": "string",
+          "description": "Business document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "7QOkuSQwUHDS",
+    "name": "Apply Business Document Event",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/{uniqueName}/events",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "7QOkuSQwUHDS",
+      "description": "Apply Event. Part of the Events APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"event\": \"RETURN\",\n  \"resolution\": \"RETURN\",\n  \"create\": \"RETURN\",\n  \"documentDate\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"remarks\": \"string\",\n  \"requestId\": \"string\",\n  \"creditNote\": \"string\",\n  \"debitNote\": \"string\",\n  \"items\": [],\n  \"sourceItemId\": 0,\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"description\": \"string\",\n  \"stock\": \"string\",\n  \"variant\": \"string\",\n  \"stockUniqueName\": \"string\",\n  \"variantUniqueName\": \"string\",\n  \"stockUnitUniqueName\": \"string\",\n  \"batches\": [],\n  \"replacementVariantUniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "event": {
+          "type": "string",
+          "description": "Event. Allowed values: RETURN, LOSS. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "LOSS"
+          ]
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Resolution. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "create": {
+          "type": "string",
+          "description": "Create. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "documentDate": {
+          "type": "string",
+          "description": "Document date. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "creditNote": {
+          "type": "string",
+          "description": "Credit note. Optional.",
+          "value": "string"
+        },
+        "debitNote": {
+          "type": "string",
+          "description": "Debit note. Optional.",
+          "value": "string"
+        },
+        "items": {
+          "type": "array",
+          "description": "Line items (array). Optional.",
+          "value": []
+        },
+        "sourceItemId": {
+          "type": "number",
+          "description": "Source item id. Optional.",
+          "value": 0
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stockUniqueName": {
+          "type": "string",
+          "description": "Stock unique name. Optional.",
+          "value": "string"
+        },
+        "variantUniqueName": {
+          "type": "string",
+          "description": "Variant unique name. Optional.",
+          "value": "string"
+        },
+        "stockUnitUniqueName": {
+          "type": "string",
+          "description": "Stock unit unique name. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "replacementVariantUniqueName": {
+          "type": "string",
+          "description": "Replacement variant unique name. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "sxgleQpNct3S",
+    "name": "Apply Business Document Status",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/{uniqueName}/status",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "sxgleQpNct3S",
+      "description": "Apply Action. Part of the Status APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"action\": \"string\",\n  \"status\": \"string\",\n  \"statusCode\": \"string\",\n  \"businessDocumentType\": \"DC\",\n  \"reason\": \"string\",\n  \"remarks\": \"string\",\n  \"uniqueNames\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "statusCode": {
+          "type": "string",
+          "description": "Status code. Optional.",
+          "value": "string"
+        },
+        "businessDocumentType": {
+          "type": "string",
+          "description": "Business document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "mR5aGg6VSqEr",
+    "name": "Apply Delivery Challan Event",
+    "catalogKey": "POST /company/{companyUniqueName}/delivery-challan/{uniqueName}/events",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "mR5aGg6VSqEr",
+      "description": "Apply Event. Part of the Events APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"event\": \"RETURN\",\n  \"resolution\": \"RETURN\",\n  \"create\": \"RETURN\",\n  \"documentDate\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"remarks\": \"string\",\n  \"requestId\": \"string\",\n  \"creditNote\": \"string\",\n  \"debitNote\": \"string\",\n  \"items\": [],\n  \"sourceItemId\": 0,\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"description\": \"string\",\n  \"stock\": \"string\",\n  \"variant\": \"string\",\n  \"stockUniqueName\": \"string\",\n  \"variantUniqueName\": \"string\",\n  \"stockUnitUniqueName\": \"string\",\n  \"batches\": [],\n  \"replacementVariantUniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "event": {
+          "type": "string",
+          "description": "Event. Allowed values: RETURN, LOSS. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "LOSS"
+          ]
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Resolution. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "create": {
+          "type": "string",
+          "description": "Create. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "documentDate": {
+          "type": "string",
+          "description": "Document date. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "creditNote": {
+          "type": "string",
+          "description": "Credit note. Optional.",
+          "value": "string"
+        },
+        "debitNote": {
+          "type": "string",
+          "description": "Debit note. Optional.",
+          "value": "string"
+        },
+        "items": {
+          "type": "array",
+          "description": "Line items (array). Optional.",
+          "value": []
+        },
+        "sourceItemId": {
+          "type": "number",
+          "description": "Source item id. Optional.",
+          "value": 0
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stockUniqueName": {
+          "type": "string",
+          "description": "Stock unique name. Optional.",
+          "value": "string"
+        },
+        "variantUniqueName": {
+          "type": "string",
+          "description": "Variant unique name. Optional.",
+          "value": "string"
+        },
+        "stockUnitUniqueName": {
+          "type": "string",
+          "description": "Stock unit unique name. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "replacementVariantUniqueName": {
+          "type": "string",
+          "description": "Replacement variant unique name. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "oZ_ldx6KCPwV",
+    "name": "Apply Delivery Challan Event",
+    "catalogKey": "POST /company/{companyUniqueName}/delivery-challan/{uniqueName}/events",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "oZ_ldx6KCPwV",
+      "description": "Apply Event. Part of the Events APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"event\": \"RETURN\",\n  \"resolution\": \"RETURN\",\n  \"create\": \"RETURN\",\n  \"documentDate\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"remarks\": \"string\",\n  \"requestId\": \"string\",\n  \"creditNote\": \"string\",\n  \"debitNote\": \"string\",\n  \"items\": [],\n  \"sourceItemId\": 0,\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"description\": \"string\",\n  \"stock\": \"string\",\n  \"variant\": \"string\",\n  \"stockUniqueName\": \"string\",\n  \"variantUniqueName\": \"string\",\n  \"stockUnitUniqueName\": \"string\",\n  \"batches\": [],\n  \"replacementVariantUniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "event": {
+          "type": "string",
+          "description": "Event. Allowed values: RETURN, LOSS. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "LOSS"
+          ]
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Resolution. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "create": {
+          "type": "string",
+          "description": "Create. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "documentDate": {
+          "type": "string",
+          "description": "Document date. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "creditNote": {
+          "type": "string",
+          "description": "Credit note. Optional.",
+          "value": "string"
+        },
+        "debitNote": {
+          "type": "string",
+          "description": "Debit note. Optional.",
+          "value": "string"
+        },
+        "items": {
+          "type": "array",
+          "description": "Line items (array). Optional.",
+          "value": []
+        },
+        "sourceItemId": {
+          "type": "number",
+          "description": "Source item id. Optional.",
+          "value": 0
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stockUniqueName": {
+          "type": "string",
+          "description": "Stock unique name. Optional.",
+          "value": "string"
+        },
+        "variantUniqueName": {
+          "type": "string",
+          "description": "Variant unique name. Optional.",
+          "value": "string"
+        },
+        "stockUnitUniqueName": {
+          "type": "string",
+          "description": "Stock unit unique name. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "replacementVariantUniqueName": {
+          "type": "string",
+          "description": "Replacement variant unique name. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ZCt5NQPNRPwB",
+    "name": "Apply Receipt Note Event",
+    "catalogKey": "POST /company/{companyUniqueName}/receipt-note/{uniqueName}/events",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ZCt5NQPNRPwB",
+      "description": "Apply Event. Part of the Events APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"event\": \"RETURN\",\n  \"resolution\": \"RETURN\",\n  \"create\": \"RETURN\",\n  \"documentDate\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"remarks\": \"string\",\n  \"requestId\": \"string\",\n  \"creditNote\": \"string\",\n  \"debitNote\": \"string\",\n  \"items\": [],\n  \"sourceItemId\": 0,\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"description\": \"string\",\n  \"stock\": \"string\",\n  \"variant\": \"string\",\n  \"stockUniqueName\": \"string\",\n  \"variantUniqueName\": \"string\",\n  \"stockUnitUniqueName\": \"string\",\n  \"batches\": [],\n  \"replacementVariantUniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "event": {
+          "type": "string",
+          "description": "Event. Allowed values: RETURN, LOSS. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "LOSS"
+          ]
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Resolution. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "create": {
+          "type": "string",
+          "description": "Create. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "documentDate": {
+          "type": "string",
+          "description": "Document date. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "creditNote": {
+          "type": "string",
+          "description": "Credit note. Optional.",
+          "value": "string"
+        },
+        "debitNote": {
+          "type": "string",
+          "description": "Debit note. Optional.",
+          "value": "string"
+        },
+        "items": {
+          "type": "array",
+          "description": "Line items (array). Optional.",
+          "value": []
+        },
+        "sourceItemId": {
+          "type": "number",
+          "description": "Source item id. Optional.",
+          "value": 0
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stockUniqueName": {
+          "type": "string",
+          "description": "Stock unique name. Optional.",
+          "value": "string"
+        },
+        "variantUniqueName": {
+          "type": "string",
+          "description": "Variant unique name. Optional.",
+          "value": "string"
+        },
+        "stockUnitUniqueName": {
+          "type": "string",
+          "description": "Stock unit unique name. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "replacementVariantUniqueName": {
+          "type": "string",
+          "description": "Replacement variant unique name. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "tt0rq4FrucAj",
+    "name": "Apply Receipt Note Event",
+    "catalogKey": "POST /company/{companyUniqueName}/receipt-note/{uniqueName}/events",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "tt0rq4FrucAj",
+      "description": "Apply Event. Part of the Events APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"event\": \"RETURN\",\n  \"resolution\": \"RETURN\",\n  \"create\": \"RETURN\",\n  \"documentDate\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"remarks\": \"string\",\n  \"requestId\": \"string\",\n  \"creditNote\": \"string\",\n  \"debitNote\": \"string\",\n  \"items\": [],\n  \"sourceItemId\": 0,\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"description\": \"string\",\n  \"stock\": \"string\",\n  \"variant\": \"string\",\n  \"stockUniqueName\": \"string\",\n  \"variantUniqueName\": \"string\",\n  \"stockUnitUniqueName\": \"string\",\n  \"batches\": [],\n  \"replacementVariantUniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "event": {
+          "type": "string",
+          "description": "Event. Allowed values: RETURN, LOSS. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "LOSS"
+          ]
+        },
+        "resolution": {
+          "type": "string",
+          "description": "Resolution. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "create": {
+          "type": "string",
+          "description": "Create. Allowed values: RETURN, RETURN_AND_CREDIT_NOTE, RETURN_AND_DEBIT_NOTE, REPLACEMENT, EXCHANGE, LOSS, LOSS_AND_CREDIT_NOTE, LOSS_AND_DEBIT_NOTE, DEBIT_NOTE. Optional.",
+          "value": "RETURN",
+          "allowedValues": [
+            "RETURN",
+            "RETURN_AND_CREDIT_NOTE",
+            "RETURN_AND_DEBIT_NOTE",
+            "REPLACEMENT",
+            "EXCHANGE",
+            "LOSS",
+            "LOSS_AND_CREDIT_NOTE",
+            "LOSS_AND_DEBIT_NOTE",
+            "DEBIT_NOTE"
+          ]
+        },
+        "documentDate": {
+          "type": "string",
+          "description": "Document date. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "creditNote": {
+          "type": "string",
+          "description": "Credit note. Optional.",
+          "value": "string"
+        },
+        "debitNote": {
+          "type": "string",
+          "description": "Debit note. Optional.",
+          "value": "string"
+        },
+        "items": {
+          "type": "array",
+          "description": "Line items (array). Optional.",
+          "value": []
+        },
+        "sourceItemId": {
+          "type": "number",
+          "description": "Source item id. Optional.",
+          "value": 0
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stockUniqueName": {
+          "type": "string",
+          "description": "Stock unique name. Optional.",
+          "value": "string"
+        },
+        "variantUniqueName": {
+          "type": "string",
+          "description": "Variant unique name. Optional.",
+          "value": "string"
+        },
+        "stockUnitUniqueName": {
+          "type": "string",
+          "description": "Stock unit unique name. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "replacementVariantUniqueName": {
+          "type": "string",
+          "description": "Replacement variant unique name. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "R_441kH4J5rH",
+    "name": "Archive Batch",
+    "catalogKey": "POST /company/{companyUniqueName}/batch/{batchUniqueName}/archive",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "R_441kH4J5rH",
+      "description": "Soft-delete ({@code isActive = 1}) only if the batch is not on a voucher or DC/RC. Part of the Archive APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"email\": \"string\",\n  \"mobileNumber\": \"string\",\n  \"archiveStatus\": \"string\",\n  \"linkedEntities\": [],\n  \"archiveOnly\": false,\n  \"action\": \"PRINCIPAL\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Mandatory.",
+          "value": "string"
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Mandatory.",
+          "value": "string"
+        },
+        "archiveStatus": {
+          "type": "string",
+          "description": "Archive status. Optional.",
+          "value": "string"
+        },
+        "linkedEntities": {
+          "type": "array",
+          "description": "Array of linked entities values. Optional.",
+          "value": []
+        },
+        "archiveOnly": {
+          "type": "boolean",
+          "description": "When true, applies the archive only filter or flag. Optional.",
+          "value": false
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Allowed values: PRINCIPAL, COMPANY_UNIQUE_NAME_PATH_PARAM, DUEPERIOD, PAGE, COUNT, RAZORPAY, TRANSFER, UNASSIGNED, UNARCHIVED, CONTENT_TYPE, MESSAGING_PRODUCT, TYPE, POLICY, LANGUAGE_CODE. Optional.",
+          "value": "PRINCIPAL",
+          "allowedValues": [
+            "PRINCIPAL",
+            "COMPANY_UNIQUE_NAME_PATH_PARAM",
+            "DUEPERIOD",
+            "PAGE",
+            "COUNT",
+            "RAZORPAY",
+            "TRANSFER",
+            "UNASSIGNED",
+            "UNARCHIVED",
+            "CONTENT_TYPE",
+            "MESSAGING_PRODUCT",
+            "TYPE",
+            "POLICY",
+            "LANGUAGE_CODE"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "1EpWWk16sW7M",
+    "name": "Archive Sales Person",
+    "catalogKey": "POST /company/{companyUniqueName}/salesperson/{uniqueName}/archive",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1EpWWk16sW7M",
+      "description": "Update Archive Status. Part of the Archive APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"email\": \"string\",\n  \"mobileNumber\": \"string\",\n  \"archiveStatus\": \"string\",\n  \"linkedEntities\": [],\n  \"archiveOnly\": false,\n  \"action\": \"PRINCIPAL\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Mandatory.",
+          "value": "string"
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Mandatory.",
+          "value": "string"
+        },
+        "archiveStatus": {
+          "type": "string",
+          "description": "Archive status. Optional.",
+          "value": "string"
+        },
+        "linkedEntities": {
+          "type": "array",
+          "description": "Array of linked entities values. Optional.",
+          "value": []
+        },
+        "archiveOnly": {
+          "type": "boolean",
+          "description": "When true, applies the archive only filter or flag. Optional.",
+          "value": false
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Allowed values: PRINCIPAL, COMPANY_UNIQUE_NAME_PATH_PARAM, DUEPERIOD, PAGE, COUNT, RAZORPAY, TRANSFER, UNASSIGNED, UNARCHIVED, CONTENT_TYPE, MESSAGING_PRODUCT, TYPE, POLICY, LANGUAGE_CODE. Optional.",
+          "value": "PRINCIPAL",
+          "allowedValues": [
+            "PRINCIPAL",
+            "COMPANY_UNIQUE_NAME_PATH_PARAM",
+            "DUEPERIOD",
+            "PAGE",
+            "COUNT",
+            "RAZORPAY",
+            "TRANSFER",
+            "UNASSIGNED",
+            "UNARCHIVED",
+            "CONTENT_TYPE",
+            "MESSAGING_PRODUCT",
+            "TYPE",
+            "POLICY",
+            "LANGUAGE_CODE"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "9oZbalVVf5uT",
+    "name": "Assign Role",
+    "catalogKey": "POST /company/{companyUniqueName}/role/{roleUniqueName}/assign",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "9oZbalVVf5uT",
+      "description": "Assign Role. Part of the Assign APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"emailId\": \"string\",\n  \"from\": \"string\",\n  \"to\": \"string\",\n  \"duration\": 0,\n  \"period\": \"string\",\n  \"allowedIps\": [],\n  \"allowedCidrs\": [],\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"roleName\": \"string\",\n  \"roleUniqueName\": \"string\",\n  \"userName\": \"string\",\n  \"userEmail\": \"string\",\n  \"userUniqueName\": \"string\",\n  \"uniqueName\": \"string\",\n  \"fromDateObj\": \"01-04-2025\",\n  \"toDateObj\": \"01-04-2025\",\n  \"mobileVerified\": false,\n  \"mobileNumber\": \"string\",\n  \"userIsSubscriber\": false,\n  \"companyUniqueName\": \"string\",\n  \"comingFromAdminPanel\": false,\n  \"reGenerateAuthKey\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "emailId": {
+          "type": "string",
+          "description": "Email id. Optional.",
+          "value": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "From. Optional.",
+          "value": "string"
+        },
+        "to": {
+          "type": "string",
+          "description": "To. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration. Optional.",
+          "value": 0
+        },
+        "period": {
+          "type": "string",
+          "description": "Period. Optional.",
+          "value": "string"
+        },
+        "allowedIps": {
+          "type": "array",
+          "description": "Array of allowed ips values. Optional.",
+          "value": []
+        },
+        "allowedCidrs": {
+          "type": "array",
+          "description": "Array of allowed cidrs values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "roleName": {
+          "type": "string",
+          "description": "Role name. Optional.",
+          "value": "string"
+        },
+        "roleUniqueName": {
+          "type": "string",
+          "description": "Role unique name. Optional.",
+          "value": "string"
+        },
+        "userName": {
+          "type": "string",
+          "description": "User name. Optional.",
+          "value": "string"
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "User email. Optional.",
+          "value": "string"
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "fromDateObj": {
+          "type": "string",
+          "description": "From date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "toDateObj": {
+          "type": "string",
+          "description": "To date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "mobileVerified": {
+          "type": "boolean",
+          "description": "When true, applies the mobile verified filter or flag. Optional.",
+          "value": false
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Optional.",
+          "value": "string"
+        },
+        "userIsSubscriber": {
+          "type": "boolean",
+          "description": "When true, applies the user is subscriber filter or flag. Optional.",
+          "value": false
+        },
+        "companyUniqueName": {
+          "type": "string",
+          "description": "Company unique name. Optional.",
+          "value": "string"
+        },
+        "comingFromAdminPanel": {
+          "type": "boolean",
+          "description": "When true, applies the coming from admin panel filter or flag. Optional.",
+          "value": false
+        },
+        "reGenerateAuthKey": {
+          "type": "boolean",
+          "description": "When true, applies the re generate auth key filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "K-Hpu0r9QLYu",
+    "name": "Assign Taxes On Groups And Accounts",
+    "catalogKey": "POST /company/{companyUniqueName}/tax/assign",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "K-Hpu0r9QLYu",
+      "description": "Assign Taxes On Groups And Accounts. Part of the Assign APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueName\": \"string\",\n  \"taxes\": [],\n  \"isAccount\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "isAccount": {
+          "type": "boolean",
+          "description": "When true, applies the is account filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "dDl543kSWppI",
+    "name": "Assigned Discounts",
+    "catalogKey": "POST /company/{companyUniqueName}/discount/assign",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "dDl543kSWppI",
+      "description": "Assigned Discounts. Part of the Assign APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "qCv4F9zKN3dd",
+    "name": "Authenticate Gsp Session",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/authenticate-gsp-session",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "qCv4F9zKN3dd",
+      "description": "Authenticate Gsp Session. Part of the Authenticate Gsp Session APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "userName": {
+          "checked": "true",
+          "value": "",
+          "description": "User name query parameter. Mandatory.",
+          "required": true
+        },
+        "otp": {
+          "checked": "true",
+          "value": "",
+          "description": "Otp query parameter. Mandatory.",
+          "required": true
+        },
+        "gsp": {
+          "checked": "true",
+          "value": "whitebooks",
+          "description": "Gsp query parameter. Default: whitebooks. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

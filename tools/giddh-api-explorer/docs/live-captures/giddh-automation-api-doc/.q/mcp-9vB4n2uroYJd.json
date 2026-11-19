@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"9vB4n2uroYJd","description":"Customer Portal proxy helper (PROXY_URL), not a Giddh Spring controller. Part of the Getdetails APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"none"}}}

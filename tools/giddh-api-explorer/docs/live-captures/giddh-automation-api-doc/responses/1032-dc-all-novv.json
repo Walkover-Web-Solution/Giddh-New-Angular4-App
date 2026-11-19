@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "uniqueName": "zyu1792738825009",
+        "number": "DC-261023-1",
+        "date": "23-10-2026",
+        "source": "BUSINESS_DOCUMENT",
+        "documentType": "DC",
+        "challanType": "STOCK_TRANSFER",
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one"
+        },
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "exchangeRate": 1,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "status": {
+          "documentType": "DC",
+          "statusCode": "DELIVERED",
+          "statusName": "Delivered",
+          "statusCategory": "COMPLETED",
+          "defaultStatusCategory": "COMPLETED",
+          "stage": "END"
+        },
+        "statusCode": "DELIVERED",
+        "statusName": "Delivered",
+        "invoiceStatus": "FULLY_INVOICED",
+        "adjustmentStatus": "NOT_ADJUSTED",
+        "remainingQuantity": 0.0,
+        "linkedInvoiceCount": 1,
+        "linkedInvoiceNumber": "261023-7",
+        "isReturn": false,
+        "allowedActions": [
+          "PREVIEW",
+          "EDIT",
+          "RETURN",
+          "CANCEL",
+          "DELETE"
+        ]
+      }
+    ],
+    "balances": {
+      "totalCount": 1,
+      "totalAmount": 100.0,
+      "notInvoicedCount": 0,
+      "notInvoicedAmount": 0.0,
+      "partiallyInvoicedCount": 0,
+      "partiallyInvoicedAmount": 0.0,
+      "fullyInvoicedCount": 1,
+      "fullyInvoicedAmount": 100.0,
+      "openCount": 0,
+      "closedCount": 1,
+      "expiredCount": 0,
+      "cancelledCount": 0
+    }
+  }
+}

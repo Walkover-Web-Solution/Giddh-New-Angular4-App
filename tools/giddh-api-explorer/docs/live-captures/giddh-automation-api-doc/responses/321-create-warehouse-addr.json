@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "body": {
+    "countryCode": "IN",
+    "currencyCode": "INR",
+    "isDefault": false,
+    "addresses": [],
+    "isArchived": false,
+    "name": "API Doc Warehouse Two",
+    "address": "My new address",
+    "uniqueName": "4gr1792733898078"
+  }
+}

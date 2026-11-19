@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "code": "INVALID_SESSION_ID",
+  "message": "No session found with Session-Id: in3f3af1********REDACTED",
+  "httpStatus": 401,
+  "env": "prod"
+}

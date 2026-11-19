@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Following Constraints failed : Entry date must be provided. ",
+  "code": "INVALID_PARAMETERS"
+}

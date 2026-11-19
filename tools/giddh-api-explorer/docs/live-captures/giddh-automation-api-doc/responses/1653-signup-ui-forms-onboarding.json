@@ -1,0 +1,53 @@
+{
+  "status": "success",
+  "body": {
+    "mobileNumber": {
+      "callingCode": "91",
+      "regex": ""
+    },
+    "applicableTaxes": [
+      {
+        "name": "GST5",
+        "uniqueName": "gst5"
+      },
+      {
+        "name": "GST12",
+        "uniqueName": "gst12"
+      },
+      {
+        "name": "GST18",
+        "uniqueName": "gst18"
+      },
+      {
+        "name": "GST28",
+        "uniqueName": "gst28"
+      }
+    ],
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "businessNature": [
+      "Retail",
+      "Service",
+      "Manufacturing",
+      "Food",
+      "Other"
+    ],
+    "businessType": [
+      "Unregistered",
+      "Registered"
+    ],
+    "fields": [
+      {
+        "name": "taxName",
+        "label": "GSTIN",
+        "regex": [
+          "[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9A-Za-z]{1}[Zz1-9A-Ja-j]{1}[0-9a-zA-Z]{1}"
+        ]
+      }
+    ]
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

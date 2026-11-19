@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-number",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website",
+  "body": {
+    "countryCode": "91",
+    "mobileNumber": "9111525164",
+    "oneTimePassword": "<OTP_REDACTED>"
+  }
+}

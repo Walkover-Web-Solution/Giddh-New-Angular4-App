@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "body": {
+    "billingAccountUniqueName": "3io1792758057270",
+    "taxTotal": 576.0,
+    "period": "YEARLY",
+    "status": "trial",
+    "expiry": "06-11-2026",
+    "amount": 3200.0,
+    "planUniqueName": "dmg1715623569079",
+    "planName": "Oak",
+    "totalCompaniesAllowed": 1,
+    "totalInvoices": 3000,
+    "totalBills": 3000,
+    "isOwner": true,
+    "billingDetails": {
+      "billingName": "Shristi Test ",
+      "companyName": "Shristi Test ",
+      "taxNumber": "23AAACC1206D2ZN",
+      "email": "shristi@viasocket.com",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "country": {
+        "name": "India",
+        "code": "IN"
+      },
+      "address": "Lig, near NRK, Indore",
+      "uniqueName": "3io1792758057270"
+    },
+    "region": {
+      "name": "India",
+      "code": "IND"
+    },
+    "planCurrency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    }
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

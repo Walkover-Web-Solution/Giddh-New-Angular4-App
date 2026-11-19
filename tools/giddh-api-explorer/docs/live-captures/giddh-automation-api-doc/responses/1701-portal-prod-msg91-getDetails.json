@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "hasError": false,
+  "data": [
+    {
+      "id": 1188,
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "active_c_company_id": 1275,
+      "currentCompany": {
+        "name": "Divyanshu Shirvastav",
+        "company_uname": "c797e89b_1",
+        "role": {
+          "name": "Owner"
+        }
+      }
+    }
+  ],
+  "note": "MSG91 proxy getDetails \u2014 not a Giddh Spring controller",
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "INVALID_REQUEST",
+  "message": "One or more parameters provided are incorrect: type."
+}

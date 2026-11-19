@@ -1,0 +1,4 @@
+{
+  "method": "DELETE",
+  "path": "/v2/subscription/payment-method/placeholder"
+}

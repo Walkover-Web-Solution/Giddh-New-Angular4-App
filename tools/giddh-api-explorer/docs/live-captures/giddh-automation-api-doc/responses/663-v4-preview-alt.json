@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "INVALID_REQUEST",
+  "message": "Cannot search voucher with the given details. Please provide unique name to search."
+}

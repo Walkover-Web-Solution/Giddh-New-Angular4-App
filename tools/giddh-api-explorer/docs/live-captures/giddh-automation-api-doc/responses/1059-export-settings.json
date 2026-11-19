@@ -1,0 +1,613 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "exportName": "CASH_FLOW_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Cash_Flow",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_DEBIT_NOTE",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Debit Note",
+        "REPORT_NAME": "Voucher_Export_Debit-note",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_CREDIT_NOTE",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Credit Note",
+        "REPORT_NAME": "Bulk_Export_Credit-note",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "ACCOUNT_STATEMENT_EXPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Account_Statement",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham"
+      }
+    },
+    {
+      "exportName": "FLAT_TRIAL_BALANCE_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Flat_Trial_Balance",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "PURCHASE_REGISTER_DETAILED_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "SALES_PERSON_NAME": "John",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "REPORT_NAME": "Purchase_Register_Detailed_Report"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_ESTIMATE",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Estimate",
+        "REPORT_NAME": "Bulk_Export_Estimate",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "EWAY_BILL_DETAILED_DOWNLOAD",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Eway_Bill_Detatiled",
+        "EWAY_BILL_DATE": "01-01-2024",
+        "EWAY_BILL_NUMBER": "39864",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_PROFORMA",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Proforma",
+        "REPORT_NAME": "Voucher_Export_Proforma",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Voucher_Export",
+        "VOUCHER_TYPE": "Sales",
+        "VOUCHER_NUMBER": "5678435",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_PURCHASE_ORDER",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Purchase Order",
+        "REPORT_NAME": "Bulk_Export_Purchase_Order",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "ENTRIES_EXPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "REPORT_NAME": "Entries_Export",
+        "SALES_PERSON_NAME": "John",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "TRIAL_BALANCE_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Trial_Balance",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_INVOICE",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Voucher_Export_Invoice",
+        "VOUCHER_TYPE": "Sales",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "MASTER_EXPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Master_Export",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "GSTR3_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "GSTR3_Report",
+        "TAX_NUMBER": "435465768",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "GROUP_LEDGER_EXPORT",
+      "format": "{REPORT_NAME}{GROUP_UNIQUE_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Group_Ledger_Export",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "GROUP_UNIQUE_NAME": "sundry_creditors"
+      }
+    },
+    {
+      "exportName": "GSTR1_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "GSTR1_Report",
+        "TAX_NUMBER": "435465768",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_ESTIMATE",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Estimate",
+        "REPORT_NAME": "Voucher_Export_Estimate",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "DAYBOOK_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Daybook",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "SALES_PERSON_NAME": "John"
+      }
+    },
+    {
+      "exportName": "INVENTORY_GROUP_WISE_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Group_Wise",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "INVENTORY_TYPE": "Product"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_INVOICE",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Bulk_Export_Invoice",
+        "VOUCHER_TYPE": "Sales",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "COLUMNAR_LEDGER_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Columnar_Ledger_Report",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_DEBIT_NOTE",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Debit Note",
+        "REPORT_NAME": "Bulk_Export_Debit-note",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_BILL",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Bill",
+        "REPORT_NAME": "Bulk_Export_Bill",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "SALES_REGISTER_OVERVIEW_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "SALES_PERSON_NAME": "John",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "REPORT_NAME": "Sales_Register_Overview_Detailed_Report"
+      }
+    },
+    {
+      "exportName": "PURCHASE_REGISTER_OVERVIEW_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "SALES_PERSON_NAME": "John",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "REPORT_NAME": "Purchase_Register_Overview_Report"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Bulk_Export",
+        "VOUCHER_TYPE": "Sales",
+        "VOUCHER_NUMBER": "5678435",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "BILL_TO_BILL_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "REPORT_NAME": "Bill_To_Bill_Report",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_PURCHASE_ORDER",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Purchase Order",
+        "REPORT_NAME": "Voucher_Export_Purchase_Order",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "COLUMNAR_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Columnar_Report",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "GROUP_NAME": "Sales",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024"
+      }
+    },
+    {
+      "exportName": "EWAY_BILL_DOWNLOAD",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Eway_Bill",
+        "EWAY_BILL_DATE": "01-01-2024",
+        "EWAY_BILL_NUMBER": "39864",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "BALANCE_SHEET_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Balance_Sheet",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_PROFORMA",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Proforma",
+        "REPORT_NAME": "Bulk_Export_Proforma",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "INVENTORY_TRANSACTION_WISE_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Transaction_Wise",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "INVENTORY_TYPE": "Product",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "AGING_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Aging_Report",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_PAYMENT",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Payment",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "REPORT_NAME": "Bulk_Export_Payment",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "SALES_REGISTER_DETAILED_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "SALES_PERSON_NAME": "John",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "REPORT_NAME": "Sales_Register_Detailed_Report"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_PAYMENT",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Payment",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "REPORT_NAME": "Voucher_Export_Payment",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_BILL",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Bill",
+        "REPORT_NAME": "Voucher_Export_Bill",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "LEDGER_EXPORT",
+      "format": "{REPORT_NAME}{ACCOUNT_NAME}",
+      "supportedVariableMap": {
+        "ACCOUNT_NAME": "Shubham",
+        "ACCOUNT_UNIQUE_NAME": "shubham",
+        "REPORT_NAME": "Ledger_Export",
+        "SALES_PERSON_NAME": "John",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "INVENTORY_VARIANT_WISE_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Variant_Wise",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "INVENTORY_TYPE": "Product"
+      }
+    },
+    {
+      "exportName": "INVENTORY_EXPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "REPORT_NAME": "Inventory_Export",
+        "INVENTORY_TYPE": "Product"
+      }
+    },
+    {
+      "exportName": "BULK_EXPORT_RECEIPT",
+      "format": "{REPORT_NAME}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Receipt",
+        "REPORT_NAME": "Bulk_Export_Receipt",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "PROFIT_LOSS_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "Profit_And_Loss",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "INVENTORY_ITEM_WISE_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "REPORT_NAME": "Inventory_Item_Wise",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "INVENTORY_TYPE": "Product"
+      }
+    },
+    {
+      "exportName": "GSTR2_REPORT",
+      "format": "{REPORT_NAME}",
+      "supportedVariableMap": {
+        "REPORT_NAME": "GSTR2_Report",
+        "TAX_NUMBER": "435465768",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_RECEIPT",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Receipt",
+        "REPORT_NAME": "Voucher_Export_Receipt",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    },
+    {
+      "exportName": "VOUCHER_EXPORT_CREDIT_NOTE",
+      "format": "{VOUCHER_NUMBER}{FROM_DATE}{TO_DATE}",
+      "supportedVariableMap": {
+        "VOUCHER_TYPE": "Credit Note",
+        "REPORT_NAME": "Voucher_Export_Credit-note",
+        "FROM_DATE": "01-01-2024",
+        "TO_DATE": "31-01-2024",
+        "COMPANY_NAME": "Giddh",
+        "BRANCH_NAME": "Main Branch",
+        "VOUCHER_NUMBER": "5678435"
+      }
+    }
+  ]
+}

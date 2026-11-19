@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-portal-user?isEmailLogin=true",
+  "body": {
+    "emailId": "customer.one@example.com",
+    "subDomain": "GiddhAutomationAPIDOC"
+  }
+}

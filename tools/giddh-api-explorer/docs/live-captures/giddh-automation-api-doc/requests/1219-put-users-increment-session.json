@@ -1,0 +1,5 @@
+{
+  "method": "PUT",
+  "path": "/users/divyanshu%40whozzat.com/increment-session",
+  "body": {}
+}

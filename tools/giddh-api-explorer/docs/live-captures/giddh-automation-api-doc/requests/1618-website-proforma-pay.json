@@ -1,0 +1,7 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/proforma/PR-20261023-1/pay",
+  "body": {
+    "razorpay_payment_id": "pay_fake"
+  }
+}

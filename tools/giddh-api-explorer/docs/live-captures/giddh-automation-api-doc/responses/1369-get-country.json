@@ -1,0 +1,3034 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "alpha3CountryCode": "FJI",
+      "alpha2CountryCode": "FJ",
+      "countryName": "Fiji",
+      "callingCode": "679",
+      "currency": {
+        "code": "FJD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PYF",
+      "alpha2CountryCode": "PF",
+      "countryName": "French Polynesia",
+      "callingCode": "689",
+      "currency": {
+        "code": "XPF",
+        "symbol": "\u20a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GMB",
+      "alpha2CountryCode": "GM",
+      "countryName": "Gambia",
+      "callingCode": "220",
+      "currency": {
+        "code": "GMD",
+        "symbol": "D"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GIB",
+      "alpha2CountryCode": "GI",
+      "countryName": "Gibraltar",
+      "callingCode": "350",
+      "currency": {
+        "code": "GIP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GUY",
+      "alpha2CountryCode": "GY",
+      "countryName": "Guyana",
+      "callingCode": "592",
+      "currency": {
+        "code": "GYD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "HTI",
+      "alpha2CountryCode": "HT",
+      "countryName": "Haiti",
+      "callingCode": "509",
+      "currency": {
+        "code": "HTG",
+        "symbol": "G"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KGZ",
+      "alpha2CountryCode": "KG",
+      "countryName": "Kyrgyzstan",
+      "callingCode": "996",
+      "currency": {
+        "code": "KGS",
+        "symbol": "\u041b\u0432"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LSO",
+      "alpha2CountryCode": "LS",
+      "countryName": "Lesotho",
+      "callingCode": "266",
+      "currency": {
+        "code": "LSL",
+        "symbol": "M"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LBR",
+      "alpha2CountryCode": "LR",
+      "countryName": "Liberia",
+      "callingCode": "231",
+      "currency": {
+        "code": "LRD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MWI",
+      "alpha2CountryCode": "MW",
+      "countryName": "Malawi",
+      "callingCode": "265",
+      "currency": {
+        "code": "MWK",
+        "symbol": "MK"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MDV",
+      "alpha2CountryCode": "MV",
+      "countryName": "Maldives",
+      "callingCode": "960",
+      "currency": {
+        "code": "MVR",
+        "symbol": ".\u0783"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MRT",
+      "alpha2CountryCode": "MR",
+      "countryName": "Mauritania",
+      "callingCode": "222",
+      "currency": {
+        "code": "MRO",
+        "symbol": "UM"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MNG",
+      "alpha2CountryCode": "MN",
+      "countryName": "Mongolia",
+      "callingCode": "976",
+      "currency": {
+        "code": "MNT",
+        "symbol": "\u20ae"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NCL",
+      "alpha2CountryCode": "NC",
+      "countryName": "New Caledonia",
+      "callingCode": "687",
+      "currency": {
+        "code": "XPF",
+        "symbol": "\u20a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PLW",
+      "alpha2CountryCode": "PW",
+      "countryName": "Palau",
+      "callingCode": "680",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PNG",
+      "alpha2CountryCode": "PG",
+      "countryName": "Papua New Guinea",
+      "callingCode": "675",
+      "currency": {
+        "code": "PGK",
+        "symbol": "K"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "WSM",
+      "alpha2CountryCode": "WS",
+      "countryName": "Samoa",
+      "callingCode": "685",
+      "currency": {
+        "code": "WST",
+        "symbol": "T"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "STP",
+      "alpha2CountryCode": "ST",
+      "countryName": "Sao Tome and Principe",
+      "callingCode": "239",
+      "currency": {
+        "code": "STD",
+        "symbol": "Db"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SYC",
+      "alpha2CountryCode": "SC",
+      "countryName": "Seychelles",
+      "callingCode": "248",
+      "currency": {
+        "code": "SCR",
+        "symbol": "SRe"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SLE",
+      "alpha2CountryCode": "SL",
+      "countryName": "Sierra Leone",
+      "callingCode": "232",
+      "currency": {
+        "code": "SLL",
+        "symbol": "Le"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SLB",
+      "alpha2CountryCode": "SB",
+      "countryName": "Solomon Islands",
+      "callingCode": "677",
+      "currency": {
+        "code": "SBD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SWZ",
+      "alpha2CountryCode": "SZ",
+      "countryName": "Swaziland",
+      "callingCode": "268",
+      "currency": {
+        "code": "SZL",
+        "symbol": "L"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TJK",
+      "alpha2CountryCode": "TJ",
+      "countryName": "Tajikistan",
+      "callingCode": "992",
+      "currency": {
+        "code": "TJS",
+        "symbol": "\u0405\u041c"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MAF",
+      "alpha2CountryCode": "MF",
+      "countryName": "St. Martin",
+      "callingCode": "590",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VCT",
+      "alpha2CountryCode": "VC",
+      "countryName": "St. Vincent",
+      "callingCode": "1784",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KOR",
+      "alpha2CountryCode": "KR",
+      "countryName": "South Korea",
+      "callingCode": "82",
+      "currency": {
+        "code": "KRW",
+        "symbol": "\u20a9"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SUR",
+      "alpha2CountryCode": "SR",
+      "countryName": "SuriName",
+      "callingCode": "597",
+      "currency": {
+        "code": "SRD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SJM",
+      "alpha2CountryCode": "SJ",
+      "countryName": "Svalbard",
+      "callingCode": "4779",
+      "currency": {
+        "code": "NOK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SYR",
+      "alpha2CountryCode": "SY",
+      "countryName": "Syria",
+      "callingCode": "963",
+      "currency": {
+        "code": "SYP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TZA",
+      "alpha2CountryCode": "TZ",
+      "countryName": "Tanzania",
+      "callingCode": "255",
+      "currency": {
+        "code": "TZS",
+        "symbol": "Sh"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TTO",
+      "alpha2CountryCode": "TT",
+      "countryName": "Trinidad",
+      "callingCode": "1868",
+      "currency": {
+        "code": "TTD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "EST",
+      "alpha2CountryCode": "EE",
+      "countryName": "Estonia",
+      "callingCode": "372",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "FIN",
+      "alpha2CountryCode": "FI",
+      "countryName": "Finland",
+      "callingCode": "358",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "FRA",
+      "alpha2CountryCode": "FR",
+      "countryName": "France",
+      "callingCode": "33",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "DEU",
+      "alpha2CountryCode": "DE",
+      "countryName": "Germany",
+      "callingCode": "49",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GRC",
+      "alpha2CountryCode": "GR",
+      "countryName": "Greece",
+      "callingCode": "30",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GEO",
+      "alpha2CountryCode": "GE",
+      "countryName": "Georgia",
+      "callingCode": "995",
+      "currency": {
+        "code": "GEL",
+        "symbol": "\u10da"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SVN",
+      "alpha2CountryCode": "SI",
+      "countryName": "Slovenia",
+      "callingCode": "386",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ESP",
+      "alpha2CountryCode": "ES",
+      "countryName": "Spain",
+      "callingCode": "34",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SWE",
+      "alpha2CountryCode": "SE",
+      "countryName": "Sweden",
+      "callingCode": "46",
+      "currency": {
+        "code": "SEK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AUT",
+      "alpha2CountryCode": "AT",
+      "countryName": "Austria",
+      "callingCode": "43",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BEL",
+      "alpha2CountryCode": "BE",
+      "countryName": "Belgium",
+      "callingCode": "32",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SSD",
+      "alpha2CountryCode": "SS",
+      "countryName": "South Sudan",
+      "callingCode": "211",
+      "currency": {
+        "code": "SSP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "YUG",
+      "alpha2CountryCode": "YU",
+      "countryName": "Yugoslavia",
+      "callingCode": "38",
+      "currency": {
+        "code": "YUD",
+        "symbol": "din."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BGR",
+      "alpha2CountryCode": "BG",
+      "countryName": "Bulgaria",
+      "callingCode": "359",
+      "currency": {
+        "code": "BGN",
+        "symbol": "\u043b\u0432"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "HRV",
+      "alpha2CountryCode": "HR",
+      "countryName": "Croatia",
+      "callingCode": "385",
+      "currency": {
+        "code": "HRK",
+        "symbol": "kn"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CYP",
+      "alpha2CountryCode": "CY",
+      "countryName": "Cyprus",
+      "callingCode": "357",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CZE",
+      "alpha2CountryCode": "CZ",
+      "countryName": "Czech Republic",
+      "callingCode": "420",
+      "currency": {
+        "code": "CZK",
+        "symbol": "K\u010d"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "DNK",
+      "alpha2CountryCode": "DK",
+      "countryName": "Denmark",
+      "callingCode": "45",
+      "currency": {
+        "code": "DKK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MDA",
+      "alpha2CountryCode": "MD",
+      "countryName": "Moldova",
+      "callingCode": "373",
+      "currency": {
+        "code": "MDL",
+        "symbol": "L"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "RUS",
+      "alpha2CountryCode": "RU",
+      "countryName": "Russia",
+      "callingCode": "7",
+      "currency": {
+        "code": "RUB",
+        "symbol": "\u20bd"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ETH",
+      "alpha2CountryCode": "ET",
+      "countryName": "Ethiopia",
+      "callingCode": "251",
+      "currency": {
+        "code": "ETB",
+        "symbol": "Br"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "FRO",
+      "alpha2CountryCode": "FO",
+      "countryName": "Faroe Islands",
+      "callingCode": "298",
+      "currency": {
+        "code": "DKK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GAB",
+      "alpha2CountryCode": "GA",
+      "countryName": "Gabon",
+      "callingCode": "241",
+      "currency": {
+        "code": "XAF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GHA",
+      "alpha2CountryCode": "GH",
+      "countryName": "Ghana",
+      "callingCode": "233",
+      "currency": {
+        "code": "GHS",
+        "symbol": "\u20b5"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CUW",
+      "alpha2CountryCode": "CW",
+      "countryName": "Cura\u00e7ao",
+      "callingCode": "599",
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SXM",
+      "alpha2CountryCode": "SX",
+      "countryName": "Sint Maarten (Dutch part)",
+      "callingCode": "1721",
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ALA",
+      "alpha2CountryCode": "AX",
+      "countryName": "\u00c5land Islands",
+      "callingCode": "358",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BES",
+      "alpha2CountryCode": "BQ",
+      "countryName": "Bonaire, Sint Eustatius and Saba",
+      "callingCode": "5997",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BVT",
+      "alpha2CountryCode": "BV",
+      "countryName": "Bouvet Island",
+      "callingCode": "",
+      "currency": {
+        "code": "NOK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "UMI",
+      "alpha2CountryCode": "UM",
+      "countryName": "United States Minor Outlying Islands",
+      "callingCode": "",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GUF",
+      "alpha2CountryCode": "GF",
+      "countryName": "French Guiana",
+      "callingCode": "594",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ATF",
+      "alpha2CountryCode": "TF",
+      "countryName": "French Southern Territories",
+      "callingCode": "262",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GLP",
+      "alpha2CountryCode": "GP",
+      "countryName": "Guadeloupe",
+      "callingCode": "590",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GGY",
+      "alpha2CountryCode": "XU",
+      "countryName": "Guernsey and Alderney",
+      "callingCode": "44",
+      "currency": {
+        "code": "GBP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "HMD",
+      "alpha2CountryCode": "HM",
+      "countryName": "Heard Island and McDonald Islands",
+      "callingCode": "672",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MTQ",
+      "alpha2CountryCode": "MQ",
+      "countryName": "Martinique",
+      "callingCode": "596",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NFK",
+      "alpha2CountryCode": "NF",
+      "countryName": "Norfolk Island",
+      "callingCode": "672",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PSE",
+      "alpha2CountryCode": "PS",
+      "countryName": "Palestine, State of",
+      "callingCode": "970",
+      "currency": {
+        "code": "ILS",
+        "symbol": "\u20aa"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KOS",
+      "alpha2CountryCode": "XK",
+      "countryName": "Republic of Kosovo",
+      "callingCode": "383",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "REU",
+      "alpha2CountryCode": "RE",
+      "countryName": "R\u00e9union",
+      "callingCode": "262",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SGS",
+      "alpha2CountryCode": "GS",
+      "countryName": "South Georgia and the South Sandwich Islands",
+      "callingCode": "500",
+      "currency": {
+        "code": "GBP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "EXT",
+      "alpha2CountryCode": "XA",
+      "countryName": "External Territories of Australia",
+      "callingCode": "61",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "XGK",
+      "alpha2CountryCode": "XG",
+      "countryName": "Smaller Territories of the UK",
+      "callingCode": "1-264",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AGO",
+      "alpha2CountryCode": "AO",
+      "countryName": "Angola",
+      "callingCode": "244",
+      "currency": {
+        "code": "AOA",
+        "symbol": "Kz"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ABW",
+      "alpha2CountryCode": "AW",
+      "countryName": "Aruba",
+      "callingCode": "297",
+      "currency": {
+        "code": "AWG",
+        "symbol": "\u0192"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BHS",
+      "alpha2CountryCode": "BS",
+      "countryName": "Bahamas",
+      "callingCode": "1242",
+      "currency": {
+        "code": "BSD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BRB",
+      "alpha2CountryCode": "BB",
+      "countryName": "Barbados",
+      "callingCode": "1246",
+      "currency": {
+        "code": "BBD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BMU",
+      "alpha2CountryCode": "BM",
+      "countryName": "Bermuda",
+      "callingCode": "1441",
+      "currency": {
+        "code": "BMD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BTN",
+      "alpha2CountryCode": "BT",
+      "countryName": "Bhutan",
+      "callingCode": "975",
+      "currency": {
+        "code": "BTN",
+        "symbol": "Nu."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CYM",
+      "alpha2CountryCode": "KY",
+      "countryName": "Cayman Islands",
+      "callingCode": "1345",
+      "currency": {
+        "code": "KYD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CUB",
+      "alpha2CountryCode": "CU",
+      "countryName": "Cuba",
+      "callingCode": "53",
+      "currency": {
+        "code": "CUC",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BLR",
+      "alpha2CountryCode": "BY",
+      "countryName": "Belarus",
+      "callingCode": "375",
+      "currency": {
+        "code": "BYN",
+        "symbol": "Br"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "HUN",
+      "alpha2CountryCode": "HU",
+      "countryName": "Hungary",
+      "callingCode": "36",
+      "currency": {
+        "code": "HUF",
+        "symbol": "Ft"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IRL",
+      "alpha2CountryCode": "IE",
+      "countryName": "Ireland",
+      "callingCode": "353",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ITA",
+      "alpha2CountryCode": "IT",
+      "countryName": "Italy",
+      "callingCode": "39",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LVA",
+      "alpha2CountryCode": "LV",
+      "countryName": "Latvia",
+      "callingCode": "371",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LTU",
+      "alpha2CountryCode": "LT",
+      "countryName": "Lithuania",
+      "callingCode": "370",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LUX",
+      "alpha2CountryCode": "LU",
+      "countryName": "Luxembourg",
+      "callingCode": "352",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MLT",
+      "alpha2CountryCode": "MT",
+      "countryName": "Malta",
+      "callingCode": "356",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NLD",
+      "alpha2CountryCode": "NL",
+      "countryName": "Netherlands",
+      "callingCode": "31",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ISL",
+      "alpha2CountryCode": "IS",
+      "countryName": "Iceland",
+      "callingCode": "354",
+      "currency": {
+        "code": "ISK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KAZ",
+      "alpha2CountryCode": "KZ",
+      "countryName": "Kazakhstan",
+      "callingCode": "76",
+      "currency": {
+        "code": "KZT",
+        "symbol": "\u20b8"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ATG",
+      "alpha2CountryCode": "AG",
+      "countryName": "Antigua",
+      "callingCode": "1268",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BOL",
+      "alpha2CountryCode": "BO",
+      "countryName": "Bolivia",
+      "callingCode": "591",
+      "currency": {
+        "code": "BOB",
+        "symbol": "Bs."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VGB",
+      "alpha2CountryCode": "VG",
+      "countryName": "British Virgin Islands",
+      "callingCode": "1284",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VIR",
+      "alpha2CountryCode": "VI",
+      "countryName": "US Virgin Islands",
+      "callingCode": "1 340",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BRN",
+      "alpha2CountryCode": "BN",
+      "countryName": "Brunei",
+      "callingCode": "673",
+      "currency": {
+        "code": "BND",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CPV",
+      "alpha2CountryCode": "CV",
+      "countryName": "Cape Verde",
+      "callingCode": "238",
+      "currency": {
+        "code": "CVE",
+        "symbol": "Esc"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LIE",
+      "alpha2CountryCode": "LI",
+      "countryName": "Liechtenstein",
+      "callingCode": "423",
+      "currency": {
+        "code": "CHF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "COG",
+      "alpha2CountryCode": "CG",
+      "countryName": "Republic of the Congo",
+      "callingCode": "242",
+      "currency": {
+        "code": "XAF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "COD",
+      "alpha2CountryCode": "CD",
+      "countryName": "Democratic Republic of the Congo",
+      "callingCode": "243",
+      "currency": {
+        "code": "CDF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MCO",
+      "alpha2CountryCode": "MC",
+      "countryName": "Monaco",
+      "callingCode": "377",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MNE",
+      "alpha2CountryCode": "ME",
+      "countryName": "Montenegro",
+      "callingCode": "382",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NOR",
+      "alpha2CountryCode": "NO",
+      "countryName": "Norway",
+      "callingCode": "47",
+      "currency": {
+        "code": "NOK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KWT",
+      "alpha2CountryCode": "KW",
+      "countryName": "Kuwait",
+      "callingCode": "965",
+      "currency": {
+        "code": "KWD",
+        "symbol": "\u062f.\u0643"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "OMN",
+      "alpha2CountryCode": "OM",
+      "countryName": "Oman",
+      "callingCode": "968",
+      "currency": {
+        "code": "OMR",
+        "symbol": "\u0631.\u0639."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GRL",
+      "alpha2CountryCode": "GL",
+      "countryName": "Greenland",
+      "callingCode": "299",
+      "currency": {
+        "code": "DKK",
+        "symbol": "kr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GRD",
+      "alpha2CountryCode": "GD",
+      "countryName": "Grenada",
+      "callingCode": "1473",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GUM",
+      "alpha2CountryCode": "GU",
+      "countryName": "Guam",
+      "callingCode": "1671",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GTM",
+      "alpha2CountryCode": "GT",
+      "countryName": "Guatemala",
+      "callingCode": "502",
+      "currency": {
+        "code": "GTQ",
+        "symbol": "Q"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GIN",
+      "alpha2CountryCode": "GN",
+      "countryName": "Guinea",
+      "callingCode": "224",
+      "currency": {
+        "code": "GNF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GNB",
+      "alpha2CountryCode": "GW",
+      "countryName": "Guinea-Bissau",
+      "callingCode": "245",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "HND",
+      "alpha2CountryCode": "HN",
+      "countryName": "Honduras",
+      "callingCode": "504",
+      "currency": {
+        "code": "HNL",
+        "symbol": "L"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "HKG",
+      "alpha2CountryCode": "HK",
+      "countryName": "Hong Kong",
+      "callingCode": "852",
+      "currency": {
+        "code": "HKD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "callingCode": "91",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "europeanUnionCountry": false,
+      "india": true
+    },
+    {
+      "alpha3CountryCode": "IDN",
+      "alpha2CountryCode": "ID",
+      "countryName": "Indonesia",
+      "callingCode": "62",
+      "currency": {
+        "code": "IDR",
+        "symbol": "Rp"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IRQ",
+      "alpha2CountryCode": "IQ",
+      "countryName": "Iraq",
+      "callingCode": "964",
+      "currency": {
+        "code": "IQD",
+        "symbol": "\u0639.\u062f"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IMN",
+      "alpha2CountryCode": "IM",
+      "countryName": "Isle of Man",
+      "callingCode": "44",
+      "currency": {
+        "code": "GBP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ISR",
+      "alpha2CountryCode": "IL",
+      "countryName": "Israel",
+      "callingCode": "972",
+      "currency": {
+        "code": "ILS",
+        "symbol": "\u20aa"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "JAM",
+      "alpha2CountryCode": "JM",
+      "countryName": "Jamaica",
+      "callingCode": "1876",
+      "currency": {
+        "code": "JMD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "JPN",
+      "alpha2CountryCode": "JP",
+      "countryName": "Japan",
+      "callingCode": "81",
+      "currency": {
+        "code": "JPY",
+        "symbol": "\u00a5"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "JEY",
+      "alpha2CountryCode": "JE",
+      "countryName": "Jersey",
+      "callingCode": "44",
+      "currency": {
+        "code": "GBP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "JOR",
+      "alpha2CountryCode": "JO",
+      "countryName": "Jordan",
+      "callingCode": "962",
+      "currency": {
+        "code": "JOD",
+        "symbol": "\u062f.\u0627"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KEN",
+      "alpha2CountryCode": "KE",
+      "countryName": "Kenya",
+      "callingCode": "254",
+      "currency": {
+        "code": "KES",
+        "symbol": "Sh"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KIR",
+      "alpha2CountryCode": "KI",
+      "countryName": "Kiribati",
+      "callingCode": "686",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LBN",
+      "alpha2CountryCode": "LB",
+      "countryName": "Lebanon",
+      "callingCode": "961",
+      "currency": {
+        "code": "LBP",
+        "symbol": "\u0644.\u0644"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LBY",
+      "alpha2CountryCode": "LY",
+      "countryName": "Libya",
+      "callingCode": "218",
+      "currency": {
+        "code": "LYD",
+        "symbol": "\u0644.\u062f"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MDG",
+      "alpha2CountryCode": "MG",
+      "countryName": "Madagascar",
+      "callingCode": "261",
+      "currency": {
+        "code": "MGA",
+        "symbol": "Ar"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MYS",
+      "alpha2CountryCode": "MY",
+      "countryName": "Malaysia",
+      "callingCode": "60",
+      "currency": {
+        "code": "MYR",
+        "symbol": "RM"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MLI",
+      "alpha2CountryCode": "ML",
+      "countryName": "Mali",
+      "callingCode": "223",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MHL",
+      "alpha2CountryCode": "MH",
+      "countryName": "Marshall Islands",
+      "callingCode": "692",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MUS",
+      "alpha2CountryCode": "MU",
+      "countryName": "Mauritius",
+      "callingCode": "230",
+      "currency": {
+        "code": "MUR",
+        "symbol": "\u20a8"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MYT",
+      "alpha2CountryCode": "YT",
+      "countryName": "Mayotte",
+      "callingCode": "262",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MEX",
+      "alpha2CountryCode": "MX",
+      "countryName": "Mexico",
+      "callingCode": "52",
+      "currency": {
+        "code": "MXN",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MSR",
+      "alpha2CountryCode": "MS",
+      "countryName": "Montserrat",
+      "callingCode": "1664",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MAR",
+      "alpha2CountryCode": "MA",
+      "countryName": "Morocco",
+      "callingCode": "212",
+      "currency": {
+        "code": "MAD",
+        "symbol": "\u062f.\u0645."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MOZ",
+      "alpha2CountryCode": "MZ",
+      "countryName": "Mozambique",
+      "callingCode": "258",
+      "currency": {
+        "code": "MZN",
+        "symbol": "MT"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MMR",
+      "alpha2CountryCode": "MM",
+      "countryName": "Myanmar",
+      "callingCode": "95",
+      "currency": {
+        "code": "MMK",
+        "symbol": "Ks"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NAM",
+      "alpha2CountryCode": "NA",
+      "countryName": "Namibia",
+      "callingCode": "264",
+      "currency": {
+        "code": "NAD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NRU",
+      "alpha2CountryCode": "NR",
+      "countryName": "Nauru",
+      "callingCode": "674",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NPL",
+      "alpha2CountryCode": "NP",
+      "countryName": "Nepal",
+      "callingCode": "977",
+      "currency": {
+        "code": "NPR",
+        "symbol": "\u20a8"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NZL",
+      "alpha2CountryCode": "NZ",
+      "countryName": "New Zealand",
+      "callingCode": "64",
+      "currency": {
+        "code": "NZD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NIC",
+      "alpha2CountryCode": "NI",
+      "countryName": "Nicaragua",
+      "callingCode": "505",
+      "currency": {
+        "code": "NIO",
+        "symbol": "C$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NER",
+      "alpha2CountryCode": "NE",
+      "countryName": "Niger",
+      "callingCode": "227",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NGA",
+      "alpha2CountryCode": "NG",
+      "countryName": "Nigeria",
+      "callingCode": "234",
+      "currency": {
+        "code": "NGN",
+        "symbol": "\u20a6"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "NIU",
+      "alpha2CountryCode": "NU",
+      "countryName": "Niue",
+      "callingCode": "683",
+      "currency": {
+        "code": "NZD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MNP",
+      "alpha2CountryCode": "MP",
+      "countryName": "Northern Mariana Islands",
+      "callingCode": "1670",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PAK",
+      "alpha2CountryCode": "PK",
+      "countryName": "Pakistan",
+      "callingCode": "92",
+      "currency": {
+        "code": "PKR",
+        "symbol": "\u20a8"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PAN",
+      "alpha2CountryCode": "PA",
+      "countryName": "Panama",
+      "callingCode": "507",
+      "currency": {
+        "code": "PAB",
+        "symbol": "B/."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PRY",
+      "alpha2CountryCode": "PY",
+      "countryName": "Paraguay",
+      "callingCode": "595",
+      "currency": {
+        "code": "PYG",
+        "symbol": "\u20b2"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PER",
+      "alpha2CountryCode": "PE",
+      "countryName": "Peru",
+      "callingCode": "51",
+      "currency": {
+        "code": "PEN",
+        "symbol": "S/."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PHL",
+      "alpha2CountryCode": "PH",
+      "countryName": "Philippines",
+      "callingCode": "63",
+      "currency": {
+        "code": "PHP",
+        "symbol": "\u20b1"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PRI",
+      "alpha2CountryCode": "PR",
+      "countryName": "Puerto Rico",
+      "callingCode": "1787",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "RWA",
+      "alpha2CountryCode": "RW",
+      "countryName": "Rwanda",
+      "callingCode": "250",
+      "currency": {
+        "code": "RWF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SPM",
+      "alpha2CountryCode": "PM",
+      "countryName": "Saint Pierre and Miquelon",
+      "callingCode": "508",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SEN",
+      "alpha2CountryCode": "SN",
+      "countryName": "Senegal",
+      "callingCode": "221",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SGP",
+      "alpha2CountryCode": "SG",
+      "countryName": "Singapore",
+      "callingCode": "65",
+      "currency": {
+        "code": "BND",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SMR",
+      "alpha2CountryCode": "SM",
+      "countryName": "San Marino",
+      "callingCode": "378",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SOM",
+      "alpha2CountryCode": "SO",
+      "countryName": "Somalia",
+      "callingCode": "252",
+      "currency": {
+        "code": "SOS",
+        "symbol": "Sh"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ZAF",
+      "alpha2CountryCode": "ZA",
+      "countryName": "South Africa",
+      "callingCode": "27",
+      "currency": {
+        "code": "ZAR",
+        "symbol": "Rs"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SRB",
+      "alpha2CountryCode": "RS",
+      "countryName": "Serbia",
+      "callingCode": "381",
+      "currency": {
+        "code": "RSD",
+        "symbol": "\u0434\u0438\u043d."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LKA",
+      "alpha2CountryCode": "LK",
+      "countryName": "Sri Lanka",
+      "callingCode": "94",
+      "currency": {
+        "code": "LKR",
+        "symbol": "Rs"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SDN",
+      "alpha2CountryCode": "SD",
+      "countryName": "Sudan",
+      "callingCode": "249",
+      "currency": {
+        "code": "SDG",
+        "symbol": "\u062c.\u0633."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CHE",
+      "alpha2CountryCode": "CH",
+      "countryName": "Switzerland",
+      "callingCode": "41",
+      "currency": {
+        "code": "CHF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TWN",
+      "alpha2CountryCode": "TW",
+      "countryName": "Taiwan",
+      "callingCode": "886",
+      "currency": {
+        "code": "TWD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "THA",
+      "alpha2CountryCode": "TH",
+      "countryName": "Thailand",
+      "callingCode": "66",
+      "currency": {
+        "code": "THB",
+        "symbol": "\u0e3f"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TLS",
+      "alpha2CountryCode": "TL",
+      "countryName": "Timor-Leste",
+      "callingCode": "670",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TGO",
+      "alpha2CountryCode": "TG",
+      "countryName": "Togo",
+      "callingCode": "228",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TKL",
+      "alpha2CountryCode": "TK",
+      "countryName": "Tokelau",
+      "callingCode": "690",
+      "currency": {
+        "code": "NZD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TON",
+      "alpha2CountryCode": "TO",
+      "countryName": "Tonga",
+      "callingCode": "676",
+      "currency": {
+        "code": "TOP",
+        "symbol": "T$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TUN",
+      "alpha2CountryCode": "TN",
+      "countryName": "Tunisia",
+      "callingCode": "216",
+      "currency": {
+        "code": "TND",
+        "symbol": "\u062f.\u062a"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AFG",
+      "alpha2CountryCode": "AF",
+      "countryName": "Afghanistan",
+      "callingCode": "93",
+      "currency": {
+        "code": "AFN",
+        "symbol": "\u060b"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "DZA",
+      "alpha2CountryCode": "DZ",
+      "countryName": "Algeria",
+      "callingCode": "213",
+      "currency": {
+        "code": "DZD",
+        "symbol": "\u062f.\u062c"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AIA",
+      "alpha2CountryCode": "AI",
+      "countryName": "Anguilla",
+      "callingCode": "1264",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ATA",
+      "alpha2CountryCode": "AQ",
+      "countryName": "Antarctica",
+      "callingCode": "672",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ARG",
+      "alpha2CountryCode": "AR",
+      "countryName": "Argentina",
+      "callingCode": "54",
+      "currency": {
+        "code": "ARS",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AUS",
+      "alpha2CountryCode": "AU",
+      "countryName": "Australia",
+      "callingCode": "61",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ALB",
+      "alpha2CountryCode": "AL",
+      "countryName": "Albania",
+      "callingCode": "355",
+      "currency": {
+        "code": "ALL",
+        "symbol": "L"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BGD",
+      "alpha2CountryCode": "BD",
+      "countryName": "Bangladesh",
+      "callingCode": "880",
+      "currency": {
+        "code": "BDT",
+        "symbol": "\u09f3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AND",
+      "alpha2CountryCode": "AD",
+      "countryName": "Andorra",
+      "callingCode": "376",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BLZ",
+      "alpha2CountryCode": "BZ",
+      "countryName": "Belize",
+      "callingCode": "501",
+      "currency": {
+        "code": "BZD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BEN",
+      "alpha2CountryCode": "BJ",
+      "countryName": "Benin",
+      "callingCode": "229",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BWA",
+      "alpha2CountryCode": "BW",
+      "countryName": "Botswana",
+      "callingCode": "267",
+      "currency": {
+        "code": "BWP",
+        "symbol": "P"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BRA",
+      "alpha2CountryCode": "BR",
+      "countryName": "Brazil",
+      "callingCode": "55",
+      "currency": {
+        "code": "BRL",
+        "symbol": "R$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IOT",
+      "alpha2CountryCode": "IO",
+      "countryName": "British Indian Ocean Territory",
+      "callingCode": "246",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ARM",
+      "alpha2CountryCode": "AM",
+      "countryName": "Armenia",
+      "callingCode": "374",
+      "currency": {
+        "code": "AMD",
+        "symbol": "\u058f"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BFA",
+      "alpha2CountryCode": "BF",
+      "countryName": "Burkina Faso",
+      "callingCode": "226",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BDI",
+      "alpha2CountryCode": "BI",
+      "countryName": "Burundi",
+      "callingCode": "257",
+      "currency": {
+        "code": "BIF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KHM",
+      "alpha2CountryCode": "KH",
+      "countryName": "Cambodia",
+      "callingCode": "855",
+      "currency": {
+        "code": "KHR",
+        "symbol": "\u17db"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CMR",
+      "alpha2CountryCode": "CM",
+      "countryName": "Cameroon",
+      "callingCode": "237",
+      "currency": {
+        "code": "XAF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CAN",
+      "alpha2CountryCode": "CA",
+      "countryName": "Canada",
+      "callingCode": "1",
+      "currency": {
+        "code": "CAD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CAF",
+      "alpha2CountryCode": "CF",
+      "countryName": "Central African Republic",
+      "callingCode": "236",
+      "currency": {
+        "code": "XAF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "AZE",
+      "alpha2CountryCode": "AZ",
+      "countryName": "Azerbaijan",
+      "callingCode": "994",
+      "currency": {
+        "code": "AZN",
+        "symbol": "\u20bc"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TCD",
+      "alpha2CountryCode": "TD",
+      "countryName": "Chad",
+      "callingCode": "235",
+      "currency": {
+        "code": "XAF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CHL",
+      "alpha2CountryCode": "CL",
+      "countryName": "Chile",
+      "callingCode": "56",
+      "currency": {
+        "code": "CLP",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CHN",
+      "alpha2CountryCode": "CN",
+      "countryName": "China",
+      "callingCode": "86",
+      "currency": {
+        "code": "CNY",
+        "symbol": "\u00a5"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CXR",
+      "alpha2CountryCode": "CX",
+      "countryName": "Christmas Island",
+      "callingCode": "61",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CCK",
+      "alpha2CountryCode": "CC",
+      "countryName": "Cocos (Keeling) Islands",
+      "callingCode": "61",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "COL",
+      "alpha2CountryCode": "CO",
+      "countryName": "Colombia",
+      "callingCode": "57",
+      "currency": {
+        "code": "COP",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "COM",
+      "alpha2CountryCode": "KM",
+      "countryName": "Comoros",
+      "callingCode": "269",
+      "currency": {
+        "code": "KMF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "COK",
+      "alpha2CountryCode": "CK",
+      "countryName": "Cook Islands",
+      "callingCode": "682",
+      "currency": {
+        "code": "NZD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CRI",
+      "alpha2CountryCode": "CR",
+      "countryName": "Costa Rica",
+      "callingCode": "506",
+      "currency": {
+        "code": "CRC",
+        "symbol": "\u20a1"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BIH",
+      "alpha2CountryCode": "BA",
+      "countryName": "Bosnia and Herzegovina",
+      "callingCode": "387",
+      "currency": {
+        "code": "BAM",
+        "symbol": "KM"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "POL",
+      "alpha2CountryCode": "PL",
+      "countryName": "Poland",
+      "callingCode": "48",
+      "currency": {
+        "code": "PLN",
+        "symbol": "z\u0142"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PRT",
+      "alpha2CountryCode": "PT",
+      "countryName": "Portugal",
+      "callingCode": "351",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ROU",
+      "alpha2CountryCode": "RO",
+      "countryName": "Romania",
+      "callingCode": "40",
+      "currency": {
+        "code": "RON",
+        "symbol": "lei"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "DJI",
+      "alpha2CountryCode": "DJ",
+      "countryName": "Djibouti",
+      "callingCode": "253",
+      "currency": {
+        "code": "DJF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "DMA",
+      "alpha2CountryCode": "DM",
+      "countryName": "Dominica",
+      "callingCode": "1767",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "DOM",
+      "alpha2CountryCode": "DO",
+      "countryName": "Dominican Republic",
+      "callingCode": "1809",
+      "currency": {
+        "code": "DOP",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ECU",
+      "alpha2CountryCode": "EC",
+      "countryName": "Ecuador",
+      "callingCode": "593",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "EGY",
+      "alpha2CountryCode": "EG",
+      "countryName": "Egypt",
+      "callingCode": "20",
+      "currency": {
+        "code": "EGP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SLV",
+      "alpha2CountryCode": "SV",
+      "countryName": "El Salvador",
+      "callingCode": "503",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GNQ",
+      "alpha2CountryCode": "GQ",
+      "countryName": "Equatorial Guinea",
+      "callingCode": "240",
+      "currency": {
+        "code": "XAF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ERI",
+      "alpha2CountryCode": "ER",
+      "countryName": "Eritrea",
+      "callingCode": "291",
+      "currency": {
+        "code": "ERN",
+        "symbol": "Nfk"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ASM",
+      "alpha2CountryCode": "AS",
+      "countryName": "American Samoa",
+      "callingCode": "1",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SVK",
+      "alpha2CountryCode": "SK",
+      "countryName": "Slovakia",
+      "callingCode": "421",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": true,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "QAT",
+      "alpha2CountryCode": "QA",
+      "countryName": "Qatar",
+      "callingCode": "974",
+      "currency": {
+        "code": "QAR",
+        "symbol": "\u0631.\u0642"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SAU",
+      "alpha2CountryCode": "SA",
+      "countryName": "Saudi Arabia",
+      "callingCode": "966",
+      "currency": {
+        "code": "SAR",
+        "symbol": "\u0631.\u0633"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BHR",
+      "alpha2CountryCode": "BH",
+      "countryName": "Bahrain",
+      "callingCode": "973",
+      "currency": {
+        "code": "BHD",
+        "symbol": ".\u062f.\u0628"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "FLK",
+      "alpha2CountryCode": "FK",
+      "countryName": "Falkland Islands",
+      "callingCode": "500",
+      "currency": {
+        "code": "FKP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VAT",
+      "alpha2CountryCode": "VA",
+      "countryName": "Holy See (Vatican, City)",
+      "callingCode": "379",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "CIV",
+      "alpha2CountryCode": "CI",
+      "countryName": "Ivory Coast",
+      "callingCode": "225",
+      "currency": {
+        "code": "XOF",
+        "symbol": "Fr"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IRN",
+      "alpha2CountryCode": "IR",
+      "countryName": "Iran",
+      "callingCode": "98",
+      "currency": {
+        "code": "IRR",
+        "symbol": "\ufdfc"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LAO",
+      "alpha2CountryCode": "LA",
+      "countryName": "Laos",
+      "callingCode": "856",
+      "currency": {
+        "code": "LAK",
+        "symbol": "\u20ad"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MAC",
+      "alpha2CountryCode": "MO",
+      "countryName": "Macau",
+      "callingCode": "853",
+      "currency": {
+        "code": "MOP",
+        "symbol": "P"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "MKD",
+      "alpha2CountryCode": "MK",
+      "countryName": "Macedonia",
+      "callingCode": "389",
+      "currency": {
+        "code": "MKD",
+        "symbol": "\u0434\u0435\u043d"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "FSM",
+      "alpha2CountryCode": "FM",
+      "countryName": "Micronesia",
+      "callingCode": "691",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PRK",
+      "alpha2CountryCode": "KP",
+      "countryName": "North Korea",
+      "callingCode": "850",
+      "currency": {
+        "code": "KPW",
+        "symbol": "\u20a9"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "PCN",
+      "alpha2CountryCode": "PN",
+      "countryName": "Pitcairn Islands",
+      "callingCode": "64",
+      "currency": {
+        "code": "NZD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "BLM",
+      "alpha2CountryCode": "BL",
+      "countryName": "Saint Barthelemy",
+      "callingCode": "590",
+      "currency": {
+        "code": "EUR",
+        "symbol": "\u20ac"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "SHN",
+      "alpha2CountryCode": "SH",
+      "countryName": "St. Helena",
+      "callingCode": "290",
+      "currency": {
+        "code": "SHP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "KNA",
+      "alpha2CountryCode": "KN",
+      "countryName": "St. Kitts",
+      "callingCode": "1869",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "LCA",
+      "alpha2CountryCode": "LC",
+      "countryName": "St. Lucia",
+      "callingCode": "1758",
+      "currency": {
+        "code": "XCD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TUR",
+      "alpha2CountryCode": "TR",
+      "countryName": "Turkey",
+      "callingCode": "90",
+      "currency": {
+        "code": "TRY",
+        "symbol": "\u20ba"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "UKR",
+      "alpha2CountryCode": "UA",
+      "countryName": "Ukraine",
+      "callingCode": "380",
+      "currency": {
+        "code": "UAH",
+        "symbol": "\u20b4"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "GBR",
+      "alpha2CountryCode": "GB",
+      "countryName": "United Kingdom",
+      "callingCode": "44",
+      "currency": {
+        "code": "GBP",
+        "symbol": "\u00a3"
+      },
+      "europeanUnionCountry": false,
+      "alternateCountryCode": "UK",
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TKM",
+      "alpha2CountryCode": "TM",
+      "countryName": "Turkmenistan",
+      "callingCode": "993",
+      "currency": {
+        "code": "TMT",
+        "symbol": "m"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VUT",
+      "alpha2CountryCode": "VU",
+      "countryName": "Vanuatu",
+      "callingCode": "678",
+      "currency": {
+        "code": "VUV",
+        "symbol": "Vt"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "WLF",
+      "alpha2CountryCode": "WF",
+      "countryName": "Wallis and Futuna",
+      "callingCode": "681",
+      "currency": {
+        "code": "XPF",
+        "symbol": "\u20a3"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ZMB",
+      "alpha2CountryCode": "ZM",
+      "countryName": "Zambia",
+      "callingCode": "260",
+      "currency": {
+        "code": "ZMW",
+        "symbol": "ZK"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ARE",
+      "alpha2CountryCode": "AE",
+      "countryName": "United Arab Emirates",
+      "callingCode": "971",
+      "currency": {
+        "code": "AED",
+        "symbol": "\u062f.\u0625"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VEN",
+      "alpha2CountryCode": "VE",
+      "countryName": "Venezuela",
+      "callingCode": "58",
+      "currency": {
+        "code": "VEF",
+        "symbol": "Bs F"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ZWE",
+      "alpha2CountryCode": "ZW",
+      "countryName": "Zimbabwe",
+      "callingCode": "263",
+      "currency": {
+        "code": "ZWG",
+        "symbol": "ZiG"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "VNM",
+      "alpha2CountryCode": "VN",
+      "countryName": "Vietnam",
+      "callingCode": "84",
+      "currency": {
+        "code": "VND",
+        "symbol": "\u20ab"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TCA",
+      "alpha2CountryCode": "TC",
+      "countryName": "Turks and Caicos Islands",
+      "callingCode": "1649",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "TUV",
+      "alpha2CountryCode": "TV",
+      "countryName": "Tuvalu",
+      "callingCode": "688",
+      "currency": {
+        "code": "AUD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "UGA",
+      "alpha2CountryCode": "UG",
+      "countryName": "Uganda",
+      "callingCode": "256",
+      "currency": {
+        "code": "UGX",
+        "symbol": "Sh"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "USA",
+      "alpha2CountryCode": "US",
+      "countryName": "United States of America",
+      "callingCode": "1",
+      "currency": {
+        "code": "USD",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "URY",
+      "alpha2CountryCode": "UY",
+      "countryName": "Uruguay",
+      "callingCode": "598",
+      "currency": {
+        "code": "UYU",
+        "symbol": "$"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "UZB",
+      "alpha2CountryCode": "UZ",
+      "countryName": "Uzbekistan",
+      "callingCode": "998",
+      "currency": {
+        "code": "UZS",
+        "symbol": "so'm"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ESH",
+      "alpha2CountryCode": "EH",
+      "countryName": "Western Sahara",
+      "callingCode": "212",
+      "currency": {
+        "code": "MAD",
+        "symbol": "\u062f.\u0645."
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "YEM",
+      "alpha2CountryCode": "YE",
+      "countryName": "Yemen",
+      "callingCode": "967",
+      "currency": {
+        "code": "YER",
+        "symbol": "\ufdfc"
+      },
+      "europeanUnionCountry": false,
+      "india": false
+    }
+  ]
+}

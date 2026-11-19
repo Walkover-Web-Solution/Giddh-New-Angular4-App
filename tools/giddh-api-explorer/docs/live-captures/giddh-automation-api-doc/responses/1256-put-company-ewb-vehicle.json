@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "EWB no. cannot blank/null",
+  "code": "INVALID_REQUEST"
+}

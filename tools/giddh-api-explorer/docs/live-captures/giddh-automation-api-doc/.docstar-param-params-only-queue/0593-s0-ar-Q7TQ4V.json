@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "s0-ar-Q7TQ4V", "description": "Update Patch. Part of the Trigger APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"lang": {"checked": "true", "value": "StaticMessageSource.DEFAULT_LANG", "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.", "required": "false"}}}

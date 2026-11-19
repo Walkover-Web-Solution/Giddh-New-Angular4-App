@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "TBUAgvdA-4UK", "description": "Set Company Image. Part of the Images APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"type": {"checked": "true", "value": "logo", "description": "Voucher or entity type discriminator for the list. Default: logo. Optional.", "required": "false"}}}

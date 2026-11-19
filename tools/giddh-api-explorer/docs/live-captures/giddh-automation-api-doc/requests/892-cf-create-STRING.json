@@ -1,0 +1,21 @@
+{
+  "fieldName": "API Doc CF Note",
+  "fieldType": {
+    "name": "Text",
+    "type": "STRING"
+  },
+  "fieldInfo": "note",
+  "isMandatory": false,
+  "dataRange": {
+    "min": null,
+    "max": null
+  },
+  "multipleOptions": false,
+  "modules": [
+    {
+      "name": "Account",
+      "uniqueName": "ACCOUNT"
+    }
+  ],
+  "status": true
+}

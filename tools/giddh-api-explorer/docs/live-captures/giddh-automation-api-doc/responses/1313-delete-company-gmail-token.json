@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Token not found",
+  "code": "NOT_FOUND"
+}

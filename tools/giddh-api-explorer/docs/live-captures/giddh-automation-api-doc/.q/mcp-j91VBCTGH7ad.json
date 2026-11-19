@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"j91VBCTGH7ad","description":"Delete Comment a reports record. Part of the Reports APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"none"}}}

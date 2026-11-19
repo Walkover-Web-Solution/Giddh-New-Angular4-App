@@ -1,0 +1,142 @@
+{
+  "status": "success",
+  "body": {
+    "number": "PR-20261023-1",
+    "type": "sales",
+    "date": "23-10-2026",
+    "dueDate": "06-11-2026",
+    "uniqueName": "q2c1792731068597",
+    "balanceTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0,
+      "type": "DEBIT"
+    },
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "currency": {
+        "code": "INR"
+      },
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "account": {
+      "name": "API Doc Customer Three",
+      "uniqueName": "apidoc-customer-three",
+      "customerName": "API Doc Customer Three",
+      "billingDetails": {
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "stateGstCode": "23",
+        "countryName": "India",
+        "countryCode": "IN",
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        }
+      },
+      "shippingDetails": {
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "stateGstCode": "23",
+        "countryName": "India",
+        "countryCode": "IN",
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        }
+      },
+      "placeOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "currency": {
+        "code": "INR"
+      }
+    },
+    "entries": [
+      {
+        "voucherType": "sales",
+        "voucherNumber": "PR-20261023-1",
+        "description": "Proforma via sales type",
+        "date": "23-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Sales",
+              "uniqueName": "sales"
+            },
+            "amount": {
+              "amountForAccount": 77.0,
+              "amountForCompany": 77.0
+            },
+            "type": "DEBIT"
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "entryTotal": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "entryTotalWithoutTcsTds": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "usedQuantity": 0
+      }
+    ],
+    "grandTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0,
+      "type": "DEBIT"
+    },
+    "subTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0,
+      "type": "DEBIT"
+    },
+    "taxTotal": {
+      "cumulativeAmountForAccount": 0.0,
+      "cumulativeAmountForCompany": 0.0,
+      "taxBreakdown": []
+    },
+    "roundOffTotal": {
+      "amountForAccount": 0.0,
+      "amountForCompany": 0.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Seventy Seven Only",
+      "amountForCompany": "Seventy Seven Only"
+    },
+    "updateAccountDetails": false,
+    "action": "submitted",
+    "templateDetails": {
+      "other": {}
+    },
+    "attachedFiles": [],
+    "entryUniqueNames": [
+      null
+    ],
+    "exchangeRate": 1.0,
+    "valuesInAccountCurrency": true,
+    "isEcommerceInvoice": false,
+    "applyApplicableTaxes": false,
+    "multiCurrency": false,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "touristSchemeApplicable": false,
+    "roundOffApplicable": true,
+    "forNewSubscription": false,
+    "cashInvoice": false,
+    "defaultCompanyAddress": true,
+    "exportInvoice": false
+  }
+}

@@ -1,0 +1,1 @@
+{"file": "create-c2-2.json", "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/export-account-statement:PortalController:exportAccountStatement"}

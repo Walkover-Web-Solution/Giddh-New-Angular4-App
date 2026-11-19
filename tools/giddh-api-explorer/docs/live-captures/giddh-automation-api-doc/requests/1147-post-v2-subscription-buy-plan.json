@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/subscription/buy-plan",
+  "body": {
+    "planUniqueName": "placeholder",
+    "paymentMethod": "PAYPAL"
+  }
+}

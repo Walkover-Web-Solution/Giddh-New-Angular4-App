@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "orgId": "83427",
+    "collectionId": "-Jey39dCAAyx",
+    "rootParentId": "u9XDYe5Zc_ds",
+    "queueTotal": 627,
+    "missingCatalogCount": 93,
+    "updatedOk": 720,
+    "failedCount": 0,
+    "skippedIdentical": 0,
+    "queueAndMissingSample": {
+      "totalUpdatesAttempted": 657,
+      "updatedOk": 657,
+      "failedCount": 0,
+      "updateMethod": "DocStar PUT (hm_ API token; same body as user-docstar update_endpoint)"
+    },
+    "missingFollowup": {
+      "attempted": 63,
+      "updatedOk": 63,
+      "failedCount": 0,
+      "updateMethod": "user-docstar update_endpoint MCP (public description template)"
+    },
+    "publish": {
+      "mainBulkPublish": {
+        "pageIdsTotal": 658,
+        "chunks": 4,
+        "allChunksOk": true,
+        "completedAt": "2026-10-28T05:32:12.190Z"
+      },
+      "followupMissing": {
+        "pageIdsTotal": 64,
+        "ok": true,
+        "via": "user-docstar publish_pages MCP",
+        "completedAt": "2026-10-28T05:34:22.585Z"
+      }
+    },
+    "completedAt": "2026-10-28T05:34:22.585Z"
+  },
+  "failed": []
+}

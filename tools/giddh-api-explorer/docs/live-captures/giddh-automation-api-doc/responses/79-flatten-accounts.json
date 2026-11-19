@@ -1,0 +1,180 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 8,
+    "totalPages": 1,
+    "totalItems": 8,
+    "results": [
+      {
+        "name": "API Doc Bank HDFC",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": null,
+        "mobileNo": null,
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-bank-hdfc",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets"
+          },
+          {
+            "name": "Bank Accounts",
+            "uniqueName": "bankaccounts"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Vendor Two",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "vendor.two@example.com",
+        "mobileNo": "919876543230",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-vendor-two",
+        "parentGroups": [
+          {
+            "name": "Current Liabilities",
+            "uniqueName": "currentliabilities"
+          },
+          {
+            "name": "Sundry Creditors",
+            "uniqueName": "sundrycreditors"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Vendor One",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "vendor.one@example.com",
+        "mobileNo": "919876543211",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-vendor-one",
+        "parentGroups": [
+          {
+            "name": "Current Liabilities",
+            "uniqueName": "currentliabilities"
+          },
+          {
+            "name": "Sundry Creditors",
+            "uniqueName": "sundrycreditors"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Vendor Three",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "vendor.three@example.com",
+        "mobileNo": "919876543231",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-vendor-three",
+        "parentGroups": [
+          {
+            "name": "Current Liabilities",
+            "uniqueName": "currentliabilities"
+          },
+          {
+            "name": "Sundry Creditors",
+            "uniqueName": "sundrycreditors"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Walk-in Customer",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "walkin@example.com",
+        "mobileNo": "919876543222",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-customer-b2c",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets"
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Customer One",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "customer.one@example.com",
+        "mobileNo": "919876543210",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-customer-one",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets"
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Customer Two",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "customer.two@example.com",
+        "mobileNo": "919876543220",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-customer-two",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets"
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Customer Three",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "email": "customer.three@example.com",
+        "mobileNo": "919876543221",
+        "mergedAccounts": "",
+        "isFixed": false,
+        "uniqueName": "apidoc-customer-three",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets"
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors"
+          }
+        ]
+      }
+    ],
+    "size": 8
+  }
+}

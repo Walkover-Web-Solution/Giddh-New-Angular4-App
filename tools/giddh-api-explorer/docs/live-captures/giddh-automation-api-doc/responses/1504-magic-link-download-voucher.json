@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "code": "NOT_FOUND",
+  "message": "Magic link not found. please request the owner to share it again.",
+  "httpStatus": 404
+}

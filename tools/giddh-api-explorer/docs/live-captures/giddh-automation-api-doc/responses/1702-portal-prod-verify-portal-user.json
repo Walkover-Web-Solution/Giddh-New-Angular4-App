@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "account": {
+        "name": "Raji",
+        "uniqueName": "raji1"
+      },
+      "vendorContactUniqueName": "8b51792755886875"
+    },
+    {
+      "account": {
+        "name": "Siddhi Batra",
+        "uniqueName": "siddhi"
+      },
+      "vendorContactUniqueName": "tdl1792756235005"
+    }
+  ],
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

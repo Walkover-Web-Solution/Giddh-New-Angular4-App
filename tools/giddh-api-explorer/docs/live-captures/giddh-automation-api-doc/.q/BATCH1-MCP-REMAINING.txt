@@ -1,0 +1,5 @@
+Batch 1 (start 50): apply MCP update_endpoint for EVERY index 0-49 before finish_batch.
+Payloads: .q/mcp-pending/00.json .. 49.json
+Or: node _docstar_param_mcp_reapply_mcp_from_pending.mjs <start> <count>
+Each stdout line: {"endpointId","args"} -> CallDynamicTool update_endpoint with args.
+DO NOT run finish_batch until all 50 succeed.

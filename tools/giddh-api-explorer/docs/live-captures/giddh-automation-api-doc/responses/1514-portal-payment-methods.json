@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "body": {
+    "RAZORPAY": false,
+    "PAYU": false,
+    "PAYPAL": false
+  },
+  "httpStatus": 200
+}

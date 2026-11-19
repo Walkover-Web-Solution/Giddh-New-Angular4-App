@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Payment method not found by unique name placeholder.",
+  "code": "NOT_FOUND"
+}

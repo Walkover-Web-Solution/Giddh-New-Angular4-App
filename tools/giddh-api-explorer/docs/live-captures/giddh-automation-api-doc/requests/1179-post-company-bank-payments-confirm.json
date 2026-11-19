@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/bank/payments/confirm?urn=placeholder&uniqueName=apidoc-widget",
+  "body": {}
+}

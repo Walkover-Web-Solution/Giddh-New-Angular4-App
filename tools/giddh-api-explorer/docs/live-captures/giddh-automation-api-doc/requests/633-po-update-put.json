@@ -1,0 +1,188 @@
+{
+  "number": "PO-20261023-1",
+  "type": "purchase",
+  "date": "23-10-2026",
+  "dueDate": "20-11-2026",
+  "uniqueName": "pze1792734608469",
+  "balanceTotal": {
+    "amountForAccount": 500.0,
+    "amountForCompany": 500.0
+  },
+  "status": "OPEN",
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "currency": {
+      "code": "INR"
+    },
+    "gstNumber": "23AAACC1206D2ZN",
+    "state": {
+      "name": "Madhya Pradesh",
+      "code": "MP"
+    },
+    "billingDetails": {
+      "gstNumber": "23AAACC1206D2ZN",
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "stateCode": "MP",
+      "stateGstCode": "23",
+      "countryName": "India",
+      "countryCode": "IN",
+      "pincode": "484224",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "country": {
+        "name": "India",
+        "code": "IN"
+      }
+    },
+    "shippingDetails": {
+      "gstNumber": "23AAACC1206D2ZN",
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "stateCode": "MP",
+      "stateGstCode": "23",
+      "countryName": "India",
+      "countryCode": "IN",
+      "pincode": "484224",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "country": {
+        "name": "India",
+        "code": "IN"
+      }
+    }
+  },
+  "account": {
+    "name": "API Doc Vendor One",
+    "uniqueName": "apidoc-vendor-one",
+    "billingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor addr"
+      ],
+      "stateCode": "MP",
+      "stateGstCode": "23",
+      "countryName": "India",
+      "countryCode": "IN",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "country": {
+        "name": "India",
+        "code": "IN"
+      }
+    },
+    "shippingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor addr"
+      ],
+      "stateCode": "MP",
+      "stateGstCode": "23",
+      "countryName": "India",
+      "countryCode": "IN",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "country": {
+        "name": "India",
+        "code": "IN"
+      }
+    },
+    "sourceOfSupply": {
+      "name": "Madhya Pradesh",
+      "code": "MP"
+    },
+    "destinationOfSupply": {
+      "name": "Madhya Pradesh",
+      "code": "MP"
+    }
+  },
+  "entries": [
+    {
+      "uniqueName": "qrq1792734608291",
+      "voucherType": "purchase",
+      "voucherNumber": "PO-20261023-1",
+      "description": "PO line",
+      "date": "23-10-2026",
+      "transactions": [
+        {
+          "account": {
+            "name": "Purchases",
+            "uniqueName": "purchases"
+          },
+          "amount": {
+            "amountForAccount": 500.0,
+            "amountForCompany": 500.0
+          },
+          "type": "DEBIT"
+        }
+      ],
+      "discounts": [],
+      "taxes": [],
+      "exchangeRate": 1.0,
+      "taxableValue": {
+        "amountForAccount": 500.0,
+        "amountForCompany": 500.0
+      },
+      "entryTotal": {
+        "amountForAccount": 500.0,
+        "amountForCompany": 500.0
+      },
+      "entryTotalWithoutTcsTds": {
+        "amountForAccount": 500.0,
+        "amountForCompany": 500.0
+      },
+      "usedQuantity": 0,
+      "totalQuantity": 1
+    }
+  ],
+  "subTotal": {
+    "amountForAccount": 500.0,
+    "amountForCompany": 500.0
+  },
+  "roundOffTotal": {
+    "amountForAccount": 0.0,
+    "amountForCompany": 0.0
+  },
+  "totalAsWords": {
+    "amountForAccount": "Five Hundred Only",
+    "amountForCompany": "Five Hundred Only"
+  },
+  "updateAccountDetails": false,
+  "entryUniqueNames": [
+    "qrq1792734608291"
+  ],
+  "exchangeRate": 1.0,
+  "valuesInAccountCurrency": true,
+  "subVoucher": "",
+  "isEcommerceInvoice": false,
+  "applyApplicableTaxes": false,
+  "warehouse": {
+    "name": "Gidd warehouse",
+    "uniqueName": "xbq1792673424418"
+  },
+  "branch": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhautomationapidoc",
+    "alias": "Gidd",
+    "parentBranch": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "42ysmze74chxajowlphz",
+      "alias": "Gidd1",
+      "parentBranch": null
+    }
+  },
+  "roundOffApplicable": true
+}

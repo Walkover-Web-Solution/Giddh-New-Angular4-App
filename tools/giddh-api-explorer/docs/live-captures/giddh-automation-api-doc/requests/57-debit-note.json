@@ -1,0 +1,108 @@
+{
+  "type": "debit note",
+  "date": "22-10-2026",
+  "dueDate": "05-11-2026",
+  "exchangeRate": 1,
+  "applyApplicableTaxes": false,
+  "roundOffApplicable": false,
+  "updateAccountDetails": false,
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-vendor-two",
+    "name": "API Doc Vendor Two",
+    "customerName": "API Doc Vendor Two",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "billingDetails": {
+      "name": "API Doc Vendor Two",
+      "address": [
+        "Address line 1"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN",
+      "gstNumber": "23AAACC1206D2ZN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Vendor Two",
+      "address": [
+        "Address line 1"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN",
+      "gstNumber": "23AAACC1206D2ZN"
+    }
+  },
+  "entries": [
+    {
+      "date": "22-10-2026",
+      "description": "API doc debit note 57-debit-note",
+      "voucherType": "debit note",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "purchases",
+            "name": "Purchases"
+          },
+          "amount": {
+            "amountForAccount": 40,
+            "amountForCompany": 40
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "warehouse": {
+    "name": "Gidd warehouse",
+    "uniqueName": "xbq1792673424418"
+  },
+  "templateDetails": {
+    "other": {}
+  }
+}

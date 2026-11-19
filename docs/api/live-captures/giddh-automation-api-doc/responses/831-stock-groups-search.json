@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "API Doc Products",
+      "uniqueName": "apidoc-products",
+      "entity": "STOCK_GROUP",
+      "stockGroups": [],
+      "stocks": [
+        {
+          "name": "API Doc Finished Good",
+          "uniqueName": "apidoc-finished-good",
+          "entity": "STOCK"
+        },
+        {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget",
+          "entity": "STOCK"
+        },
+        {
+          "name": "API Doc Widget",
+          "uniqueName": "apidoc-widget",
+          "entity": "STOCK"
+        }
+      ]
+    },
+    {
+      "name": "API Doc Services",
+      "uniqueName": "apidoc-services",
+      "entity": "STOCK_GROUP",
+      "stockGroups": [],
+      "stocks": [
+        {
+          "name": "API Doc Consulting Hour",
+          "uniqueName": "apidoc-service-hour",
+          "entity": "STOCK"
+        }
+      ]
+    }
+  ]
+}

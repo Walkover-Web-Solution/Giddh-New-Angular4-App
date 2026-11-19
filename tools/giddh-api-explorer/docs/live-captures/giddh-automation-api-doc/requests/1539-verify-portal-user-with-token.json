@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-portal-user?isEmailLogin=true",
+  "body": {
+    "emailId": "divyanshu@whozzat.com",
+    "subDomain": "GiddhAutomationAPIDOC",
+    "proxyAuthToken": "REDACTED"
+  }
+}

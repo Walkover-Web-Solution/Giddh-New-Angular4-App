@@ -1,0 +1,1375 @@
+[
+  {
+    "endpointId": "Z5ECSZ0hYb7h",
+    "name": "Retrieve Ledgers",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/ledgers/merge",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Z5ECSZ0hYb7h",
+      "description": "Retrieve Ledgers. Part of the Merge APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "desc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: desc. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        },
+        "includeSalesPersons": {
+          "type": "boolean",
+          "description": "When true, applies the include sales persons filter or flag. Optional.",
+          "value": false
+        },
+        "includeAmount": {
+          "type": "boolean",
+          "description": "When true, applies the include amount filter or flag. Optional.",
+          "value": false
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount greater than filter or flag. Optional.",
+          "value": false
+        },
+        "amountLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount less than filter or flag. Optional.",
+          "value": false
+        },
+        "amountEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the amount equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "When true, applies the include description filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "includeVouchers": {
+          "type": "boolean",
+          "description": "When true, applies the include vouchers filter or flag. Optional.",
+          "value": false
+        },
+        "includeParticulars": {
+          "type": "boolean",
+          "description": "When true, applies the include particulars filter or flag. Optional.",
+          "value": false
+        },
+        "particulars": {
+          "type": "array",
+          "description": "Array of particulars values. Optional.",
+          "value": []
+        },
+        "isInvoiceGenerated": {
+          "type": "boolean",
+          "description": "When true, applies the is invoice generated filter or flag. Optional.",
+          "value": false
+        },
+        "includeTag": {
+          "type": "boolean",
+          "description": "When true, applies the include tag filter or flag. Optional.",
+          "value": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tag names (array). Optional.",
+          "value": []
+        },
+        "chequeNumber": {
+          "type": "string",
+          "description": "Cheque number. Optional.",
+          "value": "string"
+        },
+        "dateOnCheque": {
+          "type": "string",
+          "description": "Date on cheque. Optional.",
+          "value": "string"
+        },
+        "inventory": {
+          "type": "string",
+          "description": "Inventory. Optional.",
+          "value": "string"
+        },
+        "cancelledEntries": {
+          "type": "boolean",
+          "description": "When true, applies the cancelled entries filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "chequeDate": {
+          "type": "string",
+          "description": "Cheque date. Optional.",
+          "value": "01-04-2025"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "pY8OOp1-T_lI",
+    "name": "Retrieve Vat Liabilities",
+    "catalogKey": "POST /company/{companyUniqueName}/uk/retrieve-vat-liabilities",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "pY8OOp1-T_lI",
+      "description": "Retrieve Vat Liabilities. Part of the Retrieve Vat Liabilities APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "bqrfTOXKY12o",
+    "name": "Retrieve Vat Payments",
+    "catalogKey": "POST /company/{companyUniqueName}/uk/retrieve-vat-payments",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "bqrfTOXKY12o",
+      "description": "Retrieve Vat Payments. Part of the Retrieve Vat Payments APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "AhSLgbA4nc3f",
+    "name": "Returns true/false if E-way bill credentials are saved (no credential details…",
+    "catalogKey": "GET /company/{companyUniqueName}/ewb/user",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "AhSLgbA4nc3f",
+      "description": "Returns true/false if E-way bill credentials are saved (no credential details exposed). Part of the User APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "YsKTwW6NsdH8",
+    "name": "Same account unique name, same tax number, same purchase Date",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/validate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "YsKTwW6NsdH8",
+      "description": "Same account unique name, same tax number, same purchase Date. Part of the Validate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "purchaseDate": {
+          "checked": "true",
+          "value": "",
+          "description": "Purchase date query parameter. Mandatory.",
+          "required": true
+        },
+        "number": {
+          "checked": "true",
+          "value": "",
+          "description": "Number query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "FcvzjE3XRUTV",
+    "name": "Save Authorization Code",
+    "catalogKey": "POST /company/{companyUniqueName}/save-authorization-code",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "FcvzjE3XRUTV",
+      "description": "Save Authorization Code. Part of the Save Authorization Code APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "s36BeOFR8FI7",
+    "name": "Save Favorite Report Module",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/reports/save-report-data",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "s36BeOFR8FI7",
+      "description": "Save Favorite Report Module. Part of the Save Report Data APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "7wLRZsk19hOf",
+    "name": "Save Gstr1Data",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/save-gstr1",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "7wLRZsk19hOf",
+      "description": "Save Gstr1Data. Part of the Save Gstr1 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "monthYear": {
+          "checked": "true",
+          "value": "",
+          "description": "Month year query parameter. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "gsp": {
+          "checked": "true",
+          "value": "whitebooks",
+          "description": "Gsp query parameter. Default: whitebooks. Optional.",
+          "required": false
+        },
+        "currentDateTime": {
+          "checked": "true",
+          "value": "",
+          "description": "Current date time query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "wyta_GoIgGm_",
+    "name": "Save Gstr1Status",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/save-gstr1-status",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "wyta_GoIgGm_",
+      "description": "Save Gstr1Status. Part of the Save Gstr1 Status APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "referenceId": {
+          "checked": "true",
+          "value": "",
+          "description": "Reference id query parameter. Mandatory.",
+          "required": true
+        },
+        "gsp": {
+          "checked": "true",
+          "value": "whitebooks",
+          "description": "Gsp query parameter. Default: whitebooks. Optional.",
+          "required": false
+        },
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Optional.",
+          "required": false
+        },
+        "retPeriod": {
+          "checked": "true",
+          "value": "",
+          "description": "Ret period query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "6_-zbfHnp0n6",
+    "name": "Save Gstr3Bdata",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/save-gstr3b",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "6_-zbfHnp0n6",
+      "description": "Save Gstr3BData. Part of the Save Gstr3B APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "monthYear": {
+          "checked": "true",
+          "value": "",
+          "description": "Month year query parameter. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "currentDateTime": {
+          "checked": "true",
+          "value": "",
+          "description": "Current date time query parameter. Mandatory.",
+          "required": true
+        },
+        "gsp": {
+          "checked": "true",
+          "value": "whitebooks",
+          "description": "Gsp query parameter. Default: whitebooks. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "3cnPtZQGlJDy",
+    "name": "Save Mail Token",
+    "catalogKey": "POST /company/{companyUniqueName}/save-mail-token",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "3cnPtZQGlJDy",
+      "description": "Save Mail Token. Part of the Save Mail Token APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"access_token\": \"string\",\n  \"refresh_token\": \"string\",\n  \"token_type\": \"string\",\n  \"expires_in\": \"string\",\n  \"client_id\": \"string\",\n  \"client_secret\": \"string\",\n  \"scope\": \"string\",\n  \"id_token\": \"string\",\n  \"subject\": \"string\",\n  \"code\": \"string\",\n  \"redirect_uri\": \"string\",\n  \"grant_type\": \"string\",\n  \"ipAddress\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "access_token": {
+          "type": "string",
+          "description": "Access token. Optional.",
+          "value": "string"
+        },
+        "refresh_token": {
+          "type": "string",
+          "description": "Refresh token. Optional.",
+          "value": "string"
+        },
+        "token_type": {
+          "type": "string",
+          "description": "Token type. Optional.",
+          "value": "string"
+        },
+        "expires_in": {
+          "type": "string",
+          "description": "Expires in. Optional.",
+          "value": "string"
+        },
+        "client_id": {
+          "type": "string",
+          "description": "Client id. Optional.",
+          "value": "string"
+        },
+        "client_secret": {
+          "type": "string",
+          "description": "Client secret. Optional.",
+          "value": "string"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope. Optional.",
+          "value": "string"
+        },
+        "id_token": {
+          "type": "string",
+          "description": "Id token. Optional.",
+          "value": "string"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject. Optional.",
+          "value": "string"
+        },
+        "code": {
+          "type": "string",
+          "description": "Code. Optional.",
+          "value": "string"
+        },
+        "redirect_uri": {
+          "type": "string",
+          "description": "Redirect uri. Optional.",
+          "value": "string"
+        },
+        "grant_type": {
+          "type": "string",
+          "description": "Grant type. Optional.",
+          "value": "string"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "Ip address. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "PgcSTlUEJXjd",
+    "name": "Save Razorpay Token",
+    "catalogKey": "GET /v2/subscription/{subscriptionId}/payment/{paymentId}/save-razorpay-token",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "PgcSTlUEJXjd",
+      "description": "Save Razorpay Token. Part of the Save Razorpay Token APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "orderId": {
+          "checked": "true",
+          "value": "",
+          "description": "Order id query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "1qN6KppTyBsM",
+    "name": "Save Report Filter Columns",
+    "catalogKey": "POST /report-filters",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1qN6KppTyBsM",
+      "description": "Save Report Filter Columns. Part of the Report Filters APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "companyUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Company uniqueName. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"module\": \"string\",\n  \"columns\": [],\n  \"reportFilterColumns\": [],\n  \"headerColumns\": [],\n  \"vatReportCurrency\": \"string\",\n  \"liabilityReportCurrency\": \"string\",\n  \"reportNature\": \"string\",\n  \"showReportNature\": false,\n  \"label\": \"string\",\n  \"checked\": false,\n  \"dataType\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "module": {
+          "type": "string",
+          "description": "Module. Mandatory.",
+          "value": "string"
+        },
+        "columns": {
+          "type": "array",
+          "description": "Array of columns values. Optional.",
+          "value": []
+        },
+        "reportFilterColumns": {
+          "type": "array",
+          "description": "Array of report filter columns values. Optional.",
+          "value": []
+        },
+        "headerColumns": {
+          "type": "array",
+          "description": "Array of header columns values. Optional.",
+          "value": []
+        },
+        "vatReportCurrency": {
+          "type": "string",
+          "description": "Vat report currency. Optional.",
+          "value": "string"
+        },
+        "liabilityReportCurrency": {
+          "type": "string",
+          "description": "Liability report currency. Optional.",
+          "value": "string"
+        },
+        "reportNature": {
+          "type": "string",
+          "description": "Report nature. Optional.",
+          "value": "string"
+        },
+        "showReportNature": {
+          "type": "boolean",
+          "description": "When true, applies the show report nature filter or flag. Optional.",
+          "value": false
+        },
+        "label": {
+          "type": "string",
+          "description": "Label. Optional.",
+          "value": "string"
+        },
+        "checked": {
+          "type": "boolean",
+          "description": "When true, applies the checked filter or flag. Optional.",
+          "value": false
+        },
+        "dataType": {
+          "type": "string",
+          "description": "Data type. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "n8T7K6ysejA9",
+    "name": "Save Session For Portal User",
+    "catalogKey": "POST /v2/portal-user/save-session",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "n8T7K6ysejA9",
+      "description": "Save Session For Portal User. Part of the Save Session APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "isEmailLogin": {
+          "checked": "true",
+          "value": "true",
+          "description": "Is email login query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"account\": \"string\",\n  \"vendorContactUniqueName\": \"string\",\n  \"session\": \"string\",\n  \"companyUniqueName\": \"string\",\n  \"subDomain\": \"string\",\n  \"proxyAuthToken\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "account": {
+          "type": "string",
+          "description": "Account. Optional.",
+          "value": "string"
+        },
+        "vendorContactUniqueName": {
+          "type": "string",
+          "description": "Vendor contact unique name. Optional.",
+          "value": "string"
+        },
+        "session": {
+          "type": "string",
+          "description": "Session. Optional.",
+          "value": "string"
+        },
+        "companyUniqueName": {
+          "type": "string",
+          "description": "Company unique name. Optional.",
+          "value": "string"
+        },
+        "subDomain": {
+          "type": "string",
+          "description": "Sub domain. Optional.",
+          "value": "string"
+        },
+        "proxyAuthToken": {
+          "type": "string",
+          "description": "Proxy auth token. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "JmyGzk0pn-Xc",
+    "name": "Save Stripe Payment Method",
+    "catalogKey": "GET /v2/subscription/{subscriptionId}/payment/{paymentIntentId}/save-stripe-payment",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "JmyGzk0pn-Xc",
+      "description": "Save Stripe Payment Method. Part of the Save Stripe Payment APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "ftyRrxrWBxhe",
+    "name": "Send Email",
+    "catalogKey": "POST /company/{companyUniqueName}/ecommerce/email",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ftyRrxrWBxhe",
+      "description": "*. Part of the Email APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"email\": \"string\",\n  \"verificationCode\": \"string\",\n  \"retryCount\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "email": {
+          "type": "string",
+          "description": "Email address. Optional.",
+          "value": "string"
+        },
+        "verificationCode": {
+          "type": "string",
+          "description": "Verification code. Optional.",
+          "value": "string"
+        },
+        "retryCount": {
+          "type": "number",
+          "description": "Retry count. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "PD8-mHU09nub",
+    "name": "Send Lead Data To Slack",
+    "catalogKey": "POST /send-data",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "PD8-mHU09nub",
+      "description": "Send signup data to Slack (new signup flow). Part of the Send Data APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"companyName\": \"string\",\n  \"timestamp\": 0,\n  \"loggedInEmailId\": \"string\",\n  \"mobileNo\": \"string\",\n  \"name\": \"string\",\n  \"utmSource\": \"string\",\n  \"utmMedium\": \"string\",\n  \"utmCampaign\": \"string\",\n  \"utmTerm\": \"string\",\n  \"utmContent\": \"string\",\n  \"businessNature\": \"string\",\n  \"ref\": \"string\",\n  \"source\": {}\n}"
+        }
+      },
+      "bodyDescription": {
+        "companyName": {
+          "type": "string",
+          "description": "Company name. Optional.",
+          "value": "string"
+        },
+        "timestamp": {
+          "type": "number",
+          "description": "Timestamp. Optional.",
+          "value": 0
+        },
+        "loggedInEmailId": {
+          "type": "string",
+          "description": "Logged in email id. Optional.",
+          "value": "string"
+        },
+        "mobileNo": {
+          "type": "string",
+          "description": "Mobile no. Optional.",
+          "value": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "utmSource": {
+          "type": "string",
+          "description": "Utm source. Optional.",
+          "value": "string"
+        },
+        "utmMedium": {
+          "type": "string",
+          "description": "Utm medium. Optional.",
+          "value": "string"
+        },
+        "utmCampaign": {
+          "type": "string",
+          "description": "Utm campaign. Optional.",
+          "value": "string"
+        },
+        "utmTerm": {
+          "type": "string",
+          "description": "Utm term. Optional.",
+          "value": "string"
+        },
+        "utmContent": {
+          "type": "string",
+          "description": "Utm content. Optional.",
+          "value": "string"
+        },
+        "businessNature": {
+          "type": "string",
+          "description": "Business nature. Optional.",
+          "value": "string"
+        },
+        "ref": {
+          "type": "string",
+          "description": "Ref. Optional.",
+          "value": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": {}
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "EmEnTqeX3sxv",
+    "name": "Send Mail To Customer Vendor",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/accounts/send-mail",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "EmEnTqeX3sxv",
+      "description": "Send Mail To Customer Vendor. Part of the Send Mail APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"title\": \"string\",\n  \"entity\": \"string\",\n  \"entityUniqueNames\": [],\n  \"voucherTypes\": [],\n  \"emailSubject\": \"string\",\n  \"triggerModule\": \"VOUCHER_DUE\",\n  \"to\": [],\n  \"cc\": [],\n  \"bcc\": [],\n  \"replyTo\": [],\n  \"conditions\": {},\n  \"executionTime\": \"string\",\n  \"actions\": [\n    \"ATTACH_VOUCHER_PDF\"\n  ],\n  \"html\": \"string\",\n  \"disabled\": false,\n  \"sendMail\": false,\n  \"templateOf\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "title": {
+          "type": "string",
+          "description": "Title. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueNames": {
+          "type": "array",
+          "description": "Array of entity unique names values. Optional.",
+          "value": []
+        },
+        "voucherTypes": {
+          "type": "array",
+          "description": "Array of voucher types values. Optional.",
+          "value": []
+        },
+        "emailSubject": {
+          "type": "string",
+          "description": "Email subject. Optional.",
+          "value": "string"
+        },
+        "triggerModule": {
+          "type": "string",
+          "description": "Trigger module. Allowed values: VOUCHER_DUE, LEDGER_WITH_CLOSING_BALANCE, LEDGER_BALANCE. Optional.",
+          "value": "VOUCHER_DUE",
+          "allowedValues": [
+            "VOUCHER_DUE",
+            "LEDGER_WITH_CLOSING_BALANCE",
+            "LEDGER_BALANCE"
+          ]
+        },
+        "to": {
+          "type": "array",
+          "description": "Array of to values. Optional.",
+          "value": []
+        },
+        "cc": {
+          "type": "array",
+          "description": "Array of cc values. Optional.",
+          "value": []
+        },
+        "bcc": {
+          "type": "array",
+          "description": "Array of bcc values. Optional.",
+          "value": []
+        },
+        "replyTo": {
+          "type": "array",
+          "description": "Array of reply to values. Optional.",
+          "value": []
+        },
+        "conditions": {
+          "type": "string",
+          "description": "Conditions. Optional.",
+          "value": {}
+        },
+        "executionTime": {
+          "type": "string",
+          "description": "Execution time. Optional.",
+          "value": "string"
+        },
+        "actions": {
+          "type": "array",
+          "description": "Array of actions values. Allowed values: ATTACH_VOUCHER_PDF, ATTACH_LEDGER, ADD_ATTACHMENT. Optional.",
+          "value": [
+            "ATTACH_VOUCHER_PDF"
+          ],
+          "allowedValues": [
+            "ATTACH_VOUCHER_PDF",
+            "ATTACH_LEDGER",
+            "ADD_ATTACHMENT"
+          ]
+        },
+        "html": {
+          "type": "string",
+          "description": "Html. Optional.",
+          "value": "string"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "When true, applies the disabled filter or flag. Optional.",
+          "value": false
+        },
+        "sendMail": {
+          "type": "boolean",
+          "description": "When true, applies the send mail filter or flag. Optional.",
+          "value": false
+        },
+        "templateOf": {
+          "type": "string",
+          "description": "Template of. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ZD5zPR_Aak1t",
+    "name": "Send New User Info",
+    "catalogKey": "POST /users/send-new-user-info",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ZD5zPR_Aak1t",
+      "description": "Send New User Info. Part of the Send New User Info APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"currency\": \"string\",\n  \"contactNo\": \"string\",\n  \"country\": \"string\",\n  \"email\": \"string\",\n  \"source\": \"string\",\n  \"medium\": \"string\",\n  \"campaign\": \"string\",\n  \"term\": \"string\",\n  \"content\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency. Optional.",
+          "value": "string"
+        },
+        "contactNo": {
+          "type": "string",
+          "description": "Contact no. Optional.",
+          "value": "string"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Optional.",
+          "value": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": "string"
+        },
+        "medium": {
+          "type": "string",
+          "description": "Medium. Optional.",
+          "value": "string"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign. Optional.",
+          "value": "string"
+        },
+        "term": {
+          "type": "string",
+          "description": "Term. Optional.",
+          "value": "string"
+        },
+        "content": {
+          "type": "string",
+          "description": "Content. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "uEinXoiButfF",
+    "name": "Send New User Info",
+    "catalogKey": "POST /users/send-new-user-info",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "uEinXoiButfF",
+      "description": "Send New User Info. Part of the Send New User Info APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"currency\": \"string\",\n  \"contactNo\": \"string\",\n  \"country\": \"string\",\n  \"email\": \"string\",\n  \"source\": \"string\",\n  \"medium\": \"string\",\n  \"campaign\": \"string\",\n  \"term\": \"string\",\n  \"content\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency. Optional.",
+          "value": "string"
+        },
+        "contactNo": {
+          "type": "string",
+          "description": "Contact no. Optional.",
+          "value": "string"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Optional.",
+          "value": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": "string"
+        },
+        "medium": {
+          "type": "string",
+          "description": "Medium. Optional.",
+          "value": "string"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign. Optional.",
+          "value": "string"
+        },
+        "term": {
+          "type": "string",
+          "description": "Term. Optional.",
+          "value": "string"
+        },
+        "content": {
+          "type": "string",
+          "description": "Content. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "kdWYaFKawM0k",
+    "name": "Set Access Token",
+    "catalogKey": "POST /company/{companyUniqueName}/plaid/create/access-token",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "kdWYaFKawM0k",
+      "description": "Set Access Token. Part of the Access Token APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"client_name\": \"string\",\n  \"country_codes\": [],\n  \"language\": \"string\",\n  \"user\": \"string\",\n  \"products\": [],\n  \"publicToken\": \"string\",\n  \"institution\": \"string\",\n  \"accounts\": [],\n  \"accessToken\": \"string\",\n  \"startDate\": \"string\",\n  \"endDate\": \"string\",\n  \"client_user_id\": \"string\",\n  \"name\": \"string\",\n  \"institutionId\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "client_name": {
+          "type": "string",
+          "description": "Client name. Optional.",
+          "value": "string"
+        },
+        "country_codes": {
+          "type": "array",
+          "description": "Array of country codes values. Optional.",
+          "value": []
+        },
+        "language": {
+          "type": "string",
+          "description": "Language. Optional.",
+          "value": "string"
+        },
+        "user": {
+          "type": "string",
+          "description": "User. Optional.",
+          "value": "string"
+        },
+        "products": {
+          "type": "array",
+          "description": "Array of products values. Optional.",
+          "value": []
+        },
+        "publicToken": {
+          "type": "string",
+          "description": "Public token. Optional.",
+          "value": "string"
+        },
+        "institution": {
+          "type": "string",
+          "description": "Institution. Optional.",
+          "value": "string"
+        },
+        "accounts": {
+          "type": "array",
+          "description": "Array of accounts values. Optional.",
+          "value": []
+        },
+        "accessToken": {
+          "type": "string",
+          "description": "Access token. Optional.",
+          "value": "string"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "Start date. Optional.",
+          "value": "string"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "End date. Optional.",
+          "value": "string"
+        },
+        "client_user_id": {
+          "type": "string",
+          "description": "Client user id. Optional.",
+          "value": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "institutionId": {
+          "type": "string",
+          "description": "Institution id. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "TBUAgvdA-4UK",
+    "name": "Set Company Image",
+    "catalogKey": "POST /company/{companyUniqueName}/images",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "TBUAgvdA-4UK",
+      "description": "Set Company Image. Part of the Images APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "type": {
+          "checked": "true",
+          "value": "logo",
+          "description": "Voucher or entity type discriminator for the list. Default: logo. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"format\": \"string\",\n  \"base64\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "format": {
+          "type": "string",
+          "description": "Format. Optional.",
+          "value": "string"
+        },
+        "base64": {
+          "type": "string",
+          "description": "Base64. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "zrt3DiurAh8D",
+    "name": "Set Custom Fields",
+    "catalogKey": "POST /company/{companyUniqueName}/custom-fields",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "zrt3DiurAh8D",
+      "description": "Set Custom Fields. Part of the Custom Fields APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"key\": \"string\",\n  \"dataType\": \"string\",\n  \"valueLength\": 0,\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "key": {
+          "type": "string",
+          "description": "Key. Optional.",
+          "value": "string"
+        },
+        "dataType": {
+          "type": "string",
+          "description": "Data type. Optional.",
+          "value": "string"
+        },
+        "valueLength": {
+          "type": "number",
+          "description": "Value length. Optional.",
+          "value": 0
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ZIEyFJB5Jet3",
+    "name": "Set Default Template",
+    "catalogKey": "PATCH /v2/company/{companyUniqueName}/templates/{templateUniqueName:.+}/default",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ZIEyFJB5Jet3",
+      "description": "Set Default Template. Part of the Default APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "type": {
+          "checked": "true",
+          "value": "invoice",
+          "description": "Voucher or entity type discriminator for the list. Default: invoice. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "bxXlArQ4QOWY",
+    "name": "Set Default Warehouse",
+    "catalogKey": "PATCH /company/{companyUniqueName}/warehouse/{warehouseUniqueName}/default",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "bxXlArQ4QOWY",
+      "description": "Set Default Warehouse. Part of the Default APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

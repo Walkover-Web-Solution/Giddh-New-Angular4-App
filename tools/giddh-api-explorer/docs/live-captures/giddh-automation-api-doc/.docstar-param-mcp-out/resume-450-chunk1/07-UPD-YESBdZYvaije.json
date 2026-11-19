@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "YESBdZYvaije", "description": "Get Subscription Billing Account By User. Part of the Get APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"billingAccountUniqueName": {"checked": "true", "value": "", "description": "Billing account unique name query parameter. Optional.", "required": false}}, "body": {"type": "none"}}

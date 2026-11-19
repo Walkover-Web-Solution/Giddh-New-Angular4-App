@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "body": {
+    "page": 0,
+    "count": 50,
+    "totalPages": 0,
+    "totalItems": 0,
+    "results": [],
+    "size": 0,
+    "fromDate": "01-04-2026",
+    "toDate": "23-10-2026",
+    "openingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "closingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "debitTotal": 0.0,
+    "creditTotal": 0.0
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "name": "API Doc Widget",
+    "variants": [
+      {
+        "name": "API Doc Widget",
+        "archive": false,
+        "warehouseBalance": [
+          {
+            "warehouse": {
+              "name": "Gidd warehouse",
+              "uniqueName": "xbq1792673424418"
+            },
+            "openingAmount": 800.0,
+            "openingQuantity": 10.0,
+            "stockUnit": {
+              "name": "Piece",
+              "code": "pcs",
+              "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+            }
+          }
+        ],
+        "skuCode": "WDG-001",
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl",
+        "isDefault": true
+      }
+    ],
+    "openingAmount": 800.0,
+    "openingQuantity": 10.0,
+    "skuCodeHeading": "SKU Code",
+    "options": [
+      {
+        "name": "Options 1",
+        "values": [
+          "API Doc Widget"
+        ],
+        "order": 1
+      }
+    ],
+    "outOfStockSelling": false,
+    "stockUnit": {
+      "name": "Piece",
+      "code": "pcs",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+    },
+    "skuCode": "WDG-001",
+    "discounts": [],
+    "stockGroup": {
+      "name": "API Doc Products",
+      "uniqueName": "apidoc-products"
+    },
+    "uniqueName": "apidoc-widget",
+    "taxesToSave": [],
+    "stockUnitGroup": {
+      "name": "Main Group",
+      "uniqueName": "maingroup"
+    },
+    "amazonAsin": "",
+    "lowStockAlertCount": 0,
+    "updateStockUnitsForLinkedCompanies": false,
+    "rowNumber": 0
+  }
+}

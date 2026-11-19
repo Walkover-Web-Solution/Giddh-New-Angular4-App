@@ -1,0 +1,7 @@
+{
+  "method": "POST",
+  "path": "/portal/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/invoice-pay-request?voucherVersion=2",
+  "body": [
+    "llvtc1792674364760"
+  ]
+}

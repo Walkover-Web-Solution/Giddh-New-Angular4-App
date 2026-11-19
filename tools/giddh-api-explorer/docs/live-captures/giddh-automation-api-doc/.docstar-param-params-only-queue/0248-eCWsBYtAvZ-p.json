@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "eCWsBYtAvZ-p", "description": "Get All Templates V2. Part of the Templates APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"type": {"checked": "true", "value": "invoice", "description": "Voucher or entity type discriminator for the list. Default: invoice. Optional.", "required": "false"}}}

@@ -1,0 +1,15 @@
+{
+  "name": "API Doc Gadget",
+  "uniqueName": "apidoc-gadget",
+  "stockType": "PRODUCT",
+  "isSalesActive": true,
+  "isPurchaseActive": true,
+  "salesAccountUniqueNames": [
+    "sales"
+  ],
+  "purchaseAccountUniqueNames": [
+    "purchases"
+  ],
+  "skuCode": "APIDOC-GADGET",
+  "hsnNumber": "847130"
+}

@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Missing Auth-Key / Session-Id header in request.",
+  "code": "MISSING_HEADER",
+  "httpStatus": 400
+}

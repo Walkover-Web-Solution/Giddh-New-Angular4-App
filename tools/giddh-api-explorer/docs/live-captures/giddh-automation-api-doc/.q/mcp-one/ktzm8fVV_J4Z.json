@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"ktzm8fVV_J4Z","description":"Fetch Account Details. Part of the Requisitions APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"lang":{"checked":"true","value":"DEFAULT_LANG","description":"Locale/language code for translated labels. Default: DEFAULT_LANG. Optional."}},"body":{"type":"none"},"bodyDescription":{}}

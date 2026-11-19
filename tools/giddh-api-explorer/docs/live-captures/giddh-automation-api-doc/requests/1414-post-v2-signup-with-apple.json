@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/signup-with-apple",
+  "body": {
+    "email": "apidoc@example.invalid",
+    "password": "InvalidPass1!"
+  }
+}

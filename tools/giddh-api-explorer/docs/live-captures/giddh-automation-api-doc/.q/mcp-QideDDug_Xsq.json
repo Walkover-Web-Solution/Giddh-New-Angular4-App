@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"QideDDug_Xsq","description":"Customer portal API: :accountUniqueName/export account statement. Requires portal session.","params":{},"body":{"type":"none"}}}

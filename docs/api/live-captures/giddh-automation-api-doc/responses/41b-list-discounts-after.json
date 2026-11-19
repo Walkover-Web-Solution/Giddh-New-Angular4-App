@@ -1,0 +1,53 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "API Doc Flat 10",
+      "linkAccount": {
+        "name": "Discount",
+        "address": "",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "description": null,
+        "attentionTo": null,
+        "mobileNo": null,
+        "openingBalance": 0.0,
+        "openingBalanceType": "DEBIT",
+        "isFixed": true,
+        "mergedAccounts": "",
+        "openingBalanceDate": "01-04-2026",
+        "uniqueName": "discount",
+        "email": null,
+        "parentGroups": []
+      },
+      "uniqueName": "73m1792675076662",
+      "discountType": "FIX_AMOUNT",
+      "discountValue": 10.0
+    },
+    {
+      "name": "API Doc Percent 5",
+      "linkAccount": {
+        "name": "Discount",
+        "address": "",
+        "currencySymbol": "\u20b9",
+        "currency": "INR",
+        "applicableTaxes": [],
+        "description": null,
+        "attentionTo": null,
+        "mobileNo": null,
+        "openingBalance": 0.0,
+        "openingBalanceType": "DEBIT",
+        "isFixed": true,
+        "mergedAccounts": "",
+        "openingBalanceDate": "01-04-2026",
+        "uniqueName": "discount",
+        "email": null,
+        "parentGroups": []
+      },
+      "uniqueName": "dn31792675100909",
+      "discountType": "PERCENTAGE",
+      "discountValue": 5.0
+    }
+  ]
+}

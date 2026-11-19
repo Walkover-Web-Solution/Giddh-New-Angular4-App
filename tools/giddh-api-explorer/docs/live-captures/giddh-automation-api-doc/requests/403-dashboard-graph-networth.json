@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/company/giddhain1792673422178091xos/dashboard/graph?currentFrom=01-04-2026&currentTo=23-10-2026&previousFrom=01-04-2025&previousTo=23-10-2025&interval=monthly&type=networth&uniqueName=&refresh=true",
+  "note": "no body"
+}

@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "uniqueName": "apidocbranchtwo",
+      "name": "API Doc Branch Two",
+      "entity": "BRANCH",
+      "alias": "apidoc-branch-two",
+      "isHeadQuarter": false,
+      "isArchived": false,
+      "isConsolidated": false
+    },
+    {
+      "uniqueName": "giddhautomationapidoc",
+      "name": "Giddh Automation API DOC",
+      "entity": "BRANCH",
+      "alias": "Gidd",
+      "isHeadQuarter": false,
+      "isArchived": false,
+      "isConsolidated": false
+    },
+    {
+      "uniqueName": "42ysmze74chxajowlphz",
+      "name": "Giddh Automation API DOC",
+      "entity": "BRANCH",
+      "alias": "Gidd1",
+      "isHeadQuarter": true,
+      "isArchived": false,
+      "isConsolidated": true
+    },
+    {
+      "uniqueName": "xbq1792673424418",
+      "name": "Gidd warehouse",
+      "entity": "WAREHOUSE",
+      "alias": "Gidd warehouse",
+      "isHeadQuarter": false,
+      "isArchived": false,
+      "isConsolidated": false
+    },
+    {
+      "uniqueName": "0d41792733820723",
+      "name": "apidoc-branch-two warehouse",
+      "entity": "WAREHOUSE",
+      "alias": "apidoc-branch-two warehouse",
+      "isHeadQuarter": false,
+      "isArchived": false,
+      "isConsolidated": false
+    },
+    {
+      "uniqueName": "4gr1792733898078",
+      "name": "API Doc Warehouse Two",
+      "entity": "WAREHOUSE",
+      "alias": "API Doc Warehouse Two",
+      "isHeadQuarter": false,
+      "isArchived": false,
+      "isConsolidated": false
+    }
+  ]
+}

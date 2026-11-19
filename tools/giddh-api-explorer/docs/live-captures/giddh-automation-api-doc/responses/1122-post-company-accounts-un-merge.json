@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Account with no merged account can not be un-merged.",
+  "code": "NO_MERGE_ACCOUNT"
+}

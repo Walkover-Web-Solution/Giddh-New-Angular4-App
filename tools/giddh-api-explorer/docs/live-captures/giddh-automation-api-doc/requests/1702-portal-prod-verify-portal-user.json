@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-portal-user",
+  "host": "https://api.giddh.com",
+  "origin": "https://portal.giddh.com",
+  "surface": "customer-portal",
+  "env": "prod",
+  "portalSubDomain": "10k",
+  "companyUniqueName": "10kin177424654546509z75a",
+  "viaProxy": "https://routes.msg91.com/api/proxy/117230/24yrfox2/v2/verify-portal-user",
+  "body": {
+    "emailId": "divyanshu@whozzat.com",
+    "subDomain": "10k"
+  },
+  "note": "Via MSG91 proxy. Multi-account \u2192 UI account picker then save-session. Prod works; testportal had INVALID_CF_IP."
+}

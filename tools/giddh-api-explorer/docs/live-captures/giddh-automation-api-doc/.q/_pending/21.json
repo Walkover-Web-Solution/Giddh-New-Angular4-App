@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"Is2jOkYxWx8I","description":"Delete Branch Transfer Note. Part of the Branch Transfer APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"branchUniqueName":{"checked":"true","value":"","description":"Branch uniqueName; omit for default company branch behaviour. Optional."}},"body":{"type":"none"},"bodyDescription":{}}

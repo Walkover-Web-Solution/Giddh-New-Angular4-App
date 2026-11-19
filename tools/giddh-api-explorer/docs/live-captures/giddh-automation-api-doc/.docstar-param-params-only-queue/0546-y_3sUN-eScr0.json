@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "y_3sUN-eScr0", "description": "Batch transfer. Minimal body: {@code fromBatchUniqueName} + {@code toBatchUniqueName}. Part of the Transfer APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {}}

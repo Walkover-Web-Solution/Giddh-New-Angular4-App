@@ -1,0 +1,1 @@
+{"status":"success","body":{"applicableTaxes":[],"inheritedTaxes":[{"name":"Sales","uniqueName":"sales","applicableTaxes":[]},{"name":"Revenue From Operations","uniqueName":"revenuefromoperations","applicableTaxes":[{"name":"API Doc GST 18","uniqueName":"apidocgst18"}]}]}}

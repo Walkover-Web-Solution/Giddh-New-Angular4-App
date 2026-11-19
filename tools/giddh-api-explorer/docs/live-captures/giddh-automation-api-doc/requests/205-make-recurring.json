@@ -1,0 +1,9 @@
+{
+  "interval": 1,
+  "period": "MONTHLY",
+  "repeatEvery": 1,
+  "repeatOption": "MONTHLY",
+  "startDate": "01-11-2026",
+  "endDate": "01-03-2027",
+  "nextCronDate": "01-11-2026"
+}

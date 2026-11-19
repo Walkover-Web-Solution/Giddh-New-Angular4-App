@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "invalid client_id or secret provided",
+  "code": "PLAID_ERROR"
+}

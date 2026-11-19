@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "path": "/portal/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers/get-all?voucherVersion=2&type=sales&page=1&count=5&sort=desc&sortBy=voucherDate&from=01-04-2026&to=23-10-2026",
+  "body": {
+    "companyUniqueName": "giddhain1792673422178091xos",
+    "accountUniqueName": "apidoc-customer-one",
+    "balanceStatus": [],
+    "uniqueNames": []
+  }
+}

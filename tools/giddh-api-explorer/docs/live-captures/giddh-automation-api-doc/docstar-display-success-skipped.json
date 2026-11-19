@@ -1,0 +1,300 @@
+{
+  "count": 59,
+  "items": [
+    {
+      "endpointId": "Wimr-1AbDmG9",
+      "name": "Get Currency Conversion Rate",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "PBIQUyDqiDHg",
+      "name": "Delete Inventory Adjustment",
+      "requestType": "DELETE"
+    },
+    {
+      "endpointId": "FIHc4go9eLDj",
+      "name": "Stock Inventory Export Arrangedby Accounts",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "cpz9o9UkTBwr",
+      "name": "Cancel Einvoice For Account Voucher",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "tlN3PwbSlzme",
+      "name": "Get Company Details",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "G0NGBl7-B3xZ",
+      "name": "Get Inventory Masters",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "FHk_EVqzjr-x",
+      "name": "Get Top Inventory Groups",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "IQro_yA6iyT1",
+      "name": "Get All Batches",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "bcyefOtU2XvH",
+      "name": "Verify Ecommerce User",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "4WuVlt2XxZIN",
+      "name": "Petty Cash Action",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "UWsrMZ7M6gL8",
+      "name": "Download All Inventory Hierarchy",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "AXqbQT4VB0H1",
+      "name": "Add Comments",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "LyXIyi3m8tUO",
+      "name": "Get Comments",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "G3BF9J-8B4NF",
+      "name": "Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route.",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "dVsKwEExfZBV",
+      "name": "Bulk Generate Vouchers",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "v3T4hen3lTO3",
+      "name": "Make Recurring Voucher V4",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "9vBOqp4xrflL",
+      "name": "Get All Recurring Vouchers With Filters",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "q4kOc9pfKo7z",
+      "name": "Delete Recurring Voucher",
+      "requestType": "DELETE"
+    },
+    {
+      "endpointId": "Wld5x5ifNu8f",
+      "name": "Stock Inventory Export All Stock In Hierarchy",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "3LWVKWZifQtj",
+      "name": "Stock Inventory Export All Group Stock Report",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "3_ppzaHDeDhJ",
+      "name": "Stock Inventory Export Group Stock Report",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "tkmdM6fG4OFO",
+      "name": "Download All Inventory Report V2",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "tuJp5ldg755R",
+      "name": "Get All Recurring Vouchers",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "7G3_3wSV7hyX",
+      "name": "Get All Stock Unit Groups",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "fAwbbp5AaOWC",
+      "name": "Create Stock Group Inventory Report",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "U_SEE8DGtJKo",
+      "name": "Download Stock Group Inventory Report",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "9vB4n2uroYJd",
+      "name": "Customer Portal proxy helper (PROXY_URL), not a Giddh Spring controller.",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "QQp3HyikWUZw",
+      "name": "Fetch Supported Payment Methods",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "n8T7K6ysejA9",
+      "name": "Save Session For Portal User",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "31eP24vmSPjA",
+      "name": "Get Account Details",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "FLMaX2KPOOos",
+      "name": "Download Stock Inventory Report V3",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "2Omu_hXQaJ_u",
+      "name": "Get Batch Availability",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "TFy45YbtVVyZ",
+      "name": "Create Batch",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "TI8tKndVky79",
+      "name": "Update Batch",
+      "requestType": "PUT"
+    },
+    {
+      "endpointId": "DC8riPxsvNHc",
+      "name": "Verify Portal User",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "2lxdy7ALye2b",
+      "name": "Create",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "F_lB51enHMNJ",
+      "name": "Process Proforma Payment",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "RImgW_voQqLQ",
+      "name": "Bulk Export Vouchers",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "J8jKc7iiNC2w",
+      "name": "Get All Sales Persons",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "1EpWWk16sW7M",
+      "name": "Archive Sales Person",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "x8-ZZpS-XHXm",
+      "name": "Finish DSC",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "3lmWLglXBRE2",
+      "name": "Bulk Update Vouchers",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "UFhf2-9u5Wvg",
+      "name": "Stock Inventory Export Group Stock Report",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "eeLqMJdw-d41",
+      "name": "Stock Inventory Export Stock Report",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "R-d3Ncj14PKm",
+      "name": "Get Batch",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "gjsPCSL9F5-z",
+      "name": "Get New Old Sales Data With Filters",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "Y_KZI5UYOHeK",
+      "name": "Get Detailed Sales Register Report",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "DFtXbso_PzBU",
+      "name": "Get Sales Register Overview",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "aZeDr2gyW6Xo",
+      "name": "Get All Voucher Balances",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "ilhOGontCe5E",
+      "name": "Get Unadjusted Vouchers",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "6DlKV44KYgAd",
+      "name": "Invoice Action On Voucher",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "S2fQ0lJbWWvR",
+      "name": "Get Voucher Versions",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "45lIGMs5Lzrt",
+      "name": "Create Stock Unit Group",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "xNc2ASBFlg8T",
+      "name": "Update Stock Unit Group",
+      "requestType": "PUT"
+    },
+    {
+      "endpointId": "7rKUysvK5BoQ",
+      "name": "Get All Business Nature",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "j1wcKtzq6AJb",
+      "name": "Delete Image",
+      "requestType": "DELETE"
+    },
+    {
+      "endpointId": "pG9vfCSLuHlB",
+      "name": "Generate Invoice Invalid Json",
+      "requestType": "POST"
+    },
+    {
+      "endpointId": "BqHIxaj3iAGF",
+      "name": "Get Linked Sources",
+      "requestType": "GET"
+    },
+    {
+      "endpointId": "GyPtUjeYtIV4",
+      "name": "Stock Inventory Export Stock Report",
+      "requestType": "POST"
+    }
+  ]
+}

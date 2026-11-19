@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "j1wcKtzq6AJb", "description": "API - Deleting image by image unique name. Part of the Delete Image APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"imgUniqueName": {"checked": "true", "value": "", "description": "Img unique name query parameter. Required."}}, "body": {"type": "none"}}

@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"d1t9kMrjpV5S","description":"To get purchase record. Part of the Purchase Record APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"branchUniqueName":{"checked":"true","value":"","description":"Branch uniqueName; omit for default company branch behaviour."}},"body":{"type":"none"}}}

@@ -1,0 +1,45 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "alpha3CountryCode": "GLB",
+      "countryName": "Global",
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "ARE",
+      "alpha2CountryCode": "AE",
+      "countryName": "United Arab Emirates",
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "USA",
+      "alpha2CountryCode": "US",
+      "countryName": "United States of America",
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "EUR",
+      "countryName": "Europe",
+      "europeanUnionCountry": false,
+      "india": false
+    },
+    {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "europeanUnionCountry": false,
+      "india": true
+    },
+    {
+      "alpha3CountryCode": "GBR",
+      "alpha2CountryCode": "GB",
+      "countryName": "United Kingdom",
+      "europeanUnionCountry": false,
+      "india": false
+    }
+  ]
+}

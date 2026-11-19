@@ -1,0 +1,1 @@
+{"status":"success","body":{"page":1,"count":50,"totalPages":1,"totalItems":2,"results":[{"name":"API Doc Gadget","uniqueName":"apidoc-gadget","entity":"STOCK"},{"name":"API Doc Widget","uniqueName":"apidoc-widget","entity":"STOCK"}]}}

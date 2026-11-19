@@ -1,0 +1,110 @@
+{
+  "type": "payment",
+  "date": "22-10-2026",
+  "exchangeRate": 1,
+  "applyApplicableTaxes": false,
+  "roundOffApplicable": false,
+  "updateAccountDetails": false,
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-vendor-one",
+    "name": "API Doc Vendor One",
+    "customerName": "API Doc Vendor One",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "billingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor address"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor address"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "entries": [
+    {
+      "date": "22-10-2026",
+      "description": "Payment against bill",
+      "voucherType": "payment",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "cash",
+            "name": "Cash"
+          },
+          "amount": {
+            "amountForAccount": 50,
+            "amountForCompany": 50
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "adjustments": [
+    {
+      "uniqueName": "mgswt1792674404601",
+      "voucherType": "purchase",
+      "voucherDate": "22-10-2026",
+      "amount": {
+        "amountForAccount": 50,
+        "amountForCompany": 50
+      },
+      "exchangeRate": 1
+    }
+  ]
+}

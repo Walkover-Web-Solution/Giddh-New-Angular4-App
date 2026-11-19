@@ -1,0 +1,58 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "name": "API Doc Finished Good",
+        "openingQuantity": 0.0,
+        "mappedPurchaseAccount": null,
+        "mappedSalesAccount": null,
+        "amount": 0.0,
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs",
+          "group": {
+            "name": "Main Group",
+            "uniqueName": "maingroup"
+          },
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "skuCode": "APIDOC-FG",
+        "hsnNumber": "847130",
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "uniqueName": "apidoc-finished-good"
+      },
+      {
+        "name": "API Doc Widget",
+        "openingQuantity": 10.0,
+        "mappedPurchaseAccount": null,
+        "mappedSalesAccount": null,
+        "amount": 800.0,
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs",
+          "group": {
+            "name": "Main Group",
+            "uniqueName": "maingroup"
+          },
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "skuCode": "WDG-001",
+        "hsnNumber": null,
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "uniqueName": "apidoc-widget"
+      }
+    ],
+    "size": 2
+  }
+}

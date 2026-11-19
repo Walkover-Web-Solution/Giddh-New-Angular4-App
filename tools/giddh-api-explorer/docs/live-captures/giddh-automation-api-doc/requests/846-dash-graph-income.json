@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/company/giddhain1792673422178091xos/dashboard/graph?type=category&uniqueName=income&from=01-04-2026&to=23-10-2026&refresh=true&branchUniqueName=giddhautomationapidoc",
+  "note": "no body"
+}

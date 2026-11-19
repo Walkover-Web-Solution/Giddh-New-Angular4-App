@@ -1,0 +1,20 @@
+[
+  {
+    "file": "create-c0-0.json",
+    "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{paymentId}/pay:PortalController:processVoucherPayment",
+    "endpointId": "4Fn52OAvoUsJ",
+    "status": "created"
+  },
+  {
+    "file": "create-c0-1.json",
+    "catalogId": "accounting-microservice:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/payment-methods:PortalController:getPaymentMethods",
+    "endpointId": "jskGLn1iLN2t",
+    "status": "created"
+  },
+  {
+    "file": "create-c0-2.json",
+    "catalogId": "accounting-microservice:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/balance-summary:PortalController:getBalanceSummary",
+    "endpointId": "Qq2rADPlymJv",
+    "status": "created"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "method": "GET",
+  "path": "https://www.googleapis.com/oauth2/v1/userinfo?alt=json",
+  "note": "Not a Giddh backend API. Website uses Google Bearer after OAuth popup.",
+  "surface": "giddh-website"
+}

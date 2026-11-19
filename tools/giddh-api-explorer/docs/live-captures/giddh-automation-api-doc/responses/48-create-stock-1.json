@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stock unit is invalid or not found in company, please create it before continuing.",
+  "code": "INVALID_PARAMETER"
+}

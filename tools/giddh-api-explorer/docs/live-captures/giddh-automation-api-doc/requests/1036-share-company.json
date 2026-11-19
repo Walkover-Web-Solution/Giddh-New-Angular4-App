@@ -1,0 +1,10 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/share",
+  "body": {
+    "user": "apidoc-invite-probe@example.invalid",
+    "role": "view_only",
+    "entity": "company",
+    "entityUniqueName": "giddhain1792673422178091xos"
+  }
+}

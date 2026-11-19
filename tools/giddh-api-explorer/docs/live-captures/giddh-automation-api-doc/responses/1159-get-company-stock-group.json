@@ -1,0 +1,28 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "discounts": [],
+    "name": "API Doc Products",
+    "type": "PRODUCT",
+    "inheritedTaxes": [],
+    "inheritedDiscounts": [],
+    "stocks": [
+      {
+        "name": "API Doc Finished Good",
+        "uniqueName": "apidoc-finished-good"
+      },
+      {
+        "name": "API Doc Gadget",
+        "uniqueName": "apidoc-gadget"
+      },
+      {
+        "name": "API Doc Widget",
+        "uniqueName": "apidoc-widget"
+      }
+    ],
+    "uniqueName": "apidoc-products",
+    "childStockGroups": [],
+    "parentStockGroupNames": []
+  }
+}

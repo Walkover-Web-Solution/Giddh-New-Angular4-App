@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "recurringVoucherUniqueName": "LUJYfC8PaG",
+        "accountName": "API Doc Customer Three",
+        "accountUniqueName": "apidoc-customer-three",
+        "frequency": "1 month",
+        "lastRun": "--",
+        "nextRun": "2026-11-01 00:00:00",
+        "status": "ACTIVE",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "amount": 99.0,
+        "existingVoucherUniqueName": "vitmq1792733952798",
+        "createdAt": "23-10-2026"
+      },
+      {
+        "recurringVoucherUniqueName": "xprYvZ7Rdx",
+        "accountName": "API Doc Customer Three",
+        "accountUniqueName": "apidoc-customer-three",
+        "frequency": "1 month",
+        "lastRun": "--",
+        "nextRun": "2026-11-01 00:00:00",
+        "status": "ACTIVE",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "amount": 99.0,
+        "existingVoucherUniqueName": "vitmq1792733952798",
+        "createdAt": "23-10-2026"
+      },
+      {
+        "recurringVoucherUniqueName": "g3Kj558l2U",
+        "accountName": "API Doc Customer Three",
+        "accountUniqueName": "apidoc-customer-three",
+        "frequency": "1 week on [MONDAY]",
+        "lastRun": "--",
+        "nextRun": "2026-11-02 00:00:00",
+        "status": "ACTIVE",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "amount": 99.0,
+        "existingVoucherUniqueName": "vitmq1792733952798",
+        "createdAt": "23-10-2026"
+      },
+      {
+        "recurringVoucherUniqueName": "3XRg36iYn4",
+        "accountName": "API Doc Customer Three",
+        "accountUniqueName": "apidoc-customer-three",
+        "frequency": "1 day",
+        "lastRun": "--",
+        "nextRun": "2026-10-24 00:00:00",
+        "status": "ACTIVE",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "amount": 99.0,
+        "existingVoucherUniqueName": "vitmq1792733952798",
+        "createdAt": "23-10-2026"
+      }
+    ],
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 4,
+    "fromDate": "2026-04-01",
+    "toDate": "2027-03-31"
+  }
+}

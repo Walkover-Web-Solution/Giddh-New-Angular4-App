@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "dateOfSupply": "23-10-2026",
+      "challanNo": "DC-20261023-3",
+      "note": "BT after BD enable batch8",
+      "uniqueName": "cn11792738855808",
+      "sources": [
+        {
+          "name": "Giddh Automation API DOC",
+          "uniqueName": "giddhautomationapidoc",
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418",
+            "address": "My new address",
+            "taxNumber": "23AAACC1206D2ZN"
+          }
+        }
+      ],
+      "destinations": [
+        {
+          "name": "API Doc Branch Two",
+          "uniqueName": "apidocbranchtwo",
+          "warehouse": {
+            "name": "apidoc-branch-two warehouse",
+            "uniqueName": "0d41792733820723",
+            "address": "My new address",
+            "taxNumber": "23AAACC1206D2ZN"
+          }
+        }
+      ],
+      "products": [
+        {
+          "name": "API Doc Widget",
+          "uniqueName": "apidoc-widget",
+          "stockDetails": {
+            "stockUnit": "pcs",
+            "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+            "amount": 100.0,
+            "rate": 100,
+            "quantity": 1
+          },
+          "description": "BT",
+          "showVariant": false,
+          "variant": {
+            "name": "API Doc Widget",
+            "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+          }
+        }
+      ],
+      "entity": "deliverynote",
+      "transporterDetails": null,
+      "totalAmount": 100.0,
+      "transferType": "PRODUCTS",
+      "autoGenerateNote": false
+    }
+  ]
+}

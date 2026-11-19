@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/magic-link-ledger/lj792oo?from=01-04-2026&to=23-10-2026&sort=desc&count=20&ledgerView=customer"
+}

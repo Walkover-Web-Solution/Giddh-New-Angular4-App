@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Bank Details Not Found.",
+  "code": "BANK_DETAILS_NOT_FOUND"
+}

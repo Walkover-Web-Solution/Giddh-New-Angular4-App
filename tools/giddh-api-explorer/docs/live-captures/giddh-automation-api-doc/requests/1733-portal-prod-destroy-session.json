@@ -1,0 +1,7 @@
+{
+  "method": "DELETE",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/destroy-session",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy"
+}

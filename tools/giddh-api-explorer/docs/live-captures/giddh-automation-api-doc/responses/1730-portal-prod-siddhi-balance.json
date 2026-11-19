@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "body": {
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "balancePayable": 54621.0,
+    "noOfInvoices": 21
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

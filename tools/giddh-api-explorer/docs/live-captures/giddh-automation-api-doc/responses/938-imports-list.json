@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "items": [],
+    "page": 1,
+    "count": 20,
+    "totalPages": 0,
+    "totalItems": 0
+  }
+}

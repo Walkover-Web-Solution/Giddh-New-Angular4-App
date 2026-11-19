@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Comment not found for given account",
+  "code": "Not_Found"
+}

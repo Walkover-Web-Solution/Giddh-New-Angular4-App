@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Portal Contact not found.",
+  "code": "PORTAL_CONTACT_NOT_FOUND",
+  "httpStatus": 404
+}

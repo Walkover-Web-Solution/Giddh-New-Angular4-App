@@ -1,0 +1,28 @@
+{
+  "orgId": "83427",
+  "endpointId": "q2q8SGJZVaEc",
+  "description": "Get Email Content Suggestion. Part of the Email Content Suggestion APIs in Giddh. Requires Auth-Key or Session-Id.",
+  "params": {
+    "isForCustomer": {
+      "checked": "true",
+      "value": "false",
+      "description": "Is for customer query parameter. Default: false.",
+      "required": "false"
+    },
+    "isForVendor": {
+      "checked": "true",
+      "value": "false",
+      "description": "Is for vendor query parameter. Default: false.",
+      "required": "false"
+    },
+    "isForAccount": {
+      "checked": "true",
+      "value": "false",
+      "description": "Is for account query parameter. Default: false.",
+      "required": "false"
+    }
+  },
+  "body": {
+    "type": "none"
+  }
+}

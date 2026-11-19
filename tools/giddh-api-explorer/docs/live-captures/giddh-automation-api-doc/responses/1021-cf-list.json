@@ -1,0 +1,60 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "fieldType": {
+          "name": "Boolean",
+          "type": "BOOLEAN"
+        },
+        "fieldName": "API Doc CF Flag",
+        "status": true,
+        "modules": [
+          {
+            "name": "Account",
+            "uniqueName": "ACCOUNT"
+          }
+        ],
+        "dataRange": {
+          "min": null,
+          "max": null
+        },
+        "isMandatory": false,
+        "regex": null,
+        "fieldOptions": null,
+        "fieldInfo": "flag",
+        "isActive": true,
+        "uniqueName": "1792758792191n1ficygh8s7bfds"
+      },
+      {
+        "fieldType": {
+          "name": "Text Field",
+          "type": "STRING"
+        },
+        "fieldName": "API Doc CF Note",
+        "status": true,
+        "modules": [
+          {
+            "name": "Account",
+            "uniqueName": "ACCOUNT"
+          }
+        ],
+        "dataRange": {
+          "min": "1",
+          "max": "150"
+        },
+        "isMandatory": false,
+        "regex": "^.{1,150}$",
+        "fieldOptions": null,
+        "fieldInfo": "note",
+        "isActive": true,
+        "uniqueName": "1792758799819yswzbgh521k1smj"
+      }
+    ],
+    "size": 2
+  }
+}

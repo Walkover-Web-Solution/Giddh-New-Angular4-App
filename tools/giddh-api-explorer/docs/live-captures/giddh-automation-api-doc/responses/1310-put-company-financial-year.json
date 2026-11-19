@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No financial year period passed.",
+  "code": "INVALID_FINANCIAL_YEAR_PERIOD"
+}

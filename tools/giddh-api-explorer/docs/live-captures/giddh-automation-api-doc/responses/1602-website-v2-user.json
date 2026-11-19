@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "body": {
+    "user": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": true
+    },
+    "session": {
+      "id": "in3f3af1********HbI=",
+      "expiresAt": "25-10-2026 11:37:21",
+      "createdAt": "23-10-2026 11:37:21"
+    },
+    "isNewUser": false,
+    "isSystemUser": false,
+    "loggedInRegion": "IN",
+    "intercomHash": "87c46b20d1b00693eb068e8c6b62380cff9769adde525f48b47a65e9992f8add"
+  },
+  "httpStatus": 200
+}

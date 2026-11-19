@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide proper action.",
+  "code": "INVALID_REQUEST"
+}

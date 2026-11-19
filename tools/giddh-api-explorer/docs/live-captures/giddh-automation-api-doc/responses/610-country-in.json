@@ -1,0 +1,199 @@
+{
+  "status": "success",
+  "body": {
+    "country": {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "callingCode": "91",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "europeanUnionCountry": false,
+      "india": true
+    },
+    "stateList": [
+      {
+        "code": "DN",
+        "name": "Dadra and Nagar Haveli and Daman and Diu",
+        "stateGstCode": "26"
+      },
+      {
+        "code": "LA",
+        "name": "Ladakh",
+        "stateGstCode": "38"
+      },
+      {
+        "code": "JK",
+        "name": "Jammu and Kashmir",
+        "stateGstCode": "01"
+      },
+      {
+        "code": "HP",
+        "name": "Himachal Pradesh",
+        "stateGstCode": "02"
+      },
+      {
+        "code": "PB",
+        "name": "Punjab",
+        "stateGstCode": "03"
+      },
+      {
+        "code": "CH",
+        "name": "Chandigarh",
+        "stateGstCode": "04"
+      },
+      {
+        "code": "UT",
+        "name": "Uttarakhand",
+        "stateGstCode": "05"
+      },
+      {
+        "code": "HR",
+        "name": "Haryana",
+        "stateGstCode": "06"
+      },
+      {
+        "code": "DL",
+        "name": "Delhi",
+        "stateGstCode": "07"
+      },
+      {
+        "code": "RJ",
+        "name": "Rajasthan",
+        "stateGstCode": "08"
+      },
+      {
+        "code": "UP",
+        "name": "Uttar Pradesh",
+        "stateGstCode": "09"
+      },
+      {
+        "code": "BR",
+        "name": "Bihar",
+        "stateGstCode": "10"
+      },
+      {
+        "code": "SK",
+        "name": "Sikkim",
+        "stateGstCode": "11"
+      },
+      {
+        "code": "AR",
+        "name": "Arunachal Pradesh",
+        "stateGstCode": "12"
+      },
+      {
+        "code": "NL",
+        "name": "Nagaland",
+        "stateGstCode": "13"
+      },
+      {
+        "code": "MN",
+        "name": "Manipur",
+        "stateGstCode": "14"
+      },
+      {
+        "code": "MZ",
+        "name": "Mizoram",
+        "stateGstCode": "15"
+      },
+      {
+        "code": "TR",
+        "name": "Tripura",
+        "stateGstCode": "16"
+      },
+      {
+        "code": "ML",
+        "name": "Meghalaya",
+        "stateGstCode": "17"
+      },
+      {
+        "code": "AS",
+        "name": "Assam",
+        "stateGstCode": "18"
+      },
+      {
+        "code": "WB",
+        "name": "West Bengal",
+        "stateGstCode": "19"
+      },
+      {
+        "code": "JH",
+        "name": "Jharkhand",
+        "stateGstCode": "20"
+      },
+      {
+        "code": "OD",
+        "name": "Odisha",
+        "stateGstCode": "21"
+      },
+      {
+        "code": "CG",
+        "name": "Chhattisgarh",
+        "stateGstCode": "22"
+      },
+      {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      {
+        "code": "GJ",
+        "name": "Gujarat",
+        "stateGstCode": "24"
+      },
+      {
+        "code": "MH",
+        "name": "Maharashtra",
+        "stateGstCode": "27"
+      },
+      {
+        "code": "KA",
+        "name": "Karnataka",
+        "stateGstCode": "29"
+      },
+      {
+        "code": "GA",
+        "name": "Goa",
+        "stateGstCode": "30"
+      },
+      {
+        "code": "LD",
+        "name": "Lakshadweep",
+        "stateGstCode": "31"
+      },
+      {
+        "code": "KL",
+        "name": "Kerala",
+        "stateGstCode": "32"
+      },
+      {
+        "code": "TN",
+        "name": "Tamil Nadu",
+        "stateGstCode": "33"
+      },
+      {
+        "code": "PY",
+        "name": "Pondicherry",
+        "stateGstCode": "34"
+      },
+      {
+        "code": "AN",
+        "name": "Andaman & Nicobar Islands",
+        "stateGstCode": "35"
+      },
+      {
+        "code": "TS",
+        "name": "Telangana",
+        "stateGstCode": "36"
+      },
+      {
+        "code": "AP",
+        "name": "Andhra Pradesh",
+        "stateGstCode": "37"
+      }
+    ]
+  }
+}

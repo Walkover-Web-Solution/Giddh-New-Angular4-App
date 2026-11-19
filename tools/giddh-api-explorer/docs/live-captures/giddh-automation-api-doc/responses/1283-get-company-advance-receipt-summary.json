@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "body": {
+    "advance": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "code": null,
+      "symbol": "\u20b9"
+    },
+    "normal": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "code": null,
+      "symbol": "\u20b9"
+    },
+    "total": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "code": null,
+      "symbol": "\u20b9"
+    },
+    "unUsed": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "code": null,
+      "symbol": "\u20b9"
+    }
+  }
+}

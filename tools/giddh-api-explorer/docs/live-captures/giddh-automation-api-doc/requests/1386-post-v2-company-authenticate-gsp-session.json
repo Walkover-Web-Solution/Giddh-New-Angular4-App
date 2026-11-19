@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/authenticate-gsp-session?gstin=23AAACC1206D2ZN&userName=divyanshu@whozzat.com&otp=000000",
+  "body": {}
+}

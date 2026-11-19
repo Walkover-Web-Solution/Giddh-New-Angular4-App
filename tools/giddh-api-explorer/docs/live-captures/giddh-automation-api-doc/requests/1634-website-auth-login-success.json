@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "path": "/v2/auth-login",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website",
+  "body": {
+    "accessToken": "<MSG91_VERIFY_OTP_JWT_REDACTED>"
+  }
+}

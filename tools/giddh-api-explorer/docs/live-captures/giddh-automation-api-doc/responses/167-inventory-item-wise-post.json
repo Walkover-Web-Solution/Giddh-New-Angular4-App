@@ -1,0 +1,123 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 3,
+    "results": [
+      {
+        "opening": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "inwards": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "outwards": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "closing": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "profit": 0.0,
+        "stock": {
+          "name": "API Doc Consulting Hour",
+          "uniqueName": "apidoc-service-hour"
+        },
+        "stockGroup": {
+          "name": "API Doc Services",
+          "uniqueName": "apidoc-services"
+        },
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs"
+        },
+        "batchCount": 0,
+        "stockGroupHasChild": false
+      },
+      {
+        "opening": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "inwards": {
+          "quantity": 2.0,
+          "amount": 200.0
+        },
+        "outwards": {
+          "quantity": 2.0,
+          "amount": 300.0
+        },
+        "closing": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "profit": 0.0,
+        "stock": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget"
+        },
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs"
+        },
+        "batchCount": 0,
+        "stockGroupHasChild": false
+      },
+      {
+        "opening": {
+          "quantity": 10.0,
+          "amount": 800.0
+        },
+        "inwards": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "outwards": {
+          "quantity": 0.0,
+          "amount": 0.0
+        },
+        "closing": {
+          "quantity": 10.0,
+          "amount": 800.0
+        },
+        "profit": 0.0,
+        "stock": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidoc-widget"
+        },
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs"
+        },
+        "batchCount": 0,
+        "stockGroupHasChild": false
+      }
+    ],
+    "size": 3,
+    "fromDate": "01-04-2026",
+    "toDate": "31-03-2027",
+    "openingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "closingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "debitTotal": 0.0,
+    "creditTotal": 0.0
+  }
+}

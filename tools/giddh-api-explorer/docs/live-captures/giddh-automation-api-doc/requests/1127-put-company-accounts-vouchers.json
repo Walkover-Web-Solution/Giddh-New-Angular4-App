@@ -1,0 +1,8 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers?voucherVersion=2",
+  "body": {
+    "uniqueName": "5zkmf1792674363694",
+    "type": "sales"
+  }
+}

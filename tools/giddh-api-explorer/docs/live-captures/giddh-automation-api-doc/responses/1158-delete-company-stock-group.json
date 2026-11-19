@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stock group cannot be deleted as one or more stock has manufacturing transactions. Please delete the manufacturing transactions before deleting stock group.",
+  "code": "NOT_PERMITTED"
+}

@@ -1,0 +1,3941 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 20,
+    "totalPages": 2,
+    "totalItems": 33,
+    "results": [
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921664",
+        "operation": "CREATE",
+        "time": "23-10-2026 07:00:43",
+        "ip": "10.193.4.116",
+        "details": {
+          "number": null,
+          "type": "purchase",
+          "uniqueName": "uj1my1792738843214",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "grandTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "One Hundred Only",
+            "amountForCompany": "One Hundred Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "07-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Vendor One",
+            "uniqueName": "apidoc-vendor-one",
+            "customerName": "API Doc Vendor One",
+            "billingDetails": {
+              "name": "API Doc Customer One",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "API Doc Customer One",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "sourceOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "destinationOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "tteqt1792738843093",
+              "description": "DC line",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Purchases",
+                    "uniqueName": "purchases"
+                  },
+                  "amount": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  },
+                  "stock": {
+                    "name": "API Doc Widget",
+                    "uniqueName": "apidoc-widget",
+                    "stockUnit": {
+                      "name": "Piece",
+                      "code": "pcs",
+                      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                    },
+                    "sku": "WDG-001",
+                    "skuCodeHeading": "SKU Code",
+                    "quantity": 1.0,
+                    "rate": {
+                      "rateForAccount": 100,
+                      "rateForCompany": 100
+                    },
+                    "variant": {
+                      "name": "API Doc Widget",
+                      "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+                    },
+                    "type": "PRODUCT",
+                    "taxInclusive": false,
+                    "showVariant": false,
+                    "hasVariants": false,
+                    "customField1": {
+                      "key": "Custom field 1",
+                      "value": null
+                    },
+                    "customField2": {
+                      "key": "Custom field 2",
+                      "value": null
+                    }
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "entryTotal": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "grandTotal": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418",
+            "address": "My new address"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921663",
+        "operation": "CREATE",
+        "time": "23-10-2026 07:00:40",
+        "ip": "10.193.4.116",
+        "details": {
+          "number": "261023-7",
+          "type": "sales",
+          "uniqueName": "fbzat1792738840769",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "grandTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "One Hundred Only",
+            "amountForCompany": "One Hundred Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "07-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer One",
+            "uniqueName": "apidoc-customer-one",
+            "customerName": "API Doc Customer One",
+            "billingDetails": {
+              "name": "API Doc Customer One",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "API Doc Customer One",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "d1otu1792738840566",
+              "description": "DC line",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  },
+                  "stock": {
+                    "name": "API Doc Widget",
+                    "uniqueName": "apidoc-widget",
+                    "stockUnit": {
+                      "name": "Piece",
+                      "code": "pcs",
+                      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                    },
+                    "sku": "WDG-001",
+                    "skuCodeHeading": "SKU Code",
+                    "quantity": 1.0,
+                    "rate": {
+                      "rateForAccount": 100,
+                      "rateForCompany": 100
+                    },
+                    "variant": {
+                      "name": "API Doc Widget",
+                      "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+                    },
+                    "type": "PRODUCT",
+                    "taxInclusive": false,
+                    "showVariant": false,
+                    "hasVariants": false,
+                    "customField1": {
+                      "key": "Custom field 1",
+                      "value": null
+                    },
+                    "customField2": {
+                      "key": "Custom field 2",
+                      "value": null
+                    }
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "entryTotal": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "grandTotal": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418",
+            "address": "My new address"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921662",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:39:54",
+        "ip": null,
+        "details": {
+          "number": "JV-261023-2",
+          "type": "journal",
+          "uniqueName": "w31fb1792733994149",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "grandTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Eighty Only",
+            "amountForCompany": "Eighty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "Purchases",
+            "uniqueName": "purchases",
+            "customerName": "Purchases",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "xwryf1792733993977",
+              "description": "INV-ADJ-API-006/API inventory adjust with expense",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "API Doc Shrinkage Expense",
+                    "uniqueName": "apidoc-shrinkage-expense"
+                  },
+                  "amount": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  },
+                  "stock": {
+                    "name": "API Doc Widget",
+                    "uniqueName": "apidoc-widget",
+                    "stockUnit": {
+                      "name": "Piece",
+                      "code": "pcs",
+                      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                    },
+                    "sku": "WDG-001",
+                    "skuCodeHeading": "SKU Code",
+                    "quantity": 1,
+                    "rate": {
+                      "rateForAccount": 80,
+                      "rateForCompany": 80
+                    },
+                    "variant": {
+                      "name": "API Doc Widget",
+                      "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+                    },
+                    "type": "PRODUCT",
+                    "taxInclusive": false,
+                    "showVariant": false,
+                    "hasVariants": false,
+                    "customField1": {
+                      "key": "Custom field 1",
+                      "value": null
+                    },
+                    "customField2": {
+                      "key": "Custom field 2",
+                      "value": null
+                    }
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "entryTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "grandTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418",
+            "address": "My new address"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921661",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:39:17",
+        "ip": "10.193.4.116",
+        "details": {
+          "number": "261023-6",
+          "type": "sales",
+          "uniqueName": "zzguo1792733957208",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 77.0,
+            "amountForCompany": 77.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 77.0,
+            "amountForCompany": 77.0
+          },
+          "grandTotal": {
+            "amountForAccount": 77.0,
+            "amountForCompany": 77.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Seventy Seven Only",
+            "amountForCompany": "Seventy Seven Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "07-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "gstNumber": "23AAACC1206D2ZN",
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Three",
+            "uniqueName": "apidoc-customer-three",
+            "customerName": "API Doc Customer Three",
+            "billingDetails": {
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "uuttr1792733957144",
+              "description": "Proforma via sales type",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 77.0,
+                    "amountForCompany": 77.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 77.0,
+                    "amountForCompany": 77.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 77.0,
+                "amountForCompany": 77.0
+              },
+              "entryTotal": {
+                "amountForAccount": 77.0,
+                "amountForCompany": 77.0
+              },
+              "grandTotal": {
+                "amountForAccount": 77.0,
+                "amountForCompany": 77.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921660",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:39:12",
+        "ip": "10.193.4.116",
+        "details": {
+          "number": "261023-5",
+          "type": "sales",
+          "uniqueName": "vitmq1792733952798",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 99.0,
+            "amountForCompany": 99.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 99.0,
+            "amountForCompany": 99.0
+          },
+          "grandTotal": {
+            "amountForAccount": 99.0,
+            "amountForCompany": 99.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Ninety Nine Only",
+            "amountForCompany": "Ninety Nine Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "07-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "gstNumber": "23AAACC1206D2ZN",
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "address": [
+                "My new address"
+              ],
+              "pincode": "484224",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Three",
+            "uniqueName": "apidoc-customer-three",
+            "customerName": "API Doc Customer Three",
+            "billingDetails": {
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "stateGstCode": "23",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "rqer91792733952717",
+              "description": "Estimate consulting",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 99.0,
+                    "amountForCompany": 99.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 99.0,
+                    "amountForCompany": 99.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 99.0,
+                "amountForCompany": 99.0
+              },
+              "entryTotal": {
+                "amountForAccount": 99.0,
+                "amountForCompany": 99.0
+              },
+              "grandTotal": {
+                "amountForAccount": 99.0,
+                "amountForCompany": 99.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921602",
+        "operation": "UPDATE",
+        "time": "23-10-2026 05:28:42",
+        "ip": "103.187.160.186",
+        "details": {
+          "dueDate": "20-11-2026 12:00:00"
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921659",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:28:10",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "CR-261023-1",
+          "type": "credit note",
+          "uniqueName": "xmh271792733290665",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "grandTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Eighty Only",
+            "amountForCompany": "Eighty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Three",
+            "uniqueName": "apidoc-customer-three",
+            "customerName": "API Doc Customer Three",
+            "billingDetails": {
+              "name": "API Doc Customer Three",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "API Doc Customer Three",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "hokgd1792733290607",
+              "description": "CN with adjust",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "entryTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "grandTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921658",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:28:10",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "261023-4",
+          "type": "sales",
+          "uniqueName": "vkbcg1792733290253",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "grandTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Eighty Only",
+            "amountForCompany": "Eighty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "06-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Three",
+            "uniqueName": "apidoc-customer-three",
+            "customerName": "API Doc Customer Three",
+            "billingDetails": {
+              "name": "API Doc Customer Three",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "API Doc Customer Three",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "hkuyk1792733290200",
+              "description": "CN adjust target",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "entryTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "grandTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921602",
+        "operation": "UPDATE",
+        "time": "23-10-2026 05:27:30",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "261022-3",
+          "type": "sales",
+          "uniqueName": "rrftm1792675101875",
+          "voucherDate": [
+            2026,
+            10,
+            22
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 250.0,
+            "amountForCompany": 250.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 250.0,
+            "amountForCompany": 250.0
+          },
+          "grandTotal": {
+            "amountForAccount": 250.0,
+            "amountForCompany": 250.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Two Hundred Fifty Only",
+            "amountForCompany": "Two Hundred Fifty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "22-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "05-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Two",
+            "uniqueName": "apidoc-customer-two",
+            "customerName": "API Doc Customer Two",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer Two",
+              "address": [
+                "Address line 1"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer Two",
+              "address": [
+                "Address line 1"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "d9ti41792675101804",
+              "description": "Updated via API capture",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 250.0,
+                    "amountForCompany": 250.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 250.0,
+                    "amountForCompany": 250.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 250.0,
+                "amountForCompany": 250.0
+              },
+              "entryTotal": {
+                "amountForAccount": 250.0,
+                "amountForCompany": 250.0
+              },
+              "grandTotal": {
+                "amountForAccount": 250.0,
+                "amountForCompany": 250.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921657",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:27:24",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "RCPT-261023-2",
+          "type": "receipt",
+          "uniqueName": "f4bjw1792733243977",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "grandTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Three Hundred Only",
+            "amountForCompany": "Three Hundred Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer One",
+            "uniqueName": "apidoc-customer-one",
+            "customerName": "API Doc Customer One",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer One",
+              "address": [
+                "Address line 1"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer One",
+              "address": [
+                "Address line 1"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "hzrne1792733243928",
+              "description": "Full remaining adjust 261022-5",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "API Doc Bank HDFC",
+                    "uniqueName": "apidoc-bank-hdfc"
+                  },
+                  "amount": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "entryTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "grandTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921655",
+        "operation": "UPDATE",
+        "time": "23-10-2026 05:26:06",
+        "ip": "103.187.160.186",
+        "details": {
+          "status": "CANCEL"
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921655",
+        "operation": "CREATE",
+        "time": "23-10-2026 05:26:06",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "261023-3",
+          "type": "sales",
+          "uniqueName": "jtovv1792733166464",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 50.0,
+            "amountForCompany": 50.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 50.0,
+            "amountForCompany": 50.0
+          },
+          "grandTotal": {
+            "amountForAccount": 50.0,
+            "amountForCompany": 50.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Fifty Only",
+            "amountForCompany": "Fifty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "06-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Walk-in Customer",
+            "uniqueName": "apidoc-customer-b2c",
+            "customerName": "API Doc Walk-in Customer",
+            "billingDetails": {
+              "name": "API Doc Walk-in Customer",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "API Doc Walk-in Customer",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "gwb9n1792733166383",
+              "description": "Cancel-target sales",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 50.0,
+                    "amountForCompany": 50.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 50.0,
+                    "amountForCompany": 50.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 50.0,
+                "amountForCompany": 50.0
+              },
+              "entryTotal": {
+                "amountForAccount": 50.0,
+                "amountForCompany": 50.0
+              },
+              "grandTotal": {
+                "amountForAccount": 50.0,
+                "amountForCompany": 50.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921654",
+        "operation": "CREATE",
+        "time": "23-10-2026 04:50:47",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "JV-261023-1",
+          "type": "journal",
+          "uniqueName": "znb501792731047289",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 15.0,
+            "amountForCompany": 15.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 15.0,
+            "amountForCompany": 15.0
+          },
+          "grandTotal": {
+            "amountForAccount": 15.0,
+            "amountForCompany": 15.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Fifteen Only",
+            "amountForCompany": "Fifteen Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "Cash",
+            "uniqueName": "cash",
+            "customerName": "Cash",
+            "billingDetails": {
+              "name": "Cash",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "Cash",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "5ocw31792731047204",
+              "description": "JV cash to sales",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 15.0,
+                    "amountForCompany": 15.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 15.0,
+                    "amountForCompany": 15.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 15.0,
+                "amountForCompany": 15.0
+              },
+              "entryTotal": {
+                "amountForAccount": 15.0,
+                "amountForCompany": 15.0
+              },
+              "grandTotal": {
+                "amountForAccount": 15.0,
+                "amountForCompany": 15.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921653",
+        "operation": "CREATE",
+        "time": "23-10-2026 04:50:15",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "RCPT-261023-1",
+          "type": "receipt",
+          "uniqueName": "ncwkd1792731015079",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "grandTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Three Hundred Only",
+            "amountForCompany": "Three Hundred Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Two",
+            "uniqueName": "apidoc-customer-two",
+            "customerName": "API Doc Customer Two",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "8rwwp1792731014961",
+              "description": "Receipt stock invoice",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "API Doc Bank HDFC",
+                    "uniqueName": "apidoc-bank-hdfc"
+                  },
+                  "amount": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "entryTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "grandTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921652",
+        "operation": "CREATE",
+        "time": "23-10-2026 04:49:40",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "261023-2",
+          "type": "sales",
+          "uniqueName": "lfptf1792730980051",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 50.0,
+            "amountForCompany": 50.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 50.0,
+            "amountForCompany": 50.0
+          },
+          "grandTotal": {
+            "amountForAccount": 50.0,
+            "amountForCompany": 50.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Fifty Only",
+            "amountForCompany": "Fifty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "Cash",
+            "uniqueName": "cash",
+            "customerName": "Cash",
+            "billingDetails": {
+              "name": "Cash",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "Cash",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "n3y931792730979987",
+              "description": "Cash sale",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 50.0,
+                    "amountForCompany": 50.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 50.0,
+                    "amountForCompany": 50.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 50.0,
+                "amountForCompany": 50.0
+              },
+              "entryTotal": {
+                "amountForAccount": 50.0,
+                "amountForCompany": 50.0
+              },
+              "grandTotal": {
+                "amountForAccount": 50.0,
+                "amountForCompany": 50.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921651",
+        "operation": "CREATE",
+        "time": "23-10-2026 04:49:38",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "PB-STOCK-001",
+          "type": "purchase",
+          "uniqueName": "q39wp1792730978257",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 200.0,
+            "amountForCompany": 200.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 200.0,
+            "amountForCompany": 200.0
+          },
+          "grandTotal": {
+            "amountForAccount": 200.0,
+            "amountForCompany": 200.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Two Hundred Only",
+            "amountForCompany": "Two Hundred Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "06-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Vendor Three",
+            "uniqueName": "apidoc-vendor-three",
+            "customerName": "API Doc Vendor Three",
+            "billingDetails": {
+              "name": "API Doc Vendor Three",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "name": "API Doc Vendor Three",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "sourceOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "destinationOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "i9cd41792730978146",
+              "description": "Buy gadgets",
+              "hsnNumber": "847130",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Purchases",
+                    "uniqueName": "purchases"
+                  },
+                  "amount": {
+                    "amountForAccount": 200.0,
+                    "amountForCompany": 200.0
+                  },
+                  "stock": {
+                    "name": "API Doc Gadget",
+                    "uniqueName": "apidoc-gadget",
+                    "stockUnit": {
+                      "name": "Piece",
+                      "code": "pcs",
+                      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                    },
+                    "sku": "APIDOC-GADGET",
+                    "skuCodeHeading": "SKU Code",
+                    "quantity": 2,
+                    "rate": {
+                      "rateForAccount": 100,
+                      "rateForCompany": 100
+                    },
+                    "variant": {
+                      "name": "API Doc Gadget",
+                      "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+                    },
+                    "type": "PRODUCT",
+                    "taxInclusive": false,
+                    "showVariant": false,
+                    "hasVariants": false,
+                    "customField1": {
+                      "key": "Custom field 1",
+                      "value": null
+                    },
+                    "customField2": {
+                      "key": "Custom field 2",
+                      "value": null
+                    }
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 200.0,
+                    "amountForCompany": 200.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 200.0,
+                "amountForCompany": 200.0
+              },
+              "entryTotal": {
+                "amountForAccount": 200.0,
+                "amountForCompany": 200.0
+              },
+              "grandTotal": {
+                "amountForAccount": 200.0,
+                "amountForCompany": 200.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418",
+            "address": "My new address"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921650",
+        "operation": "CREATE",
+        "time": "23-10-2026 04:49:37",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "261023-1",
+          "type": "sales",
+          "uniqueName": "bvvvm1792730977197",
+          "voucherDate": [
+            2026,
+            10,
+            23
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "grandTotal": {
+            "amountForAccount": 300.0,
+            "amountForCompany": 300.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Three Hundred Only",
+            "amountForCompany": "Three Hundred Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "23-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "06-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Customer Two",
+            "uniqueName": "apidoc-customer-two",
+            "customerName": "API Doc Customer Two",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D1ZM",
+              "name": "API Doc Customer Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "placeOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "e2q3r1792730977051",
+              "description": "Gadget sale qty 2",
+              "hsnNumber": "847130",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Sales",
+                    "uniqueName": "sales"
+                  },
+                  "amount": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  },
+                  "stock": {
+                    "name": "API Doc Gadget",
+                    "uniqueName": "apidoc-gadget",
+                    "stockUnit": {
+                      "name": "Piece",
+                      "code": "pcs",
+                      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                    },
+                    "sku": "APIDOC-GADGET",
+                    "skuCodeHeading": "SKU Code",
+                    "quantity": 2,
+                    "rate": {
+                      "rateForAccount": 150,
+                      "rateForCompany": 150
+                    },
+                    "variant": {
+                      "name": "API Doc Gadget",
+                      "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+                    },
+                    "type": "PRODUCT",
+                    "taxInclusive": false,
+                    "showVariant": false,
+                    "hasVariants": false,
+                    "customField1": {
+                      "key": "Custom field 1",
+                      "value": null
+                    },
+                    "customField2": {
+                      "key": "Custom field 2",
+                      "value": null
+                    }
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "entryTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "grandTotal": {
+                "amountForAccount": 300.0,
+                "amountForCompany": 300.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418",
+            "address": "My new address"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921613",
+        "operation": "CREATE",
+        "time": "22-10-2026 13:19:08",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "PAY-261022-2",
+          "type": "payment",
+          "uniqueName": "n8p781792675148688",
+          "voucherDate": [
+            2026,
+            10,
+            22
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 120.0,
+            "amountForCompany": 120.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 120.0,
+            "amountForCompany": 120.0
+          },
+          "grandTotal": {
+            "amountForAccount": 120.0,
+            "amountForCompany": 120.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "One Hundred Twenty Only",
+            "amountForCompany": "One Hundred Twenty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": null,
+          "base64": null,
+          "paymentLink": null,
+          "date": "22-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": null,
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Vendor Two",
+            "uniqueName": "apidoc-vendor-two",
+            "customerName": "API Doc Vendor Two",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "API Doc Vendor Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "API Doc Vendor Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "phc6m1792675148626",
+              "description": "Pay PB-API-002",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Cash",
+                    "uniqueName": "cash"
+                  },
+                  "amount": {
+                    "amountForAccount": 120.0,
+                    "amountForCompany": 120.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 120.0,
+                    "amountForCompany": 120.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 120.0,
+                "amountForCompany": 120.0
+              },
+              "entryTotal": {
+                "amountForAccount": 120.0,
+                "amountForCompany": 120.0
+              },
+              "grandTotal": {
+                "amountForAccount": 120.0,
+                "amountForCompany": 120.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921612",
+        "operation": "CREATE",
+        "time": "22-10-2026 13:18:47",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "PB-API-002",
+          "type": "purchase",
+          "uniqueName": "0pwea1792675127009",
+          "voucherDate": [
+            2026,
+            10,
+            22
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 120.0,
+            "amountForCompany": 120.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 120.0,
+            "amountForCompany": 120.0
+          },
+          "grandTotal": {
+            "amountForAccount": 120.0,
+            "amountForCompany": 120.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "One Hundred Twenty Only",
+            "amountForCompany": "One Hundred Twenty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "22-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "05-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Vendor Two",
+            "uniqueName": "apidoc-vendor-two",
+            "customerName": "API Doc Vendor Two",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "API Doc Vendor Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "API Doc Vendor Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "sourceOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "destinationOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "hnp2e1792675126945",
+              "description": "Purchase with number",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Purchases",
+                    "uniqueName": "purchases"
+                  },
+                  "amount": {
+                    "amountForAccount": 120.0,
+                    "amountForCompany": 120.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 120.0,
+                    "amountForCompany": 120.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 120.0,
+                "amountForCompany": 120.0
+              },
+              "entryTotal": {
+                "amountForAccount": 120.0,
+                "amountForCompany": 120.0
+              },
+              "grandTotal": {
+                "amountForAccount": 120.0,
+                "amountForCompany": 120.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "VOUCHER",
+        "entityId": "1921610",
+        "operation": "CREATE",
+        "time": "22-10-2026 13:18:46",
+        "ip": "103.187.160.186",
+        "details": {
+          "number": "PB-API-001",
+          "type": "purchase",
+          "uniqueName": "no1km1792675126040",
+          "voucherDate": [
+            2026,
+            10,
+            22
+          ],
+          "mergePB": false,
+          "passportNumber": null,
+          "subVoucher": null,
+          "withPay": false,
+          "ewayBillDetails": null,
+          "attachedFiles": [],
+          "attachedFileName": null,
+          "entryUniqueNames": [],
+          "ecommerceDetails": null,
+          "balanceTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "status": null,
+          "subTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "discountTotal": null,
+          "taxTotal": null,
+          "roundOffTotal": null,
+          "otherTaxTotal": null,
+          "voucherTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "grandTotal": {
+            "amountForAccount": 80.0,
+            "amountForCompany": 80.0
+          },
+          "totalAsWords": {
+            "amountForAccount": "Eighty Only",
+            "amountForCompany": "Eighty Only"
+          },
+          "salesPerson": {
+            "linkedEntities": [],
+            "archiveOnly": false
+          },
+          "exchangeRate": 1.0,
+          "valuesInAccountCurrency": true,
+          "templateDetails": {
+            "other": {}
+          },
+          "base64": null,
+          "paymentLink": null,
+          "date": "22-10-2026",
+          "touristSchemeApplicable": false,
+          "dueDate": "05-11-2026",
+          "nil": true,
+          "company": {
+            "name": "Giddh Automation API DOC",
+            "uniqueName": "giddhain1792673422178091xos",
+            "currency": {
+              "code": "INR"
+            },
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "Default Address",
+              "address": [
+                "My new address"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "pincode": "484224",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            }
+          },
+          "account": {
+            "name": "API Doc Vendor Two",
+            "uniqueName": "apidoc-vendor-two",
+            "customerName": "API Doc Vendor Two",
+            "billingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "API Doc Vendor Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "shippingDetails": {
+              "gstNumber": "23AAACC1206D2ZN",
+              "name": "API Doc Vendor Two",
+              "address": [
+                "addr"
+              ],
+              "stateCode": "MP",
+              "countryName": "India",
+              "countryCode": "IN",
+              "taxNumber": "23AAACC1206D2ZN",
+              "state": {
+                "name": "Madhya Pradesh",
+                "code": "MP"
+              },
+              "country": {
+                "name": "India",
+                "code": "IN"
+              }
+            },
+            "sourceOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "destinationOfSupply": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "currency": {
+              "code": "INR"
+            }
+          },
+          "entries": [
+            {
+              "uniqueName": "7eiu81792675125949",
+              "description": "Purchase with number",
+              "transactions": [
+                {
+                  "account": {
+                    "name": "Purchases",
+                    "uniqueName": "purchases"
+                  },
+                  "amount": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  },
+                  "taxableValue": {
+                    "amountForAccount": 80.0,
+                    "amountForCompany": 80.0
+                  }
+                }
+              ],
+              "discounts": [],
+              "taxes": [],
+              "salesPerson": {
+                "linkedEntities": [],
+                "archiveOnly": false
+              },
+              "subTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "entryTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "grandTotal": {
+                "amountForAccount": 80.0,
+                "amountForCompany": 80.0
+              },
+              "usedQuantity": 0
+            }
+          ],
+          "warehouse": null
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      }
+    ]
+  }
+}

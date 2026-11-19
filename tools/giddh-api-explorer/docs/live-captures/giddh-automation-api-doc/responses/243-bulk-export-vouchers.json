@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "body": {
+    "file": "Your request is being processed.",
+    "type": "message",
+    "name": null,
+    "data": null
+  }
+}

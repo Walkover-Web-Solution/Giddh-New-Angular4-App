@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please specify manufacturing quantity and unit in link stock",
+  "code": "INVALID_ACCOUNT"
+}

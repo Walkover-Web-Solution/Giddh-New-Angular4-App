@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "a-t2p98JN4TT", "description": "Get. Part of the Vouchers APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"refresh": {"checked": "true", "value": "false", "description": "When true, bypass cache and recompute. Default: false. Optional.", "required": "false"}}}

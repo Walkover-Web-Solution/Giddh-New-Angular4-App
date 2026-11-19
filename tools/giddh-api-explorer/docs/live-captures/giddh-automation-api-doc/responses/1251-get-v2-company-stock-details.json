@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "body": {
+    "variants": [
+      {
+        "name": "API Doc Widget",
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl",
+        "units": [
+          {
+            "name": "temp",
+            "code": "pcs",
+            "group": {
+              "name": "Main Group",
+              "uniqueName": "maingroup"
+            },
+            "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+          }
+        ]
+      }
+    ]
+  }
+}

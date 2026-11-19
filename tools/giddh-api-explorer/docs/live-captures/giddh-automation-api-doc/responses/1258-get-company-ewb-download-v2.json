@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No E-way bill user found for the company, please integrate the user first.",
+  "code": "NOT_FOUND"
+}

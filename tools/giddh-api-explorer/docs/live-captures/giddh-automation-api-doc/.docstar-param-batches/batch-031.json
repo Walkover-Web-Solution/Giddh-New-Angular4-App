@@ -1,0 +1,1463 @@
+[
+  {
+    "endpointId": "rSOH7hwPnPHk",
+    "name": "Update Template",
+    "catalogKey": "PUT /v2/company/{companyUniqueName}/templates/{templateUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "rSOH7hwPnPHk",
+      "description": "Update Template. Part of the Templates APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"isSample\": false,\n  \"sections\": {},\n  \"templateColor\": \"string\",\n  \"tableColor\": \"string\",\n  \"font\": \"string\",\n  \"fontDefault\": 0,\n  \"topMargin\": 0,\n  \"leftMargin\": 0,\n  \"bottomMargin\": 0,\n  \"rightMargin\": 0,\n  \"logoPosition\": \"string\",\n  \"logoSize\": \"string\",\n  \"isDefault\": false,\n  \"isDefaultForVoucher\": false,\n  \"copyFrom\": \"string\",\n  \"logoUniqueName\": \"string\",\n  \"qrCodeId\": \"string\",\n  \"showBankQrCode\": false,\n  \"isActive\": \"string\",\n  \"type\": \"string\",\n  \"templateType\": \"string\",\n  \"isThermal\": false,\n  \"showSectionsInline\": false,\n  \"accountCustomFieldUniqueNames\": [],\n  \"enableSecondaryLanguage\": false,\n  \"language1Code\": \"string\",\n  \"language2Code\": \"string\",\n  \"displayLanguage1\": false,\n  \"displayLanguage2\": false,\n  \"showLanguage2DisplayedFirst\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "isSample": {
+          "type": "boolean",
+          "description": "When true, applies the is sample filter or flag. Optional.",
+          "value": false
+        },
+        "sections": {
+          "type": "string",
+          "description": "Sections. Optional.",
+          "value": {}
+        },
+        "templateColor": {
+          "type": "string",
+          "description": "Template color. Optional.",
+          "value": "string"
+        },
+        "tableColor": {
+          "type": "string",
+          "description": "Table color. Optional.",
+          "value": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "Font. Optional.",
+          "value": "string"
+        },
+        "fontDefault": {
+          "type": "number",
+          "description": "Font default. Optional.",
+          "value": 0
+        },
+        "topMargin": {
+          "type": "number",
+          "description": "Top margin. Optional.",
+          "value": 0
+        },
+        "leftMargin": {
+          "type": "number",
+          "description": "Left margin. Optional.",
+          "value": 0
+        },
+        "bottomMargin": {
+          "type": "number",
+          "description": "Bottom margin. Optional.",
+          "value": 0
+        },
+        "rightMargin": {
+          "type": "number",
+          "description": "Right margin. Optional.",
+          "value": 0
+        },
+        "logoPosition": {
+          "type": "string",
+          "description": "Logo position. Optional.",
+          "value": "string"
+        },
+        "logoSize": {
+          "type": "string",
+          "description": "Logo size. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "isDefaultForVoucher": {
+          "type": "boolean",
+          "description": "When true, applies the is default for voucher filter or flag. Optional.",
+          "value": false
+        },
+        "copyFrom": {
+          "type": "string",
+          "description": "Copy from. Optional.",
+          "value": "string"
+        },
+        "logoUniqueName": {
+          "type": "string",
+          "description": "Logo unique name. Optional.",
+          "value": "string"
+        },
+        "qrCodeId": {
+          "type": "string",
+          "description": "Qr code id. Optional.",
+          "value": "string"
+        },
+        "showBankQrCode": {
+          "type": "boolean",
+          "description": "When true, applies the show bank qr code filter or flag. Optional.",
+          "value": false
+        },
+        "isActive": {
+          "type": "string",
+          "description": "Is active. Optional.",
+          "value": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        },
+        "templateType": {
+          "type": "string",
+          "description": "Template type. Optional.",
+          "value": "string"
+        },
+        "isThermal": {
+          "type": "boolean",
+          "description": "When true, applies the is thermal filter or flag. Optional.",
+          "value": false
+        },
+        "showSectionsInline": {
+          "type": "boolean",
+          "description": "When true, applies the show sections inline filter or flag. Optional.",
+          "value": false
+        },
+        "accountCustomFieldUniqueNames": {
+          "type": "array",
+          "description": "Array of account custom field unique names values. Optional.",
+          "value": []
+        },
+        "enableSecondaryLanguage": {
+          "type": "boolean",
+          "description": "When true, applies the enable secondary language filter or flag. Optional.",
+          "value": false
+        },
+        "language1Code": {
+          "type": "string",
+          "description": "Language1 code. Optional.",
+          "value": "string"
+        },
+        "language2Code": {
+          "type": "string",
+          "description": "Language2 code. Optional.",
+          "value": "string"
+        },
+        "displayLanguage1": {
+          "type": "boolean",
+          "description": "When true, applies the display language1 filter or flag. Optional.",
+          "value": false
+        },
+        "displayLanguage2": {
+          "type": "boolean",
+          "description": "When true, applies the display language2 filter or flag. Optional.",
+          "value": false
+        },
+        "showLanguage2DisplayedFirst": {
+          "type": "boolean",
+          "description": "When true, applies the show language2 displayed first filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "UoJvLGiLZKqB",
+    "name": "Update Template",
+    "catalogKey": "PUT /v2/company/{companyUniqueName}/templates/{templateUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "UoJvLGiLZKqB",
+      "description": "Update Template. Part of the Templates APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"isSample\": false,\n  \"sections\": {},\n  \"templateColor\": \"string\",\n  \"tableColor\": \"string\",\n  \"font\": \"string\",\n  \"fontDefault\": 0,\n  \"topMargin\": 0,\n  \"leftMargin\": 0,\n  \"bottomMargin\": 0,\n  \"rightMargin\": 0,\n  \"logoPosition\": \"string\",\n  \"logoSize\": \"string\",\n  \"isDefault\": false,\n  \"isDefaultForVoucher\": false,\n  \"copyFrom\": \"string\",\n  \"logoUniqueName\": \"string\",\n  \"qrCodeId\": \"string\",\n  \"showBankQrCode\": false,\n  \"isActive\": \"string\",\n  \"type\": \"string\",\n  \"templateType\": \"string\",\n  \"isThermal\": false,\n  \"showSectionsInline\": false,\n  \"accountCustomFieldUniqueNames\": [],\n  \"enableSecondaryLanguage\": false,\n  \"language1Code\": \"string\",\n  \"language2Code\": \"string\",\n  \"displayLanguage1\": false,\n  \"displayLanguage2\": false,\n  \"showLanguage2DisplayedFirst\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "isSample": {
+          "type": "boolean",
+          "description": "When true, applies the is sample filter or flag. Optional.",
+          "value": false
+        },
+        "sections": {
+          "type": "string",
+          "description": "Sections. Optional.",
+          "value": {}
+        },
+        "templateColor": {
+          "type": "string",
+          "description": "Template color. Optional.",
+          "value": "string"
+        },
+        "tableColor": {
+          "type": "string",
+          "description": "Table color. Optional.",
+          "value": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "Font. Optional.",
+          "value": "string"
+        },
+        "fontDefault": {
+          "type": "number",
+          "description": "Font default. Optional.",
+          "value": 0
+        },
+        "topMargin": {
+          "type": "number",
+          "description": "Top margin. Optional.",
+          "value": 0
+        },
+        "leftMargin": {
+          "type": "number",
+          "description": "Left margin. Optional.",
+          "value": 0
+        },
+        "bottomMargin": {
+          "type": "number",
+          "description": "Bottom margin. Optional.",
+          "value": 0
+        },
+        "rightMargin": {
+          "type": "number",
+          "description": "Right margin. Optional.",
+          "value": 0
+        },
+        "logoPosition": {
+          "type": "string",
+          "description": "Logo position. Optional.",
+          "value": "string"
+        },
+        "logoSize": {
+          "type": "string",
+          "description": "Logo size. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "isDefaultForVoucher": {
+          "type": "boolean",
+          "description": "When true, applies the is default for voucher filter or flag. Optional.",
+          "value": false
+        },
+        "copyFrom": {
+          "type": "string",
+          "description": "Copy from. Optional.",
+          "value": "string"
+        },
+        "logoUniqueName": {
+          "type": "string",
+          "description": "Logo unique name. Optional.",
+          "value": "string"
+        },
+        "qrCodeId": {
+          "type": "string",
+          "description": "Qr code id. Optional.",
+          "value": "string"
+        },
+        "showBankQrCode": {
+          "type": "boolean",
+          "description": "When true, applies the show bank qr code filter or flag. Optional.",
+          "value": false
+        },
+        "isActive": {
+          "type": "string",
+          "description": "Is active. Optional.",
+          "value": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        },
+        "templateType": {
+          "type": "string",
+          "description": "Template type. Optional.",
+          "value": "string"
+        },
+        "isThermal": {
+          "type": "boolean",
+          "description": "When true, applies the is thermal filter or flag. Optional.",
+          "value": false
+        },
+        "showSectionsInline": {
+          "type": "boolean",
+          "description": "When true, applies the show sections inline filter or flag. Optional.",
+          "value": false
+        },
+        "accountCustomFieldUniqueNames": {
+          "type": "array",
+          "description": "Array of account custom field unique names values. Optional.",
+          "value": []
+        },
+        "enableSecondaryLanguage": {
+          "type": "boolean",
+          "description": "When true, applies the enable secondary language filter or flag. Optional.",
+          "value": false
+        },
+        "language1Code": {
+          "type": "string",
+          "description": "Language1 code. Optional.",
+          "value": "string"
+        },
+        "language2Code": {
+          "type": "string",
+          "description": "Language2 code. Optional.",
+          "value": "string"
+        },
+        "displayLanguage1": {
+          "type": "boolean",
+          "description": "When true, applies the display language1 filter or flag. Optional.",
+          "value": false
+        },
+        "displayLanguage2": {
+          "type": "boolean",
+          "description": "When true, applies the display language2 filter or flag. Optional.",
+          "value": false
+        },
+        "showLanguage2DisplayedFirst": {
+          "type": "boolean",
+          "description": "When true, applies the show language2 displayed first filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "JzcC3bfsWBeU",
+    "name": "Update Transporter",
+    "catalogKey": "PUT /company/{companyUniqueName}/transporters",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "JzcC3bfsWBeU",
+      "description": "Update Transporter. Part of the Transporters APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "transporterId": {
+          "checked": "true",
+          "value": "",
+          "description": "Transporter id query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "H_UOEdazZ2kN",
+    "name": "Update Trigger",
+    "catalogKey": "PUT /company/{companyUniqueName}/triggers/{triggerUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "H_UOEdazZ2kN",
+      "description": "Update Trigger. Part of the Triggers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"description\": \"string\",\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"scope\": \"string\",\n  \"filter\": \"string\",\n  \"action\": \"string\",\n  \"url\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope. Optional.",
+          "value": "string"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter. Optional.",
+          "value": "string"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "url": {
+          "type": "string",
+          "description": "Url. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "RbY2VBQNpEPf",
+    "name": "Update Trigger",
+    "catalogKey": "PUT /company/{companyUniqueName}/triggers/{triggerUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "RbY2VBQNpEPf",
+      "description": "Update Trigger. Part of the Triggers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"description\": \"string\",\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"scope\": \"string\",\n  \"filter\": \"string\",\n  \"action\": \"string\",\n  \"url\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope. Optional.",
+          "value": "string"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter. Optional.",
+          "value": "string"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "url": {
+          "type": "string",
+          "description": "Url. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "R69xK76H_WH5",
+    "name": "Update User Company Entry Settings",
+    "catalogKey": "PUT /company/{companyUniqueName}/entry-settings",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "R69xK76H_WH5",
+      "description": "Update User Company Entry Settings. Part of the Entry Settings APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"fromDate\": \"string\",\n  \"toDate\": \"string\",\n  \"period\": \"string\",\n  \"duration\": 0,\n  \"ledgerCount\": 0,\n  \"status\": false,\n  \"noOfTransactions\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "fromDate": {
+          "type": "string",
+          "description": "From date. Optional.",
+          "value": "string"
+        },
+        "toDate": {
+          "type": "string",
+          "description": "To date. Optional.",
+          "value": "string"
+        },
+        "period": {
+          "type": "string",
+          "description": "Period. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration. Optional.",
+          "value": 0
+        },
+        "ledgerCount": {
+          "type": "number",
+          "description": "Ledger count. Optional.",
+          "value": 0
+        },
+        "status": {
+          "type": "boolean",
+          "description": "When true, applies the status filter or flag. Optional.",
+          "value": false
+        },
+        "noOfTransactions": {
+          "type": "number",
+          "description": "No of transactions. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "cbBpHcWdAxMt",
+    "name": "Update User Entity Role",
+    "catalogKey": "PUT /company/{companyUniqueName}/uer/{entityRoleUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "cbBpHcWdAxMt",
+      "description": "Update User Entity Role. Part of the Uer APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"emailId\": \"string\",\n  \"from\": \"string\",\n  \"to\": \"string\",\n  \"duration\": 0,\n  \"period\": \"string\",\n  \"allowedIps\": [],\n  \"allowedCidrs\": [],\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"roleName\": \"string\",\n  \"roleUniqueName\": \"string\",\n  \"userName\": \"string\",\n  \"userEmail\": \"string\",\n  \"userUniqueName\": \"string\",\n  \"uniqueName\": \"string\",\n  \"fromDateObj\": \"01-04-2025\",\n  \"toDateObj\": \"01-04-2025\",\n  \"mobileVerified\": false,\n  \"mobileNumber\": \"string\",\n  \"userIsSubscriber\": false,\n  \"companyUniqueName\": \"string\",\n  \"comingFromAdminPanel\": false,\n  \"reGenerateAuthKey\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "emailId": {
+          "type": "string",
+          "description": "Email id. Optional.",
+          "value": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "From. Optional.",
+          "value": "string"
+        },
+        "to": {
+          "type": "string",
+          "description": "To. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration. Optional.",
+          "value": 0
+        },
+        "period": {
+          "type": "string",
+          "description": "Period. Optional.",
+          "value": "string"
+        },
+        "allowedIps": {
+          "type": "array",
+          "description": "Array of allowed ips values. Optional.",
+          "value": []
+        },
+        "allowedCidrs": {
+          "type": "array",
+          "description": "Array of allowed cidrs values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "roleName": {
+          "type": "string",
+          "description": "Role name. Optional.",
+          "value": "string"
+        },
+        "roleUniqueName": {
+          "type": "string",
+          "description": "Role unique name. Optional.",
+          "value": "string"
+        },
+        "userName": {
+          "type": "string",
+          "description": "User name. Optional.",
+          "value": "string"
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "User email. Optional.",
+          "value": "string"
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "fromDateObj": {
+          "type": "string",
+          "description": "From date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "toDateObj": {
+          "type": "string",
+          "description": "To date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "mobileVerified": {
+          "type": "boolean",
+          "description": "When true, applies the mobile verified filter or flag. Optional.",
+          "value": false
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Optional.",
+          "value": "string"
+        },
+        "userIsSubscriber": {
+          "type": "boolean",
+          "description": "When true, applies the user is subscriber filter or flag. Optional.",
+          "value": false
+        },
+        "companyUniqueName": {
+          "type": "string",
+          "description": "Company unique name. Optional.",
+          "value": "string"
+        },
+        "comingFromAdminPanel": {
+          "type": "boolean",
+          "description": "When true, applies the coming from admin panel filter or flag. Optional.",
+          "value": false
+        },
+        "reGenerateAuthKey": {
+          "type": "boolean",
+          "description": "When true, applies the re generate auth key filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "vtqI28qr1V-8",
+    "name": "Update User Entity Role",
+    "catalogKey": "PUT /company/{companyUniqueName}/uer/{entityRoleUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "vtqI28qr1V-8",
+      "description": "Update User Entity Role. Part of the Uer APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"emailId\": \"string\",\n  \"from\": \"string\",\n  \"to\": \"string\",\n  \"duration\": 0,\n  \"period\": \"string\",\n  \"allowedIps\": [],\n  \"allowedCidrs\": [],\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"roleName\": \"string\",\n  \"roleUniqueName\": \"string\",\n  \"userName\": \"string\",\n  \"userEmail\": \"string\",\n  \"userUniqueName\": \"string\",\n  \"uniqueName\": \"string\",\n  \"fromDateObj\": \"01-04-2025\",\n  \"toDateObj\": \"01-04-2025\",\n  \"mobileVerified\": false,\n  \"mobileNumber\": \"string\",\n  \"userIsSubscriber\": false,\n  \"companyUniqueName\": \"string\",\n  \"comingFromAdminPanel\": false,\n  \"reGenerateAuthKey\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "emailId": {
+          "type": "string",
+          "description": "Email id. Optional.",
+          "value": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "From. Optional.",
+          "value": "string"
+        },
+        "to": {
+          "type": "string",
+          "description": "To. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration. Optional.",
+          "value": 0
+        },
+        "period": {
+          "type": "string",
+          "description": "Period. Optional.",
+          "value": "string"
+        },
+        "allowedIps": {
+          "type": "array",
+          "description": "Array of allowed ips values. Optional.",
+          "value": []
+        },
+        "allowedCidrs": {
+          "type": "array",
+          "description": "Array of allowed cidrs values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "roleName": {
+          "type": "string",
+          "description": "Role name. Optional.",
+          "value": "string"
+        },
+        "roleUniqueName": {
+          "type": "string",
+          "description": "Role unique name. Optional.",
+          "value": "string"
+        },
+        "userName": {
+          "type": "string",
+          "description": "User name. Optional.",
+          "value": "string"
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "User email. Optional.",
+          "value": "string"
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "fromDateObj": {
+          "type": "string",
+          "description": "From date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "toDateObj": {
+          "type": "string",
+          "description": "To date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "mobileVerified": {
+          "type": "boolean",
+          "description": "When true, applies the mobile verified filter or flag. Optional.",
+          "value": false
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Optional.",
+          "value": "string"
+        },
+        "userIsSubscriber": {
+          "type": "boolean",
+          "description": "When true, applies the user is subscriber filter or flag. Optional.",
+          "value": false
+        },
+        "companyUniqueName": {
+          "type": "string",
+          "description": "Company unique name. Optional.",
+          "value": "string"
+        },
+        "comingFromAdminPanel": {
+          "type": "boolean",
+          "description": "When true, applies the coming from admin panel filter or flag. Optional.",
+          "value": false
+        },
+        "reGenerateAuthKey": {
+          "type": "boolean",
+          "description": "When true, applies the re generate auth key filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "zr5QthHe3r9U",
+    "name": "Update User Settings",
+    "catalogKey": "PUT /users/{userUniqueName}/settings",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "zr5QthHe3r9U",
+      "description": "Update User Settings. Part of the Settings APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"authenticateTwoWay\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "authenticateTwoWay": {
+          "type": "boolean",
+          "description": "When true, applies the authenticate two way filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "V4NfSHObFs4U",
+    "name": "Update Vehicle Number",
+    "catalogKey": "PUT /company/{companyUniqueName}/ewb/vehicle",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "V4NfSHObFs4U",
+      "description": "Update Vehicle Number. Part of the Vehicle APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "b8kL1aUaLO-n",
+    "name": "Update Warehouse",
+    "catalogKey": "PUT /company/{companyUniqueName}/warehouse/{warehouseUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "b8kL1aUaLO-n",
+      "description": "Update Warehouse. Part of the Warehouse APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"countryCode\": \"string\",\n  \"currencyCode\": \"string\",\n  \"stateCode\": \"string\",\n  \"isDefault\": false,\n  \"callingCode\": \"string\",\n  \"addresses\": [],\n  \"linkAddresses\": [],\n  \"isArchived\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "Currency code. Optional.",
+          "value": "string"
+        },
+        "stateCode": {
+          "type": "string",
+          "description": "State code. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "callingCode": {
+          "type": "string",
+          "description": "Calling code. Optional.",
+          "value": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "description": "Array of addresses values. Optional.",
+          "value": []
+        },
+        "linkAddresses": {
+          "type": "array",
+          "description": "Array of link addresses values. Optional.",
+          "value": []
+        },
+        "isArchived": {
+          "type": "boolean",
+          "description": "When true, applies the is archived filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Y8SQ5vuQ392P",
+    "name": "Update Warehouse V2",
+    "catalogKey": "PATCH /company/{companyUniqueName}/warehouse/{warehouseUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Y8SQ5vuQ392P",
+      "description": "Update Warehouse V2. Part of the Warehouse APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"countryCode\": \"string\",\n  \"currencyCode\": \"string\",\n  \"stateCode\": \"string\",\n  \"isDefault\": false,\n  \"callingCode\": \"string\",\n  \"addresses\": [],\n  \"linkAddresses\": [],\n  \"isArchived\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "Currency code. Optional.",
+          "value": "string"
+        },
+        "stateCode": {
+          "type": "string",
+          "description": "State code. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "callingCode": {
+          "type": "string",
+          "description": "Calling code. Optional.",
+          "value": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "description": "Array of addresses values. Optional.",
+          "value": []
+        },
+        "linkAddresses": {
+          "type": "array",
+          "description": "Array of link addresses values. Optional.",
+          "value": []
+        },
+        "isArchived": {
+          "type": "boolean",
+          "description": "When true, applies the is archived filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "OwAjpvMJCFZm",
+    "name": "Upload Document",
+    "catalogKey": "POST /company/{companyUniqueName}/imports/document/upload",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "OwAjpvMJCFZm",
+      "description": "Upload Document. Part of the Upload APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "TALLY_MASTERS",
+          "description": "Voucher or entity type discriminator for the list. Allowed values: TALLY_MASTERS, TALLY_ENTRIES, MASTER_IMPORT, ENTRIES_IMPORT, INVENTORY_IMPORT, BANK_TRANSACTIONS_IMPORT, CONVERT_FILE, ACCOUNT_WISE_VOUCHER_IMPORT, VOUCHER_WISE_VOUCHER_IMPORT, DOCUMENT_IMPORT, MAIL_BANK_TRANSACTIONS_IMPORT. Mandatory.",
+          "required": true
+        },
+        "ocrType": {
+          "checked": "true",
+          "value": "",
+          "description": "Ocr type query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"requestId\": \"string\",\n  \"signedUrl\": \"string\",\n  \"filePath\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "signedUrl": {
+          "type": "string",
+          "description": "Signed url. Optional.",
+          "value": "string"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "File path. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "gUSfzGsewJRV",
+    "name": "Upload File For Ledger",
+    "catalogKey": "POST /company/{companyUniqueName}/ledger/upload",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "gUSfzGsewJRV",
+      "description": "Upload File For Ledger. Part of the Upload APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "entries": {
+          "checked": "true",
+          "value": "",
+          "description": "Entries query parameter. Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "ledger",
+          "description": "Voucher or entity type discriminator for the list. Default: ledger. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "fjXfm4ELuAJn",
+    "name": "Upload File For Ledger",
+    "catalogKey": "POST /company/{companyUniqueName}/ledger/upload",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "fjXfm4ELuAJn",
+      "description": "Upload File For Ledger. Part of the Upload APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "entries": {
+          "checked": "true",
+          "value": "",
+          "description": "Entries query parameter. Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "ledger",
+          "description": "Voucher or entity type discriminator for the list. Default: ledger. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Q-kQzqiMBAy2",
+    "name": "Upload a bank statement file (PDF or Excel/CSV) to initiate reconciliation.",
+    "catalogKey": "POST /company/{companyUniqueName}/imports/reconciliation/upload",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Q-kQzqiMBAy2",
+      "description": "Upload a bank statement file (PDF or Excel/CSV) to initiate reconciliation. Part of the Upload APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Account uniqueName. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "password": {
+          "checked": "true",
+          "value": "",
+          "description": "Password query parameter. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "en",
+          "description": "Locale/language code for translated labels. Default: en. Optional.",
+          "required": false
+        },
+        "sameDebitCreditColumn": {
+          "checked": "true",
+          "value": "",
+          "description": "Same debit credit column query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "d1t9kMrjpV5S",
+    "name": "Use to get purchase record",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/{uniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "d1t9kMrjpV5S",
+      "description": "To get purchase record. Part of the Purchase Record APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "uWDPLV03e5g9",
+    "name": "Validate Invoice",
+    "catalogKey": "POST /company/{companyUniqueName}/ewb/validate-invoice",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "uWDPLV03e5g9",
+      "description": "Validate Invoice. Part of the Validate Invoice APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "IjGpZUmOOnba",
+    "name": "Verify Auth Key",
+    "catalogKey": "POST /company/{companyUniqueName}/communication/platform/verify",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "IjGpZUmOOnba",
+      "description": "Verify Auth Key. Part of the Verify APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"platform\": \"MSG91\",\n  \"authFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "platform": {
+          "type": "string",
+          "description": "Platform. Allowed values: MSG91, GMAIL. Optional.",
+          "value": "MSG91",
+          "allowedValues": [
+            "MSG91",
+            "GMAIL"
+          ]
+        },
+        "authFields": {
+          "type": "array",
+          "description": "Array of auth fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "UxxJYpK21UMw",
+    "name": "Verify Company Invoice Email",
+    "catalogKey": "GET /company/{companyUniqueName}/purchase-bill-setting/verify-email",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "UxxJYpK21UMw",
+      "description": "Verify Company Invoice Email. Part of the Verify Email APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "emailAddress": {
+          "checked": "true",
+          "value": "",
+          "description": "Email address query parameter. Mandatory.",
+          "required": true
+        },
+        "scope": {
+          "checked": "true",
+          "value": "",
+          "description": "Scope query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "_XODrPJ6hwIb",
+    "name": "Verify Company Invoice Email",
+    "catalogKey": "GET /company/{companyUniqueName}/invoice-setting/verify-email",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "_XODrPJ6hwIb",
+      "description": "Verify Company Invoice Email. Part of the Verify Email APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "emailAddress": {
+          "checked": "true",
+          "value": "",
+          "description": "Email address query parameter. Mandatory.",
+          "required": true
+        },
+        "scope": {
+          "checked": "true",
+          "value": "",
+          "description": "Scope query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "rxOlSj-JcBJN",
+    "name": "Verify Domain",
+    "catalogKey": "GET /company/{companyUniqueName}/verify-domain",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "rxOlSj-JcBJN",
+      "description": "Verify Domain. Part of the Verify Domain APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "domainUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Domain unique name query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "bcyefOtU2XvH",
+    "name": "Verify Ecommerce User",
+    "catalogKey": "POST /company/{companyUniqueName}/ecommerce/verify/{ecommerceUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "bcyefOtU2XvH",
+      "description": "This function is used register ecommerce user. Part of the Verify APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"authKey\": \"string\",\n  \"email\": \"string\",\n  \"password\": \"string\",\n  \"source\": \"string\",\n  \"domain\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "authKey": {
+          "type": "string",
+          "description": "Auth key. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Optional.",
+          "value": "string"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password. Optional.",
+          "value": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": "string"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Domain. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "IX6NVCdbpwNN",
+    "name": "Verify Email V2",
+    "catalogKey": "POST /v2/verify-email",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "IX6NVCdbpwNN",
+      "description": "Verify Email V2. Part of the Verify Email APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"email\": \"string\",\n  \"verificationCode\": \"string\",\n  \"retryCount\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "email": {
+          "type": "string",
+          "description": "Email address. Optional.",
+          "value": "string"
+        },
+        "verificationCode": {
+          "type": "string",
+          "description": "Verification code. Optional.",
+          "value": "string"
+        },
+        "retryCount": {
+          "type": "number",
+          "description": "Retry count. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "2phQvg8hbO60",
+    "name": "Verify Mobile V2",
+    "catalogKey": "POST /v2/verify-number",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "2phQvg8hbO60",
+      "description": "Verify Mobile V2. Part of the Verify Number APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"countryCode\": \"string\",\n  \"mobileNumber\": \"string\",\n  \"oneTimePassword\": \"string\",\n  \"getGeneratedOTP\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Mandatory.",
+          "value": "string"
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Mandatory.",
+          "value": "string"
+        },
+        "oneTimePassword": {
+          "type": "string",
+          "description": "One time password. Mandatory.",
+          "value": "string"
+        },
+        "getGeneratedOTP": {
+          "type": "boolean",
+          "description": "When true, applies the get generated otp filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  }
+]

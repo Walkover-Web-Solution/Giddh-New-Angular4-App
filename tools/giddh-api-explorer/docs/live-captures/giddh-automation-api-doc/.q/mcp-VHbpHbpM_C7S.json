@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"VHbpHbpM_C7S","description":"Customer portal API: :accountUniqueName/view statement. Requires portal session.","params":{},"body":{"type":"none"}}}

@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/users/subscriptions",
+  "note": "no body"
+}

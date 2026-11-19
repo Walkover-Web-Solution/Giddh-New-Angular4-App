@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "DAgf3xl1FwPf", "description": "Owner Ship Transfer. Part of the Ownership APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"subscriptionId": {"checked": "true", "value": "", "description": "Subscription id query parameter. Mandatory.", "required": "true"}}}

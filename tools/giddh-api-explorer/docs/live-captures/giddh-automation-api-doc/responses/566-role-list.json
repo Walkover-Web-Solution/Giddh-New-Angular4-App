@@ -1,0 +1,809 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "Admin",
+      "scopes": [
+        {
+          "selectAllFields": [],
+          "name": "MANAGE",
+          "permissions": [
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "LEDGER",
+          "permissions": [
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "DLT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INVOICE",
+          "permissions": [
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SETTINGS",
+          "permissions": [
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "GSTFL"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "REPORT",
+          "permissions": [
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTVW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "PETTY_CASH_MANAGER",
+          "permissions": [
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "UPDT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "DASHBOARD",
+          "permissions": [
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SEARCH",
+          "permissions": [
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "DLT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INTEGRATION",
+          "permissions": [
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "ADD"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INVENTORY",
+          "permissions": [
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "ADD"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "AUDIT_LOGS",
+          "permissions": [
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "RECURRING_ENTRY",
+          "permissions": [
+            {
+              "code": "VW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        }
+      ],
+      "isFixed": true,
+      "authKey": [],
+      "uniqueName": "admin"
+    },
+    {
+      "name": "Super Admin",
+      "scopes": [
+        {
+          "selectAllFields": [],
+          "name": "RECURRING_ENTRY",
+          "permissions": [
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INVOICE",
+          "permissions": [
+            {
+              "code": "VW"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "GSTFL"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "REPORT",
+          "permissions": [
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTFL"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INVENTORY",
+          "permissions": [
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "GSTFL"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "DASHBOARD",
+          "permissions": [
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "SHR"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SETTINGS",
+          "permissions": [
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "SHR"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INTEGRATION",
+          "permissions": [
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "UPDT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "MANAGE",
+          "permissions": [
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "PETTY_CASH_MANAGER",
+          "permissions": [
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SEARCH",
+          "permissions": [
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "CMT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "SHR"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "LEDGER",
+          "permissions": [
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SHARE",
+          "permissions": [
+            {
+              "code": "SHRLWR"
+            },
+            {
+              "code": "SHRALL"
+            },
+            {
+              "code": "SHRSM"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "AUDIT_LOGS",
+          "permissions": [
+            {
+              "code": "GSTVW"
+            },
+            {
+              "code": "DLT"
+            },
+            {
+              "code": "ADD"
+            },
+            {
+              "code": "UPDT"
+            },
+            {
+              "code": "VW"
+            },
+            {
+              "code": "SHR"
+            },
+            {
+              "code": "GSTFL"
+            },
+            {
+              "code": "CMT"
+            }
+          ]
+        }
+      ],
+      "isFixed": true,
+      "authKey": [],
+      "uniqueName": "super_admin"
+    },
+    {
+      "name": "View",
+      "scopes": [
+        {
+          "selectAllFields": [],
+          "name": "INVOICE",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "MANAGE",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "REPORT",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "RECURRING_ENTRY",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "INVENTORY",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "DASHBOARD",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "PETTY_CASH_MANAGER",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SEARCH",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "SETTINGS",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "AUDIT_LOGS",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        },
+        {
+          "selectAllFields": [],
+          "name": "LEDGER",
+          "permissions": [
+            {
+              "code": "VW"
+            }
+          ]
+        }
+      ],
+      "isFixed": true,
+      "authKey": [],
+      "uniqueName": "view"
+    }
+  ]
+}

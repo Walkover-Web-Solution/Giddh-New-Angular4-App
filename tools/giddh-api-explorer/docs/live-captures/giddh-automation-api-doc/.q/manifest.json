@@ -1,0 +1,84 @@
+{
+  "start": 662,
+  "count": 13,
+  "manifest": [
+    {
+      "index": 0,
+      "endpointId": "GcjAwGj0E4HB",
+      "catalogKey": "PATCH /company/{companyUniqueName}/project/{projectUniqueName}",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-0.json"
+    },
+    {
+      "index": 1,
+      "endpointId": "iDKAiQjyiSkR",
+      "catalogKey": "PUT /company/{companyUniqueName}/project/{projectUniqueName}/entry/{entryUniqueName}",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-1.json"
+    },
+    {
+      "index": 2,
+      "endpointId": "Sdg5nHS9GzKl",
+      "catalogKey": "PATCH /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-2.json"
+    },
+    {
+      "index": 3,
+      "endpointId": "c0d30oxA5xd1",
+      "catalogKey": "POST /v2/company/{companyUniqueName}/reports/entity-status",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-3.json"
+    },
+    {
+      "index": 4,
+      "endpointId": "0xnvKWCWqFTJ",
+      "catalogKey": "PUT /company/{companyUniqueName}/role/{roleUniqueName}",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-4.json"
+    },
+    {
+      "index": 5,
+      "endpointId": "kcZm7ONMjQTE",
+      "catalogKey": "PUT /company/{companyUniqueName}/salesperson/{uniqueName}",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-5.json"
+    },
+    {
+      "index": 6,
+      "endpointId": "7f-TIk0zXXav",
+      "catalogKey": null,
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-6.json"
+    },
+    {
+      "index": 7,
+      "endpointId": "wno274ZpjQU7",
+      "catalogKey": null,
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-7.json"
+    },
+    {
+      "index": 8,
+      "endpointId": "qlsvhUUv77--",
+      "catalogKey": null,
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-8.json"
+    },
+    {
+      "index": 9,
+      "endpointId": "tr-JzRJ11Fpj",
+      "catalogKey": null,
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-9.json"
+    },
+    {
+      "index": 10,
+      "endpointId": "xNc2ASBFlg8T",
+      "catalogKey": null,
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-10.json"
+    },
+    {
+      "index": 11,
+      "endpointId": "-iIwNDI5dA1j",
+      "catalogKey": "POST /v2/subscription/update",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-11.json"
+    },
+    {
+      "index": 12,
+      "endpointId": "1oMe5KrsEDRm",
+      "catalogKey": "POST /v2/subscription/update",
+      "argsFile": "/Users/divyanshu/Documents/Giddh-New-Angular4-App/docs/api/live-captures/giddh-automation-api-doc/.q/batch-12.json"
+    }
+  ]
+}

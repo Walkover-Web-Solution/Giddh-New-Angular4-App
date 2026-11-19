@@ -1,0 +1,26 @@
+{
+  "status": "success",
+  "body": {
+    "subscriptionId": "SUB-20261023-8",
+    "status": "trial",
+    "dueAmount": 3776.0,
+    "balance": 3200.0,
+    "duration": "YEARLY",
+    "promoCode": {
+      "code": "GIDDH20",
+      "discountValue": 20.0
+    },
+    "planDetails": {
+      "name": "Oak",
+      "uniqueName": "dmg1715623569079"
+    },
+    "region": {
+      "name": "India",
+      "code": "IND"
+    },
+    "expiry": "06-11-2026",
+    "startedAt": "23-10-2026"
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

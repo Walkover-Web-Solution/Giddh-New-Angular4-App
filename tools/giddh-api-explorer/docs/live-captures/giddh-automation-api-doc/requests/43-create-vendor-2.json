@@ -1,0 +1,24 @@
+{
+  "name": "API Doc Vendor Three",
+  "uniqueName": "apidoc-vendor-three",
+  "email": "vendor.three@example.com",
+  "mobileNo": "919876543231",
+  "mobileCode": "91",
+  "openingBalanceType": "CREDIT",
+  "openingBalance": 0,
+  "openingBalanceDate": "01-04-2026",
+  "currency": "INR",
+  "country": {
+    "countryCode": "IN"
+  },
+  "addresses": [
+    {
+      "stateCode": "MP",
+      "stateName": "Madhya Pradesh",
+      "address": "API Doc Vendor Three address",
+      "pinCode": "484224",
+      "isDefault": true,
+      "isComposite": false
+    }
+  ]
+}

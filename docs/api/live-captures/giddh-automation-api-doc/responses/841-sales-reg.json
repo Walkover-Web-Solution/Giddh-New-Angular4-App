@@ -1,0 +1,173 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 0.0,
+      "debitTotal": 0.0,
+      "closingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-04-2026",
+      "to": "30-04-2026",
+      "balance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      }
+    },
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 0.0,
+      "debitTotal": 0.0,
+      "closingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-05-2026",
+      "to": "31-05-2026",
+      "balance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      }
+    },
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 0.0,
+      "debitTotal": 0.0,
+      "closingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-06-2026",
+      "to": "30-06-2026",
+      "balance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      }
+    },
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 0.0,
+      "debitTotal": 0.0,
+      "closingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-07-2026",
+      "to": "31-07-2026",
+      "balance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      }
+    },
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 0.0,
+      "debitTotal": 0.0,
+      "closingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-08-2026",
+      "to": "31-08-2026",
+      "balance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      }
+    },
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 0.0,
+      "debitTotal": 0.0,
+      "closingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-09-2026",
+      "to": "30-09-2026",
+      "balance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      }
+    },
+    {
+      "openingBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 1856.5,
+      "debitTotal": 155.0,
+      "closingBalance": {
+        "amount": 1701.5,
+        "type": "CREDIT"
+      },
+      "taxTotal": 0.0,
+      "tcsTotal": 0.0,
+      "tdsTotal": 0.0,
+      "discountTotal": 0.0,
+      "roundOff": 0.0,
+      "dateLabel": null,
+      "from": "01-10-2026",
+      "to": "23-10-2026",
+      "balance": {
+        "amount": 1701.5,
+        "type": "CREDIT"
+      }
+    }
+  ]
+}

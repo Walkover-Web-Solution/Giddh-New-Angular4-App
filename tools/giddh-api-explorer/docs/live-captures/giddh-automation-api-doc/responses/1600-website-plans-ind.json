@@ -1,0 +1,88 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "countries": [
+        "India"
+      ],
+      "yearlyAmountAfterDiscount": 1000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "3 Disc plandf",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "invoicesAllowed": 10000,
+      "billsAllowed": 1000,
+      "monthlyBillsAllowed": 10000,
+      "monthlyInvoicesAllowed": 10000,
+      "yearlyAmount": 1000.0,
+      "yearlyDiscount": {
+        "name": "2 times (50%)",
+        "value": 50.0,
+        "type": "PERCENTAGE",
+        "duration": 2,
+        "expiryDate": "30-11-2025",
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "uniqueName": "7rt1715339285584",
+        "isActive": 0
+      },
+      "archiveStatus": "UNARCHIVED",
+      "uniqueName": "nef1715342227198",
+      "createdAt": "10-03-2026 18:17:28",
+      "companiesLimit": 1,
+      "monthlyCompaniesLimit": 1,
+      "isCommonPlan": true,
+      "restrictedModules": {}
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 999.0,
+      "yearlyAmountAfterDiscount": 2500.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "Monthly Null",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "invoicesAllowed": 2500,
+      "billsAllowed": 2500,
+      "description": "testing descirption",
+      "monthlyBillsAllowed": 120,
+      "monthlyInvoicesAllowed": 120,
+      "yearlyAmount": 2500.0,
+      "monthlyDiscount": {
+        "name": "2 times (50%)",
+        "value": 50.0,
+        "type": "PERCENTAGE",
+        "duration": 2,
+        "expiryDate": "30-11-2025",
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "uniqueName": "7rt1715339285584",
+        "isActive": 0
+      },
+      "archiveStatus": "UNARCHIVED",
+      "uniqueName": "lel1717588638765",
+      "createdAt": "25-09-2025 10:15:52",
+      "monthlyAmount": 999.0,
+      "companiesLimit": 99,
+      "monthlyCompaniesLimit": 1,
+      "isCommonPlan": true,
+      "restrictedModules": {
+        "Users": 100
+      }
+    }
+  ],
+  "httpStatus": 200,
+  "note": "Live success; truncated for docs. Full list had 11 plans."
+}

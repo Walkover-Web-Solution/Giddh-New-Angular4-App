@@ -1,0 +1,45 @@
+{
+  "name": "Giddh Automation API DOC",
+  "country": "IN",
+  "contactNo": "919111525164",
+  "uniqueName": "giddhain1792673422178091xos",
+  "isBranch": false,
+  "subscriptionRequest": {
+    "planUniqueName": "",
+    "subscriptionId": "SUB-20261022-5",
+    "userUniqueName": "divyanshu@whozzat.com",
+    "licenceKey": ""
+  },
+  "addresses": [
+    {
+      "stateCode": "MP",
+      "address": "My new address",
+      "isDefault": false,
+      "stateName": "MP - Madhya Pradesh",
+      "taxNumber": "23AAACC1206D2ZN",
+      "pincode": "484224"
+    }
+  ],
+  "businessNature": "Retail",
+  "businessType": "Registered",
+  "otherBusinessNature": "NA",
+  "industry": "",
+  "baseCurrency": "INR",
+  "isMultipleCurrency": false,
+  "city": "",
+  "email": "",
+  "taxes": null,
+  "userBillingDetails": {
+    "name": "",
+    "email": "",
+    "contactNo": "",
+    "gstin": "",
+    "stateCode": "",
+    "address": "",
+    "autorenew": ""
+  },
+  "nameAlias": "",
+  "paymentId": "",
+  "amountPaid": "",
+  "razorpaySignature": ""
+}

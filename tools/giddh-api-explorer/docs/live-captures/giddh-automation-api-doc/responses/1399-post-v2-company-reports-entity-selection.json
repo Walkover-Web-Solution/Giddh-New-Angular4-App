@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid report type WITHOUT_CHALLAN.",
+  "code": "INVALID_REQUEST"
+}

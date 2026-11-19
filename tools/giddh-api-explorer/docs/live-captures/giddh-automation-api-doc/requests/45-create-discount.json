@@ -1,0 +1,6 @@
+{
+  "name": "API Doc Flat 10",
+  "type": "FIX_AMOUNT",
+  "discountValue": 10,
+  "discountType": "FIX_AMOUNT"
+}

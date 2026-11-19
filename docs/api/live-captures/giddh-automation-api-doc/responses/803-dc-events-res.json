@@ -1,0 +1,89 @@
+{
+  "status": "success",
+  "body": {
+    "event": "RETURN",
+    "documentUniqueName": "zyu1792738825009",
+    "documentNo": "DC-261023-1",
+    "documentDate": "23-10-2026",
+    "party": {
+      "name": "API Doc Customer One",
+      "uniqueName": "apidoc-customer-one"
+    },
+    "documentType": "DC",
+    "status": "DELIVERED",
+    "invoiceStatus": "FULLY_INVOICED",
+    "documentQuantity": 1.0,
+    "invoicedQuantity": 1.0,
+    "remainingQuantity": 0.0,
+    "availableResolutions": [
+      "RETURN",
+      "RETURN_AND_CREDIT_NOTE"
+    ],
+    "items": [
+      {
+        "sourceItemId": 1428,
+        "stock": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidoc-widget"
+        },
+        "variant": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+        },
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs",
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "warehouse": {
+          "name": "Gidd warehouse",
+          "uniqueName": "xbq1792673424418"
+        },
+        "description": "DC line",
+        "quantity": 1.0,
+        "invoicedQuantity": 1.0,
+        "consumedQuantity": 1.0,
+        "remainingQuantity": 0.0,
+        "returnableQuantity": 1.0,
+        "losableQuantity": 0.0,
+        "creditableQuantity": 1.0
+      }
+    ],
+    "creditNotePreview": {
+      "created": false,
+      "message": "Credit note is created only when creditNote.items is sent on POST .../events",
+      "invoicedQuantity": 1.0,
+      "creditableQuantity": 1.0,
+      "items": [
+        {
+          "sourceItemId": 1428,
+          "stock": {
+            "name": "API Doc Widget",
+            "uniqueName": "apidoc-widget"
+          },
+          "variant": {
+            "name": "API Doc Widget",
+            "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+          },
+          "stockUnit": {
+            "name": "Piece",
+            "code": "pcs",
+            "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+          },
+          "warehouse": {
+            "name": "Gidd warehouse",
+            "uniqueName": "xbq1792673424418"
+          },
+          "description": "DC line",
+          "quantity": 1.0,
+          "invoicedQuantity": 1.0,
+          "consumedQuantity": 1.0,
+          "remainingQuantity": 0.0,
+          "returnableQuantity": 1.0,
+          "losableQuantity": 0.0,
+          "creditableQuantity": 1.0
+        }
+      ]
+    }
+  }
+}

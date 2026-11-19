@@ -1,0 +1,300 @@
+{
+  "generatedAt": "2026-10-29",
+  "org": "83427",
+  "collectionId": "-Jey39dCAAyx",
+  "rootParentId": "u9XDYe5Zc_ds",
+  "summary": {
+    "total": 40,
+    "ok": 40,
+    "failed": 0
+  },
+  "results": [
+    {
+      "endpointId": "zrt3DiurAh8D",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "zr5QthHe3r9U",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "zkp_F3PTUw8U",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "zN4CLD0slK2I",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "zBRqD6ZmXnTw",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "y_3sUN-eScr0",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "yYxKRtjAYQB5",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "yPnhhAuamllg",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "y2ie0GJ2BUMO",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "xtnY4fHsEzgq",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "xrqPkd4Qn1KS",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "xSyS1jkSG0Zp",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "xPdYugvoPz-k",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "x9mjRFItd54g",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "x8-ZZpS-XHXm",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "wno274ZpjQU7",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "wXcGnkDJaPMQ",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "wS3y86iU5q2X",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "wBDWEhJHWrep",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "vtqI28qr1V-8",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "vlo2HRaR9DYO",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "vFGIWKU2yhG1",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "v3T4hen3lTO3",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "v02GFocBh5kA",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "uTuWxQVBOwMb",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "uDHS2upDyR46",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "twOxLG65LJ_n",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "tkmdM6fG4OFO",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "slKxI7JGXMxw",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "rkqVSapyZJ_u",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "rSOH7hwPnPHk",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "qqjVypiAk35s",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "qnkdqCrfV4Hw",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "qlsvhUUv77--",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "qMnjzc-gqvcs",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "oaBQaDzjza0v",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "o8Er20PWwuGD",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "nFZs6hb2qLlF",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "mR7pSvI8ilw0",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    },
+    {
+      "endpointId": "mASj5BcLekL5",
+      "method": "PUT",
+      "httpStatus": 200,
+      "ok": true
+    }
+  ],
+  "publish": {
+    "method": "PATCH bulkPublish",
+    "pageIds": [
+      "zrt3DiurAh8D",
+      "zr5QthHe3r9U",
+      "zkp_F3PTUw8U",
+      "zN4CLD0slK2I",
+      "zBRqD6ZmXnTw",
+      "y_3sUN-eScr0",
+      "yYxKRtjAYQB5",
+      "yPnhhAuamllg",
+      "y2ie0GJ2BUMO",
+      "xtnY4fHsEzgq",
+      "xrqPkd4Qn1KS",
+      "xSyS1jkSG0Zp",
+      "xPdYugvoPz-k",
+      "x9mjRFItd54g",
+      "x8-ZZpS-XHXm",
+      "wno274ZpjQU7",
+      "wXcGnkDJaPMQ",
+      "wS3y86iU5q2X",
+      "wBDWEhJHWrep",
+      "vtqI28qr1V-8",
+      "vlo2HRaR9DYO",
+      "vFGIWKU2yhG1",
+      "v3T4hen3lTO3",
+      "v02GFocBh5kA",
+      "uTuWxQVBOwMb",
+      "uDHS2upDyR46",
+      "twOxLG65LJ_n",
+      "tkmdM6fG4OFO",
+      "slKxI7JGXMxw",
+      "rkqVSapyZJ_u",
+      "rSOH7hwPnPHk",
+      "qqjVypiAk35s",
+      "qnkdqCrfV4Hw",
+      "qlsvhUUv77--",
+      "qMnjzc-gqvcs",
+      "oaBQaDzjza0v",
+      "o8Er20PWwuGD",
+      "nFZs6hb2qLlF",
+      "mR7pSvI8ilw0",
+      "mASj5BcLekL5",
+      "u9XDYe5Zc_ds"
+    ],
+    "ok": true
+  }
+}

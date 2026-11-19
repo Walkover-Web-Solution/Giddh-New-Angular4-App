@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "body": {
+    "name": "Raji",
+    "uniqueName": "raji1",
+    "currency": "INR",
+    "ledgerView": "STATEMENT_VIEW",
+    "parentGroups": [
+      {
+        "name": "Current Assets",
+        "uniqueName": "currentassets"
+      },
+      {
+        "name": "Sundry Debtors",
+        "uniqueName": "sundrydebtors"
+      }
+    ],
+    "openingBalance": 0.0,
+    "addresses": [
+      {
+        "address": "delhi ka address",
+        "stateCode": "DL",
+        "isDefault": true
+      }
+    ]
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

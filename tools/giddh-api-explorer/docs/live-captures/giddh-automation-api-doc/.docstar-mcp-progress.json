@@ -1,0 +1,21 @@
+{
+  "workIndex": 657,
+  "ok": 657,
+  "skipped": 0,
+  "failed": [],
+  "phase": "complete",
+  "publish": {
+    "main": {
+      "pageIdsTotal": 658,
+      "allChunksOk": true,
+      "completedAt": "2026-10-28T05:32:12.190Z"
+    },
+    "followupMissing": {
+      "updatedOk": 63,
+      "pageIdsTotal": 64,
+      "ok": true,
+      "completedAt": "2026-10-28T05:34:22.585Z"
+    }
+  },
+  "notes": "657 queue+missingSample via REST (hm_ token); 63 remaining type-4 via update_endpoint MCP; publish_pages MCP + bulkPublish chunks."
+}

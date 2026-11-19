@@ -1,0 +1,15 @@
+{
+  "customerVendorAccountUniqueName": "apidoc-customer-one",
+  "customerVendorGroupUniqueName": "",
+  "discountInfo": [
+    {
+      "type": "PERCENTAGE",
+      "discountValue": 5,
+      "price": 100,
+      "quantity": 1,
+      "discountExclusive": false,
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "variantUniqueName": "apidocwidget1792693959876fk8uyv0enl"
+    }
+  ]
+}

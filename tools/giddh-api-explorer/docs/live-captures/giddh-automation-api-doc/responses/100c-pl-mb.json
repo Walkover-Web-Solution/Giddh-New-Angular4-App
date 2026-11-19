@@ -1,0 +1,472 @@
+{
+  "status": "success",
+  "body": {
+    "message": null,
+    "forwardedBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "creditTotal": 0.0,
+    "debitTotal": 0.0,
+    "closingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "groupDetails": [],
+    "incomeStatement": {
+      "costOfGoodsSold": {
+        "openingInventory": 800.0,
+        "purchasesStockAmount": 200.0,
+        "manufacturingExpenses": 0.0,
+        "closingInventory": 800.0,
+        "debitNoteStockAmount": 0.0,
+        "cogs": 200.0
+      },
+      "revenue": {
+        "amount": 1385.5,
+        "type": "CREDIT"
+      },
+      "operatingExpenses": {
+        "amount": 195.0,
+        "type": "DEBIT"
+      },
+      "otherExpenses": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "grossProfit": {
+        "amount": 1185.5,
+        "type": "CREDIT"
+      },
+      "operatingProfit": {
+        "amount": 990.5,
+        "type": "CREDIT"
+      },
+      "incomeBeforeTaxes": {
+        "amount": 990.5,
+        "type": "CREDIT"
+      },
+      "appliedTax": 0.0,
+      "netIncome": {
+        "amount": 990.5,
+        "type": "CREDIT"
+      },
+      "message": "Total Data of company without Tag filter",
+      "totalExpenses": {
+        "amount": 395.0,
+        "type": "DEBIT"
+      }
+    },
+    "groupInfo": {
+      "message": "Total Data of company without Tag filter",
+      "forwardedBalance": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "creditTotal": 1530.5,
+      "debitTotal": 340.0,
+      "closingBalance": {
+        "amount": 1190.5,
+        "type": "CREDIT"
+      },
+      "groupDetails": [
+        {
+          "forwardedBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 1475.5,
+          "debitTotal": 90.0,
+          "closingBalance": {
+            "amount": 1385.5,
+            "type": "CREDIT"
+          },
+          "checked": false,
+          "childGroups": [
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 1475.5,
+              "debitTotal": 90.0,
+              "closingBalance": {
+                "amount": 1385.5,
+                "type": "CREDIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "creditTotal": 1475.5,
+                  "debitTotal": 90.0,
+                  "closingBalance": {
+                    "amount": 1385.5,
+                    "type": "CREDIT"
+                  },
+                  "openingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "checked": false,
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "name": "Sales",
+                  "uniqueName": "sales",
+                  "groupName": null
+                }
+              ],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "sales",
+              "groupName": "Sales"
+            }
+          ],
+          "accounts": [],
+          "customGroup": false,
+          "category": "income",
+          "uniqueName": "revenuefromoperations",
+          "groupName": "Revenue From Operations"
+        },
+        {
+          "forwardedBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 0.0,
+          "debitTotal": 0.0,
+          "closingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "checked": false,
+          "childGroups": [
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "dividendincome",
+              "groupName": "Dividend Income"
+            },
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "interestincome",
+              "groupName": "Interest Income"
+            },
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "creditTotal": 0.0,
+                  "debitTotal": 0.0,
+                  "closingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "openingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "checked": false,
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "name": "Exchange Gain",
+                  "uniqueName": "exchangegain",
+                  "groupName": null
+                }
+              ],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "exchangegain",
+              "groupName": "Exchange Gain"
+            }
+          ],
+          "accounts": [],
+          "customGroup": false,
+          "category": "income",
+          "uniqueName": "otherincome",
+          "groupName": "Other Income"
+        },
+        {
+          "forwardedBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 55.0,
+          "debitTotal": 250.0,
+          "closingBalance": {
+            "amount": 195.0,
+            "type": "DEBIT"
+          },
+          "checked": false,
+          "childGroups": [
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 55.0,
+              "debitTotal": 250.0,
+              "closingBalance": {
+                "amount": 195.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "creditTotal": 55.0,
+                  "debitTotal": 250.0,
+                  "closingBalance": {
+                    "amount": 195.0,
+                    "type": "DEBIT"
+                  },
+                  "openingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "checked": false,
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "name": "Purchases",
+                  "uniqueName": "purchases",
+                  "groupName": null
+                }
+              ],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "purchases",
+              "groupName": "Purchases"
+            },
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "creditTotal": 0.0,
+                  "debitTotal": 0.0,
+                  "closingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "openingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "checked": false,
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "name": "Discount",
+                  "uniqueName": "discount",
+                  "groupName": null
+                }
+              ],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "discount",
+              "groupName": "Discount"
+            }
+          ],
+          "accounts": [],
+          "customGroup": false,
+          "category": "expenses",
+          "uniqueName": "operatingcost",
+          "groupName": "Operating Cost"
+        },
+        {
+          "forwardedBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 0.0,
+          "debitTotal": 0.0,
+          "closingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "checked": false,
+          "childGroups": [
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "dividendexpense",
+              "groupName": "Dividend Expense"
+            },
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "interestexpense",
+              "groupName": "Interest Expense"
+            },
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "creditTotal": 0.0,
+                  "debitTotal": 0.0,
+                  "closingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "openingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "checked": false,
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "name": "Exchange Loss",
+                  "uniqueName": "exchangeloss",
+                  "groupName": null
+                }
+              ],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "exchangeloss",
+              "groupName": "Exchange Loss"
+            },
+            {
+              "forwardedBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "creditTotal": 0.0,
+              "debitTotal": 0.0,
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT"
+              },
+              "checked": false,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "creditTotal": 0.0,
+                  "debitTotal": 0.0,
+                  "closingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "openingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "checked": false,
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "name": "Round Off",
+                  "uniqueName": "roundoff",
+                  "groupName": null
+                }
+              ],
+              "customGroup": false,
+              "category": null,
+              "uniqueName": "otherindirectexpenses",
+              "groupName": "Other Indirect Expenses"
+            }
+          ],
+          "accounts": [],
+          "customGroup": false,
+          "category": "expenses",
+          "uniqueName": "indirectexpenses",
+          "groupName": "Indirect Expenses"
+        }
+      ]
+    }
+  }
+}

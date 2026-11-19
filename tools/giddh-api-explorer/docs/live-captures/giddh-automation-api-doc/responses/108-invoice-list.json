@@ -1,0 +1,67 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "voucherType": "sales",
+        "subVoucher": null,
+        "voucherNumber": "261022-5",
+        "unadjustedAmount": {
+          "amountForAccount": 300.0,
+          "amountForCompany": 300.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 500.0,
+          "amountForCompany": 500.0
+        },
+        "uniqueName": "iiy341792675102708",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "exchangeRate": 1.0,
+        "amount": {
+          "amountForAccount": -200.0,
+          "amountForCompany": -200.0
+        },
+        "accountUniqueName": null,
+        "noteVoucherType": null,
+        "voucherBalanceType": null,
+        "voucherDate": "22-10-2026"
+      },
+      {
+        "voucherType": "sales",
+        "subVoucher": null,
+        "voucherNumber": "261022-2",
+        "unadjustedAmount": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "uniqueName": "llvtc1792674364760",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "exchangeRate": 1.0,
+        "amount": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "accountUniqueName": null,
+        "noteVoucherType": null,
+        "voucherBalanceType": null,
+        "voucherDate": "22-10-2026"
+      }
+    ],
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 2,
+    "fromDate": null,
+    "toDate": null
+  }
+}

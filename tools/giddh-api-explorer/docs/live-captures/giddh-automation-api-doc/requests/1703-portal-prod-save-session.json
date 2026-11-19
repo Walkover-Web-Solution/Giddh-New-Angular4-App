@@ -1,0 +1,20 @@
+{
+  "method": "POST",
+  "path": "/v2/portal-user/save-session",
+  "host": "https://api.giddh.com",
+  "origin": "https://portal.giddh.com",
+  "surface": "customer-portal",
+  "env": "prod",
+  "portalSubDomain": "10k",
+  "companyUniqueName": "10kin177424654546509z75a",
+  "viaProxy": "https://routes.msg91.com/api/proxy/117230/24yrfox2/v2/portal-user/save-session",
+  "body": {
+    "account": {
+      "name": "Raji",
+      "uniqueName": "raji1"
+    },
+    "vendorContactUniqueName": "8b51792755886875",
+    "proxyAuthToken": "<PROXY_AUTH_TOKEN_REDACTED>",
+    "subDomain": "10k"
+  }
+}

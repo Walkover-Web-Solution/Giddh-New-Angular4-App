@@ -1,0 +1,71 @@
+{
+  "totals": {
+    "totalQuantity": 10.0,
+    "totalValue": 800.0,
+    "buckets": [
+      {
+        "range": "0-30 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "31-60 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "61-90 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "91+ days",
+        "quantity": 10.0,
+        "value": 800.0
+      }
+    ]
+  },
+  "items": {
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "stockId": 633671,
+        "stockUniqueName": "apidoc-widget",
+        "stockName": "API Doc Widget",
+        "stockUnitCode": "pcs",
+        "parentGroup": "API Doc Products",
+        "totalQty": 10.0,
+        "totalAmount": 800.0,
+        "negativeQty": 0.0,
+        "negativeValue": 0.0,
+        "buckets": [
+          {
+            "range": "0-30 days",
+            "quantity": 0.0,
+            "value": 0.0
+          },
+          {
+            "range": "31-60 days",
+            "quantity": 0.0,
+            "value": 0.0
+          },
+          {
+            "range": "61-90 days",
+            "quantity": 0.0,
+            "value": 0.0
+          },
+          {
+            "range": "91+ days",
+            "quantity": 10.0,
+            "value": 800.0
+          }
+        ],
+        "hasVariants": false
+      }
+    ],
+    "size": 1
+  }
+}

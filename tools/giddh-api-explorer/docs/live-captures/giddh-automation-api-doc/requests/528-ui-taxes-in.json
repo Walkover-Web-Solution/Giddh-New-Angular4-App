@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/ui/taxes?country=IN"
+}

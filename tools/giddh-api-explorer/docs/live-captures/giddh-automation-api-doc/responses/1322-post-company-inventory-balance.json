@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "body": {
+    "opening": {
+      "quantity": 10.0,
+      "amount": 800.0
+    },
+    "inwards": {
+      "quantity": 8.0,
+      "amount": 630.0
+    },
+    "outwards": {
+      "quantity": 9.0,
+      "amount": 710.0
+    },
+    "closing": {
+      "quantity": 9.0,
+      "amount": 910.0
+    },
+    "profit": 190.0
+  }
+}

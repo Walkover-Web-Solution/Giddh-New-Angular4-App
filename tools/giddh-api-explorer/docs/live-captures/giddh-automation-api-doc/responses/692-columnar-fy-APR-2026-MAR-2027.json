@@ -1,0 +1,552 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 20,
+    "totalPages": 1,
+    "totalItems": 4,
+    "results": null,
+    "grandTotal": {
+      "apidoc-customer-three": {
+        "amount": 351.5,
+        "type": "DEBIT"
+      },
+      "apidoc-customer-b2c": {
+        "amount": 0.0,
+        "type": "DEBIT"
+      },
+      "apidoc-customer-one": {
+        "amount": 100.0,
+        "type": "DEBIT"
+      },
+      "apidoc-customer-two": {
+        "amount": 175.0,
+        "type": "DEBIT"
+      }
+    },
+    "openingBalance": {},
+    "closingBalance": {},
+    "data": [
+      {
+        "monthYear": "04-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "05-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "06-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "07-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "08-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "09-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "10-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 100.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 175.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 351.5,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "11-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "12-2026",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "01-2027",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "02-2027",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      },
+      {
+        "monthYear": "03-2027",
+        "accountsData": [
+          {
+            "accountName": "API Doc Customer One",
+            "accountUniqueName": "apidoc-customer-one",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Two",
+            "accountUniqueName": "apidoc-customer-two",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Customer Three",
+            "accountUniqueName": "apidoc-customer-three",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          {
+            "accountName": "API Doc Walk-in Customer",
+            "accountUniqueName": "apidoc-customer-b2c",
+            "groupName": "Sundry Debtors",
+            "monthlyBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          }
+        ]
+      }
+    ],
+    "accounts": [
+      {
+        "accountName": "API Doc Customer One",
+        "accountUniqueName": "apidoc-customer-one",
+        "groupName": "Sundry Debtors",
+        "monthlyBalance": null
+      },
+      {
+        "accountName": "API Doc Customer Two",
+        "accountUniqueName": "apidoc-customer-two",
+        "groupName": "Sundry Debtors",
+        "monthlyBalance": null
+      },
+      {
+        "accountName": "API Doc Customer Three",
+        "accountUniqueName": "apidoc-customer-three",
+        "groupName": "Sundry Debtors",
+        "monthlyBalance": null
+      },
+      {
+        "accountName": "API Doc Walk-in Customer",
+        "accountUniqueName": "apidoc-customer-b2c",
+        "groupName": "Sundry Debtors",
+        "monthlyBalance": null
+      }
+    ],
+    "from": "01-04-2026",
+    "to": "31-03-2027"
+  }
+}

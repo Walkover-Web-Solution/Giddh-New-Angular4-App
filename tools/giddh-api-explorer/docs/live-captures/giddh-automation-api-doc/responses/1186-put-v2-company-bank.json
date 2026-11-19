@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Account unique name cannot be blank.",
+  "code": "Invalid request provided"
+}

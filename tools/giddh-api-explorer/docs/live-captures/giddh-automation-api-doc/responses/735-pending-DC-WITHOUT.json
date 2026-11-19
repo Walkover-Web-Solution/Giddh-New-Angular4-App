@@ -1,0 +1,56 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "uniqueName": "bvvvm1792730977197",
+        "number": "261023-1",
+        "date": "23-10-2026",
+        "source": "VOUCHER",
+        "voucherType": "sales",
+        "documentType": "DC",
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two"
+        },
+        "grandTotal": {
+          "amountForAccount": 300.0,
+          "amountForCompany": 300.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "₹",
+        "accountCurrencySymbol": "₹",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "statusCode": "",
+        "statusName": "",
+        "invoiceStatus": "NOT_INVOICED",
+        "remainingQuantity": 2.0,
+        "linkedInvoiceCount": 0,
+        "isReturn": false,
+        "allowedActions": [
+          "CONVERT_TO_DC"
+        ]
+      }
+    ],
+    "reportType": "WITHOUT_CHALLAN",
+    "balances": {
+      "totalCount": 1,
+      "totalAmount": 300.0,
+      "notInvoicedCount": 0,
+      "notInvoicedAmount": 0.0,
+      "partiallyInvoicedCount": 0,
+      "partiallyInvoicedAmount": 0.0,
+      "fullyInvoicedCount": 0,
+      "fullyInvoicedAmount": 0.0,
+      "openCount": 0,
+      "closedCount": 0,
+      "expiredCount": 0,
+      "cancelledCount": 0
+    }
+  }
+}

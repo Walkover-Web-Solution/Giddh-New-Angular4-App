@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Urn cannot be blank.",
+  "code": "NOT_PERMITTED"
+}

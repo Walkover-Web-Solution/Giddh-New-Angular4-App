@@ -1,0 +1,34 @@
+{
+  "method": "POST",
+  "path": "/v2/subscription",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup",
+  "body": {
+    "planUniqueName": "dmg1715623569079",
+    "duration": "YEARLY",
+    "userUniqueName": null,
+    "billingAccount": {
+      "billingName": "Shristi Test ",
+      "companyName": "Shristi Test ",
+      "taxNumber": "23AAACC1206D2ZN",
+      "email": "shristi@viasocket.com",
+      "pincode": "",
+      "mobileNumber": "918319337938",
+      "country": {
+        "name": "IN - India",
+        "code": "IN"
+      },
+      "address": "Lig, near NRK, Indore",
+      "state": {
+        "name": "MP - Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "promoCode": "GIDDH20",
+    "paymentProvider": "RAZORPAY",
+    "subscriptionId": null,
+    "payNow": false
+  },
+  "note": "payNow:false \u2192 trial subscription"
+}

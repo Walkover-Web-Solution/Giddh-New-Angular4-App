@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Account must belong to 'income' or 'expense' category.",
+  "code": "INVALID_REQUEST"
+}

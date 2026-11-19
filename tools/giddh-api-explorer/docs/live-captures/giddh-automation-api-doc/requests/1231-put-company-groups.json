@@ -1,0 +1,9 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/groups/apidoc-custom-assets",
+  "body": {
+    "name": "temp",
+    "uniqueName": "apidoc-temp-g-1025",
+    "parentGroupUniqueName": "currentassets"
+  }
+}

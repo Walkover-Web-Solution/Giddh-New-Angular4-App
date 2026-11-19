@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"6DlKV44KYgAd","description":"Customer portal API: https://api.giddh.com/company/:companyUniqueName/vouchers/:voucherUniqueName/action. Requires portal session.","params":{},"body":{"type":"none"}}}

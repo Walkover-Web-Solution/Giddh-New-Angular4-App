@@ -1,0 +1,9 @@
+[
+  {
+    "uniqueName": "revenuefromoperations",
+    "taxes": [
+      "apidocgst18"
+    ],
+    "isAccount": false
+  }
+]

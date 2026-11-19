@@ -1,0 +1,31 @@
+{
+  "name": "API Doc Walk-in Customer",
+  "uniqueName": "apidoc-customer-b2c",
+  "description": "Updated via API capture 23-10-2026",
+  "addresses": [
+    {
+      "address": "API Doc Walk-in Customer address",
+      "stateCode": "MP",
+      "isDefault": true,
+      "partyType": "not applicable",
+      "isComposite": false,
+      "gstinStatus": "NOT_PROVIDED",
+      "state": {
+        "stateGstCode": "23",
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "stateName": "Madhya Pradesh",
+      "stateCodeString": "MP",
+      "stateGstCode": "23"
+    }
+  ],
+  "country": {
+    "countryName": "India",
+    "countryCode": "IN",
+    "alpha3CountryCode": null
+  },
+  "currency": "INR",
+  "mobileNo": "919876543222",
+  "email": "walkin@example.com"
+}

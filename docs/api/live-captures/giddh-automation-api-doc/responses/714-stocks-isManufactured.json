@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "name": "API Doc Widget",
+        "openingQuantity": 10.0,
+        "mappedPurchaseAccount": null,
+        "mappedSalesAccount": null,
+        "amount": 800.0,
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs",
+          "group": {
+            "name": "Main Group",
+            "uniqueName": "maingroup"
+          },
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "skuCode": "WDG-001",
+        "hsnNumber": null,
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "uniqueName": "apidoc-widget"
+      }
+    ],
+    "size": 1
+  }
+}

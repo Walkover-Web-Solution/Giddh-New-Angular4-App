@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "path": "/v2/user",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup",
+  "note": "Origin books.giddh.com after token-verify"
+}

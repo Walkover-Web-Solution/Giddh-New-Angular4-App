@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide role unique name to generate auth key.",
+  "code": "INVALID_REQUEST"
+}

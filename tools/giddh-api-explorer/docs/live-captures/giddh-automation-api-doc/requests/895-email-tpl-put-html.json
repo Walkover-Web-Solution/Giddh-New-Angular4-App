@@ -1,0 +1,4 @@
+{
+  "html": "<p>Dear customer, invoice {{voucherNumber}} attached.</p>",
+  "subject": "API Doc Invoice"
+}

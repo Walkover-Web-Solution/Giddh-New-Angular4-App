@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "The email: null is invalid.",
+  "code": "INVALID_EMAIL"
+}

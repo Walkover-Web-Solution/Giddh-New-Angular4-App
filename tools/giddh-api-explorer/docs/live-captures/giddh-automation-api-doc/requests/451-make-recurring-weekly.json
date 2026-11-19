@@ -1,0 +1,9 @@
+{
+  "repeatOption": "WEEKLY",
+  "repeatType": "WEEK_DAYS",
+  "weekday": "MONDAY",
+  "startDate": "02-11-2026",
+  "endType": "NEVER",
+  "interval": 1,
+  "frequencyUnit": "WEEK"
+}

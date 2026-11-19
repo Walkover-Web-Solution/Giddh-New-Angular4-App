@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "PgcSTlUEJXjd", "description": "Save Razorpay Token. Part of the Save Razorpay Token APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"orderId": {"checked": "true", "value": "", "description": "Order id query parameter. Mandatory.", "required": "true"}}}

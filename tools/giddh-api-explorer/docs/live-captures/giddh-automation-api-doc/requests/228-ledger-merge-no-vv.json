@@ -1,0 +1,20 @@
+{
+  "groupUniqueNames": [],
+  "accountUniqueNames": [],
+  "includeAmount": false,
+  "amount": 0,
+  "amountGreaterThan": false,
+  "amountLessThan": false,
+  "amountEqualTo": false,
+  "includeDescription": false,
+  "description": "",
+  "vouchers": [],
+  "includeVouchers": false,
+  "includeParticulars": false,
+  "particulars": [],
+  "isInvoiceGenerated": false,
+  "includeTag": false,
+  "tags": [],
+  "cancelledEntries": false,
+  "balanceTypeAsSign": false
+}

@@ -1,0 +1,48 @@
+{
+  "status": "success",
+  "body": {
+    "page": 0,
+    "count": 0,
+    "totalPages": 0,
+    "totalItems": 0,
+    "debitTransactionsCount": 0,
+    "creditTransactionsCount": 0,
+    "forwardedBalance": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "description": "BF_BALANCE"
+    },
+    "convertedForwardedBalance": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "description": "BF_BALANCE"
+    },
+    "periodClosingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "closingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "convertedClosingBalance": {
+      "amount": 0.0,
+      "type": "DEBIT"
+    },
+    "closingBalanceForBank": {
+      "amount": 0.0,
+      "type": "CREDIT"
+    },
+    "creditTotal": 0.0,
+    "convertedCreditTotal": 0.0,
+    "debitTotal": 0.0,
+    "convertedDebitTotal": 0.0,
+    "debitTransactions": [],
+    "creditTransactions": [],
+    "message": "Account balance and expected closing balance matched.",
+    "currencyCode": null,
+    "convertedCurrencyCode": null,
+    "currencySymbol": null,
+    "convertedCurrencySymbol": null
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "method": "PATCH",
+  "path": "/company/giddhain1792673422178091xos/communication/trigger/placeholder",
+  "body": {
+    "subject": "api",
+    "html": "<p>api</p>"
+  }
+}

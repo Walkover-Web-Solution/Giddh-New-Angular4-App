@@ -1,0 +1,11 @@
+{
+  "startDate": "24-10-2026",
+  "repeatOption": "DAY",
+  "frequency": {
+    "interval": 1,
+    "unit": "DAY"
+  },
+  "end": {
+    "type": "NEVER"
+  }
+}

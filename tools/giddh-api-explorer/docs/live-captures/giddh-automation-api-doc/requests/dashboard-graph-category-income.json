@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/company/giddhain1792673422178091xos/dashboard/graph?currentFrom=25-10-2026&currentTo=31-10-2026&previousFrom=18-10-2026&previousTo=24-10-2026&interval=daily&type=category&uniqueName=income&refresh=false&branchUniqueName=apidocbranchtwo"
+}

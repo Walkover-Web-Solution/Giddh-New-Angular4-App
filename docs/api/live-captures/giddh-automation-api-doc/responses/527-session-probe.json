@@ -1,0 +1,50 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "API Doc GST 18",
+      "duration": "MONTHLY",
+      "taxDetail": [
+        {
+          "date": "01-04-2026",
+          "taxValue": 18.0
+        }
+      ],
+      "taxAuthority": null,
+      "accounts": [
+        {
+          "name": "UTGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "utgst"
+        },
+        {
+          "name": "SGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "sgst"
+        },
+        {
+          "name": "CGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "cgst"
+        },
+        {
+          "name": "IGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "igst"
+        }
+      ],
+      "uniqueName": "apidocgst18",
+      "taxNumber": "APIDOC-GST18",
+      "taxType": "gst",
+      "taxFileDate": 1
+    }
+  ]
+}

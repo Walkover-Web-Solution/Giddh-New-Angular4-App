@@ -1,0 +1,6 @@
+{
+  "batchStart": 280,
+  "mcpAppliedIdx": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "remainingIdx": "10-49",
+  "note": "Continue emit_idx_chunk 10 10 … then finish_batch after idx 0-49 all MCP'd"
+}

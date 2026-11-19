@@ -1,0 +1,7 @@
+{
+  "method": "POST",
+  "path": "/v2/auth-login",
+  "body": {
+    "accessToken": "invalid-msg91-access-token"
+  }
+}

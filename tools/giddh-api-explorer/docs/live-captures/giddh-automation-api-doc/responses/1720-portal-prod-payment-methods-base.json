@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "message": "User with unique name or email id %s not found",
+  "code": "USER_NOT_FOUND",
+  "httpStatus": 404,
+  "env": "prod"
+}

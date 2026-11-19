@@ -1,0 +1,9 @@
+{
+  "status": "error",
+  "message": "You do not have appropriate permission to perform this action.",
+  "code": "UNAUTHORISED",
+  "httpStatus": 401,
+  "env": "prod",
+  "surface": "customer-portal",
+  "note": "User-supplied browser capture. Session-Id was the pre-destroy portal session (redacted). Contrast with 1705 success and 1745 INVALID_SESSION_ID after DELETE destroy-session."
+}

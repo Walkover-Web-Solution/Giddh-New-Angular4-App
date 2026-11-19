@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "code": "INVALID_REQUEST",
+  "message": "Please provide payment provider to process payment.",
+  "httpStatus": 406,
+  "env": "prod"
+}

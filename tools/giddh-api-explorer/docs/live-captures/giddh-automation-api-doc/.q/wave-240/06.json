@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"ibS32-OCcrPJ","description":"Generate EWay Bill. Part of the Ewb APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"branchUniqueName":{"checked":"true","value":"","description":"Branch uniqueName; omit for default company branch behaviour. Optional.","required":"false"}}}

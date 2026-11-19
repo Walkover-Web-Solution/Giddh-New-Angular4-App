@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please integrate MSG91 platform in the company.",
+  "code": "INVALID_REQUEST"
+}

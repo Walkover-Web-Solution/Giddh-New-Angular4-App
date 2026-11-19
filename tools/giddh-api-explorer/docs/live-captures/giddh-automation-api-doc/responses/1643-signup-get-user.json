@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "body": {
+    "hasSubscriptionPermission": false,
+    "name": "shristi@viasocket.com",
+    "availableCredit": 0.0,
+    "verified": true,
+    "uniqueName": "shristi@viasocket.com",
+    "email": "shristi@viasocket.com",
+    "createdAt": "23-10-2026 12:12:21",
+    "contactNo": "918319337938",
+    "mobileVerified": true,
+    "isNewUser": true,
+    "authenticateTwoWay": false,
+    "systemUser": false,
+    "subUsers": [],
+    "subUser": false
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

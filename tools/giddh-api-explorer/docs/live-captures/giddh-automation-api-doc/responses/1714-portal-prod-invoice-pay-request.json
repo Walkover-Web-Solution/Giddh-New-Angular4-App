@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "body": {
+    "company": {
+      "name": "10k",
+      "uniqueName": "10kin177424654546509z75a"
+    },
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "totalAmount": 0.0,
+    "voucherUniqueNames": [
+      "yktu41792755921064"
+    ],
+    "vouchers": [
+      {
+        "content": "<omitted base64/pdf 80424 chars>",
+        "contentType": "invoice",
+        "amount": 15283.0,
+        "status": "UNPAID",
+        "canPay": false,
+        "message": "No payment gateway integrated in the company.",
+        "number": "BE-1211",
+        "balanceTotal": {
+          "amountForAccount": 15283.0,
+          "amountForCompany": 15283.0
+        },
+        "dueDate": "06-11-2026",
+        "uniqueName": "yktu41792755921064"
+      }
+    ]
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

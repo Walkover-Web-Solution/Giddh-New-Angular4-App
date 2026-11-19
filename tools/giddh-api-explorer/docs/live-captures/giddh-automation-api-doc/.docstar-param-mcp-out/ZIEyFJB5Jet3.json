@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"ZIEyFJB5Jet3","description":"Set Default Template. Part of the Default APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"type":{"checked":"true","value":"invoice","description":"Voucher or entity type discriminator for the list. Default: invoice. Optional.","required":false}},"body":{"type":"none"},"bodyDescription":{}}

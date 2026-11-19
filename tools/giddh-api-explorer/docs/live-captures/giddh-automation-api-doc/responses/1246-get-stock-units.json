@@ -1,0 +1,376 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "BAGS",
+      "code": "BAG",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "BUCKLES",
+      "code": "BKL",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "BILLIONS OF UNIT",
+      "code": "BOU",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "BOX",
+      "code": "BOX",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "BOTTLES",
+      "code": "BTL",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "BUNCHES",
+      "code": "BUN",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "CUBIC METER",
+      "code": "CBM",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "CUBIC CENTIMETER",
+      "code": "CCM",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "CUBIC INCHES",
+      "code": "CIN",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "DOZEN",
+      "code": "DOZ",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "CENTIMETER",
+      "code": "CMS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "CARTON",
+      "code": "CTN",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "DRUM",
+      "code": "DRM",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "FEET",
+      "code": "FTS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "GREAT GROSS",
+      "code": "GGR",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "GRAMS",
+      "code": "GMS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "GROSS",
+      "code": "GRS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "GROSS YARDS",
+      "code": "GYD",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "HANKS",
+      "code": "HKS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "INCHES",
+      "code": "INC",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "KILOGRAMS",
+      "code": "KGS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "KILOLITER",
+      "code": "KLR",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "KILOMETERS",
+      "code": "KME",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "POUNDS",
+      "code": "LBS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "LOTS",
+      "code": "LOT",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "LITERS",
+      "code": "LTR",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "MILLI GRAMS",
+      "code": "MGS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "METER",
+      "code": "MTR",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "METRIC TON",
+      "code": "MTS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "ROLLS",
+      "code": "ROL",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "ODDS",
+      "code": "ODD",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "PACKS",
+      "code": "PAC",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "PIECES",
+      "code": "PCS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "NUMBERS",
+      "code": "NOS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "PAIRS",
+      "code": "PRS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "QUINTAL",
+      "code": "QTL",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "DECAMETER SQUARE",
+      "code": "SDM",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "SETS",
+      "code": "SET",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "SHEETS",
+      "code": "SHT",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "SQUARE FEET",
+      "code": "SQF",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "SQUARE INCHES",
+      "code": "SQI",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "SQUARE METER",
+      "code": "SQM",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "SQUARE YARDS",
+      "code": "SQY",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "TABLETS",
+      "code": "TBS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "TUBES",
+      "code": "TUB",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "GREAT BRITAIN TON",
+      "code": "TON",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "TOLA",
+      "code": "TOL",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "US GALLONS",
+      "code": "UGS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "UNITS",
+      "code": "UNT",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "VIALS",
+      "code": "VLS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "YARDS",
+      "code": "YDS",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "THOUSANDS",
+      "code": "THD",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    },
+    {
+      "name": "OTHERS",
+      "code": "OTH",
+      "alias": null,
+      "pincode": null,
+      "alias_2": null
+    }
+  ]
+}

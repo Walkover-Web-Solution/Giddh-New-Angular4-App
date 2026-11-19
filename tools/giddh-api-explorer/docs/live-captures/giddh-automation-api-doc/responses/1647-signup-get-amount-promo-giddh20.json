@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "body": {
+    "planAmount": 4000.0,
+    "planAmountBeforeDiscount": 3200.0,
+    "planAmountBeforeTax": 3200.0,
+    "discount": {
+      "calculationMethod": "PERCENTAGE",
+      "amount": {
+        "amountForAccount": 800.0,
+        "amountForCompany": 0.0
+      },
+      "discountValue": 20.0
+    },
+    "promoCode": "GIDDH20",
+    "taxTotal": 576.0,
+    "planAmountAfterTax": 3776.0,
+    "startDate": "23-10-2026",
+    "endDate": "22-10-2027"
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

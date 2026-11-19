@@ -1,0 +1,217 @@
+{
+  "status": "success",
+  "body": {
+    "number": "261023-5",
+    "type": "sales",
+    "uniqueName": "vitmq1792733952798",
+    "isCustomInvoiceNo": false,
+    "isTouristSchemeApplicable": false,
+    "mergePB": false,
+    "passportNumber": null,
+    "withPay": false,
+    "forNewSubscription": false,
+    "subVoucher": null,
+    "attachedFiles": [],
+    "attachedFileName": null,
+    "roundOffApplicable": true,
+    "updateAccountDetails": false,
+    "copyBillingAddressToShippingAddress": true,
+    "readDetailsFromAccount": null,
+    "tallyUniqueId": null,
+    "templateDetails": {
+      "other": {}
+    },
+    "entryUniqueNames": [],
+    "ecommerceDetails": null,
+    "balanceTotal": {
+      "amountForAccount": 99.0,
+      "amountForCompany": 99.0
+    },
+    "gainLoss": 0.0,
+    "status": "UNPAID",
+    "subTotal": {
+      "amountForAccount": 99.0,
+      "amountForCompany": 99.0
+    },
+    "discountTotal": null,
+    "taxTotal": null,
+    "roundOffTotal": null,
+    "otherTaxTotal": null,
+    "voucherTotal": {
+      "amountForAccount": 99.0,
+      "amountForCompany": 99.0
+    },
+    "grandTotal": {
+      "amountForAccount": 99.0,
+      "amountForCompany": 99.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Ninety Nine Only",
+      "amountForCompany": "Ninety Nine Only"
+    },
+    "ewayBillDetails": null,
+    "roundOffAccount": null,
+    "items": [],
+    "referenceVoucher": null,
+    "deposits": null,
+    "deposit": null,
+    "adjustments": [],
+    "valuesInAccountCurrency": true,
+    "exchangeRate": 1.0,
+    "purchaseOrders": null,
+    "purchaseOrderDetails": null,
+    "isEInvoiceGenerated": false,
+    "paymentLink": null,
+    "viewInvoiceLink": null,
+    "generateEInvoice": null,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "documentItems": [],
+    "invoiceStatus": null,
+    "multiCurrency": false,
+    "encodedData": null,
+    "token": null,
+    "salesPerson": {},
+    "fileExtention": null,
+    "fileName": null,
+    "recurrencePreviewRequest": null,
+    "recurringVoucherUniqueName": null,
+    "gstUnitMap": null,
+    "date": "23-10-2026",
+    "cashVoucher": false,
+    "dueDate": "07-11-2026",
+    "einvoiceGenerated": false,
+    "touristSchemeApplicable": false,
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "taxNumber": "23AAACC1206D2ZN",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ]
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "taxNumber": "23AAACC1206D2ZN",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ]
+      },
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "account": {
+      "name": "API Doc Customer Three",
+      "uniqueName": "apidoc-customer-three",
+      "customerName": "API Doc Customer Three",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "stateGstCode": "23",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "stateGstCode": "23",
+        "countryCode": "IN"
+      },
+      "placeOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "rqer91792733952717",
+        "description": "Estimate consulting",
+        "date": "23-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Sales",
+              "uniqueName": "sales"
+            },
+            "amount": {
+              "amountForAccount": 99.0,
+              "amountForCompany": 99.0
+            },
+            "taxableValue": {
+              "amountForAccount": 99.0,
+              "amountForCompany": 99.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 99.0,
+          "amountForCompany": 99.0
+        },
+        "entryTotal": {
+          "amountForAccount": 99.0,
+          "amountForCompany": 99.0
+        },
+        "grandTotal": {
+          "amountForAccount": 99.0,
+          "amountForCompany": 99.0
+        },
+        "salesPerson": {},
+        "usedQuantity": 0
+      }
+    ],
+    "warehouse": null
+  }
+}

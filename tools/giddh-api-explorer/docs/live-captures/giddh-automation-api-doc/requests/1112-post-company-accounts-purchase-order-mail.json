@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-order/apidoc-widget/mail?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+  "body": {
+    "to": [
+      "apidoc@example.invalid"
+    ],
+    "subject": "api doc",
+    "message": "test"
+  }
+}

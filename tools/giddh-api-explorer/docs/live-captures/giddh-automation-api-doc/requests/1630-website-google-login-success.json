@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "path": "/v2/google-login",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website",
+  "note": "Header Access-Token: <GOOGLE_OAUTH_ACCESS_TOKEN redacted>"
+}

@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "code": "USER_NOT_FOUND",
+  "message": "User not found.",
+  "httpStatus": 404,
+  "env": "prod"
+}

@@ -1,0 +1,34 @@
+{
+  "status": "success",
+  "body": {
+    "forwardedBalance": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "description": "BF_BALANCE"
+    },
+    "convertedForwardedBalance": {
+      "amount": 0.0,
+      "type": "DEBIT",
+      "description": "BF_BALANCE"
+    },
+    "creditTotal": 600.0,
+    "convertedCreditTotal": 600.0,
+    "debitTotal": 800.0,
+    "convertedDebitTotal": 800.0,
+    "closingBalance": {
+      "amount": 200.0,
+      "type": "DEBIT"
+    },
+    "convertedClosingBalance": {
+      "amount": 200.0,
+      "type": "DEBIT"
+    },
+    "name": "API Doc Customer One",
+    "uniqueName": "apidoc-customer-one",
+    "currencyCode": "INR",
+    "convertedCurrencyCode": "INR",
+    "currencySymbol": "\u20b9",
+    "convertedCurrencySymbol": "\u20b9"
+  },
+  "httpStatus": 200
+}

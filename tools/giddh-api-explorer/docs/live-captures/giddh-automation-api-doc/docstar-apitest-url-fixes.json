@@ -1,0 +1,2246 @@
+[
+  {
+    "id": "EmEnTqeX3sxv",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/send-mail"
+  },
+  {
+    "id": "mX4ZZTedcbQP",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/balance"
+  },
+  {
+    "id": "JHcSRhSJEpBo",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-proforma"
+  },
+  {
+    "id": "zB1X_AZJnC0b",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger"
+  },
+  {
+    "id": "cID-ACZxWiQG",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/balance"
+  },
+  {
+    "id": "ysPuim_ujMlt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report"
+  },
+  {
+    "id": "3tyrj-0-n2gP",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/bulk-export"
+  },
+  {
+    "id": "9O3lAXVOErB1",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stocks"
+  },
+  {
+    "id": "RmrL6hCX6vDb",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/domain/:domainUniqueName"
+  },
+  {
+    "id": "dDl543kSWppI",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/discount/assign"
+  },
+  {
+    "id": "h2T7t_u9W8oX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/export-invoices-v2"
+  },
+  {
+    "id": "sPXwzlknnxQC",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report-detailed-download-v2"
+  },
+  {
+    "id": "U0UrpFVlPe3o",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName/history"
+  },
+  {
+    "id": "9oZbalVVf5uT",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/role/:roleUniqueName/assign"
+  },
+  {
+    "id": "URCAl323gWOc",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multicompany/:reportType"
+  },
+  {
+    "id": "X0z52t1nQvAt",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/entity-selection"
+  },
+  {
+    "id": "TSWF99SY7wqW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/registration"
+  },
+  {
+    "id": "WqAdgr6MBoKa",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v3/export-ledger/file"
+  },
+  {
+    "id": "nrERwFAkAQxi",
+    "URL": "https://api.giddh.com/v2/subscription/buy-plan"
+  },
+  {
+    "id": "paJQ5QbuS6uK",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/trial-balance"
+  },
+  {
+    "id": "wbcZNdDqUjJg",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/country-list"
+  },
+  {
+    "id": "FNy_QjY-kuMq",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v2/export-ledger-with-invoice/file"
+  },
+  {
+    "id": "LfzIaZIhmnMk",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/columnar-report"
+  },
+  {
+    "id": "jhErH7zIepcm",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/generate-order"
+  },
+  {
+    "id": "TjpWBFxIPYQu",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/group-search"
+  },
+  {
+    "id": "1fzUWcBYCYoK",
+    "URL": "https://api.giddh.com/users/subscriptions"
+  },
+  {
+    "id": "cbBpHcWdAxMt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName"
+  },
+  {
+    "id": "lj1EEhICYPqI",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName"
+  },
+  {
+    "id": "RImgW_voQqLQ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/bulk-export"
+  },
+  {
+    "id": "ZD5zPR_Aak1t",
+    "URL": "https://api.giddh.com/users/send-new-user-info"
+  },
+  {
+    "id": "Ntji3_cwAxYx",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups"
+  },
+  {
+    "id": "c5OxrZyxXo5J",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+"
+  },
+  {
+    "id": "o8UmEjoh9MXt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+"
+  },
+  {
+    "id": "I940ovgQslbF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/merge"
+  },
+  {
+    "id": "WN30GjVEzGne",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/un-merge"
+  },
+  {
+    "id": "h_uc_vFF7m2I",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/move"
+  },
+  {
+    "id": "rckkguq5RXBl",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/contacts"
+  },
+  {
+    "id": "EvzxvMeYbfwz",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/contacts"
+  },
+  {
+    "id": "er1WQ4R8DmOJ",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+"
+  },
+  {
+    "id": "bbReBoPsiSIC",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+"
+  },
+  {
+    "id": "Jukp0TkMa3KV",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/project-entries"
+  },
+  {
+    "id": "Uq6ms3YywyiP",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/entries/:entryUniqueName:.+"
+  },
+  {
+    "id": "KbT5mayI190H",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v3/export-ledger/file"
+  },
+  {
+    "id": "twOxLG65LJ_n",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v2/export-ledger-with-invoice/file"
+  },
+  {
+    "id": "gAYqq32GJwiO",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/mail-ledger"
+  },
+  {
+    "id": "aHtmetKLpmgb",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/invoices"
+  },
+  {
+    "id": "_OWOQdhYUwYu",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+"
+  },
+  {
+    "id": "Z5ECSZ0hYb7h",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/merge"
+  },
+  {
+    "id": "6XPllHEy4EeH",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/reconcile"
+  },
+  {
+    "id": "qsMKfPZl9LOp",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/view-statement"
+  },
+  {
+    "id": "hk2wEGHFe7zO",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/export-account-statement"
+  },
+  {
+    "id": "7HZ-jn67BwPi",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/status/change"
+  },
+  {
+    "id": "cD6SHbCJ1kUN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/pending-numbers"
+  },
+  {
+    "id": "FBH4Jkct2gAX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/versions/all"
+  },
+  {
+    "id": "QiNIWIiR3_Cd",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/:uniqueName/download"
+  },
+  {
+    "id": "YQ0B-90gs25Z",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate"
+  },
+  {
+    "id": "1lZ5EjrOz8vS",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file"
+  },
+  {
+    "id": "O7xhUCQ89jGB",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/mail"
+  },
+  {
+    "id": "csZQCvlFcM-S",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+"
+  },
+  {
+    "id": "yPnhhAuamllg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/preview"
+  },
+  {
+    "id": "IP4YYNRNh28X",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/account-closing-balance"
+  },
+  {
+    "id": "U5_9BMaWX6WR",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances-v2"
+  },
+  {
+    "id": "QteSNZZFR4gA",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/flatten-accounts"
+  },
+  {
+    "id": "3e-Q7HkZfpZ4",
+    "URL": "https://api.giddh.com/v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate"
+  },
+  {
+    "id": "w0ynW_3mOE4L",
+    "URL": "https://api.giddh.com/country/company/:companyUniqueName/account-countries"
+  },
+  {
+    "id": "CRkeJbkDtFpr",
+    "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-generate"
+  },
+  {
+    "id": "srExxTwlLKsj",
+    "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/advance-receipt/all"
+  },
+  {
+    "id": "ouHQFwZu3aZ7",
+    "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export-v2"
+  },
+  {
+    "id": "ldCWVzk2Q2w0",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/yodlee/accounts/:accountUniqueName:.+/eledgers"
+  },
+  {
+    "id": "uCJY0trgQOHX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/autopaid"
+  },
+  {
+    "id": "xazABCZ3huNT",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/bulk-ledgers-v2"
+  },
+  {
+    "id": "Ay934ZSA2npl",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+"
+  },
+  {
+    "id": "_SRmF5Ump0Bc",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/entries"
+  },
+  {
+    "id": "pV0ToInFrMYV",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-export"
+  },
+  {
+    "id": "VwdLWl3-GFwN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/brief-accounts"
+  },
+  {
+    "id": "UzV3SmLTQiFW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/v3/account-search"
+  },
+  {
+    "id": "NkwU8n4ELQzf",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/account-search-2"
+  },
+  {
+    "id": "0TPQSsQmFbd1",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/account-search-predicted"
+  },
+  {
+    "id": "DAgf3xl1FwPf",
+    "URL": "https://api.giddh.com/v2/subscription/transfer/ownership"
+  },
+  {
+    "id": "l-N4G9BbVBaV",
+    "URL": "https://api.giddh.com/v2/subscription/verify/ownership"
+  },
+  {
+    "id": "YESBdZYvaije",
+    "URL": "https://api.giddh.com/v2/subscription/billing-account/get"
+  },
+  {
+    "id": "Js5pEhr3V531",
+    "URL": "https://api.giddh.com/v2/subscription/billing-account/:billingAccountUniqueName"
+  },
+  {
+    "id": "kftm_fbrSEtD",
+    "URL": "https://api.giddh.com/v2/subscription"
+  },
+  {
+    "id": "JreCZG1WBlYb",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/cancel"
+  },
+  {
+    "id": "MDhNlty7yO4a",
+    "URL": "https://api.giddh.com/v2/subscription/plans/all"
+  },
+  {
+    "id": "OR4Q-ZvaT552",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/payment-methods"
+  },
+  {
+    "id": "apgy-SlSyMMK",
+    "URL": "https://api.giddh.com/v2/subscription/payment-method/:paymentUniqueName"
+  },
+  {
+    "id": "yBxPIaEAJ-yn",
+    "URL": "https://api.giddh.com/v2/subscription/payment-method/:paymentUniqueName"
+  },
+  {
+    "id": "lKjc8WQJOUpw",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId"
+  },
+  {
+    "id": "MzuG6vDzk-ji",
+    "URL": "https://api.giddh.com/v2/subscription/change-plan"
+  },
+  {
+    "id": "A9hbgwDTsZp3",
+    "URL": "https://api.giddh.com/v2/subscription/buy-plan"
+  },
+  {
+    "id": "1oMe5KrsEDRm",
+    "URL": "https://api.giddh.com/v2/subscription/update"
+  },
+  {
+    "id": "HRS35Tk7fTM3",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/country-list"
+  },
+  {
+    "id": "dMYl-XuflTAt",
+    "URL": "https://api.giddh.com/v2/subscription/add-payment-method"
+  },
+  {
+    "id": "QD_Vl64seD3x",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/company-list"
+  },
+  {
+    "id": "oJbHW83uXMbK",
+    "URL": "https://api.giddh.com/v2/subscription/get-amount"
+  },
+  {
+    "id": "BTUcw19frMWw",
+    "URL": "https://api.giddh.com/v2/subscription/add-wallet-amount"
+  },
+  {
+    "id": "vbyidjRDDVY3",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/wallet"
+  },
+  {
+    "id": "QLjcbdXn9wPl",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/wallet-logs"
+  },
+  {
+    "id": "MLqSG0UXcEUH",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/capture-wallet-payment"
+  },
+  {
+    "id": "wXcGnkDJaPMQ",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/create-pre-paid"
+  },
+  {
+    "id": "c-5yuW3LRbZw",
+    "URL": "https://api.giddh.com/company/:companyUniqueName:.+/plan"
+  },
+  {
+    "id": "jOjeqo7MXb-U",
+    "URL": "https://api.giddh.com/subscription/generateOrder"
+  },
+  {
+    "id": "1qN6KppTyBsM",
+    "URL": "https://api.giddh.com/report-filters"
+  },
+  {
+    "id": "7qnX1vYKRlns",
+    "URL": "https://api.giddh.com/report-filters"
+  },
+  {
+    "id": "91Qs-985R7My",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/report-comment"
+  },
+  {
+    "id": "j91VBCTGH7ad",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/report-comment"
+  },
+  {
+    "id": "RD7jJXCNGMiE",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/pending-report"
+  },
+  {
+    "id": "2bQbeXhBGdHC",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/due-amount-report"
+  },
+  {
+    "id": "Ofhv2LnwOaBh",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings/daybook-v2"
+  },
+  {
+    "id": "GzI2kpBQwqXw",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings/daybook-v2"
+  },
+  {
+    "id": "KRlkLJAdKfgZ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/columnar-report"
+  },
+  {
+    "id": "bm-crxdqEUa1",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/v2/balance-sheet-collapsed-download-v2"
+  },
+  {
+    "id": "EPSrpH_-OgAr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/v2/profit-loss-collapsed-download-v2"
+  },
+  {
+    "id": "jbJEwrK3KJcB",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/trial-balance-export-v2"
+  },
+  {
+    "id": "c0d30oxA5xd1",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/entity-status"
+  },
+  {
+    "id": "V-aX4-ST-yGb",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multicompany/:reportType"
+  },
+  {
+    "id": "U9Yq_-1HRUO9",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/upload"
+  },
+  {
+    "id": "cDccIk05fFcS",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName:.+"
+  },
+  {
+    "id": "4Uwc4mGzKQVq",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName:.+"
+  },
+  {
+    "id": "HlMisZlKTs3E",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/address/all"
+  },
+  {
+    "id": "v02GFocBh5kA",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName/move"
+  },
+  {
+    "id": "hkFwUGej8n9l",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/address/all"
+  },
+  {
+    "id": "Mc8Iz_7gkVjh",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance"
+  },
+  {
+    "id": "nLNqXkR7Dg3G",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch"
+  },
+  {
+    "id": "-YYOOAEIRj4H",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy"
+  },
+  {
+    "id": "qa9zvHhSrAHl",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch"
+  },
+  {
+    "id": "vFGIWKU2yhG1",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance"
+  },
+  {
+    "id": "o8Er20PWwuGD",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/email-account-closing-balance"
+  },
+  {
+    "id": "GPg8Nk_0sRMZ",
+    "URL": "https://api.giddh.com/users/:userUniqueName/v2/companies"
+  },
+  {
+    "id": "BitG4ldye7m8",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch/:branchUniqueName:.+"
+  },
+  {
+    "id": "LcWcEuQCGm0A",
+    "URL": "https://api.giddh.com/users/:userUniqueName/destroy-session"
+  },
+  {
+    "id": "tBW4lxb9OyCK",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch/:branchUniqueName:.+"
+  },
+  {
+    "id": "wv_0GyrGAwl4",
+    "URL": "https://api.giddh.com/login-with-number"
+  },
+  {
+    "id": "dZaw8XMcNCS3",
+    "URL": "https://api.giddh.com/signup-with-email"
+  },
+  {
+    "id": "bdTchiDOadek",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/process"
+  },
+  {
+    "id": "9dIUc0SZmjN8",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/get-all"
+  },
+  {
+    "id": "x9mjRFItd54g",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/flatten-groups-with-accounts"
+  },
+  {
+    "id": "aQNUXYe5sEG2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/signed-url"
+  },
+  {
+    "id": "vzFKKqCSM3fp",
+    "URL": "https://api.giddh.com/reset-password"
+  },
+  {
+    "id": "-N97CaiDLbPG",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/cash-flow-download-v2"
+  },
+  {
+    "id": "KEZb7PPsS-ct",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/download-import-logs"
+  },
+  {
+    "id": "JWcEGn9zf51w",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/compared-profit-loss"
+  },
+  {
+    "id": "IX6NVCdbpwNN",
+    "URL": "https://api.giddh.com/v2/verify-email"
+  },
+  {
+    "id": "Q-kQzqiMBAy2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/reconciliation/upload"
+  },
+  {
+    "id": "2phQvg8hbO60",
+    "URL": "https://api.giddh.com/v2/verify-number"
+  },
+  {
+    "id": "3xcNZfMOuS7_",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/reconciliation/process"
+  },
+  {
+    "id": "T5BIdF5C6Z0k",
+    "URL": "https://api.giddh.com/v2/login-with-password"
+  },
+  {
+    "id": "9-8CUfs7yGrW",
+    "URL": "https://api.giddh.com/v2/signup"
+  },
+  {
+    "id": "Lxw8QyTylHjv",
+    "URL": "https://api.giddh.com/v2/signup-with-apple"
+  },
+  {
+    "id": "XpcW7fEURyLq",
+    "URL": "https://api.giddh.com/v2/auth-login"
+  },
+  {
+    "id": "Q5MMxqUowY0U",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/generate"
+  },
+  {
+    "id": "rmnCLIhM8VQ0",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project"
+  },
+  {
+    "id": "s36BeOFR8FI7",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/save-report-data"
+  },
+  {
+    "id": "GcjAwGj0E4HB",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName"
+  },
+  {
+    "id": "PkzGBP3u8mV8",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/all-reports"
+  },
+  {
+    "id": "6-Cn1ygbAum1",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/entries"
+  },
+  {
+    "id": "hnVYKF-o137U",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/auth/:authUniqueName/update"
+  },
+  {
+    "id": "WYGpnAcEwqoB",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/auth/all"
+  },
+  {
+    "id": "1bwhUvmpp7FM",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/top-shared-groups"
+  },
+  {
+    "id": "aUKTYxwEKPTy",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/download-file"
+  },
+  {
+    "id": "vJEI77fqodZV",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/:uniqueName"
+  },
+  {
+    "id": "2sfxq5WftUW-",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority"
+  },
+  {
+    "id": "wKdnSdLkGXfh",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/group-search"
+  },
+  {
+    "id": "fqDqmphNuLRE",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/auth/:authUniqueName"
+  },
+  {
+    "id": "sXs5PvemuYAm",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/all"
+  },
+  {
+    "id": "LX25ytiZ3AzX",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/activate-prepaid"
+  },
+  {
+    "id": "2fFuU-lf1XKk",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report/totals"
+  },
+  {
+    "id": "8RllN-bAIXES",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/settings"
+  },
+  {
+    "id": "KL_hYGK2nt3i",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority/:taxAuthorityUniqueName"
+  },
+  {
+    "id": "iDKAiQjyiSkR",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/entry/:entryUniqueName"
+  },
+  {
+    "id": "V0braQC_YwKf",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/vat-report"
+  },
+  {
+    "id": "agWwkrR46gDM",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/entry-settings"
+  },
+  {
+    "id": "zr5QthHe3r9U",
+    "URL": "https://api.giddh.com/users/:userUniqueName/settings"
+  },
+  {
+    "id": "wl5QMcsBIe6Y",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount"
+  },
+  {
+    "id": "Yjn5qPY-lYdM",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/purchases-register-overview"
+  },
+  {
+    "id": "EGcLHSz1DUrd",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount"
+  },
+  {
+    "id": "NaXplCiFbfXd",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/domain/:domainUniqueName/share"
+  },
+  {
+    "id": "S4L4X05UPpzx",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/discount/assign/list"
+  },
+  {
+    "id": "nc3emnJPQf_F",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stocks/v2"
+  },
+  {
+    "id": "JLo_r5vVasxB",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/resend-otp"
+  },
+  {
+    "id": "w89FCnqPcstX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report-detailed"
+  },
+  {
+    "id": "8o5KxnA5TXN-",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax-numbers"
+  },
+  {
+    "id": "-DEi57217qkn",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stocks-manufacture"
+  },
+  {
+    "id": "Ea-uaQis_1p_",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/logs"
+  },
+  {
+    "id": "j2gzwPvSYSWn",
+    "URL": "https://api.giddh.com/company/:companyUniqueName:.+"
+  },
+  {
+    "id": "ylkYJDwi0xOo",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufactureUniqueName"
+  },
+  {
+    "id": "kuCdmI1WpW-G",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+"
+  },
+  {
+    "id": "VM0x7qINcqdz",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb"
+  },
+  {
+    "id": "JqMsCm_sHmQ5",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+/payor/:urn:.+"
+  },
+  {
+    "id": "s0-ar-Q7TQ4V",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/trigger/:triggerUniqueName"
+  },
+  {
+    "id": "fI5HRLZgq2Mm",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/trigger"
+  },
+  {
+    "id": "mASj5BcLekL5",
+    "URL": "https://api.giddh.com/company/:companyUniqueName:.+"
+  },
+  {
+    "id": "j3pEUOUyVhxf",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/:ewbno/download-v2"
+  },
+  {
+    "id": "Kijj2b7_0RXI",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/:ewbno/download-detailed-v2"
+  },
+  {
+    "id": "ojvbu3bbpDmq",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/us/export-sales-report-authority-wise"
+  },
+  {
+    "id": "HTDDuJYIuSeC",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/import-pdf/bank-statement"
+  },
+  {
+    "id": "VqKbq_qNWDx1",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/:uniqueName"
+  },
+  {
+    "id": "_sDlOMHl1Vnz",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/email-key"
+  },
+  {
+    "id": "dpxXzBSmYHv9",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ledgers"
+  },
+  {
+    "id": "gXivXW1Ab3Zq",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication"
+  },
+  {
+    "id": "-lwlOwGk5O87",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/:uniqueName"
+  },
+  {
+    "id": "k6kE8BUXR3sa",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/platform/:uniqueName"
+  },
+  {
+    "id": "Y92396vTSGo6",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/all"
+  },
+  {
+    "id": "SaMlyDDqYCjQ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/triggers"
+  },
+  {
+    "id": "gHIBWn0oM60W",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName"
+  },
+  {
+    "id": "UKK8fSaqgTAr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/sms-key"
+  },
+  {
+    "id": "TLQSLQBoJoiQ",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock/:stockUniqueName:.+"
+  },
+  {
+    "id": "xrqPkd4Qn1KS",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/email-key"
+  },
+  {
+    "id": "S1ZGtNcS6jYl",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/convert"
+  },
+  {
+    "id": "Hb4SFq4JoaP1",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock"
+  },
+  {
+    "id": "P98WJF2IQt8y",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/sms-key"
+  },
+  {
+    "id": "JWQFtyq9iJhL",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting/:uniqueName"
+  },
+  {
+    "id": "NsMoHi1YmBCZ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customfield"
+  },
+  {
+    "id": "DLxYq8nWNEnX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting"
+  },
+  {
+    "id": "RwkKFAdPqRBF",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr1-referenceIds"
+  },
+  {
+    "id": "0M_rq5HDAfW3",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-adjustment/reason/get-all"
+  },
+  {
+    "id": "79pqJHkd-mQW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year"
+  },
+  {
+    "id": "fI2FEEDxHrSU",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year"
+  },
+  {
+    "id": "Zb7Olfv51WZK",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gst/unit-mapping"
+  },
+  {
+    "id": "BEwAD6-aA10m",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/dsc/prepare"
+  },
+  {
+    "id": "gkvtVOiv2eLg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/future-financial-year"
+  },
+  {
+    "id": "K_pKuRqgCLzX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+/report"
+  },
+  {
+    "id": "slKxI7JGXMxw",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/dsc/finish"
+  },
+  {
+    "id": "78rExkKCRHq4",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-limits"
+  },
+  {
+    "id": "oRmQcOqPkgyo",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/role"
+  },
+  {
+    "id": "3_N5ayYJL8aG",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2"
+  },
+  {
+    "id": "0WM7WNXI7jjc",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/inventory-report"
+  },
+  {
+    "id": "ZsaBQPVQm3Om",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/role"
+  },
+  {
+    "id": "0fP-Rkw_eWr7",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-unlock"
+  },
+  {
+    "id": "0xnvKWCWqFTJ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/role/:roleUniqueName"
+  },
+  {
+    "id": "vtqI28qr1V-8",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName"
+  },
+  {
+    "id": "Wld5x5ifNu8f",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-hierarchy"
+  },
+  {
+    "id": "ZVGTNOcGMK-Y",
+    "URL": "https://api.giddh.com/ui/forms"
+  },
+  {
+    "id": "FIHc4go9eLDj",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-inventory-arrangedby-accounts"
+  },
+  {
+    "id": "5vIXeB88WtQb",
+    "URL": "https://api.giddh.com/ui/graph-types"
+  },
+  {
+    "id": "Z5A_T874GeWy",
+    "URL": "https://api.giddh.com/ui/bank/integration/form"
+  },
+  {
+    "id": "C9cujUxVL2QD",
+    "URL": "https://api.giddh.com/ui/auditlogs-form"
+  },
+  {
+    "id": "7EkCf2vpPGjN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/top-inventory-groups"
+  },
+  {
+    "id": "wS3y86iU5q2X",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/generate"
+  },
+  {
+    "id": "IMcPcnSEq1w0",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/:transferNoteUniqueName"
+  },
+  {
+    "id": "Frpyrdh7Nm7T",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/hierarchical-stock-groups"
+  },
+  {
+    "id": "EEdX9xXZvKvW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/all"
+  },
+  {
+    "id": "Is2jOkYxWx8I",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/:transferNoteUniqueName"
+  },
+  {
+    "id": "1Ozb9fAiIUvm",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/flatten-stock-groups-with-stocks"
+  },
+  {
+    "id": "Ez1liJffNHf1",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/:transferNoteUniqueName"
+  },
+  {
+    "id": "bxXlArQ4QOWY",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName/default"
+  },
+  {
+    "id": "f0kfb9KICt31",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName"
+  },
+  {
+    "id": "s9EipKkHfQog",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse"
+  },
+  {
+    "id": "hXYGDsKg4D-g",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2"
+  },
+  {
+    "id": "zPXGO2aLVvVP",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/get-all"
+  },
+  {
+    "id": "P_eZx6l_qQA_",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/payu"
+  },
+  {
+    "id": "AIwtsYlnn8y-",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/payu"
+  },
+  {
+    "id": "PgcSTlUEJXjd",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token"
+  },
+  {
+    "id": "uj7nf3_GLGIZ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/paypal"
+  },
+  {
+    "id": "ywqecZnKTVkV",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/paypal"
+  },
+  {
+    "id": "2jTvrmqHgS6u",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/paypal"
+  },
+  {
+    "id": "MMf3DGORPJAS",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/paypal"
+  },
+  {
+    "id": "GoWfV5d6CTlq",
+    "URL": "https://api.giddh.com/subscription/paypal/order/:orderId/capture"
+  },
+  {
+    "id": "o1H7GOrLSu2R",
+    "URL": "https://api.giddh.com/stock-units"
+  },
+  {
+    "id": "aBPbIutNDqGl",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/manufacture/:manufactureUniqueName"
+  },
+  {
+    "id": "dZ0QfD0bSRoM",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/manufacture/:manufactureUniqueName"
+  },
+  {
+    "id": "CLrcyjcOOm0V",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/manufacture/:manufactureUniqueName"
+  },
+  {
+    "id": "HMx-npGldQoU",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates"
+  },
+  {
+    "id": "eCWsBYtAvZ-p",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates"
+  },
+  {
+    "id": "BcbSzv0HNHh8",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/sample-templates"
+  },
+  {
+    "id": "ftyRrxrWBxhe",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ecommerce/email"
+  },
+  {
+    "id": "fTXBLZz_WT6B",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/transporters"
+  },
+  {
+    "id": "gp88iao75REK",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/due-days-range"
+  },
+  {
+    "id": "lwU1-mg1gfNM",
+    "URL": "https://api.giddh.com/scope-v2"
+  },
+  {
+    "id": "wSTo_mQ9Wgx2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/triggers"
+  },
+  {
+    "id": "Oprl-QL-9mZH",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-bill-setting"
+  },
+  {
+    "id": "FdhnMYNFW3Qg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/sources"
+  },
+  {
+    "id": "D7JD96wBvQqy",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ui_side_bar_items"
+  },
+  {
+    "id": "Md_VTvx0SWhV",
+    "URL": "https://api.giddh.com/white-label"
+  },
+  {
+    "id": "FcvzjE3XRUTV",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/save-authorization-code"
+  },
+  {
+    "id": "1hjA7Zn6k2IS",
+    "URL": "https://api.giddh.com/time"
+  },
+  {
+    "id": "fjXfm4ELuAJn",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ledger/upload"
+  },
+  {
+    "id": "y2ie0GJ2BUMO",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings"
+  },
+  {
+    "id": "WtsrHht8FPce",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/get-domain-list"
+  },
+  {
+    "id": "j2UFP8PPFTUV",
+    "URL": "https://api.giddh.com/state-details"
+  },
+  {
+    "id": "xaB4cEBDGFbU",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gst/unit-mapping"
+  },
+  {
+    "id": "CqJ-rkfNVahz",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users/:inventoryUserUniqueName/inventory-entries"
+  },
+  {
+    "id": "HROgReOi6hMP",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/discount"
+  },
+  {
+    "id": "-h6hrgHazLVY",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock-v2"
+  },
+  {
+    "id": "TqOrYmEq9Ez_",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/us/sales-report-account-wise"
+  },
+  {
+    "id": "6yv2DAMgSCMv",
+    "URL": "https://api.giddh.com/v2/subscription/charge/:subscriptionId"
+  },
+  {
+    "id": "JzcC3bfsWBeU",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/transporters"
+  },
+  {
+    "id": "SeOizvI5wOiJ",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName"
+  },
+  {
+    "id": "V0VpQwFnEWeU",
+    "URL": "https://api.giddh.com/users/:userUniqueName/v2/companies"
+  },
+  {
+    "id": "xMiyah-1vtHE",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/flatten-stock-groups-with-stocks"
+  },
+  {
+    "id": "5rq-DQRwQWWH",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufactureUniqueName"
+  },
+  {
+    "id": "-Rj3XPHsTqNZ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/accounts/:accountUniqueName:.+/transactions"
+  },
+  {
+    "id": "I12P2ci-geuA",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank"
+  },
+  {
+    "id": "AhSLgbA4nc3f",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/user"
+  },
+  {
+    "id": "zva8fXrNkcHT",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+"
+  },
+  {
+    "id": "73X8-Fpds9k6",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-adjustment/adjustment-report"
+  },
+  {
+    "id": "cubOEu2pPW7B",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customfield/module/:moduleUniqueName:.+"
+  },
+  {
+    "id": "-LASJNrwN-mA",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/salesperson"
+  },
+  {
+    "id": "aPUIg49v8cJg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/submit-vat-return"
+  },
+  {
+    "id": "wyta_GoIgGm_",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/save-gstr1-status"
+  },
+  {
+    "id": "yYxKRtjAYQB5",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/voucher-status-count"
+  },
+  {
+    "id": "Bk9xcnTgnpOK",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/custom-fields"
+  },
+  {
+    "id": "VW7AWYqi-UOe",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/payu"
+  },
+  {
+    "id": "tnSbs7zS1jdX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/bulk-update"
+  },
+  {
+    "id": "zN4CLD0slK2I",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/sms-account-closing-balance"
+  },
+  {
+    "id": "xfiQONUOnn6b",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/bulk-update"
+  },
+  {
+    "id": "6gvvFCIhH_eN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/flatten-accounts"
+  },
+  {
+    "id": "E9uTsZ-TnMOF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/payment/banks/accounts"
+  },
+  {
+    "id": "Y8SQ5vuQ392P",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName"
+  },
+  {
+    "id": "NMWBuU906n1Q",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/refresh"
+  },
+  {
+    "id": "R-A-SCGuHOlp",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/entries"
+  },
+  {
+    "id": "S4nRE-UteCmz",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-estimate"
+  },
+  {
+    "id": "1Iwva5auErLM",
+    "URL": "https://api.giddh.com/country/cities"
+  },
+  {
+    "id": "EN5O3Y9W5HDk",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/view-statement"
+  },
+  {
+    "id": "r2PZyzSFgEM2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank"
+  },
+  {
+    "id": "ZrCMSCy8eLax",
+    "URL": "https://api.giddh.com/v2/subscription/change-plan"
+  },
+  {
+    "id": "GjuZO1kkSD9T",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/mail-ledger"
+  },
+  {
+    "id": "-iIwNDI5dA1j",
+    "URL": "https://api.giddh.com/v2/subscription/update"
+  },
+  {
+    "id": "O0IE0-iUWC8N",
+    "URL": "https://api.giddh.com/users/:userUniqueName/company-uer"
+  },
+  {
+    "id": "Tg2pxNdSmled",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/invoices/:invoiceUniqueName/action"
+  },
+  {
+    "id": "GnGnluYl8mlN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/status/change"
+  },
+  {
+    "id": "J46j-LhakoGg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users/:inventoryUserUniqueName/inventory-entries/:inventoryEntryUniqueName:.+/description"
+  },
+  {
+    "id": "RTSfU9NHkBPk",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users"
+  },
+  {
+    "id": "HBRzQaB2lihZ",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report"
+  },
+  {
+    "id": "uD_15HmttP9F",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users"
+  },
+  {
+    "id": "K-BJ-PLHddJD",
+    "URL": "https://api.giddh.com/users/:uniqueName/generate-auth-key"
+  },
+  {
+    "id": "8UEvMSPMK7l4",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/invoice/preview"
+  },
+  {
+    "id": "nl-FG2uolSqI",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+"
+  },
+  {
+    "id": "Umt_UelN_GX2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/:uniqueName/mail"
+  },
+  {
+    "id": "k6Oe6med3b6M",
+    "URL": "https://api.giddh.com/v2/subscription/company-list/:subscriptionId"
+  },
+  {
+    "id": "JmyGzk0pn-Xc",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/payment/:paymentIntentId/save-stripe-payment"
+  },
+  {
+    "id": "LuPzaQKbc7x-",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/generate-order"
+  },
+  {
+    "id": "0Yif7KHxKNSt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/calculateRatios"
+  },
+  {
+    "id": "aRqeCN16uaVi",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/users"
+  },
+  {
+    "id": "j1Cvr-qSbWRj",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/address"
+  },
+  {
+    "id": "_FiGMQIHpMuG",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports"
+  },
+  {
+    "id": "DSgZXUgVhdhA",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups-with-accounts"
+  },
+  {
+    "id": "Dy4Vv-m0uUvm",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/cogs"
+  },
+  {
+    "id": "kfoDXWKSppZH",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reverse-charge-report"
+  },
+  {
+    "id": "Fjobzhc8-XLC",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups"
+  },
+  {
+    "id": "tbQ_i1_1j-48",
+    "URL": "https://api.giddh.com/users/:userUniqueName/company-uer"
+  },
+  {
+    "id": "jutP_V0Vyygw",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch/:branchUniqueName:.+"
+  },
+  {
+    "id": "LDMrbd-oK22F",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName:.+"
+  },
+  {
+    "id": "1lTnTS2Y44pq",
+    "URL": "https://api.giddh.com/generate-otp"
+  },
+  {
+    "id": "iH6wGERAMucO",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName/masters"
+  },
+  {
+    "id": "wBDWEhJHWrep",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/v2/upload"
+  },
+  {
+    "id": "OwAjpvMJCFZm",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/document/upload"
+  },
+  {
+    "id": "yzLkY21cydi8",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/imports/reconciliation"
+  },
+  {
+    "id": "VLojp9mWiK3M",
+    "URL": "https://api.giddh.com/users/:userUniqueName/get-auth-key"
+  },
+  {
+    "id": "KuaDnTtornti",
+    "URL": "https://api.giddh.com/users/:uniqueKey/forgot-password"
+  },
+  {
+    "id": "gClJxxtKvBz-",
+    "URL": "https://api.giddh.com/users/:userUniqueName/sessions"
+  },
+  {
+    "id": "Fs05rIYBmGt3",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName"
+  },
+  {
+    "id": "d1t9kMrjpV5S",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:uniqueName"
+  },
+  {
+    "id": "mR7pSvI8ilw0",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/auth/generate"
+  },
+  {
+    "id": "uEinXoiButfF",
+    "URL": "https://api.giddh.com/users/send-new-user-info"
+  },
+  {
+    "id": "p2y0oaTZmC3N",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/auth/:authUniqueName/remove"
+  },
+  {
+    "id": "oBKQCuMtwqV2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/category-total"
+  },
+  {
+    "id": "5wYzJuDpOhAG",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/pettycash-manager/report"
+  },
+  {
+    "id": "Jx0PvtliIlaO",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order"
+  },
+  {
+    "id": "T8EGQzqXlRO6",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/kenya/v2/vat-report-download"
+  },
+  {
+    "id": "YsKTwW6NsdH8",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/validate"
+  },
+  {
+    "id": "ErXTBZ8zuzRd",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/entry"
+  },
+  {
+    "id": "XqMIXNBdodnv",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/kenya/vat-report"
+  },
+  {
+    "id": "Sdg5nHS9GzKl",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record"
+  },
+  {
+    "id": "RTUETS6h4YZo",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority"
+  },
+  {
+    "id": "EQbJjIWq2eXg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName"
+  },
+  {
+    "id": "EinFVJn2-NY8",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report"
+  },
+  {
+    "id": "ifmssXZ20Rgj",
+    "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/activate"
+  },
+  {
+    "id": "AteZ9fHgcZRF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/settings"
+  },
+  {
+    "id": "SGMWlYGsU9go",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority/:taxAuthorityUniqueName"
+  },
+  {
+    "id": "RL9ScwF7t0dD",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:uniqueName/mail"
+  },
+  {
+    "id": "vYeuSflLI5Ey",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/versions/all"
+  },
+  {
+    "id": "qCv4F9zKN3dd",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/authenticate-gsp-session"
+  },
+  {
+    "id": "_ECBHsaTqMpI",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/net-profit"
+  },
+  {
+    "id": "J2831RaJ4INt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:uniqueName/download"
+  },
+  {
+    "id": "r0ZPpcALi2GW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/vat-report-detailed"
+  },
+  {
+    "id": "R69xK76H_WH5",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/entry-settings"
+  },
+  {
+    "id": "Lce2awypp0We",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/vat-obligations"
+  },
+  {
+    "id": "2hQbo9P5hRew",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-record/get-all"
+  },
+  {
+    "id": "2uBGIVbHyHBi",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/institutions"
+  },
+  {
+    "id": "fJkHkCMpVNHd",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/details"
+  },
+  {
+    "id": "sxO7lk1Uyltw",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-record"
+  },
+  {
+    "id": "W7qA-B7iCImK",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/agreement-requisitions"
+  },
+  {
+    "id": "C4i7tkwisQWO",
+    "URL": "https://api.giddh.com/country/country-list"
+  },
+  {
+    "id": "3eBEQ-hJQdUa",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/variants"
+  },
+  {
+    "id": "_cKZBrP1ykGR",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/view-vat-return"
+  },
+  {
+    "id": "5fmUFbBE_rTn",
+    "URL": "https://api.giddh.com/country/:countryCode"
+  },
+  {
+    "id": "GFRa4lewElFe",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/get-all-users"
+  },
+  {
+    "id": "m9qFjeuTGeYq",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/:bankDetailsUniqueName"
+  },
+  {
+    "id": "ktzm8fVV_J4Z",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/requisitions/:reference"
+  },
+  {
+    "id": "bqrfTOXKY12o",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/retrieve-vat-payments"
+  },
+  {
+    "id": "fwT45gIT_TRb",
+    "URL": "https://api.giddh.com/country/country-list"
+  },
+  {
+    "id": "GOXHTU_Zunq_",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/get-all-discounts"
+  },
+  {
+    "id": "n_hh-5F1Awpi",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/discount"
+  },
+  {
+    "id": "Je1Gkd38mGQs",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report"
+  },
+  {
+    "id": "J_w73IQcenmC",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount"
+  },
+  {
+    "id": "Pd5VH5CIrOSK",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/updateDetails"
+  },
+  {
+    "id": "JjVBd-93Nrhk",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings"
+  },
+  {
+    "id": "hJqUjuFJjXTf",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/purchases-register-detailed"
+  },
+  {
+    "id": "gFj809owsfIa",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/v2/purchases-register-overview"
+  },
+  {
+    "id": "pY8OOp1-T_lI",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uk/retrieve-vat-liabilities"
+  },
+  {
+    "id": "529yVgXCsqu2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/discount/:discountUniqueName:.+"
+  },
+  {
+    "id": "0NKxozdJwUxN",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report-detailed"
+  },
+  {
+    "id": "3EPIJiquUw93",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/deregistration"
+  },
+  {
+    "id": "flR22HEZNRfR",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/add-domain"
+  },
+  {
+    "id": "XDJVUCokz1Qt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report-download-v2"
+  },
+  {
+    "id": "rxOlSj-JcBJN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/verify-domain"
+  },
+  {
+    "id": "Ix6CzhPiBOvg",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/payments"
+  },
+  {
+    "id": "JaAOUKUHgsKS",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/payments/confirm"
+  },
+  {
+    "id": "-tc8VPZ68RE-",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/plaid/create/link-token"
+  },
+  {
+    "id": "9ydRTt2g-NIH",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/discount/assign-v2"
+  },
+  {
+    "id": "kdWYaFKawM0k",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/plaid/create/access-token"
+  },
+  {
+    "id": "urRIeUag99wk",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/platform/:platformUniqueName/trigger/form"
+  },
+  {
+    "id": "pGhmkwC1FNWr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax"
+  },
+  {
+    "id": "oNy10zZZowG0",
+    "URL": "https://api.giddh.com/company"
+  },
+  {
+    "id": "ibS32-OCcrPJ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb"
+  },
+  {
+    "id": "8EIssnkI4NYq",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank"
+  },
+  {
+    "id": "NBXBHExwjCjr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/triggers"
+  },
+  {
+    "id": "kByIz1dE87FF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax"
+  },
+  {
+    "id": "_jzoKRnv-5Ll",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/user"
+  },
+  {
+    "id": "RbY2VBQNpEPf",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/triggers/:triggerUniqueName:.+"
+  },
+  {
+    "id": "K-Hpu0r9QLYu",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tax/assign"
+  },
+  {
+    "id": "vlo2HRaR9DYO",
+    "URL": "https://api.giddh.com/company/:companyUniqueName:.+"
+  },
+  {
+    "id": "XFLswY0dvZWH",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/link-with-rates"
+  },
+  {
+    "id": "e58OkJ5LDF5R",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gsp-session"
+  },
+  {
+    "id": "_e3kk83oFVu9",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/invoice-setting"
+  },
+  {
+    "id": "Iy6v2hw7RpRi",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+/payor/:urn:.+/status"
+  },
+  {
+    "id": "KCZlafEf_APD",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/multi-registration"
+  },
+  {
+    "id": "uDHS2upDyR46",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/invoices"
+  },
+  {
+    "id": "eFTSgvdhZxUf",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/manufacture-report"
+  },
+  {
+    "id": "ixGtgGZawl5R",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/trigger/:triggerUniqueName"
+  },
+  {
+    "id": "F6bkfbRlN5bP",
+    "URL": "https://api.giddh.com/v4/company/:companyUniqueName/particular"
+  },
+  {
+    "id": "azLY9hh3OJV_",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/invoices/:invoiceUniqueName/action"
+  },
+  {
+    "id": "gecV07S6Pbeq",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/session"
+  },
+  {
+    "id": "fJpjZpx0F81t",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/invoices/list"
+  },
+  {
+    "id": "Pk9ppRQQMbLG",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock"
+  },
+  {
+    "id": "XyGbgRBQpwF-",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+/payor"
+  },
+  {
+    "id": "Mtotz3OLv0q0",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger"
+  },
+  {
+    "id": "bptyOTWM-zC7",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/cancel"
+  },
+  {
+    "id": "IjGpZUmOOnba",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/platform/verify"
+  },
+  {
+    "id": "_trQSPfslW4h",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ledger/upload/:attachedFileUniqueName"
+  },
+  {
+    "id": "7pQGu5tVzPxK",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/:uniqueName"
+  },
+  {
+    "id": "V4NfSHObFs4U",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/vehicle"
+  },
+  {
+    "id": "eBnMGunRI7M2",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName:.+/move"
+  },
+  {
+    "id": "2gA7CqbCLSpG",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/pettycash-manager/ledger/:entryUniqueName"
+  },
+  {
+    "id": "BTRLmpXTzyku",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName:.+/variants"
+  },
+  {
+    "id": "X3SGPPXjwml3",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/campaign/list"
+  },
+  {
+    "id": "Yqs-fDk_hrr5",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/us/export-sales-report-tax-wise"
+  },
+  {
+    "id": "QU8HM1RjYQcn",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/campaign/:slug/fields"
+  },
+  {
+    "id": "NlVmNVpKemE6",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/suggestions/:platformUniqueName/:entity"
+  },
+  {
+    "id": "nM6M_yYkszzW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName"
+  },
+  {
+    "id": "q2q8SGJZVaEc",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/email-content-suggestion"
+  },
+  {
+    "id": "yQcDmqLHLP9i",
+    "URL": "https://api.giddh.com/magic-link/:magicLink"
+  },
+  {
+    "id": "d5dcpNSO9T9V",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/recipe"
+  },
+  {
+    "id": "H_UOEdazZ2kN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/triggers/:triggerUniqueName:.+"
+  },
+  {
+    "id": "uwWRpOU_MM0A",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/condition-suggestion"
+  },
+  {
+    "id": "7T0fEwnWIkbx",
+    "URL": "https://api.giddh.com/magic-link/:magicLink/download-invoice/:invoiceNumber"
+  },
+  {
+    "id": "jKX9v5VSDTet",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName/action"
+  },
+  {
+    "id": "irv9ohxW9sDt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/communication/generate-email"
+  },
+  {
+    "id": "AXC9qVYMsbpr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/recipe/get"
+  },
+  {
+    "id": "nFZs6hb2qLlF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/generate-mail-token"
+  },
+  {
+    "id": "CxbxZjGDdIRV",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/hierarchical-stock-groups"
+  },
+  {
+    "id": "pj7lJhnZFr34",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-history"
+  },
+  {
+    "id": "_qtL-dfcdE9q",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gmail-token"
+  },
+  {
+    "id": "aDlsd7CJmRvJ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName/versions"
+  },
+  {
+    "id": "i5U3uaawKWTN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gmail-token"
+  },
+  {
+    "id": "qBDcDKolhKKI",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock"
+  },
+  {
+    "id": "3cnPtZQGlJDy",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/save-mail-token"
+  },
+  {
+    "id": "wVpQC71rKQDa",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/statuses"
+  },
+  {
+    "id": "_xXZmuQxHs_b",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock/:stockUniqueName/details"
+  },
+  {
+    "id": "JakrjQQBRSef",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting/list"
+  },
+  {
+    "id": "AdNkz5OIou4k",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting/:uniqueName"
+  },
+  {
+    "id": "FiGeCmq4obC4",
+    "URL": "https://api.giddh.com/gst-info"
+  },
+  {
+    "id": "1xdeRy4QInsv",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr1"
+  },
+  {
+    "id": "7wLRZsk19hOf",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/save-gstr1"
+  },
+  {
+    "id": "zrt3DiurAh8D",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/custom-fields"
+  },
+  {
+    "id": "Kr5SCFebe1mP",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year"
+  },
+  {
+    "id": "6_-zbfHnp0n6",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/save-gstr3b"
+  },
+  {
+    "id": "Qy6xNltE8ZFC",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr-reconcile/invoices"
+  },
+  {
+    "id": "hf7pyIqxPInb",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/transaction-report"
+  },
+  {
+    "id": "oNens_w-L99R",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/balance"
+  },
+  {
+    "id": "_h4LDyIa2JPr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/future-financial-year"
+  },
+  {
+    "id": "u6pmpmF7V7Jt",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/role/:roleUniqueName"
+  },
+  {
+    "id": "3LWVKWZifQtj",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-report-v2"
+  },
+  {
+    "id": "jBmXzpsMsr_M",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName"
+  },
+  {
+    "id": "XLrHTYnh-hJv",
+    "URL": "https://api.giddh.com/ui/calling-code"
+  },
+  {
+    "id": "zuNs82vtoLG6",
+    "URL": "https://api.giddh.com/ui/taxes"
+  },
+  {
+    "id": "-k3H3k7gUqBx",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-inventory-arrangedby-accounts"
+  },
+  {
+    "id": "KedZU8BS4yts",
+    "URL": "https://api.giddh.com/ui/party-types"
+  },
+  {
+    "id": "XNp-G6eZGzAW",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-adjustment/:refNo"
+  },
+  {
+    "id": "y3i0wS5zobQF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/:stockGroupUniqueName/masters"
+  },
+  {
+    "id": "khdGiz7sA2XJ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-search"
+  },
+  {
+    "id": "WgWmGmsxjI9d",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/download"
+  },
+  {
+    "id": "Rm6SoZp2qcIX",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse"
+  },
+  {
+    "id": "b8kL1aUaLO-n",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName"
+  },
+  {
+    "id": "7tiutBSRTqqF",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+/report"
+  },
+  {
+    "id": "kF29g9hZtMuk",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+/inventory-report-v3"
+  },
+  {
+    "id": "K0eZ3Kni7xmJ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2"
+  },
+  {
+    "id": "MvZUlDOnU1UJ",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/recurring-voucher"
+  },
+  {
+    "id": "eeLqMJdw-d41",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-stock-inventory-report-v3"
+  },
+  {
+    "id": "GyPtUjeYtIV4",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-stock-inventory-report-v3"
+  },
+  {
+    "id": "avbnZ1YHqs_o",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-groups-with-stocks"
+  },
+  {
+    "id": "pLSHD4q2GnnN",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay"
+  },
+  {
+    "id": "XmclOvPAHE1v",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay"
+  },
+  {
+    "id": "uPfT7jNRbbaS",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay"
+  },
+  {
+    "id": "MysBM_W8Ak-c",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay"
+  },
+  {
+    "id": "zcl4hwaoFWOj",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-unit/mappings"
+  },
+  {
+    "id": "UMN6V0X4RcWP",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-unit/:stockUnitUniqueName/linked-stock-units"
+  },
+  {
+    "id": "39hWUvf3WT-n",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/communication/email-template/:templateOf"
+  },
+  {
+    "id": "CJasyaBHy7k5",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/communication/email-template/:templateOf"
+  },
+  {
+    "id": "ht36VkqA0m-C",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates"
+  },
+  {
+    "id": "jlqvEFn1oANx",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates"
+  },
+  {
+    "id": "UoJvLGiLZKqB",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+"
+  },
+  {
+    "id": "rSOH7hwPnPHk",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+"
+  },
+  {
+    "id": "ZIEyFJB5Jet3",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+/default"
+  },
+  {
+    "id": "IKqWuu9To2sn",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tags"
+  },
+  {
+    "id": "U_u2dfNI2Ygj",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tags/:tagUniqueName"
+  },
+  {
+    "id": "1z2-vAuGFS85",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tags/:tagUniqueName"
+  },
+  {
+    "id": "01ThUmnZCJxr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/new-old-sales/details"
+  },
+  {
+    "id": "auFa7w8t9JP0",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/transporters"
+  },
+  {
+    "id": "c1kKic7YR9BE",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/transporters"
+  },
+  {
+    "id": "YRWaWqt69hWr",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/advance-receipt/adjust"
+  },
+  {
+    "id": "On2jHzAxoJht",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/advance-receipt/get-all"
+  },
+  {
+    "id": "p9n5ePF0KY9V",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/advance-receipt/summary"
+  },
+  {
+    "id": "f0V79bisFje6",
+    "URL": "https://api.giddh.com/currency"
+  },
+  {
+    "id": "X0Dg8397_T-E",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/currency-converter/:baseCurrency/:toCurrency"
+  },
+  {
+    "id": "z3IilY5BIYNy",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/voucher/:voucherUniqueName/cancel-einvoice"
+  },
+  {
+    "id": "tw4-syfhLSjq",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/us/export-sales-report-account-wise"
+  },
+  {
+    "id": "QbvfLbaHFdgz",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/new-old-sales"
+  },
+  {
+    "id": "7tmWEX0xJFYv",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/v2/sales-register-overview"
+  },
+  {
+    "id": "AQ2LtndpS7so",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/due-days-range"
+  },
+  {
+    "id": "PzOAbFmY5sVR",
+    "URL": "https://api.giddh.com/state-details"
+  },
+  {
+    "id": "1K-zAPsDXMN_",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/stock-groups-with-stocks"
+  },
+  {
+    "id": "QxLJtOgW1qna",
+    "URL": "https://api.giddh.com/users/:userUniqueName/destroy-session"
+  },
+  {
+    "id": "J7mjhpFNUH9E",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/activity-logs"
+  },
+  {
+    "id": "26Gp4D9nAzYj",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/cmdk"
+  },
+  {
+    "id": "24Xj-VEYBQKa",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/completed-document-count"
+  },
+  {
+    "id": "ggd-QCh-cK6V",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/forecast"
+  },
+  {
+    "id": "TBUAgvdA-4UK",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/images"
+  },
+  {
+    "id": "AOIwqOVvO0Ph",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/logs"
+  },
+  {
+    "id": "WtAlSM35W88N",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ocr-data"
+  },
+  {
+    "id": "nYTTFRY35rz5",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/us/sales-report-authority-wise"
+  },
+  {
+    "id": "BkTH4tumVM-a",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr3b-excel-export/email"
+  },
+  {
+    "id": "lUTrmn1fgJkh",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/bank/generateotp"
+  },
+  {
+    "id": "vo_mp-AbsSnE",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-lock"
+  },
+  {
+    "id": "f8JxpCXJxizh",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr1/download-v2"
+  },
+  {
+    "id": "gDnVUwWJM1rL",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-unlock"
+  },
+  {
+    "id": "oow3L8HYluNE",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/us/sales-report-tax-wise"
+  },
+  {
+    "id": "49sziPSgXzm5",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/tags"
+  },
+  {
+    "id": "uWDPLV03e5g9",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/validate-invoice"
+  },
+  {
+    "id": "dofO48aOsK86",
+    "URL": "https://api.giddh.com/users/:userUniqueName/sessions"
+  },
+  {
+    "id": "xfsPS8nEp7Ma",
+    "URL": "https://api.giddh.com/users/:userUniqueName/increment-session"
+  },
+  {
+    "id": "gqpzKbc35-vp",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/dashboard/graph"
+  },
+  {
+    "id": "PD8-mHU09nub",
+    "URL": "https://api.giddh.com/send-data"
+  },
+  {
+    "id": "xtnY4fHsEzgq",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-report-v2"
+  },
+  {
+    "id": "9Fd247-mBFog",
+    "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-hierarchy"
+  },
+  {
+    "id": "1D4_sEqYw9xc",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/preview"
+  },
+  {
+    "id": "KrQakvYsQnEA",
+    "URL": "https://api.giddh.com/company/:companyUniqueName/authorize"
+  },
+  {
+    "id": "5OUzKI_eK_iw",
+    "URL": "https://api.giddh.com/v2/signup-with-google"
+  },
+  {
+    "id": "JV2VQwWZwbho",
+    "URL": "https://api.giddh.com/users/:uniqueName/generate-auth-key"
+  }
+]

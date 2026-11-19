@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/users/send-new-user-info",
+  "body": {
+    "email": "apidoc-invite-probe@example.invalid",
+    "companyUniqueName": "giddhain1792673422178091xos"
+  }
+}

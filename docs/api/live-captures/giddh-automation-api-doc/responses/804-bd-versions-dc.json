@@ -1,0 +1,96 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "versionNumber": "20261023-DC-261023-1-1",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com"
+        },
+        "changes": [
+          {
+            "type": "DOCUMENT_TOTAL",
+            "newValue": "100",
+            "oldValue": null,
+            "optType": "CREATE"
+          },
+          {
+            "type": "ACCOUNT_NAME",
+            "newValue": "API Doc Customer One",
+            "oldValue": null,
+            "optType": "CREATE"
+          },
+          {
+            "type": "DOCUMENT_DATE",
+            "newValue": "23-10-2026",
+            "oldValue": null,
+            "optType": "CREATE"
+          },
+          {
+            "type": "WAREHOUSE_NAME",
+            "newValue": "Gidd warehouse",
+            "oldValue": null,
+            "optType": "CREATE"
+          },
+          {
+            "type": "STATUS",
+            "newValue": "SHIPPED",
+            "oldValue": null,
+            "optType": "CREATE"
+          },
+          {
+            "type": "LINE_ADDED",
+            "newValue": {
+              "stockName": "API Doc Widget",
+              "stockUniqueName": "apidoc-widget",
+              "variantName": "API Doc Widget",
+              "variantUniqueName": "apidocwidget1792693959876fk8uyv0enl",
+              "quantity": "1",
+              "invoicedQuantity": "0"
+            },
+            "oldValue": null,
+            "optType": "CREATE"
+          }
+        ],
+        "operation": "CREATE",
+        "versionTime": 1792738825385
+      },
+      {
+        "versionNumber": "20261023-DC-261023-1-2",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com"
+        },
+        "changes": [
+          {
+            "type": "INVOICED_QUANTITY",
+            "newValue": {
+              "stockName": "API Doc Widget",
+              "stockUniqueName": "apidoc-widget",
+              "variantName": "API Doc Widget",
+              "variantUniqueName": "apidocwidget1792693959876fk8uyv0enl",
+              "quantity": "1",
+              "invoicedQuantity": "1"
+            },
+            "oldValue": {
+              "stockName": "API Doc Widget",
+              "stockUniqueName": "apidoc-widget",
+              "variantName": "API Doc Widget",
+              "variantUniqueName": "apidocwidget1792693959876fk8uyv0enl",
+              "quantity": "0",
+              "invoicedQuantity": "0"
+            },
+            "optType": "UPDATE"
+          }
+        ],
+        "operation": "UPDATE",
+        "versionTime": 1792738841286
+      }
+    ],
+    "page": 1,
+    "count": 20,
+    "totalPages": 1,
+    "totalItems": 2
+  }
+}

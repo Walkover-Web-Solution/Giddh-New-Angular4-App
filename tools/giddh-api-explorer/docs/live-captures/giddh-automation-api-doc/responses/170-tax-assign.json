@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Following groups or accounts not found; groups : [apidoc-widget]",
+  "code": "NOT_FOUND"
+}

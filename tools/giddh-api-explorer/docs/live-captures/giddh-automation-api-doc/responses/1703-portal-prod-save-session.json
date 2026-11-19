@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": {
+    "session": {
+      "id": "in3f3af1********KKc=",
+      "expiresAt": "25-10-2026 11:52:15",
+      "createdAt": "23-10-2026 11:52:15"
+    },
+    "companyUniqueName": "10kin177424654546509z75a"
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

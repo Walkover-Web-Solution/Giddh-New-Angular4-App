@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "INVALID_REQUEST",
+  "message": "Voucher type provided is not supported. Supported voucher types are: journal,credit note,purchase,receipt,payment,debit note,sales."
+}

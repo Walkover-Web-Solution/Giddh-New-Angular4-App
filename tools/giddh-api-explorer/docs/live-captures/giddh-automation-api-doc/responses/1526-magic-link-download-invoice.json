@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Voucher not provided.",
+  "code": "VOUCHER_NOT_PROVIDED",
+  "httpStatus": 400
+}

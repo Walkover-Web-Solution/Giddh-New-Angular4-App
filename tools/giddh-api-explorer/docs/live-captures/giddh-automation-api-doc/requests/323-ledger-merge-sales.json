@@ -1,0 +1,9 @@
+{
+  "cancelledEntries": false,
+  "balanceTypeAsSign": false,
+  "includeAmount": false,
+  "includeDescription": false,
+  "includeVouchers": false,
+  "includeParticulars": false,
+  "includeTag": false
+}

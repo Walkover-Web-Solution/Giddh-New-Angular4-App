@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "No user found with this contact number.",
+  "code": "INVALID_REQUEST",
+  "httpStatus": 404
+}

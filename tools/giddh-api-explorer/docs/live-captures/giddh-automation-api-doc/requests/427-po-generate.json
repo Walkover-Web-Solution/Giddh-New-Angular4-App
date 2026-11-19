@@ -1,0 +1,94 @@
+{
+  "number": "PO-API-001",
+  "date": "23-10-2026",
+  "dueDate": "06-11-2026",
+  "exchangeRate": 1,
+  "type": "purchase",
+  "company": {
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-vendor-one",
+    "name": "API Doc Vendor One",
+    "billingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor addr"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor addr"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "entries": [
+    {
+      "date": "23-10-2026",
+      "description": "PO line",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "purchases",
+            "name": "Purchases"
+          },
+          "amount": {
+            "amountForAccount": 500,
+            "amountForCompany": 500
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "warehouse": {
+    "uniqueName": "xbq1792673424418",
+    "name": "Gidd warehouse"
+  }
+}

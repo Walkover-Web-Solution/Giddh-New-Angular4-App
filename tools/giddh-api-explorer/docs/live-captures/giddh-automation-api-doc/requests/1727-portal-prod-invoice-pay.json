@@ -1,0 +1,12 @@
+{
+  "method": "POST",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/invoices/fake-payment-id/pay?voucherVersion=2",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy",
+  "body": {
+    "paymentId": "fake-payment-id",
+    "amount": 1,
+    "date": "23-10-2026"
+  }
+}

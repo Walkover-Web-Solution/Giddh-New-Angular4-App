@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "VOUCHER_NOT_FOUND",
+  "message": "Voucher not found with name/code: null."
+}

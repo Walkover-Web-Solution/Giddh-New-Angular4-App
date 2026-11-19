@@ -1,0 +1,18 @@
+{
+  "name": "API Doc Viewer Role",
+  "uniqueName": "aft1792738829523",
+  "scopes": [
+    {
+      "name": "INVOICE",
+      "permissions": [
+        {
+          "code": "VW"
+        },
+        {
+          "code": "DLT"
+        }
+      ]
+    }
+  ],
+  "isActive": true
+}

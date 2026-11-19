@@ -1,0 +1,121 @@
+{
+  "type": "receipt",
+  "date": "22-10-2026",
+  "dueDate": "05-11-2026",
+  "exchangeRate": 1,
+  "applyApplicableTaxes": false,
+  "roundOffApplicable": false,
+  "updateAccountDetails": false,
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-customer-one",
+    "name": "API Doc Customer One",
+    "customerName": "API Doc Customer One",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "billingDetails": {
+      "name": "API Doc Customer One",
+      "address": [
+        "Address line 1"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN",
+      "gstNumber": "23AAACC1206D1ZM"
+    },
+    "shippingDetails": {
+      "name": "API Doc Customer One",
+      "address": [
+        "Address line 1"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN",
+      "gstNumber": "23AAACC1206D1ZM"
+    }
+  },
+  "entries": [
+    {
+      "date": "22-10-2026",
+      "description": "API doc receipt 53-receipt-partial",
+      "voucherType": "receipt",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "apidoc-bank-hdfc",
+            "name": "API Doc Bank HDFC"
+          },
+          "amount": {
+            "amountForAccount": 200,
+            "amountForCompany": 200
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "warehouse": {
+    "name": "Gidd warehouse",
+    "uniqueName": "xbq1792673424418"
+  },
+  "templateDetails": {
+    "other": {}
+  },
+  "adjustments": [
+    {
+      "uniqueName": "iiy341792675102708",
+      "voucherNumber": "261022-5",
+      "voucherType": "sales",
+      "voucherDate": "22-10-2026",
+      "amount": {
+        "amountForAccount": 200,
+        "amountForCompany": 200
+      },
+      "exchangeRate": 1
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "type": "deliveryNote",
+  "date": "23-10-2026",
+  "exchangeRate": 1,
+  "company": {
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-customer-one",
+    "name": "API Doc Customer One",
+    "billingDetails": {
+      "name": "API Doc Customer One",
+      "address": [
+        "addr"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Customer One",
+      "address": [
+        "addr"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "entries": [
+    {
+      "date": "23-10-2026",
+      "description": "DC line",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "sales",
+            "name": "Sales"
+          },
+          "amount": {
+            "amountForAccount": 100,
+            "amountForCompany": 100
+          },
+          "stock": {
+            "uniqueName": "apidoc-widget",
+            "name": "API Doc Widget",
+            "quantity": 1,
+            "rate": {
+              "rateForAccount": 100
+            },
+            "stockUnit": {
+              "code": "pcs",
+              "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+            },
+            "variant": {
+              "uniqueName": "apidocwidget1792693959876fk8uyv0enl",
+              "name": "API Doc Widget"
+            }
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "warehouse": {
+    "uniqueName": "xbq1792673424418",
+    "name": "Gidd warehouse"
+  }
+}

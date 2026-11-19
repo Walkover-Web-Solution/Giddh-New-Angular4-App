@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/ledgers-v2/view-statement?count=50&lang=en&from=01-04-2026&to=31-03-2027&sort=asc&page=1&q=&voucherVersion=2&branchUniqueName=giddhautomationapidoc"
+}

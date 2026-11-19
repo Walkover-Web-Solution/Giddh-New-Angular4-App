@@ -1,0 +1,50 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "documentType": "RC",
+      "statusCode": "RECEIVED",
+      "statusName": "Received",
+      "statusCategory": "OPEN",
+      "defaultStatusCategory": "OPEN",
+      "isDefault": true,
+      "stage": "START"
+    },
+    {
+      "documentType": "RC",
+      "statusCode": "OPEN",
+      "statusName": "Open",
+      "statusCategory": "OPEN",
+      "defaultStatusCategory": "OPEN",
+      "isDefault": false,
+      "stage": "START"
+    },
+    {
+      "documentType": "RC",
+      "statusCode": "ACCEPTED",
+      "statusName": "Accepted",
+      "statusCategory": "COMPLETED",
+      "defaultStatusCategory": "COMPLETED",
+      "isDefault": false,
+      "stage": "END"
+    },
+    {
+      "documentType": "RC",
+      "statusCode": "COMPLETED",
+      "statusName": "Completed",
+      "statusCategory": "COMPLETED",
+      "defaultStatusCategory": "COMPLETED",
+      "isDefault": false,
+      "stage": "END"
+    },
+    {
+      "documentType": "RC",
+      "statusCode": "EXPIRED",
+      "statusName": "Expired",
+      "statusCategory": "COMPLETED",
+      "defaultStatusCategory": "COMPLETED",
+      "isDefault": false,
+      "stage": "END"
+    }
+  ]
+}

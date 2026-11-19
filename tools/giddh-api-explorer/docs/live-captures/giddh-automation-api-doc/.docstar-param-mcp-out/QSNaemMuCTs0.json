@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"QSNaemMuCTs0","description":"Get Ledger. Part of the Ledgers APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"baseRef":{"checked":"true","value":"false","description":"Base ref query parameter. Default: false. Optional.","required":false}},"body":{"type":"none"},"bodyDescription":{}}

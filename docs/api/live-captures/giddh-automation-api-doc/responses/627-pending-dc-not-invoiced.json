@@ -1,0 +1,25 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 0,
+    "totalPages": 0,
+    "totalItems": 0,
+    "results": [],
+    "reportType": "NOT_INVOICED",
+    "balances": {
+      "totalCount": 0,
+      "totalAmount": 0.0,
+      "notInvoicedCount": 0,
+      "notInvoicedAmount": 0.0,
+      "partiallyInvoicedCount": 0,
+      "partiallyInvoicedAmount": 0.0,
+      "fullyInvoicedCount": 0,
+      "fullyInvoicedAmount": 0.0,
+      "openCount": 0,
+      "closedCount": 0,
+      "expiredCount": 0,
+      "cancelledCount": 0
+    }
+  }
+}

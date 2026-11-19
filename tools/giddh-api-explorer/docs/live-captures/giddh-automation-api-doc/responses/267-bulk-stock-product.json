@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 3,
+    "totalPages": 1,
+    "totalItems": 3,
+    "results": [
+      {
+        "variantName": "API Doc Widget",
+        "variantUniqueName": "apidocwidget1792693959876fk8uyv0enl",
+        "stockName": "API Doc Widget",
+        "stockUniqueName": "apidoc-widget",
+        "stockGroupName": "API Doc Products",
+        "stockGroupUniqueName": "apidoc-products",
+        "stockUnitName": "Piece",
+        "stockUnitCode": "pcs",
+        "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "unitGroupName": "Main Group",
+        "unitGroupUniqueName": "maingroup",
+        "skuCode": "WDG-001",
+        "salesTaxInclusive": false,
+        "purchaseTaxInclusive": false,
+        "fixedAssetTaxInclusive": false,
+        "archive": false,
+        "systemGenerated": true
+      },
+      {
+        "variantName": "API Doc Gadget",
+        "variantUniqueName": "apidoc-gadget1792694923893w7fw4lbjd2",
+        "stockName": "API Doc Gadget",
+        "stockUniqueName": "apidoc-gadget",
+        "stockGroupName": "API Doc Products",
+        "stockGroupUniqueName": "apidoc-products",
+        "stockUnitName": "Piece",
+        "stockUnitCode": "pcs",
+        "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "unitGroupName": "Main Group",
+        "unitGroupUniqueName": "maingroup",
+        "hsnNo": "847130",
+        "skuCode": "APIDOC-GADGET",
+        "salesTaxInclusive": false,
+        "purchaseTaxInclusive": false,
+        "fixedAssetTaxInclusive": false,
+        "archive": false,
+        "systemGenerated": true
+      },
+      {
+        "variantName": "API Doc Consulting Hour",
+        "variantUniqueName": "apidoc-service-hour17926949252108gfigdnpr1",
+        "stockName": "API Doc Consulting Hour",
+        "stockUniqueName": "apidoc-service-hour",
+        "stockGroupName": "API Doc Services",
+        "stockGroupUniqueName": "apidoc-services",
+        "stockUnitName": "Piece",
+        "stockUnitCode": "pcs",
+        "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "unitGroupName": "Main Group",
+        "unitGroupUniqueName": "maingroup",
+        "hsnNo": "998314",
+        "skuCode": "APIDOC-SERVICE-HOUR",
+        "salesTaxInclusive": false,
+        "purchaseTaxInclusive": false,
+        "fixedAssetTaxInclusive": false,
+        "archive": false,
+        "systemGenerated": true
+      }
+    ]
+  }
+}

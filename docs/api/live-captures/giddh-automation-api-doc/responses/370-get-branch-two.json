@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "body": {
+    "businessType": "Registered",
+    "businessNature": "Service",
+    "parentBranch": {
+      "businessType": "Registered",
+      "businessNature": "Retail",
+      "warehouseResource": [],
+      "isArchived": false,
+      "name": "Giddh Automation API DOC",
+      "alias": "Gidd1",
+      "uniqueName": "42ysmze74chxajowlphz",
+      "consolidatedBranch": true,
+      "taxType": "GSTIN",
+      "defaultBranch": false
+    },
+    "warehouseResource": [
+      {
+        "countryCode": "IN",
+        "currencyCode": "INR",
+        "isDefault": true,
+        "addresses": [],
+        "isArchived": false,
+        "name": "apidoc-branch-two warehouse",
+        "address": "My new address",
+        "mobileNumber": "91-919111525164",
+        "uniqueName": "0d41792733820723"
+      }
+    ],
+    "isArchived": false,
+    "name": "API Doc Branch Two",
+    "alias": "apidoc-branch-two",
+    "uniqueName": "apidocbranchtwo",
+    "consolidatedBranch": false,
+    "taxType": "GSTIN",
+    "defaultBranch": false
+  }
+}

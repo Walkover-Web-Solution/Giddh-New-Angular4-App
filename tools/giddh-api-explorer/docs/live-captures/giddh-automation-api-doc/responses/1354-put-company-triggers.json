@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide a name for the trigger",
+  "code": "INVALID_PARAMETER"
+}

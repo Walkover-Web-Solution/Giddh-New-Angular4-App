@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Batch placeholder not found for the item.",
+  "code": "BATCH_NOT_FOUND"
+}

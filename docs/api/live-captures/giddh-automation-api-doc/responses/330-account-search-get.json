@@ -1,0 +1,31 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "results": [
+      {
+        "type": "ACCOUNT",
+        "name": "Cash",
+        "uniqueName": "cash",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          },
+          {
+            "name": "Cash",
+            "uniqueName": "cash",
+            "category": {
+              "name": "assets"
+            }
+          }
+        ],
+        "route": "/pages/ledger/cash"
+      }
+    ]
+  }
+}

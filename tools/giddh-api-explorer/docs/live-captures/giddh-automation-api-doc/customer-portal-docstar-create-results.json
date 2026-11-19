@@ -1,0 +1,216 @@
+{
+  "orgId": "83427",
+  "pageId": "zIqGK5BZ5fh6",
+  "collectionId": "-Jey39dCAAyx",
+  "rootParentId": "u9XDYe5Zc_ds",
+  "summary": {
+    "created": 16,
+    "skipped": 2,
+    "failed": 0,
+    "endpointsUnderParent": 18,
+    "publishStatus": 200,
+    "followUpSessionIdHeaders": {
+      "updated": 15,
+      "skipped": [
+        "n8T7K6ysejA9 save-session",
+        "DC8riPxsvNHc verify-portal-user",
+        "9vB4n2uroYJd proxy getDetails"
+      ],
+      "republished": true
+    }
+  },
+  "publishPageIds": [
+    "xPdYugvoPz-k",
+    "xjZ3WpIt1dI_",
+    "4Fn52OAvoUsJ",
+    "jskGLn1iLN2t",
+    "Qq2rADPlymJv",
+    "grIcgmyYc-CK",
+    "AXqbQT4VB0H1",
+    "LyXIyi3m8tUO",
+    "9vB4n2uroYJd",
+    "G3BF9J-8B4NF",
+    "WWDeCHCyPKL1",
+    "31eP24vmSPjA",
+    "QideDDug_Xsq",
+    "tlN3PwbSlzme",
+    "QQp3HyikWUZw",
+    "VHbpHbpM_C7S",
+    "n8T7K6ysejA9",
+    "DC8riPxsvNHc",
+    "zIqGK5BZ5fh6",
+    "u9XDYe5Zc_ds"
+  ],
+  "results": [
+    {
+      "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/download-file:PortalController:download",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/download-file",
+      "endpointId": "xPdYugvoPz-k",
+      "status": "ok",
+      "action": "skipped_existing"
+    },
+    {
+      "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoice-pay-request:PortalController:getInvoicePaymentRequest",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/invoice-pay-request",
+      "endpointId": "xjZ3WpIt1dI_",
+      "status": "ok",
+      "action": "skipped_existing"
+    },
+    {
+      "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{paymentId}/pay:PortalController:processVoucherPayment",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/invoices/:paymentId/pay",
+      "endpointId": "4Fn52OAvoUsJ",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "accounting-microservice:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/payment-methods:PortalController:getPaymentMethods",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/payment-methods",
+      "endpointId": "jskGLn1iLN2t",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "accounting-microservice:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/balance-summary:PortalController:getBalanceSummary",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/balance-summary",
+      "endpointId": "Qq2rADPlymJv",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/get-all:PortalController:getAllVouchers",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/get-all",
+      "endpointId": "grIcgmyYc-CK",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/{voucherUniqueName}/add-comment:PortalController:addComments",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/:voucherUniqueName/add-comment",
+      "endpointId": "AXqbQT4VB0H1",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "accounting-microservice:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/{voucherUniqueName}/comments:PortalController:getComments",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/:voucherUniqueName/comments",
+      "endpointId": "LyXIyi3m8tUO",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "client-unmatched:customer-portal:GET:api/c/getDetails",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/api/c/getDetails",
+      "endpointId": "9vB4n2uroYJd",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "client-unmatched:customer-portal:GET:portal/company/{}/accounts/{}/vouchers",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:id/accounts/:id/vouchers",
+      "endpointId": "G3BF9J-8B4NF",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/contacts:PortalController:getCustomerVendorContact",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/contacts",
+      "endpointId": "WWDeCHCyPKL1",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/details:PortalController:getAccountDetails",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/details",
+      "endpointId": "31eP24vmSPjA",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/export-account-statement:PortalController:exportAccountStatement",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/export-account-statement",
+      "endpointId": "QideDDug_Xsq",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/get-company-details:PortalController:getCompanyDetails",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/get-company-details",
+      "endpointId": "tlN3PwbSlzme",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/payment-method:PortalController:fetchSupportedPaymentMethods",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/payment-method",
+      "endpointId": "QQp3HyikWUZw",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/view-statement:PortalController:viewStatement",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/view-statement",
+      "endpointId": "VHbpHbpM_C7S",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:POST:/v2/portal-user/save-session:LoginV2Controller:saveSessionForPortalUser",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/portal-user/save-session",
+      "endpointId": "n8T7K6ysejA9",
+      "status": "ok",
+      "action": "created"
+    },
+    {
+      "catalogId": "giddh-api-v2:POST:/v2/verify-portal-user:LoginV2Controller:verifyPortalUser",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/verify-portal-user",
+      "endpointId": "DC8riPxsvNHc",
+      "status": "ok",
+      "action": "created"
+    }
+  ],
+  "failed": [],
+  "publish": {
+    "ok": true,
+    "pageIdsPublished": [
+      "xPdYugvoPz-k",
+      "xjZ3WpIt1dI_",
+      "4Fn52OAvoUsJ",
+      "jskGLn1iLN2t",
+      "Qq2rADPlymJv",
+      "grIcgmyYc-CK",
+      "AXqbQT4VB0H1",
+      "LyXIyi3m8tUO",
+      "9vB4n2uroYJd",
+      "G3BF9J-8B4NF",
+      "WWDeCHCyPKL1",
+      "31eP24vmSPjA",
+      "QideDDug_Xsq",
+      "tlN3PwbSlzme",
+      "QQp3HyikWUZw",
+      "VHbpHbpM_C7S",
+      "n8T7K6ysejA9",
+      "DC8riPxsvNHc",
+      "zIqGK5BZ5fh6",
+      "u9XDYe5Zc_ds"
+    ]
+  }
+}

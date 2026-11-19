@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-number",
+  "body": {
+    "countryCode": "91",
+    "mobileNumber": "9000000000",
+    "oneTimePassword": "000000"
+  }
+}

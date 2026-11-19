@@ -1,0 +1,14 @@
+{
+  "name": "API Doc Warehouse Two",
+  "taxNumber": "",
+  "stockName": "",
+  "address": "API Doc Street 2",
+  "countries": [
+    {
+      "countryName": "India",
+      "countryCode": "IN"
+    }
+  ],
+  "stateCode": "KA",
+  "pincode": "560001"
+}

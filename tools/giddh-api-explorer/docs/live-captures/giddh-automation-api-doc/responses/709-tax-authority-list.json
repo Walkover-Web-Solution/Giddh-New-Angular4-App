@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "API Doc Tax Authority MP",
+      "uniqueName": "apidoctaxauthoritymp",
+      "state": {
+        "stateGstCode": "23",
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "description": "Live capture authority"
+    }
+  ]
+}

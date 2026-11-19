@@ -1,0 +1,8 @@
+{
+  "status": "success",
+  "httpStatus": 200,
+  "body": {
+    "accessToken": "<MSG91_JWT_REDACTED>"
+  },
+  "note": "External MSG91 \u2014 not in Spring catalog."
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Archive action is required (TRANSFER or UNARCHIVED).",
+  "code": "INVALID_REQUEST"
+}

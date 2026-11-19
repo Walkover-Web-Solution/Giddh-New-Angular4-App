@@ -1,0 +1,74 @@
+{
+  "dateOfSupply": "23-10-2026",
+  "challanNo": "BT-RN-002",
+  "note": "BT ReceiptNote",
+  "sources": [
+    {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhautomationapidoc",
+      "warehouse": {
+        "name": "Gidd warehouse",
+        "uniqueName": "xbq1792673424418",
+        "taxNumber": "23AAACC1206D2ZN",
+        "address": "My new address",
+        "stockDetails": {
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "stockUnit": "pcs",
+          "amount": 100,
+          "rate": 100,
+          "quantity": 1
+        }
+      }
+    }
+  ],
+  "destinations": [
+    {
+      "name": "API Doc Branch Two",
+      "uniqueName": "apidocbranchtwo",
+      "warehouse": {
+        "name": "apidoc-branch-two warehouse",
+        "uniqueName": "0d41792733820723",
+        "taxNumber": "23AAACC1206D2ZN",
+        "address": "My new address",
+        "stockDetails": {
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "stockUnit": "pcs",
+          "amount": 100,
+          "rate": 100,
+          "quantity": 1
+        }
+      }
+    }
+  ],
+  "products": [
+    {
+      "name": "API Doc Widget",
+      "hsnNumber": null,
+      "sacNumber": null,
+      "showCodeType": "hsn",
+      "skuCode": null,
+      "uniqueName": "apidoc-widget",
+      "stockDetails": {
+        "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "stockUnit": "pcs",
+        "amount": 100,
+        "rate": 100,
+        "quantity": 1
+      },
+      "description": "BT",
+      "variant": {
+        "name": "API Doc Widget",
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+      }
+    }
+  ],
+  "transporterDetails": {
+    "dispatchedDate": "23-10-2026",
+    "transporterName": null,
+    "transporterId": null,
+    "transportMode": null,
+    "vehicleNumber": null
+  },
+  "entity": "ReceiptNote",
+  "transferType": "products"
+}

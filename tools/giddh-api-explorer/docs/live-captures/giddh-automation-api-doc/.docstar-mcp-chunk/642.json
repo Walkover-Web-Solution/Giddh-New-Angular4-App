@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "RmrL6hCX6vDb", "description": "/. Part of the Domain APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"operation": {"checked": "true", "value": "", "description": "Operation query parameter. Required."}}, "body": {"type": "none"}}

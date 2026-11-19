@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "No image found with this uniqueName.",
+  "code": "IMAGE_NOT_FOUND",
+  "httpStatus": 404
+}

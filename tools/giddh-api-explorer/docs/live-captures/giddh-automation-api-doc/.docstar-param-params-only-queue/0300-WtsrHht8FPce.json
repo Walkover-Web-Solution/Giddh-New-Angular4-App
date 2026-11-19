@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "WtsrHht8FPce", "description": "/. Part of the Get Domain List APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"domainUniqueName": {"checked": "true", "value": "", "description": "Domain unique name query parameter. Optional.", "required": "false"}}}

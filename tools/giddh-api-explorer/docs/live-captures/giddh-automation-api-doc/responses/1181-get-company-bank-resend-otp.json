@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "RequestId placeholder is invalid.",
+  "code": "PAYMENT_DETAILS_NOT_FOUND"
+}

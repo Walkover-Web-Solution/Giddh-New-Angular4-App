@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/currency",
+  "note": "no body"
+}

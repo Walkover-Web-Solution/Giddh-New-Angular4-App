@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "body": {
+    "page": 0,
+    "count": 0,
+    "totalPages": 0,
+    "totalItems": 0,
+    "openingBalance": {
+      "quantity": 10.0,
+      "stockUnit": "pcs",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "amount": 800.0
+    },
+    "closingBalance": {
+      "quantity": 10.0,
+      "stockUnit": "pcs",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "amount": 800.0
+    },
+    "inwardBalance": {
+      "quantity": 0.0,
+      "stockUnit": "pcs",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "amount": 0.0,
+      "transactionCount": 0
+    },
+    "outwardBalance": {
+      "quantity": 0.0,
+      "stockUnit": "pcs",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "amount": 0.0,
+      "transactionCount": 0
+    },
+    "stockUnit": "pcs",
+    "stockName": "API Doc Widget",
+    "transactions": [],
+    "stockUnitQtyMap": {
+      "WfqOHXSFugRFzJ8HDrLT": 1.0
+    },
+    "profit": 0.0,
+    "fromDate": null,
+    "toDate": null
+  }
+}

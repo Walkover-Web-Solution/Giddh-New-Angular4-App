@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "GST number: 29AAAAA0000A1Z5 does not exist in company: Giddh Automation API DOC",
+  "code": "GST_NUMBER_NOT_FOUND"
+}

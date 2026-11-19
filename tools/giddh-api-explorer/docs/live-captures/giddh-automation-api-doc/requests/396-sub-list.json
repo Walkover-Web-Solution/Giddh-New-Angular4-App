@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/v2/subscription/list?page=1&count=20&fromMoveCompany=false",
+  "note": "no body"
+}

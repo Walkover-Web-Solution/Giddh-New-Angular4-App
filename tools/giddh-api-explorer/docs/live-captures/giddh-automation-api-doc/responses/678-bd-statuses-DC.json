@@ -1,0 +1,104 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "documentType": "DC",
+      "statusCode": "SHIPPED",
+      "statusName": "Shipped",
+      "statusCategory": "OPEN",
+      "defaultStatusCategory": "OPEN",
+      "isDefault": true,
+      "stage": "START"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "OPEN",
+      "statusName": "Open",
+      "statusCategory": "OPEN",
+      "defaultStatusCategory": "OPEN",
+      "isDefault": false,
+      "stage": "START"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "PACKED",
+      "statusName": "Packed",
+      "statusCategory": "OPEN",
+      "defaultStatusCategory": "OPEN",
+      "isDefault": false,
+      "stage": "START"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "READY_TO_DISPATCH",
+      "statusName": "Ready for Dispatch",
+      "statusCategory": "OPEN",
+      "defaultStatusCategory": "OPEN",
+      "isDefault": false,
+      "stage": "START"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "DISPATCHED",
+      "statusName": "Dispatched",
+      "statusCategory": "IN_PROGRESS",
+      "defaultStatusCategory": "IN_PROGRESS",
+      "isDefault": false,
+      "stage": "IN_PROGRESS"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "IN_TRANSIT",
+      "statusName": "In Transit",
+      "statusCategory": "IN_PROGRESS",
+      "defaultStatusCategory": "IN_PROGRESS",
+      "isDefault": false,
+      "stage": "IN_PROGRESS"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "OUT_FOR_DELIVERY",
+      "statusName": "Out for Delivery",
+      "statusCategory": "IN_PROGRESS",
+      "defaultStatusCategory": "IN_PROGRESS",
+      "isDefault": false,
+      "stage": "IN_PROGRESS"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "PARTIALLY_DELIVERED",
+      "statusName": "Partially Delivered",
+      "statusCategory": "IN_PROGRESS",
+      "defaultStatusCategory": "IN_PROGRESS",
+      "isDefault": false,
+      "stage": "IN_PROGRESS"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "ON_HOLD",
+      "statusName": "On Hold",
+      "statusCategory": "IN_PROGRESS",
+      "defaultStatusCategory": "IN_PROGRESS",
+      "isDefault": false,
+      "stage": "IN_PROGRESS"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "DELIVERED",
+      "statusName": "Delivered",
+      "statusCategory": "COMPLETED",
+      "defaultStatusCategory": "COMPLETED",
+      "isDefault": false,
+      "stage": "END"
+    },
+    {
+      "documentType": "DC",
+      "statusCode": "EXPIRED",
+      "statusName": "Expired",
+      "statusCategory": "COMPLETED",
+      "defaultStatusCategory": "COMPLETED",
+      "isDefault": false,
+      "stage": "END"
+    }
+  ]
+}

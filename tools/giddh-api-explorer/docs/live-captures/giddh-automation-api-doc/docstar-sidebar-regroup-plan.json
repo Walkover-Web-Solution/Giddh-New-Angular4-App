@@ -1,0 +1,406 @@
+{
+  "orgId": "83427",
+  "collectionId": "-Jey39dCAAyx",
+  "rootParentId": "u9XDYe5Zc_ds",
+  "misplacedEndpointCount": 72,
+  "misplacedSample": [
+    {
+      "endpointId": "U0UrpFVlPe3o",
+      "name": "Get History",
+      "path": "/company/:companyUniqueName/business-documents/:uniqueName/history",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Business Documents",
+      "targetModulePageId": null,
+      "currentParentId": "NLH0VrG17dfS"
+    },
+    {
+      "endpointId": "WqAdgr6MBoKa",
+      "name": "Export Ledger Download File V3",
+      "path": "/company/:companyUniqueName/accounts/:accountUniqueName:.+/v3/export-ledger/file",
+      "expectedMenu": "Account",
+      "actualMenu": "Entry",
+      "targetModulePageId": "WqeUU3Z_oUa-",
+      "currentParentId": "Nvx6HaamQiWU"
+    },
+    {
+      "endpointId": "jhErH7zIepcm",
+      "name": "Generate Razorpay Order",
+      "path": "/v2/subscription/:subscriptionId/generate-order",
+      "expectedMenu": "Subscription",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "P8-54zD68ajK",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "TjpWBFxIPYQu",
+      "name": "Group Search",
+      "path": "/company/:companyUniqueName/group-search",
+      "expectedMenu": "Group",
+      "actualMenu": "Master",
+      "targetModulePageId": "C-pddZwTF_6c",
+      "currentParentId": "GBegaHWpQMp7"
+    },
+    {
+      "endpointId": "24cpzdCm8A5e",
+      "name": "Generate Invoice",
+      "path": "/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/invoices/generate",
+      "expectedMenu": "Account",
+      "actualMenu": "Voucher",
+      "targetModulePageId": "WqeUU3Z_oUa-",
+      "currentParentId": "67sy7QfFJUf9"
+    },
+    {
+      "endpointId": "1fzUWcBYCYoK",
+      "name": "Get All User Subscriptions",
+      "path": "/users/subscriptions",
+      "expectedMenu": "Subscription",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "P8-54zD68ajK",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "ZD5zPR_Aak1t",
+      "name": "Send New User Info",
+      "path": "/users/send-new-user-info",
+      "expectedMenu": "User",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "v3otSlzNtXne",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "bwhPELQ82D9F",
+      "name": "Initiate UK Payment",
+      "path": "/company/:companyUniqueName/uk/payment/initiate",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Payment",
+      "targetModulePageId": null,
+      "currentParentId": "XsjLnos6WrUm"
+    },
+    {
+      "endpointId": "WtsrHht8FPce",
+      "name": "Get Domains",
+      "path": "/company/:companyUniqueName/get-domain-list",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Get Domain List",
+      "targetModulePageId": null,
+      "currentParentId": "LB1C-6jsQUHW"
+    },
+    {
+      "endpointId": "FWEVC9XYqtnE",
+      "name": "Update Address",
+      "path": "/company/:companyUniqueName/address/:addressUniqueName:.+",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Address",
+      "targetModulePageId": null,
+      "currentParentId": "nZ97Ano4eCcY"
+    },
+    {
+      "endpointId": "auFa7w8t9JP0",
+      "name": "Delete Transporter",
+      "path": "/company/:companyUniqueName/transporters",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Transporters",
+      "targetModulePageId": null,
+      "currentParentId": "AlY8SpR1Pibs"
+    },
+    {
+      "endpointId": "c1kKic7YR9BE",
+      "name": "Get All Transporter",
+      "path": "/company/:companyUniqueName/transporters",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Transporters",
+      "targetModulePageId": null,
+      "currentParentId": "AlY8SpR1Pibs"
+    },
+    {
+      "endpointId": "GjuZO1kkSD9T",
+      "name": "Mail Ledger All",
+      "path": "/company/:companyUniqueName/accounts/:accountUniqueName:.+/mail-ledger",
+      "expectedMenu": "Account",
+      "actualMenu": "Entry",
+      "targetModulePageId": "WqeUU3Z_oUa-",
+      "currentParentId": "Nvx6HaamQiWU"
+    },
+    {
+      "endpointId": "K-BJ-PLHddJD",
+      "name": "Generate Auth Key",
+      "path": "/users/:uniqueName/generate-auth-key",
+      "expectedMenu": "User",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "v3otSlzNtXne",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "aDlsd7CJmRvJ",
+      "name": "Get Versions",
+      "path": "/company/:companyUniqueName/business-documents/:uniqueName/versions",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Business Documents",
+      "targetModulePageId": null,
+      "currentParentId": "NLH0VrG17dfS"
+    },
+    {
+      "endpointId": "S1ZGtNcS6jYl",
+      "name": "Convert",
+      "path": "/company/:companyUniqueName/business-documents/convert",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Business Documents",
+      "targetModulePageId": null,
+      "currentParentId": "NLH0VrG17dfS"
+    },
+    {
+      "endpointId": "TBUAgvdA-4UK",
+      "name": "Set Company Image",
+      "path": "/company/:companyUniqueName/images",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Images",
+      "targetModulePageId": null,
+      "currentParentId": "kAoH1WPA7BWx"
+    },
+    {
+      "endpointId": "HlMisZlKTs3E",
+      "name": "Get All Address",
+      "path": "/company/:companyUniqueName/address/all",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Address",
+      "targetModulePageId": null,
+      "currentParentId": "nZ97Ano4eCcY"
+    },
+    {
+      "endpointId": "FNy_QjY-kuMq",
+      "name": "Export Ledger And Invoice Download File",
+      "path": "/company/:companyUniqueName/accounts/:accountUniqueName:.+/v2/export-ledger-with-invoice/file",
+      "expectedMenu": "Account",
+      "actualMenu": "Voucher",
+      "targetModulePageId": "WqeUU3Z_oUa-",
+      "currentParentId": "67sy7QfFJUf9"
+    },
+    {
+      "endpointId": "nrERwFAkAQxi",
+      "name": "Buy Plan",
+      "path": "/v2/subscription/buy-plan",
+      "expectedMenu": "Subscription",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "P8-54zD68ajK",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "cbBpHcWdAxMt",
+      "name": "Update User Entity Role",
+      "path": "/company/:companyUniqueName/uer/:entityRoleUniqueName",
+      "expectedMenu": "Permission",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "V2uUVRvytzyl",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "Ntji3_cwAxYx",
+      "name": "Group List",
+      "path": "/company/:companyUniqueName/groups",
+      "expectedMenu": "Group",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "C-pddZwTF_6c",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "nM6M_yYkszzW",
+      "name": "Get By Unique Name",
+      "path": "/company/:companyUniqueName/business-documents/:uniqueName",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Business Documents",
+      "targetModulePageId": null,
+      "currentParentId": "NLH0VrG17dfS"
+    },
+    {
+      "endpointId": "ZrCMSCy8eLax",
+      "name": "Change Plan Of Subscription",
+      "path": "/v2/subscription/change-plan",
+      "expectedMenu": "Subscription",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "P8-54zD68ajK",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "-iIwNDI5dA1j",
+      "name": "Update Subscription After Payment",
+      "path": "/v2/subscription/update",
+      "expectedMenu": "Subscription",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "P8-54zD68ajK",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "Tg2pxNdSmled",
+      "name": "Pay Invoice",
+      "path": "/company/:companyUniqueName/invoices/:invoiceUniqueName/action",
+      "expectedMenu": "Invoice",
+      "actualMenu": "Voucher",
+      "targetModulePageId": "W6_fX_hfrhAb",
+      "currentParentId": "67sy7QfFJUf9"
+    },
+    {
+      "endpointId": "aP6gJgy1N84r",
+      "name": "Generate Invoice",
+      "path": "/company/:companyUniqueName/accounts/:accountUniqueName/invoices/generate",
+      "expectedMenu": "Account",
+      "actualMenu": "Voucher",
+      "targetModulePageId": "WqeUU3Z_oUa-",
+      "currentParentId": "67sy7QfFJUf9"
+    },
+    {
+      "endpointId": "FdhnMYNFW3Qg",
+      "name": "Get Sources",
+      "path": "/company/:companyUniqueName/sources",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Sources",
+      "targetModulePageId": null,
+      "currentParentId": "cgBY2l-HHWgG"
+    },
+    {
+      "endpointId": "JzcC3bfsWBeU",
+      "name": "Update Transporter",
+      "path": "/company/:companyUniqueName/transporters",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Transporters",
+      "targetModulePageId": null,
+      "currentParentId": "AlY8SpR1Pibs"
+    },
+    {
+      "endpointId": "49sziPSgXzm5",
+      "name": "Get All Tags",
+      "path": "/company/:companyUniqueName/tags",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Tags",
+      "targetModulePageId": null,
+      "currentParentId": "6XKG67LcRawT"
+    },
+    {
+      "endpointId": "On2jHzAxoJht",
+      "name": "Get Receipts",
+      "path": "/company/:companyUniqueName/advance-receipt/get-all",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Advance Receipt",
+      "targetModulePageId": null,
+      "currentParentId": "BkE103p6phaD"
+    },
+    {
+      "endpointId": "hkFwUGej8n9l",
+      "name": "Get All Address",
+      "path": "/company/:companyUniqueName/address/all",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Address",
+      "targetModulePageId": null,
+      "currentParentId": "nZ97Ano4eCcY"
+    },
+    {
+      "endpointId": "2lxdy7ALye2b",
+      "name": "Create",
+      "path": "/v2/company/:companyUniqueName/groups/:groupUniqueName/accounts",
+      "expectedMenu": "Account",
+      "actualMenu": "Master",
+      "targetModulePageId": "WqeUU3Z_oUa-",
+      "currentParentId": "GBegaHWpQMp7"
+    },
+    {
+      "endpointId": "F_lB51enHMNJ",
+      "name": "Process Proforma Payment",
+      "path": "/company/:companyUniqueName/invoices/:invoiceUniqueName/pay",
+      "expectedMenu": "Invoice",
+      "actualMenu": "Website",
+      "targetModulePageId": "W6_fX_hfrhAb",
+      "currentParentId": "hrvyIyYXjbni"
+    },
+    {
+      "endpointId": "FcvzjE3XRUTV",
+      "name": "Save Authorization Code",
+      "path": "/company/:companyUniqueName/save-authorization-code",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Save Authorization Code",
+      "targetModulePageId": null,
+      "currentParentId": "wZF_RELeYHCU"
+    },
+    {
+      "endpointId": "fTXBLZz_WT6B",
+      "name": "Add Transporter",
+      "path": "/company/:companyUniqueName/transporters",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Transporters",
+      "targetModulePageId": null,
+      "currentParentId": "AlY8SpR1Pibs"
+    },
+    {
+      "endpointId": "gp88iao75REK",
+      "name": "Add Due Amount Range",
+      "path": "/company/:companyUniqueName/due-days-range",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Due Days Range",
+      "targetModulePageId": null,
+      "currentParentId": "DAxWeghi7k6r"
+    },
+    {
+      "endpointId": "jKX9v5VSDTet",
+      "name": "Apply Action",
+      "path": "/company/:companyUniqueName/business-documents/:uniqueName/action",
+      "expectedMenu": ":Companyuniquename",
+      "actualMenu": "Business Documents",
+      "targetModulePageId": null,
+      "currentParentId": "NLH0VrG17dfS"
+    },
+    {
+      "endpointId": "cy0i9bF0gQtQ",
+      "name": "Get User",
+      "path": "/users/:userUniqueName:.+",
+      "expectedMenu": "User",
+      "actualMenu": "Other APIs",
+      "targetModulePageId": "v3otSlzNtXne",
+      "currentParentId": "AOMW95CQWOZV"
+    },
+    {
+      "endpointId": "HBRzQaB2lihZ",
+      "name": "Get Vat Report",
+      "path": "/v2/company/:companyUniqueName/vat-report",
+      "expectedMenu": "VAT",
+      "actualMenu": "India Tax",
+      "targetModulePageId": "MX6-JW_wMWnv",
+      "currentParentId": "ZnB_cdCqj9k9"
+    }
+  ],
+  "misplacedByExpectedMenu": {
+    ":Companyuniquename": 39,
+    "Account": 7,
+    "Subscription": 6,
+    "User": 5,
+    "Invoice": 3,
+    ":Companyuniquename:.+": 3,
+    "Group": 2,
+    "Permission": 2,
+    "VAT": 1,
+    "Api": 1,
+    "Export": 1,
+    "Ledger": 1,
+    "E-Invoice": 1
+  },
+  "guidePages": [
+    {
+      "pageId": "0M0j2julTA_A",
+      "title": "Proforma",
+      "urlName": "proforma",
+      "markdownFile": "docstar-guide-pages/proforma.md",
+      "markdownChars": 3073,
+      "apply": "PUT /orgs/83427/pages/0M0j2julTA_A { contents: <markdown> } then publish_pages"
+    },
+    {
+      "pageId": "qpclmChA8TAL",
+      "title": "Estimation",
+      "urlName": "estimation",
+      "markdownFile": "docstar-guide-pages/estimation.md",
+      "markdownChars": 2289,
+      "apply": "PUT /orgs/83427/pages/qpclmChA8TAL { contents: <markdown> } then publish_pages"
+    }
+  ],
+  "moveApi": "POST /orgs/83427/collections/-Jey39dCAAyx/dragAndDrop",
+  "notes": [
+    "Guide modules (Proforma, Estimation) have empty child[] \u2014 create a subpage under each guide, then move endpoints with dragAndDrop.",
+    "Refresh docstar-collection-pages-flat.json via list_collection_pages before re-planning."
+  ]
+}

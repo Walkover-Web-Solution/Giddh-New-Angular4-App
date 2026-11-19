@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "body": {
+    "user": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": true
+    },
+    "isSystemUser": false,
+    "contactNumber": "9111525164",
+    "countryCode": "91",
+    "statusCode": "AUTHENTICATE_TWO_WAY",
+    "text": "Verification code successfully sent to 91 9111525164",
+    "intercomHash": "87c46b20d1b00693eb068e8c6b62380cff9769adde525f48b47a65e9992f8add"
+  },
+  "note": "Requires header Access-Token: <Google OAuth access token>. External Google userinfo call is not a Giddh API.",
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

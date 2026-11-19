@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Taxes can be applied only within Expenses or Income category. Following groups or accounts are invalid.; accounts : [apidoc-customer-one]",
+  "code": "NOT_ALLOWED"
+}

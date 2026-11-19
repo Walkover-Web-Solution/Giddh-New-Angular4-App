@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "MISSING_PARAMETER",
+  "message": "Must provide cnlRsn for this API."
+}

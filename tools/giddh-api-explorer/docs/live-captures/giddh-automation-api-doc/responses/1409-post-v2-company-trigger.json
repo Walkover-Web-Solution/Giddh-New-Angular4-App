@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide title for trigger.",
+  "code": "INVALID_REQUEST"
+}

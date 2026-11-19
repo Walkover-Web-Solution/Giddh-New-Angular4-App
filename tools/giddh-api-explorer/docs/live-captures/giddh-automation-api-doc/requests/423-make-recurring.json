@@ -1,0 +1,12 @@
+{
+  "interval": 1,
+  "period": "MONTH",
+  "repeatEvery": 1,
+  "repeatOption": "MONTHLY_DATE",
+  "repeatType": "DAY_OF_MONTH",
+  "startDate": "01-11-2026",
+  "endDate": "01-03-2027",
+  "endType": "ON_DATE",
+  "dayOfMonth": 1,
+  "nextCronDate": "01-11-2026"
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/view-statement?page=1&count=10&from=01-04-2025&to=23-10-2026&sort=desc",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy"
+}

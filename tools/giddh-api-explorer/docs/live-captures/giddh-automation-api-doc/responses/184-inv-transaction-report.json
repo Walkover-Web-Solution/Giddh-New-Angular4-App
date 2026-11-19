@@ -1,0 +1,99 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 2,
+    "openingBalance": null,
+    "closingBalance": null,
+    "inwardBalance": null,
+    "outwardBalance": null,
+    "stockUnit": null,
+    "stockName": null,
+    "transactions": [
+      {
+        "type": "dr",
+        "entryDate": "23-10-2026",
+        "amount": 300.0,
+        "quantity": 2.0,
+        "account": {
+          "uniqueName": "apidoc-customer-two",
+          "name": "API Doc Customer Two",
+          "entity": "Account"
+        },
+        "source": null,
+        "destination": null,
+        "closingQuantity": null,
+        "voucherType": "SALES",
+        "voucherNo": null,
+        "isManufacturingTransaction": null,
+        "isTransferTransaction": null,
+        "stockUnit": {
+          "code": "pcs"
+        },
+        "rate": 150.0,
+        "variant": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+        },
+        "batch": null,
+        "batchNumber": null,
+        "batchCount": 0,
+        "batchName": null,
+        "batches": null,
+        "stock": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget"
+        },
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        }
+      },
+      {
+        "type": "cr",
+        "entryDate": "23-10-2026",
+        "amount": 200.0,
+        "quantity": 2.0,
+        "account": {
+          "uniqueName": "apidoc-vendor-three",
+          "name": "API Doc Vendor Three",
+          "entity": "Account"
+        },
+        "source": null,
+        "destination": null,
+        "closingQuantity": null,
+        "voucherType": "PURCHASE",
+        "voucherNo": null,
+        "isManufacturingTransaction": null,
+        "isTransferTransaction": null,
+        "stockUnit": {
+          "code": "pcs"
+        },
+        "rate": 100.0,
+        "variant": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+        },
+        "batch": null,
+        "batchNumber": null,
+        "batchCount": 0,
+        "batchName": null,
+        "batches": null,
+        "stock": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget"
+        },
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        }
+      }
+    ],
+    "stockUnitQtyMap": null,
+    "profit": null,
+    "fromDate": "01-04-2026",
+    "toDate": "31-03-2027"
+  }
+}

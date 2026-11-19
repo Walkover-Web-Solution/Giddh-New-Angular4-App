@@ -1,0 +1,233 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Merge",
+          "value": "MERGE"
+        },
+        {
+          "label": "Unmerge",
+          "value": "UNMERGE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        },
+        {
+          "label": "Move",
+          "value": "MOVE"
+        }
+      ],
+      "entity": {
+        "label": "Account",
+        "value": "ACCOUNT"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        }
+      ],
+      "entity": {
+        "label": "Voucher",
+        "value": "VOUCHER"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        },
+        {
+          "label": "Move",
+          "value": "MOVE"
+        }
+      ],
+      "entity": {
+        "label": "Stock",
+        "value": "STOCK"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        }
+      ],
+      "entity": {
+        "label": "Entry",
+        "value": "ENTRY"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        },
+        {
+          "label": "Move",
+          "value": "MOVE"
+        }
+      ],
+      "entity": {
+        "label": "Group",
+        "value": "GROUP"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        }
+      ],
+      "entity": {
+        "label": "Stock Group",
+        "value": "STOCK_GROUP"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        }
+      ],
+      "entity": {
+        "label": "Estimate",
+        "value": "ESTIMATE"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        }
+      ],
+      "entity": {
+        "label": "Proforma",
+        "value": "PROFORMA"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        },
+        {
+          "label": "Delete",
+          "value": "DELETE"
+        }
+      ],
+      "entity": {
+        "label": "Purchase Order",
+        "value": "PURCHASE_ORDER"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Create",
+          "value": "CREATE"
+        },
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        }
+      ],
+      "entity": {
+        "label": "Company",
+        "value": "COMPANY"
+      }
+    },
+    {
+      "operations": [
+        {
+          "label": "Update",
+          "value": "UPDATE"
+        }
+      ],
+      "entity": {
+        "label": "Company Settings",
+        "value": "COMPANY_SETTINGS"
+      }
+    }
+  ]
+}

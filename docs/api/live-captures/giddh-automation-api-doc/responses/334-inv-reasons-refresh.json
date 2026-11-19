@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "reason": "API Doc shrinkage reason",
+        "uniqueName": "0zn1792733816931"
+      }
+    ]
+  }
+}

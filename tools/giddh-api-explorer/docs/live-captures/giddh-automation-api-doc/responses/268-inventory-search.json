@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 8,
+    "totalPages": 1,
+    "totalItems": 8,
+    "results": [
+      {
+        "type": "STOCK GROUP",
+        "name": "API Doc Products",
+        "uniqueName": "apidoc-products"
+      },
+      {
+        "type": "STOCK GROUP",
+        "name": "API Doc Services",
+        "uniqueName": "apidoc-services"
+      },
+      {
+        "type": "STOCK",
+        "name": "API Doc Gadget",
+        "uniqueName": "apidoc-gadget"
+      },
+      {
+        "type": "STOCK",
+        "name": "API Doc Consulting Hour",
+        "uniqueName": "apidoc-service-hour"
+      },
+      {
+        "type": "STOCK",
+        "name": "API Doc Widget",
+        "uniqueName": "apidoc-widget"
+      },
+      {
+        "type": "VARIANT",
+        "name": "API Doc Consulting Hour",
+        "uniqueName": "apidoc-service-hour17926949252108gfigdnpr1"
+      },
+      {
+        "type": "VARIANT",
+        "name": "API Doc Gadget",
+        "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+      },
+      {
+        "type": "VARIANT",
+        "name": "API Doc Widget",
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+      }
+    ]
+  }
+}

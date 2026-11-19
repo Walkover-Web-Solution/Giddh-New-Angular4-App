@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide either month or financial year for fetching data.",
+  "code": "INVALID_REQUEST"
+}

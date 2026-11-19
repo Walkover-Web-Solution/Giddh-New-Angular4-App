@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Bank Details can be added only for sundry creditors. ",
+  "code": "NOT_PERMITTED"
+}

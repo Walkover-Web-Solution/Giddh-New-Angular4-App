@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/v2/subscription/SUB-20261022-5/country-list",
+  "note": "no body"
+}

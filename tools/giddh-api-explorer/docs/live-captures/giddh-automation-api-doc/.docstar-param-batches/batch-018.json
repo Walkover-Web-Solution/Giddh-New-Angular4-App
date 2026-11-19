@@ -1,0 +1,929 @@
+[
+  {
+    "endpointId": "x9mjRFItd54g",
+    "name": "Get Flatten Groups And Accounts Of Groups",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/groups/flatten-groups-with-accounts",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "x9mjRFItd54g",
+      "description": "Get Flatten Groups And Accounts Of Groups. Part of the Flatten Groups With Accounts APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "query": {
+          "checked": "true",
+          "value": "",
+          "description": "Query query parameter. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "entity": {
+          "checked": "true",
+          "value": "BOTH",
+          "description": "Entity kind (invoice, receipt, etc.). Default: BOTH. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"items\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "items": {
+          "type": "array",
+          "description": "Line items (array). Mandatory.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "xMiyah-1vtHE",
+    "name": "Get Flatten Stock Groups With Stocks",
+    "catalogKey": "GET /company/{companyUniqueName}/flatten-stock-groups-with-stocks",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "xMiyah-1vtHE",
+      "description": "Get Flatten Stock Groups With Stocks. Part of the Flatten Stock Groups With Stocks APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "0",
+          "description": "Page size (number of items returned). Default: 0. Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "1Ozb9fAiIUvm",
+    "name": "Get Flatten Stock Groups With Stocks",
+    "catalogKey": "GET /company/{companyUniqueName}/flatten-stock-groups-with-stocks",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1Ozb9fAiIUvm",
+      "description": "Get Flatten Stock Groups With Stocks. Part of the Flatten Stock Groups With Stocks APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "0",
+          "description": "Page size (number of items returned). Default: 0. Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "urRIeUag99wk",
+    "name": "Get Form",
+    "catalogKey": "GET /company/{companyUniqueName}/communication/platform/{platformUniqueName}/trigger/form",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "urRIeUag99wk",
+      "description": "Get Form. Part of the Form APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "zB1X_AZJnC0b",
+    "name": "Get Giddh Ledger",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName}/giddh-ledger",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "zB1X_AZJnC0b",
+      "description": "Get Giddh Ledger. Part of the Giddh Ledger APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "desc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: desc. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "isTView": {
+          "checked": "true",
+          "value": "",
+          "description": "Is tview query parameter. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "LDMrbd-oK22F",
+    "name": "Get Group V2",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/groups/{groupUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "LDMrbd-oK22F",
+      "description": "Get Group V2. Part of the Groups APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "DSgZXUgVhdhA",
+    "name": "Get Groups With Accounts New",
+    "catalogKey": "GET /company/{companyUniqueName}/groups-with-accounts",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "DSgZXUgVhdhA",
+      "description": "Get Groups With Accounts New. Part of the Groups With Accounts APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        },
+        "accountArchiveStatus": {
+          "checked": "true",
+          "value": "UNARCHIVED",
+          "description": "Account archive status query parameter. Default: UNARCHIVED. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "FiGeCmq4obC4",
+    "name": "Get Gst Info",
+    "catalogKey": "GET /gst-info",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "FiGeCmq4obC4",
+      "description": "Get Gst Info. Part of the Gst Info APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "gsp": {
+          "checked": "true",
+          "value": "whitebooks",
+          "description": "Gsp query parameter. Default: whitebooks. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "xaB4cEBDGFbU",
+    "name": "Get Gst Unit Mapping",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/gst/unit-mapping",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "xaB4cEBDGFbU",
+      "description": "Get Gst Unit Mapping. Part of the Unit Mapping APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "1xdeRy4QInsv",
+    "name": "Get Gstr1Data",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/gstr1",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1xdeRy4QInsv",
+      "description": "Get Gstr1Data. Part of the Gstr1 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "monthYear": {
+          "checked": "true",
+          "value": "",
+          "description": "Month year query parameter. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "validate": {
+          "checked": "true",
+          "value": "false",
+          "description": "Validate query parameter. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "RwkKFAdPqRBF",
+    "name": "Get Gstr1Reference Ids",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/gstr1-referenceIds",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "RwkKFAdPqRBF",
+      "description": "Get Gstr1Reference Ids. Part of the Gstr1 Referenceids APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "monthYear": {
+          "checked": "true",
+          "value": "",
+          "description": "Month year query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "U0UrpFVlPe3o",
+    "name": "Get History",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/history",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "U0UrpFVlPe3o",
+      "description": "Get History. Part of the History APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "kByIz1dE87FF",
+    "name": "Get India Tax",
+    "catalogKey": "GET /company/{companyUniqueName}/tax",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "kByIz1dE87FF",
+      "description": "Get. Part of the Tax APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "IBnaDHRNV_3H",
+    "name": "Get Inventory",
+    "catalogKey": "GET /company/{companyUniqueName}/inventory-adjustment/{refNo}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "IBnaDHRNV_3H",
+      "description": "Get. Part of the Inventory Adjustment APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "oNens_w-L99R",
+    "name": "Get Inventory Balance",
+    "catalogKey": "POST /company/{companyUniqueName}/inventory/balance",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "oNens_w-L99R",
+      "description": "Get Inventory Balance. Part of the Balance APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "stockGroupUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Stock group unique name query parameter. Optional.",
+          "required": false
+        },
+        "entity": {
+          "checked": "true",
+          "value": "",
+          "description": "Entity kind (invoice, receipt, etc.). Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "reportNature": {
+          "checked": "true",
+          "value": "",
+          "description": "Report nature query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"expression\": \"string\",\n  \"param\": \"CLOSING_QTY\",\n  \"val\": 0,\n  \"accountName\": \"string\",\n  \"voucherTypes\": [\n    \"PURCHASE\"\n  ],\n  \"branchUniqueNames\": [],\n  \"warehouseUniqueNames\": [],\n  \"variantUniqueNames\": [],\n  \"batchUniqueNames\": [],\n  \"batchNumbers\": [],\n  \"stockUniqueNames\": [],\n  \"stockGroupUniqueNames\": [],\n  \"inventoryType\": \"PRODUCT\",\n  \"inventoryAdjustmentRefNo\": \"string\",\n  \"archived\": false,\n  \"reportNature\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "expression": {
+          "type": "string",
+          "description": "Expression. Optional.",
+          "value": "string"
+        },
+        "param": {
+          "type": "string",
+          "description": "Param. Allowed values: CLOSING_QTY, QTY_CR, QTY_DR, RATE, AMT_CR, AMT_DR. Optional.",
+          "value": "CLOSING_QTY",
+          "allowedValues": [
+            "CLOSING_QTY",
+            "QTY_CR",
+            "QTY_DR",
+            "RATE",
+            "AMT_CR",
+            "AMT_DR"
+          ]
+        },
+        "val": {
+          "type": "number",
+          "description": "Val. Optional.",
+          "value": 0
+        },
+        "accountName": {
+          "type": "string",
+          "description": "Account name. Optional.",
+          "value": "string"
+        },
+        "voucherTypes": {
+          "type": "array",
+          "description": "Array of voucher types values. Allowed values: PURCHASE, PURCHASE_DEBIT_NOTE, PURCHASE_CREDIT_NOTE, SALES, SALES_DEBIT_NOTE, SALES_CREDIT_NOTE, MANUFACTURED, RAW_MATERIAL, RECEIPT_NOTE, DELIVERY_NOTE, CREDIT_NOTE, DEBIT_NOTE, JOURNAL. Optional.",
+          "value": [
+            "PURCHASE"
+          ],
+          "allowedValues": [
+            "PURCHASE",
+            "PURCHASE_DEBIT_NOTE",
+            "PURCHASE_CREDIT_NOTE",
+            "SALES",
+            "SALES_DEBIT_NOTE",
+            "SALES_CREDIT_NOTE",
+            "MANUFACTURED",
+            "RAW_MATERIAL",
+            "RECEIPT_NOTE",
+            "DELIVERY_NOTE",
+            "CREDIT_NOTE",
+            "DEBIT_NOTE",
+            "JOURNAL"
+          ]
+        },
+        "branchUniqueNames": {
+          "type": "array",
+          "description": "Array of branch unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueNames": {
+          "type": "array",
+          "description": "Array of warehouse unique names values. Optional.",
+          "value": []
+        },
+        "variantUniqueNames": {
+          "type": "array",
+          "description": "Array of variant unique names values. Optional.",
+          "value": []
+        },
+        "batchUniqueNames": {
+          "type": "array",
+          "description": "Array of batch unique names values. Optional.",
+          "value": []
+        },
+        "batchNumbers": {
+          "type": "array",
+          "description": "Array of batch numbers values. Optional.",
+          "value": []
+        },
+        "stockUniqueNames": {
+          "type": "array",
+          "description": "Array of stock unique names values. Optional.",
+          "value": []
+        },
+        "stockGroupUniqueNames": {
+          "type": "array",
+          "description": "Array of stock group unique names values. Optional.",
+          "value": []
+        },
+        "inventoryType": {
+          "type": "string",
+          "description": "Inventory type. Allowed values: PRODUCT, SERVICE, FIXED_ASSETS. Optional.",
+          "value": "PRODUCT",
+          "allowedValues": [
+            "PRODUCT",
+            "SERVICE",
+            "FIXED_ASSETS"
+          ]
+        },
+        "inventoryAdjustmentRefNo": {
+          "type": "string",
+          "description": "Inventory adjustment ref no. Optional.",
+          "value": "string"
+        },
+        "archived": {
+          "type": "boolean",
+          "description": "When true, applies the archived filter or flag. Optional.",
+          "value": false
+        },
+        "reportNature": {
+          "type": "string",
+          "description": "Report nature. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "hMbKJ4EegLgq",
+    "name": "Get Inventory Impact",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/inventory-impact",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "hMbKJ4EegLgq",
+      "description": "Get Inventory Impact. Part of the Inventory Impact APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "7hY_NH21CpXY",
+    "name": "Get Inventory Impact",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/inventory-impact",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "7hY_NH21CpXY",
+      "description": "Get Inventory Impact. Part of the Inventory Impact APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "G0NGBl7-B3xZ",
+    "name": "Get Inventory Masters",
+    "catalogKey": "GET /company/{companyUniqueName}/inventory/{stockGroupUniqueName}/masters",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "G0NGBl7-B3xZ",
+      "description": "Inventory Masters. Part of the Masters APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "100",
+          "description": "Page size (number of items returned). Default: 100. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "xjZ3WpIt1dI_",
+    "name": "Get Invoice Payment Request",
+    "catalogKey": "POST /portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoice-pay-request",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "xjZ3WpIt1dI_",
+      "description": "Get Invoice Payment Request. Part of the Invoice Pay Request APIs in Giddh. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "yPnhhAuamllg",
+    "name": "Get Invoice Preview",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/preview",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "yPnhhAuamllg",
+      "description": "Get Invoice Preview. Part of the Preview APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueNames\": [],\n  \"dueDate\": \"string\",\n  \"voucherType\": \"string\",\n  \"depositEntryTotal\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "depositEntryTotal": {
+          "type": "number",
+          "description": "Deposit entry total. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "XqMIXNBdodnv",
+    "name": "Get Kenya Vat Report",
+    "catalogKey": "GET /company/{companyUniqueName}/kenya/vat-report",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "XqMIXNBdodnv",
+      "description": "Get Kenya Vat Report. Part of the Vat Report APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "j2UFP8PPFTUV",
+    "name": "Get Last State",
+    "catalogKey": "GET /state-details",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "j2UFP8PPFTUV",
+      "description": "Get Last State. Part of the State Details APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "companyUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Company uniqueName. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "fetchLastState": {
+          "checked": "true",
+          "value": "",
+          "description": "Fetch last state query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "nl-FG2uolSqI",
+    "name": "Get Ledger",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/ledgers/{ledgerUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "nl-FG2uolSqI",
+      "description": "Get Ledger. Part of the Ledgers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "baseRef": {
+          "checked": "true",
+          "value": "false",
+          "description": "Base ref query parameter. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "yQcDmqLHLP9i",
+    "name": "Get Ledgers V2",
+    "catalogKey": "GET /magic-link/{magicLink}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "yQcDmqLHLP9i",
+      "description": "Get Ledgers V2. Part of the Magic Link APIs in Giddh. Requires portal session.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "desc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: desc. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "e-bWbgpdYUTc",
+    "name": "Get Linked Invoices",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/linked-invoices",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "e-bWbgpdYUTc",
+      "description": "Get Linked Invoices. Part of the Linked Invoices APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

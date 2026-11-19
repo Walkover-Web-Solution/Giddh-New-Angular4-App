@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/signup-with-email",
+  "body": {
+    "email": "apidoc@example.invalid",
+    "password": "InvalidPass1!"
+  }
+}

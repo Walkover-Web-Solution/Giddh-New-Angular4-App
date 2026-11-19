@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "number": "PO-20261023-1",
+      "uniqueName": "pze1792734608469",
+      "accountUniqueName": "apidoc-vendor-one",
+      "pendingDetails": {
+        "stocks": 0,
+        "services": 1,
+        "grandTotal": 500.0
+      }
+    }
+  ]
+}

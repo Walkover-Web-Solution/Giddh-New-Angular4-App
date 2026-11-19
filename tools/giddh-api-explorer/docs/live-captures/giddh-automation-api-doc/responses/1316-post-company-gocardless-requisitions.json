@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Client reference:'placeholder' doesn't exists.",
+  "code": "INVALID_REQUEST"
+}

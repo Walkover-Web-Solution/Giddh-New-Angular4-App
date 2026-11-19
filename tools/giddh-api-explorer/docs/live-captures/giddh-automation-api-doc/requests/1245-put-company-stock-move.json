@@ -1,0 +1,7 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/stock/apidoc-widget/move",
+  "body": {
+    "uniqueName": "apidoc-custom-assets"
+  }
+}

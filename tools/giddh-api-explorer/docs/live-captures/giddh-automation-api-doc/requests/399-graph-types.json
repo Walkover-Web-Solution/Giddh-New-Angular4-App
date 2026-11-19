@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/ui/graph-types",
+  "note": "no body"
+}

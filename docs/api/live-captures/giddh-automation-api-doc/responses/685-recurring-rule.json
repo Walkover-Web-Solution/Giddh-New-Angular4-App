@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "body": {
+    "ruleStatus": "ACTIVE",
+    "startDate": "2026-11-01 00:00:00",
+    "endDate": "--",
+    "invoiceAmount": 99.0,
+    "nextInvoiceDate": "2026-11-01 00:00:00",
+    "recurringPeriod": "1 month",
+    "accountName": "API Doc Customer Three",
+    "accountUniqueName": "apidoc-customer-three",
+    "remainingBillingCycles": "Never Expires",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "childVouchers": [],
+    "createdAt": "23-10-2026"
+  }
+}

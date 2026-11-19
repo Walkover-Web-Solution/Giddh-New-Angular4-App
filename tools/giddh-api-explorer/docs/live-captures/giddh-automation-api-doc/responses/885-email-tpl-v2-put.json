@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide the HTML Body.",
+  "code": "INVALID_REQUEST"
+}

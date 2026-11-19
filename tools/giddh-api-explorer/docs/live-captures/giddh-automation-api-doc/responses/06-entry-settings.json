@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "duration": 0,
+    "period": null,
+    "noOfTransactions": 50,
+    "toDate": null,
+    "fromDate": null
+  }
+}

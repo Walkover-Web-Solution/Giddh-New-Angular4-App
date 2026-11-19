@@ -1,0 +1,5 @@
+{
+  "html": "<p>Dear customer, invoice attached.</p>",
+  "emailSubject": "API Doc Invoice",
+  "subject": "API Doc Invoice"
+}

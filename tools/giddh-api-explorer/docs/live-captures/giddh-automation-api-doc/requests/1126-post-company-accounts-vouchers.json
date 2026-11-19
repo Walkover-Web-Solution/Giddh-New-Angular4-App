@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers?branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+  "body": {}
+}

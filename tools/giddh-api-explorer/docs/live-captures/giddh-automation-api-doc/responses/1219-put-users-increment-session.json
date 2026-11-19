@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='.",
+  "code": "SESSION_EXPIRED_OR_INVALID"
+}

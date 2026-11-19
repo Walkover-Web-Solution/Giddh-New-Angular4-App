@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/apidoc-widget/mail?voucherVersion=2",
+  "body": {
+    "to": [
+      "apidoc@example.invalid"
+    ],
+    "subject": "api doc",
+    "message": "test"
+  }
+}

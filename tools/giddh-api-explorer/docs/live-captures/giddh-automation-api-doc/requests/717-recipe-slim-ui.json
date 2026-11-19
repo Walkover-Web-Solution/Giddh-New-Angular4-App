@@ -1,0 +1,22 @@
+{
+  "manufacturingDetails": [
+    {
+      "manufacturingQuantity": 1,
+      "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "variant": {
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+      },
+      "linkedStocks": [
+        {
+          "stockUniqueName": "apidoc-gadget",
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "quantity": 2,
+          "variant": {
+            "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+          }
+        }
+      ],
+      "byProducts": []
+    }
+  ]
+}

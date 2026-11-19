@@ -1,0 +1,106 @@
+{
+  "type": "purchase",
+  "date": "22-10-2026",
+  "dueDate": "05-11-2026",
+  "exchangeRate": 1,
+  "applyApplicableTaxes": false,
+  "roundOffApplicable": false,
+  "updateAccountDetails": false,
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-vendor-one",
+    "name": "API Doc Vendor One",
+    "customerName": "API Doc Vendor One",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "billingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor address"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Vendor One",
+      "address": [
+        "Vendor address"
+      ],
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "entries": [
+    {
+      "date": "22-10-2026",
+      "description": "Office supplies",
+      "voucherType": "purchase",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "purchases",
+            "name": "Purchases"
+          },
+          "amount": {
+            "amountForAccount": 50,
+            "amountForCompany": 50
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "warehouse": {
+    "name": "Gidd warehouse",
+    "uniqueName": "xbq1792673424418"
+  },
+  "templateDetails": {
+    "other": {}
+  }
+}

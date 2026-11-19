@@ -1,0 +1,599 @@
+{
+  "status": "success",
+  "body": {
+    "headQuarterAlias": "Gidd",
+    "planVersion": 2,
+    "name": "Giddh Automation API DOC",
+    "address": "My new address",
+    "country": "India",
+    "subTrialOrCancelled": false,
+    "paymentPending": false,
+    "contactNo": "919111525164",
+    "baseCurrency": "INR",
+    "nameAlias": "",
+    "companyIdentity": [],
+    "financialYears": [
+      {
+        "financialYearEnds": "31-03-2027",
+        "financialYearStarts": "01-04-2026",
+        "uniqueName": "FY-APR2026-MAR2027",
+        "isLocked": false
+      }
+    ],
+    "createdAt": "22-10-2026 12:50:22",
+    "voucherVersion": 2,
+    "balanceDecimalPlaces": 2,
+    "userEntityRoles": [
+      {
+        "duration": null,
+        "from": null,
+        "entity": {
+          "uniqueName": "giddhain1792673422178091xos",
+          "name": "Giddh Automation API DOC",
+          "entity": "COMPANY"
+        },
+        "role": {
+          "name": "Super Admin",
+          "scopes": [
+            {
+              "selectAllFields": [],
+              "name": "INVENTORY",
+              "permissions": [
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "DLT"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "LEDGER",
+              "permissions": [
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "CMT"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "SETTINGS",
+              "permissions": [
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "GSTFL"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "REPORT",
+              "permissions": [
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "DLT"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "SHARE",
+              "permissions": [
+                {
+                  "code": "SHRSM"
+                },
+                {
+                  "code": "SHRLWR"
+                },
+                {
+                  "code": "SHRALL"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "MANAGE",
+              "permissions": [
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "DLT"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "DASHBOARD",
+              "permissions": [
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "UPDT"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "SEARCH",
+              "permissions": [
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "ADD"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "INVOICE",
+              "permissions": [
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "ADD"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "RECURRING_ENTRY",
+              "permissions": [
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "UPDT"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "INTEGRATION",
+              "permissions": [
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "VW"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "PETTY_CASH_MANAGER",
+              "permissions": [
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "DLT"
+                },
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "GSTFL"
+                }
+              ]
+            },
+            {
+              "selectAllFields": [],
+              "name": "AUDIT_LOGS",
+              "permissions": [
+                {
+                  "code": "UPDT"
+                },
+                {
+                  "code": "ADD"
+                },
+                {
+                  "code": "GSTFL"
+                },
+                {
+                  "code": "CMT"
+                },
+                {
+                  "code": "GSTVW"
+                },
+                {
+                  "code": "VW"
+                },
+                {
+                  "code": "SHR"
+                },
+                {
+                  "code": "DLT"
+                }
+              ]
+            }
+          ],
+          "isFixed": true,
+          "uniqueName": "super_admin"
+        },
+        "to": null,
+        "period": null,
+        "allowedIps": [],
+        "allowedCidrs": [],
+        "uniqueName": "tgig7awso7imt1h",
+        "sharedWith": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "sharedBy": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        }
+      }
+    ],
+    "updatedBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "archiveStatus": "UNARCHIVED",
+    "updatedAt": "22-10-2026 12:51:00",
+    "businessNature": "Retail",
+    "businessType": "Registered",
+    "createdBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "city": "",
+    "uniqueName": "giddhain1792673422178091xos",
+    "balanceDisplayFormat": "IND_COMMA_SEPARATED",
+    "currencyDisplayFormat": "SYMBOL",
+    "ledgerView": "T_VIEW",
+    "portalDomain": "GiddhAutomationAPIDOC",
+    "withPay": false,
+    "withHeldTax": 6,
+    "purchaseAsPayment": false,
+    "salesAsReceipt": false,
+    "subscription": {
+      "upgrade": false,
+      "totalCompanies": 12,
+      "totalTransactions": 0,
+      "userDetails": {
+        "name": "Divyanshu Shirvastav",
+        "uniqueName": "divyanshu@whozzat.com",
+        "email": "divyanshu@whozzat.com",
+        "signUpOn": "18-05-2023 08:37:55",
+        "mobileno": "919111525164"
+      },
+      "overdraftTransactions": 0,
+      "transactionsRemaining": 0,
+      "country": {
+        "countryName": null,
+        "countryCode": null,
+        "alpha3CountryCode": null
+      },
+      "duration": "YEARLY",
+      "region": {
+        "name": "India",
+        "code": "IND"
+      },
+      "status": "active",
+      "expiry": "21-10-2027",
+      "createdAt": "22-10-2026 18:08:15",
+      "startedAt": "22-10-2026",
+      "totalInvoices": 1200,
+      "invoicesRemaining": 1185,
+      "totalBills": 1200,
+      "billsRemaining": 1193,
+      "subscriptionId": "SUB-20261022-5",
+      "balance": 4000.0,
+      "planDetails": {
+        "countries": [
+          "India"
+        ],
+        "name": "WhiteLabelPlan",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "billsAllowed": 1200,
+        "invoicesAllowed": 1200,
+        "archiveStatus": "UNARCHIVED",
+        "createdAt": "15-01-2026 19:05:47",
+        "amount": 0.0,
+        "monthlyBillsAllowed": 120,
+        "monthlyInvoicesAllowed": 120,
+        "yearlyAmount": 4000.0,
+        "monthlyAmount": 260.0,
+        "monthlyCompaniesLimit": 6,
+        "isCommonPlan": true,
+        "restrictedModules": {},
+        "uniqueName": "ltv1768484147685",
+        "companiesLimit": 12
+      },
+      "addOnTransactions": 0,
+      "companyCount": 12,
+      "remainingTransactions": 0,
+      "additionalCharges": 0.0,
+      "isPrepaidExist": false,
+      "autoPay": false
+    },
+    "addresses": [
+      {
+        "branches": [
+          {
+            "isDefault": true,
+            "isHeadQuarter": false,
+            "name": "Giddh Automation API DOC",
+            "alias": "Gidd",
+            "uniqueName": "giddhautomationapidoc"
+          }
+        ],
+        "warehouses": [
+          {
+            "countryCode": "IN",
+            "currencyCode": "INR",
+            "isDefault": true,
+            "callingCode": null,
+            "name": "Gidd warehouse",
+            "alias": "Gidd warehouse",
+            "mobileNumber": "91-919111525164",
+            "uniqueName": "xbq1792673424418"
+          }
+        ],
+        "name": "Default Address",
+        "address": "My new address",
+        "pincode": "484224",
+        "stateCode": "MP",
+        "uniqueName": "8rz1792673422372",
+        "isDefault": true,
+        "taxNumber": "23AAACC1206D2ZN",
+        "stateName": "Madhya Pradesh",
+        "taxType": "GSTIN"
+      },
+      {
+        "branches": [
+          {
+            "isDefault": false,
+            "isHeadQuarter": false,
+            "name": "Giddh Automation API DOC",
+            "alias": "Gidd",
+            "uniqueName": "giddhautomationapidoc"
+          }
+        ],
+        "name": "API Doc Addr Two",
+        "address": "API Doc Street 2",
+        "pincode": "560001",
+        "stateCode": "KA",
+        "uniqueName": "rs61792733820379",
+        "isDefault": false,
+        "taxNumber": "",
+        "stateName": "Karnataka",
+        "taxType": "GSTIN"
+      },
+      {
+        "name": "Default Address",
+        "address": "",
+        "uniqueName": "vgv1792735015769",
+        "isDefault": false,
+        "taxType": "GSTIN"
+      }
+    ],
+    "ecommerceDetails": [],
+    "countryV2": {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "callingCode": "91",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "europeanUnionCountry": false,
+      "india": true
+    },
+    "baseCurrencySymbol": "\u20b9",
+    "hasCounty": false
+  }
+}

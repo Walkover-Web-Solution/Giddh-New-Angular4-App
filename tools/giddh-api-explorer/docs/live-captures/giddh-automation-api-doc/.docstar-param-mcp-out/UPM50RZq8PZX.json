@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"UPM50RZq8PZX","description":"Get Event Resolutions. Part of the Event Resolutions APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"event":{"checked":"true","value":"","description":"Event query parameter. Mandatory.","required":true}},"body":{"type":"none"},"bodyDescription":{}}

@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/business-documents/pending-report?from=01-04-2026&to=31-03-2027&page=1&count=20&branchUniqueName=giddhautomationapidoc",
+  "body": {
+    "reportType": "WITHOUT_CHALLAN",
+    "documentType": "RC"
+  }
+}

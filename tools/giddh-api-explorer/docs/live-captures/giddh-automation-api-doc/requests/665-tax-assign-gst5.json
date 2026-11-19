@@ -1,0 +1,10 @@
+[
+  {
+    "uniqueName": "sales",
+    "taxes": [
+      "apidocgst5",
+      "apidocgst18"
+    ],
+    "isAccount": true
+  }
+]

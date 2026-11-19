@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "callingCode": "91",
+      "currency": {
+        "code": "INR",
+        "symbol": "₹"
+      },
+      "europeanUnionCountry": false,
+      "india": true
+    }
+  ]
+}

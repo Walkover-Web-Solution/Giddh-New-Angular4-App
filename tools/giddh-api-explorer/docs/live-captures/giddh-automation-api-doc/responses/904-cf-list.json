@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "fieldType": {
+          "name": "Boolean",
+          "type": "BOOLEAN"
+        },
+        "fieldName": "API Doc CF Flag",
+        "status": true,
+        "modules": [
+          {
+            "name": "Account",
+            "uniqueName": "ACCOUNT"
+          }
+        ],
+        "dataRange": {
+          "min": null,
+          "max": null
+        },
+        "isMandatory": false,
+        "regex": null,
+        "fieldOptions": null,
+        "fieldInfo": "flag",
+        "isActive": true,
+        "uniqueName": "1792758792191n1ficygh8s7bfds"
+      }
+    ],
+    "size": 1
+  }
+}

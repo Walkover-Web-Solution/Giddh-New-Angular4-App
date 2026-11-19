@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "callingCode": "91",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "europeanUnionCountry": false,
+      "india": true
+    }
+  ],
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "vendor": {
+          "name": "API Doc Vendor One",
+          "currency": {
+            "code": "INR"
+          },
+          "email": "vendor.one@example.com",
+          "uniqueName": "apidoc-vendor-one"
+        },
+        "grandTotal": {
+          "amountForAccount": 500.0,
+          "amountForCompany": 500.0,
+          "currencyForAccount": {
+            "id": null,
+            "name": null,
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "currencyForCompany": {
+            "id": null,
+            "name": null,
+            "code": "INR",
+            "symbol": "\u20b9"
+          }
+        },
+        "dueDays": 14,
+        "entryClass": null,
+        "voucherDate": "23-10-2026",
+        "status": "open",
+        "dueDate": "06-11-2026",
+        "voucherNumber": "PO-20261023-1",
+        "uniqueName": "pze1792734608469"
+      }
+    ],
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}

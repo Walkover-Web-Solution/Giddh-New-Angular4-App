@@ -1,0 +1,16 @@
+{
+  "date": "23-10-2026",
+  "refNo": "INV-ADJ-API-003",
+  "expenseAccountUniqueName": "sales",
+  "warehouseUniqueName": "xbq1792673424418",
+  "description": "API inventory adjustment capture",
+  "entity": "VARIANT",
+  "entityUniqueName": "apidocwidget1792693959876fk8uyv0enl",
+  "reasonUniqueName": null,
+  "adjustmentMethod": "QUANTITY_WISE",
+  "calculationMethod": "VALUE",
+  "changeInValue": 1,
+  "variantUniqueNames": [
+    "apidocwidget1792693959876fk8uyv0enl"
+  ]
+}

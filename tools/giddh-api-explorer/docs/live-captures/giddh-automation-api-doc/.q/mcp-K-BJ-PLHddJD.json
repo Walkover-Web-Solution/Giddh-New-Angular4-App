@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"K-BJ-PLHddJD","description":"Generate Auth Key. Part of the Generate Auth Key APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"none"}}}

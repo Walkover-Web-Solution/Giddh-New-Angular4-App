@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "dateOfSupply": "23-10-2026",
+        "voucherType": "ReceiptNote",
+        "voucherNo": "RN-20261023-2",
+        "senderReceiver": null,
+        "sender": "Gidd",
+        "receiver": "apidoc-branch-two",
+        "fromWarehouse": "Gidd warehouse",
+        "toWarehouse": "apidoc-branch-two warehouse",
+        "totalAmount": 100.0,
+        "uniqueName": "v2p1792734673849"
+      },
+      {
+        "dateOfSupply": "23-10-2026",
+        "voucherType": "receiptnote",
+        "voucherNo": "RN-20261023-1",
+        "senderReceiver": null,
+        "sender": "Gidd",
+        "receiver": "apidoc-branch-two",
+        "fromWarehouse": "Gidd warehouse",
+        "toWarehouse": "apidoc-branch-two warehouse",
+        "totalAmount": 100.0,
+        "uniqueName": "8vk1792734673591"
+      },
+      {
+        "dateOfSupply": "23-10-2026",
+        "voucherType": "DeliveryNote",
+        "voucherNo": "DC-20261023-2",
+        "senderReceiver": null,
+        "sender": "Gidd",
+        "receiver": "apidoc-branch-two",
+        "fromWarehouse": "Gidd warehouse",
+        "toWarehouse": "apidoc-branch-two warehouse",
+        "totalAmount": 100.0,
+        "uniqueName": "2rd1792734673327"
+      },
+      {
+        "dateOfSupply": "23-10-2026",
+        "voucherType": "deliverynote",
+        "voucherNo": "DC-20261023-1",
+        "senderReceiver": null,
+        "sender": "Gidd",
+        "receiver": "apidoc-branch-two",
+        "fromWarehouse": "Gidd warehouse",
+        "toWarehouse": "apidoc-branch-two warehouse",
+        "totalAmount": 100.0,
+        "uniqueName": "hsk1792734672951"
+      }
+    ],
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 4
+  }
+}

@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"PzOAbFmY5sVR","description":"Update Last State. Part of the State Details APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"branchUniqueName":{"checked":"true","value":"","description":"Branch uniqueName; omit for default company branch behaviour. Optional.","required":false}},"body":{"type":"none"},"bodyDescription":{}}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No inventory user found with unique name divyanshu@whozzat.com.",
+  "code": "INVENTORY_USER_NOT_FOUND"
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "There was an error. Please contact support.",
+  "code": "INTERNAL_SERVER_ERROR"
+}

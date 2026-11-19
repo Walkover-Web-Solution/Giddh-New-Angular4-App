@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "The email: apidoc@example.invalid is invalid.",
+  "code": "INVALID_EMAIL"
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "error.code.invalidRequest",
+  "code": "Please add auth key."
+}

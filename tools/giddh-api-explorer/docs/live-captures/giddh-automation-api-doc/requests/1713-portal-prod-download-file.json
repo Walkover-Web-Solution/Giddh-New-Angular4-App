@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/download-file?voucherVersion=2&fileType=base64",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy",
+  "body": [
+    "yktu41792755921064"
+  ]
+}

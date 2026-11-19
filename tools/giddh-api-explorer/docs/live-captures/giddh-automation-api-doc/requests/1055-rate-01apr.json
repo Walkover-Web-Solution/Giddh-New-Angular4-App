@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/currency/rate?from=USD&to=INR&date=01-04-2026"
+}

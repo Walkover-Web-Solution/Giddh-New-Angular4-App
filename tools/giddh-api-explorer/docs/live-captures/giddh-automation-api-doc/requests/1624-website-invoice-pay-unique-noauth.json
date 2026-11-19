@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/invoices/llvtc1792674364760/pay?voucherVersion=2",
+  "body": {
+    "paymentId": "pay_fake_apidoc",
+    "amount": 100,
+    "date": "23-10-2026"
+  }
+}

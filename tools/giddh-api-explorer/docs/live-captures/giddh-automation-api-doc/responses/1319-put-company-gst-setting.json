@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid Data Access Exception.Entity must not be null java.lang.IllegalArgumentException: Entity must not be null",
+  "code": "INTERNAL_ERROR"
+}

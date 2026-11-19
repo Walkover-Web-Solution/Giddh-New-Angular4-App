@@ -1,0 +1,176 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 6,
+    "totalPages": 1,
+    "totalItems": 6,
+    "results": [
+      {
+        "entryId": 9178917,
+        "accountId": 4652996,
+        "date": "22-10-2026",
+        "baseAccount": "API Doc Customer One",
+        "address": "Customer address line 1",
+        "voucherType": "receipt",
+        "voucherNumber": "1",
+        "voucherRefNo": "RCPT-261022-1",
+        "voucherRefDate": "22-10-2026",
+        "taxNumber": "23AAACC1206D1ZM",
+        "narration": "Receipt against invoice",
+        "stockName": null,
+        "quantity": "",
+        "stockUnitCode": null,
+        "rate": null,
+        "value": null,
+        "grossTotal": {
+          "amount": 100.0,
+          "type": null
+        },
+        "balance": null,
+        "accountNameAndAmountMap": null,
+        "accountNameAndBalanceMap": {
+          "Cash": "-100.00"
+        }
+      },
+      {
+        "entryId": 9178919,
+        "accountId": 4652997,
+        "date": "22-10-2026",
+        "baseAccount": "API Doc Vendor One",
+        "address": "Vendor address line 1",
+        "voucherType": "payment",
+        "voucherNumber": "1",
+        "voucherRefNo": "PAY-261022-1",
+        "voucherRefDate": "22-10-2026",
+        "taxNumber": "23AAACC1206D2ZN",
+        "narration": "Payment against bill",
+        "stockName": null,
+        "quantity": "",
+        "stockUnitCode": null,
+        "rate": null,
+        "value": null,
+        "grossTotal": {
+          "amount": 50.0,
+          "type": null
+        },
+        "balance": null,
+        "accountNameAndAmountMap": null,
+        "accountNameAndBalanceMap": {
+          "Cash": "50.00"
+        }
+      },
+      {
+        "entryId": 9178936,
+        "accountId": 4653001,
+        "date": "22-10-2026",
+        "baseAccount": "API Doc Vendor Two",
+        "address": "API Doc Vendor Two address",
+        "voucherType": "payment",
+        "voucherNumber": "2",
+        "voucherRefNo": "PAY-261022-2",
+        "voucherRefDate": "22-10-2026",
+        "taxNumber": "23AAACC1206D2ZN",
+        "narration": "Pay PB-API-002",
+        "stockName": null,
+        "quantity": "",
+        "stockUnitCode": null,
+        "rate": null,
+        "value": null,
+        "grossTotal": {
+          "amount": 120.0,
+          "type": null
+        },
+        "balance": null,
+        "accountNameAndAmountMap": null,
+        "accountNameAndBalanceMap": {
+          "Cash": "120.00"
+        }
+      },
+      {
+        "entryId": 9179048,
+        "accountId": 4652989,
+        "date": "23-10-2026",
+        "baseAccount": "Cash",
+        "address": null,
+        "voucherType": "sales",
+        "voucherNumber": "7",
+        "voucherRefNo": "261023-2",
+        "voucherRefDate": "23-10-2026",
+        "taxNumber": null,
+        "narration": null,
+        "stockName": null,
+        "quantity": "",
+        "stockUnitCode": null,
+        "rate": null,
+        "value": null,
+        "grossTotal": {
+          "amount": 50.0,
+          "type": null
+        },
+        "balance": null,
+        "accountNameAndAmountMap": null,
+        "accountNameAndBalanceMap": {
+          "Sales": "50.00"
+        }
+      },
+      {
+        "entryId": 9179050,
+        "accountId": 4652989,
+        "date": "23-10-2026",
+        "baseAccount": "Cash",
+        "address": null,
+        "voucherType": "journal",
+        "voucherNumber": "1",
+        "voucherRefNo": "JV-261023-1",
+        "voucherRefDate": "23-10-2026",
+        "taxNumber": null,
+        "narration": "JV cash to sales",
+        "stockName": null,
+        "quantity": "",
+        "stockUnitCode": null,
+        "rate": null,
+        "value": null,
+        "grossTotal": {
+          "amount": 15.0,
+          "type": null
+        },
+        "balance": null,
+        "accountNameAndAmountMap": null,
+        "accountNameAndBalanceMap": {
+          "Sales": "-15.00"
+        }
+      },
+      {
+        "entryId": 9179053,
+        "accountId": 4652989,
+        "date": "23-10-2026",
+        "baseAccount": "Cash",
+        "address": null,
+        "voucherType": "sales",
+        "voucherNumber": "12",
+        "voucherRefNo": null,
+        "voucherRefDate": "",
+        "taxNumber": null,
+        "narration": "API capture ledger update",
+        "stockName": null,
+        "quantity": "",
+        "stockUnitCode": null,
+        "rate": null,
+        "value": null,
+        "grossTotal": {
+          "amount": 25.0,
+          "type": null
+        },
+        "balance": null,
+        "accountNameAndAmountMap": null,
+        "accountNameAndBalanceMap": {
+          "Sales": "25.00"
+        }
+      }
+    ],
+    "size": 6,
+    "fromDate": "01-04-2026",
+    "toDate": "23-10-2026"
+  }
+}

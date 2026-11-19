@@ -1,0 +1,12 @@
+{
+  "name": "API Doc Addr Two",
+  "taxNumber": "",
+  "stateCode": "29",
+  "state": {
+    "code": "29",
+    "name": "Karnataka"
+  },
+  "address": "API Doc Street 2",
+  "pincode": "560001",
+  "isDefault": false
+}

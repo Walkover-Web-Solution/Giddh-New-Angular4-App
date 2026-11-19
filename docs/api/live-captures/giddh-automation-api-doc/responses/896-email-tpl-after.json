@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": {
+    "html": "<html><head><script type=\"application/ld+json\">\n    {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"Invoice\",\n    \"description\": \"Invoice for {COMPANY_NAME}\",\n    \"paymentDueDate\": \"{VOUCHER_DUE_DATE}\",\n    \"paymentStatus\": \"{STATUS}\",\n    \"minimumPaymentDue\": {\n        \"@type\": \"PriceSpecification\",\n        \"price\": \"{DUE_AMOUNT}\",\n        \"priceCurrency\": \"{VOUCHER_CURRENCY}\"\n    },\n    \"totalPaymentDue\": {\n        \"@type\": \"PriceSpecification\",\n        \"price\": \"{VOUCHER_AMOUNT}\",\n        \"priceCurrency\": \"{VOUCHER_CURRENCY}\"\n    },\n    \"provider\": {\n        \"@type\": \"Organization\",\n        \"name\": \"{COMPANY_NAME}\",\n        \"url\": \"https://test.giddh.com\"\n    },\n    \"customer\": {\n        \"@type\": \"Person\",\n        \"name\": \"{CUSTOMER_NAME}\"\n    }\n} \n</script><title></title></head><body><div>Hi&nbsp;<span style=font-family:verdana,geneva,sans-serif;>{ATTENTION_TO}</span>,</div><div>&nbsp;</div><div><span style=font-family:verdana,geneva,sans-serif><span style=font-size:12.8px><span style=background-color:rgb(255,255,255)>Thanks for providing us the opportunity to do business with you.</span></span></span></div><div><span style=font-family:verdana,geneva,sans-serif><span style=background-color:rgb(255,255,255);color:rgb(34,34,34);font-size:12.8px>Please find the attached invoice amounting to&nbsp;</span>{VOUCHER_AMOUNT}/-&nbsp;<span style=background-color:rgb(255,255,255);color:rgb(34,34,34);font-size:12.8px>with this mail&nbsp;</span>for&nbsp;{CUSTOMER_NAME}.</span></div><div>&nbsp;</div><div style=\"display:display_type; margin-bottom: 6px;\"><span style=font-size:16px><span style=font-family:arial,helvetica,sans-serif><strong><a href={VIEW_INVOICE_LINK}><span style=color:#000000>View Invoice</span></a></strong></span></span></div><div style=display:display_type><span style=font-size:16px><span style=font-family:arial,helvetica,sans-serif><strong><a href={PAYMENT_LINK}><span style=color:#000000>Payment Link</span></a></strong></span></span></div><div>&nbsp;</div><div>Regards</div><div>{COMPANY_NAME}</div><div>&nbsp;</div><div>&nbsp;</div><div>Invoice generated via&nbsp;<a href=https://test.giddh.com>test.giddh.com</a></div></div></body></html>",
+    "emailSubject": "Invoice from {COMPANY_NAME}",
+    "to": [
+      "{VOUCHER_ATTENTION_EMAIL}",
+      "{ACCOUNT_ATTENTION_EMAIL}"
+    ],
+    "replyTo": [
+      "{COMPANY_SUPER_ADMINS_EMAIL}"
+    ]
+  }
+}

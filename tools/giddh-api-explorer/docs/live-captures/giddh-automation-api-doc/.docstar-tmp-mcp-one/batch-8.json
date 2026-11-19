@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"5fmUFbBE_rTn","description":"This function is used to get country list. Part of the Country APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"refresh":{"checked":"true","value":"false","description":"When true, bypass cache and recompute. Default: false."}},"body":{"type":"none"}}

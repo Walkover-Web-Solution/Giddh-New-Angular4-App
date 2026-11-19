@@ -1,0 +1,14 @@
+[
+  {
+    "transactions": [
+      {
+        "amount": 10,
+        "particular": "sales",
+        "type": "DEBIT"
+      }
+    ],
+    "voucherType": "sales",
+    "entryDate": "23-10-2026",
+    "description": "API bulk ledger 1"
+  }
+]

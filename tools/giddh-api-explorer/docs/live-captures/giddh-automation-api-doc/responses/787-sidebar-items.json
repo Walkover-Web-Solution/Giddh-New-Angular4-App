@@ -1,0 +1,1066 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "type": "MENU",
+      "name": "Dashboard",
+      "uniqueName": "/pages/home",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice",
+      "uniqueName": "/pages/vouchers/preview/sales/list",
+      "additional": {
+        "tab": "sales",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": 2,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "E-way bill",
+      "uniqueName": "/pages/invoice/ewaybill",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Debit Note",
+      "uniqueName": "/pages/vouchers/preview/debit-note/list",
+      "additional": {
+        "tab": "debit note",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Credit Note",
+      "uniqueName": "/pages/vouchers/preview/credit-note/list",
+      "additional": {
+        "tab": "credit note",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Pending",
+      "uniqueName": "/pages/invoice/preview/pending",
+      "additional": {
+        "tab": "pending",
+        "tabIndex": 2
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Templates",
+      "uniqueName": "/pages/vouchers/preview/sales/templates",
+      "additional": {
+        "tab": "templates",
+        "tabIndex": 3
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Recurring",
+      "uniqueName": "/pages/invoice/preview/recurring",
+      "additional": {
+        "tab": "recurring",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Preview",
+      "uniqueName": "/pages/vouchers/preview/sales/list",
+      "additional": {
+        "tab": "sales",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Estimate (Beta)",
+      "uniqueName": "/pages/vouchers/preview/estimates/list",
+      "additional": {
+        "tab": "estimates",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Proforma",
+      "uniqueName": "/pages/vouchers/preview/proformas/list",
+      "additional": {
+        "tab": "proformas",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Daybook",
+      "uniqueName": "/pages/daybook",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": 14,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Trial Balance",
+      "uniqueName": "/pages/trial-balance-and-profit-loss",
+      "additional": {
+        "tab": "trial-balance",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Profit & Loss",
+      "uniqueName": "/pages/trial-balance-and-profit-loss",
+      "additional": {
+        "tab": "profit-and-loss",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Balance Sheet",
+      "uniqueName": "/pages/trial-balance-and-profit-loss",
+      "additional": {
+        "tab": "balance-sheet",
+        "tabIndex": 2
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Inventory",
+      "uniqueName": "/pages/inventory/v2/reports/product/stock",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Inventory > Manufacturing",
+      "uniqueName": "/pages/inventory/v2/manufacturing/list",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Inventory > Report",
+      "uniqueName": "/pages/inventory/v2/branch-transfer/list",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Manufacturing",
+      "uniqueName": "/pages/manufacturing/report",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": 9,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Search",
+      "uniqueName": "/pages/search",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings",
+      "uniqueName": "/pages/settings",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 12,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Taxes",
+      "uniqueName": "/pages/settings/taxes",
+      "additional": {
+        "tab": "taxes",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Integration",
+      "uniqueName": "/pages/settings/integration",
+      "additional": {
+        "tab": "integration",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Linked Accounts",
+      "uniqueName": "/pages/settings/linked-accounts",
+      "additional": {
+        "tab": "linked-accounts",
+        "tabIndex": 2
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Profile",
+      "uniqueName": "/pages/settings/profile",
+      "additional": {
+        "tab": "profile",
+        "tabIndex": 3
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Financial Year",
+      "uniqueName": "/pages/settings/financial-year",
+      "additional": {
+        "tab": "financial-year",
+        "tabIndex": 4
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Permission",
+      "uniqueName": "/pages/settings/permission",
+      "additional": {
+        "tab": "permission",
+        "tabIndex": 5
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Permissions",
+      "uniqueName": "/pages/permissions/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Branch",
+      "uniqueName": "/pages/settings/branch",
+      "additional": {
+        "tab": "branch",
+        "tabIndex": 6
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Tag",
+      "uniqueName": "/pages/settings/tag",
+      "additional": {
+        "tab": "tag",
+        "tabIndex": 7
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Trigger",
+      "uniqueName": "/pages/settings/trigger",
+      "additional": {
+        "tab": "trigger",
+        "tabIndex": 8
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Discount",
+      "uniqueName": "/pages/settings/discount",
+      "additional": {
+        "tab": "discount",
+        "tabIndex": 9
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Settings > Warehouse",
+      "uniqueName": "/pages/settings/warehouse",
+      "additional": {
+        "tab": "warehouse",
+        "tabIndex": 10
+      },
+      "hasTabs": true,
+      "pIndex": 13,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Onboarding",
+      "uniqueName": "/pages/onboarding",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Sales bifurcation",
+      "uniqueName": "/pages/new-vs-old-invoices",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "GST",
+      "uniqueName": "/pages/gstfiling",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": 5,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Import Data from TALLY",
+      "uniqueName": "/pages/tallysync",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Import Data",
+      "uniqueName": "/pages/import/select-type",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Customer",
+      "uniqueName": "/pages/contact/customer",
+      "additional": {
+        "tab": "customer",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": 3,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Vendor",
+      "uniqueName": "/pages/contact/vendor",
+      "additional": {
+        "tab": "vendor",
+        "tabIndex": 0
+      },
+      "hasTabs": false,
+      "pIndex": 4,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Customer > Aging Report",
+      "uniqueName": "/pages/contact/sales",
+      "additional": {
+        "tab": "sales-aging-report",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": 11,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "User-Details > Api",
+      "uniqueName": "/pages/user-details/auth-key",
+      "additional": {
+        "tab": "api",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "User-Details > Profile",
+      "uniqueName": "/pages/user-details/mobile-number",
+      "additional": {
+        "tab": "profile",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": 16,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "User-Details > Session",
+      "uniqueName": "/pages/user-details/session",
+      "additional": {
+        "tab": "session",
+        "tabIndex": 2
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "User-Details > Subscriptions",
+      "uniqueName": "/pages/user-details/subscription",
+      "additional": {
+        "tab": "subscription",
+        "tabIndex": 3,
+        "isPlanPage": true
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Reports > Sales Register",
+      "uniqueName": "/pages/reports/sales-register",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Reports > Purchase Register",
+      "uniqueName": "/pages/reports/purchase-register",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Reports > Monthly Columnar Report",
+      "uniqueName": "/pages/reports/monthly-columnar-report",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Reports > Cash Flow Statement",
+      "uniqueName": "/pages/reports/cash-flow-statement",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Reports",
+      "uniqueName": "/pages/reports/reports-dashboard",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Petty Cash Management > Pending",
+      "uniqueName": "/pages/expenses-manager",
+      "additional": {
+        "tab": "pending",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Petty Cash Management > Rejected",
+      "uniqueName": "/pages/expenses-manager",
+      "additional": {
+        "tab": "rejected",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Purchase Management",
+      "uniqueName": "/pages/purchase-management/purchase",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": 15,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Receipt",
+      "uniqueName": "/pages/vouchers/preview/receipt/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Reports > Payment",
+      "uniqueName": "/pages/vouchers/preview/payment/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Purchase Management > Purchase Order",
+      "uniqueName": "/pages/vouchers/preview/purchase-order/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Bill",
+      "uniqueName": "/pages/vouchers/preview/purchase/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Bill",
+      "uniqueName": "/pages/vouchers/preview/purchase/templates",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Inventory > Warehouse Opening Balance",
+      "uniqueName": "/pages/new-inventory/stock-balance",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Audit Trail",
+      "uniqueName": "/pages/activity-logs",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Downloads",
+      "uniqueName": "/pages/downloads",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Multi-Currency Report",
+      "uniqueName": "/pages/multi-currency-report",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Project Wise Accounting",
+      "uniqueName": "/pages/project-wise-accounting/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Custom Fields",
+      "uniqueName": "/pages/custom-fields/list",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Email-to-Bank Sync",
+      "uniqueName": "/pages/email-forwarding",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Scan2Invoice",
+      "uniqueName": "/pages/ai-ocr/income",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Scan2Bill",
+      "uniqueName": "/pages/ai-ocr/expense",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Bill > Templates",
+      "uniqueName": "/pages/vouchers/preview/purchase/templates",
+      "additional": {
+        "tab": "templates",
+        "tabIndex": 3
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Invoice > Recurring Invoices",
+      "uniqueName": "/pages/vouchers/preview/sales/recurring",
+      "additional": {
+        "tab": "recurring",
+        "tabIndex": 4
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Bill > Recurring Bills",
+      "uniqueName": "/pages/vouchers/preview/purchase/recurring",
+      "additional": {
+        "tab": "recurring",
+        "tabIndex": 4
+      },
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": true
+    },
+    {
+      "type": "MENU",
+      "name": "Budget Forecasting",
+      "uniqueName": "/pages/budget-forecasting",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Budget Forecasting",
+      "uniqueName": "/pages/budget-forecasting",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Bank Reconciliation",
+      "uniqueName": "/pages/bank-reconciliation",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Vendor > Aging Report",
+      "uniqueName": "/pages/contact/purchase",
+      "additional": {
+        "tab": "purchase-aging-report",
+        "tabIndex": 1
+      },
+      "hasTabs": true,
+      "pIndex": 11,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Import > Bank statement",
+      "uniqueName": null,
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Stock Aging Report",
+      "uniqueName": "/pages/inventory/v2/product/stock-aging-report",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Stock Aging Report",
+      "uniqueName": "/pages/inventory/v2/service/stock-aging-report",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Stock Aging Report",
+      "uniqueName": "/pages/inventory/v2/fixedassets/stock-aging-report",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "All Reports",
+      "uniqueName": "/pages/all-reports",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": null,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Batch Report",
+      "uniqueName": "/pages/inventory/v2/product/batch",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Batch Report",
+      "uniqueName": "/pages/inventory/v2/service/batch",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Batch Report",
+      "uniqueName": "/pages/inventory/v2/fixedassets/batch",
+      "additional": null,
+      "hasTabs": true,
+      "pIndex": 8,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Delivery Challan",
+      "uniqueName": "/pages/vouchers/preview/delivery-challan/list",
+      "additional": {
+        "tab": "sales",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": 2,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Receipt Note",
+      "uniqueName": "/pages/vouchers/preview/receipt-note/list",
+      "additional": {
+        "tab": "sales",
+        "tabIndex": 0
+      },
+      "hasTabs": true,
+      "pIndex": 2,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Delivery Challan > DC - Invoice Reconciliation",
+      "uniqueName": "/pages/vouchers/reconciliation/delivery-challan",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": 3,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    },
+    {
+      "type": "MENU",
+      "name": "Receipt Note > RN - Bill Reconciliation",
+      "uniqueName": "/pages/vouchers/reconciliation/receipt-note",
+      "additional": null,
+      "hasTabs": false,
+      "pIndex": 3,
+      "mobile": false,
+      "notCompanyViewable": false,
+      "notBranchViewable": false
+    }
+  ]
+}

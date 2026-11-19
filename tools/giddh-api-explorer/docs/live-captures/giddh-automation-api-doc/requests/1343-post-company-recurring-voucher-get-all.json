@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/recurring-voucher/get-all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherType=sales&voucherVersion=2",
+  "body": {}
+}

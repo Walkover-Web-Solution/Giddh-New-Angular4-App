@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Giddh API Explorer</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <a class="skip-link" href="#endpoint-detail">Skip to API details</a>
+
+    <header class="app-header">
+        <div>
+            <p class="eyebrow">Backend-verified catalog</p>
+            <h1>Giddh API Explorer</h1>
+        </div>
+        <nav aria-label="Primary actions">
+            <button id="share-environment" class="button secondary" type="button">Share env URL</button>
+            <a class="button secondary" href="/docs/README.md" target="_blank" rel="noreferrer">Markdown docs</a>
+            <button id="export-filtered" class="button secondary" type="button">Export filtered to Postman</button>
+        </nav>
+    </header>
+
+    <section class="environment-bar" aria-labelledby="environment-heading">
+        <div class="environment-title">
+            <h2 id="environment-heading">Environment</h2>
+            <div class="environment-actions">
+                <button id="share-environment-inline" class="icon-button" type="button">Share</button>
+                <button id="toggle-environment" class="icon-button" type="button" aria-expanded="true" aria-controls="environment-fields">
+                    Collapse
+                </button>
+            </div>
+        </div>
+        <div id="environment-fields" class="environment-grid">
+            <label>
+                Base URL
+                <input id="base-url" type="url" spellcheck="false" placeholder="https://apitest.giddh.com" autocomplete="url">
+            </label>
+            <label>
+                companyUniqueName
+                <input id="company-unique-name" type="text" spellcheck="false" placeholder="Required for company routes" autocomplete="off">
+            </label>
+            <label>
+                branchUniqueName
+                <input id="branch-unique-name" type="text" spellcheck="false" placeholder="Optional branch" autocomplete="off">
+            </label>
+            <label>
+                Auth-Key
+                <input id="auth-key" type="password" autocomplete="off" spellcheck="false" placeholder="ENTER_YOUR_GIDDH_AUTH_KEY">
+            </label>
+            <label>
+                Session-Id
+                <input id="session-id" type="password" autocomplete="off" spellcheck="false" placeholder="ENTER_YOUR_GIDDH_SESSION_ID">
+            </label>
+            <label>
+                Origin
+                <input id="origin-header" type="url" spellcheck="false" placeholder="Optional white-label origin">
+            </label>
+        </div>
+        <p class="environment-note">Environment values persist in local storage. Search, filters, and the selected API are kept in the page URL so reload restores them. Share URL includes env (no secrets) plus catalog state. Requests run through the local proxy to avoid browser CORS restrictions.</p>
+    </section>
+
+    <div class="mobile-view-toggle" role="tablist" aria-label="Mobile panels">
+        <button id="show-catalog-panel" class="button secondary" type="button" role="tab" aria-selected="true">Catalog</button>
+        <button id="show-detail-panel" class="button secondary" type="button" role="tab" aria-selected="false">Request</button>
+    </div>
+
+    <main class="workspace" data-mobile-panel="catalog">
+        <aside class="catalog-panel" aria-labelledby="catalog-heading">
+            <div class="catalog-controls">
+                <h2 id="catalog-heading">API catalog</h2>
+                <label class="search-field">
+                    <span class="sr-only">Search APIs</span>
+                    <input id="search" type="search" placeholder="Search path, controller, frontend id…" autocomplete="off">
+                </label>
+                <div class="filter-grid">
+                    <label>
+                        Classification
+                        <select id="classification-filter">
+                            <option value="">All</option>
+                            <option value="giddh-panel">Giddh Panel</option>
+                            <option value="customer-portal">Customer Portal</option>
+                            <option value="magic-link">Magic Link</option>
+                            <option value="giddh-website">Giddh Website</option>
+                            <option value="backend-not-used">Backend not used</option>
+                            <option value="frontend-unmatched">Unmatched</option>
+                        </select>
+                    </label>
+                    <label>
+                        Service
+                        <select id="service-filter">
+                            <option value="">All services</option>
+                        </select>
+                    </label>
+                    <label>
+                        Method
+                        <select id="method-filter">
+                            <option value="">All methods</option>
+                        </select>
+                    </label>
+                    <label class="checkbox-label">
+                        <input id="deprecated-filter" type="checkbox">
+                        Deprecated only
+                    </label>
+                </div>
+                <p id="catalog-count" class="muted" aria-live="polite"></p>
+            </div>
+            <div id="endpoint-list" class="endpoint-list" role="listbox" aria-label="API endpoints"></div>
+        </aside>
+
+        <section id="endpoint-detail" class="detail-panel" tabindex="-1">
+            <div id="empty-state" class="empty-state">
+                <h2>Select an API</h2>
+                <p>Search or filter the catalog, then select an endpoint to build and run its request.</p>
+            </div>
+
+            <article id="request-workbench" hidden>
+                <div class="endpoint-heading">
+                    <div>
+                        <div class="badges">
+                            <span id="method-badge" class="method-badge"></span>
+                            <span id="classification-badge" class="status-badge"></span>
+                            <span id="deprecated-badge" class="status-badge danger" hidden>Deprecated</span>
+                        </div>
+                        <h2 id="endpoint-title"></h2>
+                        <p id="endpoint-description"></p>
+                    </div>
+                    <div class="heading-actions">
+                        <a id="source-doc-link" class="button secondary" target="_blank" rel="noreferrer">Open Markdown</a>
+                        <button id="export-selected" class="button secondary" type="button">Export to Postman</button>
+                    </div>
+                </div>
+
+                <dl class="metadata-grid">
+                    <div><dt>Service</dt><dd id="metadata-service"></dd></div>
+                    <div><dt>Controller</dt><dd id="metadata-controller"></dd></div>
+                    <div><dt>Used by</dt><dd id="metadata-frontend"></dd></div>
+                    <div><dt>Source</dt><dd id="metadata-source"></dd></div>
+                </dl>
+
+                <section class="request-section" aria-labelledby="request-heading">
+                    <div class="section-heading">
+                        <h3 id="request-heading">Request</h3>
+                        <button id="reset-request" class="button ghost" type="button">Reset values</button>
+                    </div>
+
+                    <div id="path-fields" class="field-group"></div>
+                    <div id="query-fields" class="field-group"></div>
+                    <div id="header-fields" class="field-group"></div>
+                    <div id="method-fields" class="field-group" hidden>
+                        <label>
+                            HTTP method
+                            <select id="request-method">
+                                <option>GET</option>
+                                <option>POST</option>
+                                <option>PUT</option>
+                                <option>PATCH</option>
+                                <option>DELETE</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div id="part-fields" class="field-group"></div>
+                    <div id="body-fields" class="field-group"></div>
+
+                    <label class="full-width">
+                        Request URL
+                        <input id="request-url" type="url" spellcheck="false">
+                    </label>
+
+                    <label id="body-editor-label" class="full-width" hidden>
+                        JSON body
+                        <textarea id="body-editor" rows="12" spellcheck="false"></textarea>
+                        <span id="body-error" class="validation-message" role="alert"></span>
+                    </label>
+
+                    <div class="request-actions">
+                        <button id="send-request" class="button primary" type="button">Send request</button>
+                        <button id="copy-curl" class="button secondary" type="button">Copy curl</button>
+                        <span id="request-status" class="muted" aria-live="polite"></span>
+                    </div>
+                </section>
+
+                <section class="request-section" aria-labelledby="curl-heading">
+                    <div class="section-heading">
+                        <h3 id="curl-heading">curl preview</h3>
+                    </div>
+                    <pre><code id="curl-preview"></code></pre>
+                </section>
+
+                <section id="response-examples-section" class="request-section" aria-labelledby="response-examples-heading" hidden>
+                    <div class="section-heading">
+                        <h3 id="response-examples-heading">Response examples</h3>
+                        <span id="response-examples-meta" class="muted"></span>
+                    </div>
+                    <div class="response-examples-grid">
+                        <div class="response-example-block">
+                            <div class="response-example-header">
+                                <h4 class="response-example-title">Success</h4>
+                                <span id="success-example-status" class="response-example-status muted" aria-hidden="true"></span>
+                            </div>
+                            <pre id="success-example-panel" class="response-example-panel" data-state="success"><code></code></pre>
+                        </div>
+                        <div class="response-example-block">
+                            <div class="response-example-header">
+                                <h4 class="response-example-title">Errors</h4>
+                                <label class="error-example-select-label">
+                                    <span class="sr-only">Select error example</span>
+                                    <select id="error-example-select" aria-label="Select error example"></select>
+                                </label>
+                            </div>
+                            <pre id="error-example-panel" class="response-example-panel" data-state="error"><code></code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="request-section" aria-labelledby="response-heading">
+                    <div class="section-heading">
+                        <h3 id="response-heading">Live response</h3>
+                        <span id="response-meta" class="muted"></span>
+                    </div>
+                    <pre id="response-panel" class="response-panel"><code>Select Send request to call the API.</code></pre>
+                </section>
+            </article>
+        </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+</body>
+</html>

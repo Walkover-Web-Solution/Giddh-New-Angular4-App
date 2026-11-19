@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/ui/modules",
+  "note": "no body"
+}

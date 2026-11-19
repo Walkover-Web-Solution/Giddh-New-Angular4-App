@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "path": "/company/nvlogiin165868912755901st49/groups",
+  "headers": {
+    "Auth-Key": "<company-auth-key>",
+    "Accept": "application/json"
+  }
+}

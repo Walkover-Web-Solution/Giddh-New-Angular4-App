@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/magic-link/lj792oo/download-voucher?voucherVersion=2&downloadOption=VOUCHER",
+  "body": {
+    "voucherType": "sales",
+    "uniqueName": "5zkmf1792674363694"
+  }
+}

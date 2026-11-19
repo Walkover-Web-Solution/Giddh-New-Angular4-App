@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No platform found with unique name 'apidoc-widget'.",
+  "code": "INVALID_REQUEST"
+}

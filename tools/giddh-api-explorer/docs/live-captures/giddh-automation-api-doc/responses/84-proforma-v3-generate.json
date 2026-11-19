@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide valid type for generating voucher, supported types are [sales, purchase, credit note, debit note, cash].",
+  "code": "INVALID_REQUEST"
+}

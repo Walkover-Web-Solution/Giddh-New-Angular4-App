@@ -1,0 +1,1 @@
+{"file": "create-c3-0.json", "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/payment-method:PortalController:fetchSupportedPaymentMethods"}

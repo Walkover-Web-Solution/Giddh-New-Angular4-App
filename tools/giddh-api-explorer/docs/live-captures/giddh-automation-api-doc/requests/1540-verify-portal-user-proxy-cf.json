@@ -1,0 +1,6 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-portal-user",
+  "via": "https://routes.msg91.com/api/proxy/117230/24lvqun1/v2/verify-portal-user",
+  "note": "Portal UI calls verify-portal-user through MSG91 proxy. Direct apitest call also rate-limited."
+}

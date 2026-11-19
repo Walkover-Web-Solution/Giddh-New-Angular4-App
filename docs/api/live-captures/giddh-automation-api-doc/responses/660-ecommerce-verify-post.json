@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide valid source of request.",
+  "code": "INVALID_REQUEST"
+}

@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"RTSfU9NHkBPk","description":"Create Inventory User. Part of the Inventory Users APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"none"}}}

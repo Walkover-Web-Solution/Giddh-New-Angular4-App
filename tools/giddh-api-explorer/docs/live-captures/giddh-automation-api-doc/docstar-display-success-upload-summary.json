@@ -1,0 +1,67 @@
+{
+  "orgId": "83427",
+  "collectionId": "-Jey39dCAAyx",
+  "rootParentId": "u9XDYe5Zc_ds",
+  "updateMethod": "DocStar REST PUT sampleResponse only",
+  "patchesFileCount": 525,
+  "workItemsTotal": 529,
+  "updatedOk": 529,
+  "failedCount": 0,
+  "bySource": {
+    "display-success-patches": {
+      "attempted": 525,
+      "ok": 525,
+      "failed": 0
+    },
+    "followup-queue-grouped-drafts": {
+      "attempted": 4,
+      "ok": 4,
+      "failed": 0
+    }
+  },
+  "followupQueue": {
+    "queueCount": 63,
+    "matchedByName": 4,
+    "skippedNoMatch": 59,
+    "skippedAlreadyPatched": 0,
+    "noSampleInDraft": 0
+  },
+  "publishChunks": [
+    {
+      "chunkIndex": 0,
+      "pageIdsCount": 201,
+      "status": 200,
+      "ok": true,
+      "result": {
+        "published": 201
+      }
+    },
+    {
+      "chunkIndex": 1,
+      "pageIdsCount": 201,
+      "status": 200,
+      "ok": true,
+      "result": {
+        "published": 201
+      }
+    },
+    {
+      "chunkIndex": 2,
+      "pageIdsCount": 130,
+      "status": 200,
+      "ok": true,
+      "result": {
+        "published": 130
+      }
+    }
+  ],
+  "publishChunksOk": true,
+  "failed": [],
+  "skippedFollowup": {
+    "attempted": 59,
+    "ok": 59,
+    "failed": 0,
+    "note": "From docstar-skipped-display-patches.json; display-success gap closed (529 + 59 DocStar updates)."
+  },
+  "displaySuccessDocStarTotal": 588
+}

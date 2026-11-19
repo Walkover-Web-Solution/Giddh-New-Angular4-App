@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "body": {
+    "companyUniqueName": "giddhain1792673422178091xos",
+    "companyName": "Giddh Automation API DOC",
+    "financialYearPeriod": "APR-MAR",
+    "financialYears": [
+      {
+        "financialYearStarts": "01-04-2026",
+        "financialYearEnds": "31-03-2027",
+        "isLocked": false,
+        "uniqueName": "FY-APR2026-MAR2027"
+      }
+    ]
+  }
+}

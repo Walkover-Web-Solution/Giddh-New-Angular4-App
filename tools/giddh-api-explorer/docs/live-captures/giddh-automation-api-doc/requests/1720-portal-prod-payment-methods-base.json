@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/payment-methods",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy"
+}

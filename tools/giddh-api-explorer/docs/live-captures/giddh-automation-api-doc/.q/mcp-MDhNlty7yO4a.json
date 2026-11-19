@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"MDhNlty7yO4a","description":"Get All Plans. Part of the All APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"regionCode":{"checked":"true","value":"IND","description":"Region code query parameter. Default: IND."}},"body":{"type":"none"}}}

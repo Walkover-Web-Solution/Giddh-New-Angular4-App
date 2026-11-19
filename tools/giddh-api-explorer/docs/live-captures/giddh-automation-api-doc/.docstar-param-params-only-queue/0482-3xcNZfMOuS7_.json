@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "3xcNZfMOuS7_", "description": "Process a previously uploaded Excel/CSV reconciliation file with user-provided column mappings. Part of the Process APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"accountUniqueName": {"checked": "true", "value": "", "description": "Account uniqueName. Optional.", "required": "false"}}}

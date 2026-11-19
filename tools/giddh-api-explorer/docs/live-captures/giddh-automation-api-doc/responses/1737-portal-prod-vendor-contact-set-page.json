@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "message": "Invalid page provided.",
+  "code": "INVALID_PARAMETER_PROVIDED",
+  "httpStatus": 400,
+  "env": "prod"
+}

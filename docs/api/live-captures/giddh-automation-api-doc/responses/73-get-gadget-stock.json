@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "discounts": [],
+    "name": "API Doc Gadget",
+    "variants": [
+      {
+        "name": "API Doc Gadget",
+        "archive": false,
+        "unitRates": [],
+        "warehouseBalance": [
+          {
+            "warehouse": {
+              "name": "Gidd warehouse",
+              "uniqueName": "xbq1792673424418"
+            },
+            "openingAmount": 0.0,
+            "openingQuantity": 0.0,
+            "stockUnit": {
+              "name": "Piece",
+              "code": "pcs",
+              "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+            }
+          }
+        ],
+        "salesTaxInclusive": false,
+        "purchaseTaxInclusive": false,
+        "skuCode": "APIDOC-GADGET",
+        "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2",
+        "isDefault": true,
+        "fixedAssetTaxInclusive": false,
+        "isVariantSystemGenerated": true
+      }
+    ],
+    "inheritedTaxes": [],
+    "openingAmount": 0.0,
+    "openingQuantity": 0.0,
+    "skuCodeHeading": "SKU Code",
+    "options": [
+      {
+        "name": "Options 1",
+        "values": [
+          "API Doc Gadget"
+        ],
+        "order": 1
+      }
+    ],
+    "outOfStockSelling": false,
+    "inheritedDiscounts": [],
+    "stockUnit": {
+      "name": "Piece",
+      "code": "pcs",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+    },
+    "skuCode": "APIDOC-GADGET",
+    "hsnNumber": "847130",
+    "stockGroup": {
+      "name": "API Doc Products",
+      "uniqueName": "apidoc-products"
+    },
+    "uniqueName": "apidoc-gadget",
+    "stockUnitGroup": {
+      "name": "Main Group",
+      "uniqueName": "maingroup"
+    },
+    "amazonAsin": "",
+    "lowStockAlertCount": 0,
+    "updateStockUnitsForLinkedCompanies": false,
+    "rowNumber": 0
+  }
+}

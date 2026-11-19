@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No warehouse found with unique name null.",
+  "code": "NOT_FOUND"
+}

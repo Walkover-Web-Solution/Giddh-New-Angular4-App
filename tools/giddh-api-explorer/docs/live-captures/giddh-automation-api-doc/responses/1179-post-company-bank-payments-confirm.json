@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Following Constraints failed : OTP cannot be empty. Request Id cannot be empty. ",
+  "code": "INVALID_PARAMETERS"
+}

@@ -1,0 +1,7 @@
+{
+  "start": 350,
+  "totalInBatch": 50,
+  "mcpOkEndpointIds": "all 50 — finish_batch ran 2026-10-29",
+  "remainingEndpointIds": [],
+  "note": "Complete. nextIndex advanced to 400 via finish_batch."
+}

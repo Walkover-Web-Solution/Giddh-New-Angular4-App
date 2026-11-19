@@ -1,0 +1,273 @@
+{
+  "status": "success",
+  "body": {
+    "number": "261022-3",
+    "type": "sales",
+    "uniqueName": "rrftm1792675101875",
+    "isCustomInvoiceNo": false,
+    "isTouristSchemeApplicable": false,
+    "mergePB": false,
+    "passportNumber": null,
+    "withPay": false,
+    "forNewSubscription": false,
+    "subVoucher": null,
+    "attachedFiles": [],
+    "attachedFileName": null,
+    "roundOffApplicable": false,
+    "updateAccountDetails": false,
+    "copyBillingAddressToShippingAddress": true,
+    "readDetailsFromAccount": null,
+    "tallyUniqueId": null,
+    "templateDetails": {
+      "other": {}
+    },
+    "entryUniqueNames": [],
+    "ecommerceDetails": null,
+    "balanceTotal": {
+      "amountForAccount": 175.0,
+      "amountForCompany": 175.0
+    },
+    "gainLoss": 0.0,
+    "status": "PARTIAL-PAID",
+    "subTotal": {
+      "amountForAccount": 250.0,
+      "amountForCompany": 250.0
+    },
+    "discountTotal": null,
+    "taxTotal": null,
+    "roundOffTotal": null,
+    "otherTaxTotal": null,
+    "voucherTotal": {
+      "amountForAccount": 250.0,
+      "amountForCompany": 250.0
+    },
+    "grandTotal": {
+      "amountForAccount": 250.0,
+      "amountForCompany": 250.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Two Hundred Fifty Only",
+      "amountForCompany": "Two Hundred Fifty Only"
+    },
+    "ewayBillDetails": null,
+    "roundOffAccount": null,
+    "items": [],
+    "referenceVoucher": null,
+    "deposits": null,
+    "deposit": null,
+    "adjustments": [
+      {
+        "voucherType": "credit note",
+        "subVoucher": null,
+        "voucherNumber": "CR-261022-1",
+        "unadjustedAmount": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "uniqueName": "fpzy81792675103770",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "exchangeRate": 1.0,
+        "amount": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "accountUniqueName": null,
+        "noteVoucherType": null,
+        "voucherBalanceType": "cr",
+        "voucherDate": "22-10-2026"
+      },
+      {
+        "voucherType": "credit note",
+        "subVoucher": null,
+        "voucherNumber": "CR-261022-2",
+        "unadjustedAmount": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 25.0,
+          "amountForCompany": 25.0
+        },
+        "uniqueName": "5pdez1792675104092",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "exchangeRate": 1.0,
+        "amount": {
+          "amountForAccount": 25.0,
+          "amountForCompany": 25.0
+        },
+        "accountUniqueName": null,
+        "noteVoucherType": null,
+        "voucherBalanceType": "cr",
+        "voucherDate": "22-10-2026"
+      }
+    ],
+    "valuesInAccountCurrency": true,
+    "exchangeRate": 1.0,
+    "purchaseOrders": null,
+    "purchaseOrderDetails": null,
+    "isEInvoiceGenerated": false,
+    "paymentLink": null,
+    "viewInvoiceLink": null,
+    "generateEInvoice": null,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "documentItems": [],
+    "invoiceStatus": null,
+    "multiCurrency": false,
+    "encodedData": null,
+    "token": null,
+    "salesPerson": {},
+    "fileExtention": null,
+    "fileName": null,
+    "recurrencePreviewRequest": null,
+    "recurringVoucherUniqueName": null,
+    "gstUnitMap": null,
+    "date": "22-10-2026",
+    "cashVoucher": false,
+    "dueDate": "05-11-2026",
+    "einvoiceGenerated": false,
+    "touristSchemeApplicable": false,
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      }
+    },
+    "account": {
+      "name": "API Doc Customer Two",
+      "uniqueName": "apidoc-customer-two",
+      "customerName": "API Doc Customer Two",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Customer Two",
+        "gstNumber": "23AAACC1206D1ZM",
+        "address": [
+          "Address line 1"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Customer Two",
+        "gstNumber": "23AAACC1206D1ZM",
+        "address": [
+          "Address line 1"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "placeOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "d9ti41792675101804",
+        "description": "API doc sales 50-sales-customer-two",
+        "date": "22-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Sales",
+              "uniqueName": "sales"
+            },
+            "amount": {
+              "amountForAccount": 250.0,
+              "amountForCompany": 250.0
+            },
+            "taxableValue": {
+              "amountForAccount": 250.0,
+              "amountForCompany": 250.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 250.0,
+          "amountForCompany": 250.0
+        },
+        "entryTotal": {
+          "amountForAccount": 250.0,
+          "amountForCompany": 250.0
+        },
+        "grandTotal": {
+          "amountForAccount": 250.0,
+          "amountForCompany": 250.0
+        },
+        "salesPerson": {},
+        "usedQuantity": 0
+      }
+    ],
+    "warehouse": null
+  }
+}

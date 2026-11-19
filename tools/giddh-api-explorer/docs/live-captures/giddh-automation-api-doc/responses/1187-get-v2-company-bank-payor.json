@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid 'amount' provided.",
+  "code": "INVALID_REQUEST"
+}

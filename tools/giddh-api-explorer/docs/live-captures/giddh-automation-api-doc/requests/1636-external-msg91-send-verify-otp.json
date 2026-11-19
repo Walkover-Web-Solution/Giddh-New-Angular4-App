@@ -1,0 +1,6 @@
+{
+  "method": "POST",
+  "path": "MSG91 widget sendOtp + verifyOtp",
+  "note": "Not Giddh Spring APIs. Widget returns JWT used as accessToken for POST /v2/auth-login.",
+  "surface": "giddh-website"
+}

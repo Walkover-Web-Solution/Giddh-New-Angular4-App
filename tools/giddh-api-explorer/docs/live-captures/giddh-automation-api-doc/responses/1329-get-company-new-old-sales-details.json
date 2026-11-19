@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Given date is not valid. Provide date in 'dd-MM-yyyy' format Or Entered date is not valid.",
+  "code": "INVALID_DATE"
+}

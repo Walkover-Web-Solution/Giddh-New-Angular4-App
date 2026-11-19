@@ -1,0 +1,6 @@
+{
+  "start": 500,
+  "totalInBatch": 50,
+  "mcpOkCount": 50,
+  "note": "All 50 MCP succeeded; finish_batch advanced nextIndex to 550."
+}

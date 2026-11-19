@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "gecV07S6Pbeq", "description": "Get Session. Part of the Session APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"gstin": {"checked": "true", "value": "", "description": "Gstin query parameter. Mandatory.", "required": "true"}}}

@@ -1,0 +1,36 @@
+{
+  "totals": {
+    "totalQuantity": 0.0,
+    "totalValue": 0.0,
+    "buckets": [
+      {
+        "range": "0-30 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "31-60 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "61-90 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "91+ days",
+        "quantity": 0.0,
+        "value": 0.0
+      }
+    ]
+  },
+  "items": {
+    "page": 0,
+    "count": 50,
+    "totalPages": 0,
+    "totalItems": 0,
+    "results": [],
+    "size": 0
+  }
+}

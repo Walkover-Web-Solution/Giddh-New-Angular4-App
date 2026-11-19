@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stock Group not found with uniqueName apidoc-custom-assets",
+  "code": "STOCKGROUP_NOT_FOUND"
+}

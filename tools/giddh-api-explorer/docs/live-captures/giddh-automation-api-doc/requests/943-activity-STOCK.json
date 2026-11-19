@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/activity-logs",
+  "body": {
+    "fromDate": "01-08-2026",
+    "toDate": "23-10-2026",
+    "page": 1,
+    "count": 20,
+    "userUniqueNames": [],
+    "entity": "STOCK",
+    "operation": "CREATE"
+  }
+}

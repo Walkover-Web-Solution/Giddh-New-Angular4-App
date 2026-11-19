@@ -1,0 +1,9 @@
+{
+  "repeatOption": "DAY",
+  "repeatType": "EVERY_DAY",
+  "startDate": "24-10-2026",
+  "endType": "ON_DATE",
+  "endDate": "31-10-2026",
+  "interval": 1,
+  "frequencyUnit": "DAY"
+}

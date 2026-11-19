@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stock unit with code kg already exist.",
+  "code": "CODE_NOT_AVAILABLE"
+}

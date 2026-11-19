@@ -1,0 +1,57 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "Oak",
+      "uniqueName": "dmg1715623569079",
+      "yearlyAmount": 4000.0,
+      "monthlyAmount": 400.0,
+      "invoicesAllowed": 3000,
+      "billsAllowed": 3000,
+      "companiesLimit": 1,
+      "entityCode": "IND",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      }
+    },
+    {
+      "name": "Vine",
+      "uniqueName": "2wm1715623690966",
+      "yearlyAmount": 10000.0,
+      "monthlyAmount": 1000.0,
+      "invoicesAllowed": 5000,
+      "billsAllowed": 5000,
+      "companiesLimit": 10,
+      "entityCode": "IND"
+    },
+    {
+      "name": "Sequoia",
+      "uniqueName": "rul1715624022066",
+      "yearlyAmount": 15000.0,
+      "monthlyAmount": 1500.0,
+      "invoicesAllowed": 10000,
+      "billsAllowed": 10000,
+      "companiesLimit": 100,
+      "entityCode": "IND"
+    },
+    {
+      "name": "Free Plan",
+      "uniqueName": "b0o1716180833263",
+      "yearlyAmount": 0.0,
+      "monthlyAmount": 0.0,
+      "invoicesAllowed": 1000,
+      "billsAllowed": 1000,
+      "companiesLimit": 1,
+      "entityCode": "IND",
+      "restrictedModules": {
+        "E-invoice": null,
+        "Tax filing": null,
+        "Users": 1
+      }
+    }
+  ],
+  "note": "Trimmed plan fields for docs. Full list captured from prod signup.",
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

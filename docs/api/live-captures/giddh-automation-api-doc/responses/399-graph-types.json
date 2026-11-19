@@ -1,0 +1,1 @@
+{"status":"success","body":[{"uniqueName":"income","displayName":"Revenue","type":"category"},{"uniqueName":"expenses","displayName":"Expenses","type":"category"},{"uniqueName":"payment","displayName":"Payment","type":"voucher"},{"uniqueName":"receipt","displayName":"Receipt","type":"voucher"}]}

@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "type": "pdf",
+    "name": "ACCOUNT_STATEMENT_EXPORTRaji.pdf",
+    "data": "<omitted base64 59304 chars>"
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

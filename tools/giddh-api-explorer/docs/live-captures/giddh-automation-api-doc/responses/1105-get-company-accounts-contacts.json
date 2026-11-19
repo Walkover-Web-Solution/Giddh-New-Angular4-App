@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "uniqueName": "nqk1792674061347",
+      "email": "customer.one@example.com",
+      "contactNo": "919876543210",
+      "default": true
+    }
+  ]
+}

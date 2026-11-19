@@ -1,0 +1,25 @@
+{
+  "date": "23-10-2026",
+  "products": [
+    {
+      "stockUniqueName": "apidoc-widget",
+      "variantUniqueName": "apidocwidget1792693959876fk8uyv0enl",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "quantity": 1
+    }
+  ],
+  "transfers": [
+    {
+      "entityDetails": {
+        "uniqueName": "xbq1792673424418",
+        "entity": "warehouse"
+      },
+      "fromWarehouse": {
+        "uniqueName": "xbq1792673424418"
+      },
+      "toWarehouse": {
+        "uniqueName": "xbq1792673424418"
+      }
+    }
+  ]
+}

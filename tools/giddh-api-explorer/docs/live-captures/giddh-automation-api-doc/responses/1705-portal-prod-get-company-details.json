@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "body": {
+    "headQuarterAlias": "10k",
+    "razorpayIntegrated": false,
+    "name": "10k",
+    "uniqueName": "10kin177424654546509z75a",
+    "baseCurrency": "INR",
+    "balanceDecimalPlaces": 3,
+    "portalDomain": "10k",
+    "addresses": [
+      {
+        "name": "HINDUSTAN COPPER LTD",
+        "taxNumber": "24AAACH7409R2Z6",
+        "stateCode": "GJ",
+        "isDefault": true
+      },
+      {
+        "name": "MM new",
+        "taxNumber": "27GJBPS3366F1ZY",
+        "stateCode": "MH",
+        "isDefault": false
+      }
+    ]
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

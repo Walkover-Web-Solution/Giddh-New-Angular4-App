@@ -1,0 +1,5 @@
+{
+  "method": "ANY",
+  "path": "/v2/company/giddhain1792673422178091xos/template-preview?type=invoice",
+  "body": {}
+}

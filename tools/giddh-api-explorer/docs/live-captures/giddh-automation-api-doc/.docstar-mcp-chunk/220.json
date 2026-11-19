@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "J2831RaJ4INt", "description": "Download purchase order Version 3. Part of the Download APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"fileType": {"checked": "true", "value": "base64", "description": "Output file type. Default: base64."}}, "body": {"type": "none"}}

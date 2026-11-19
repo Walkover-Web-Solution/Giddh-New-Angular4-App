@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/yktu41792755921064/add-comment?voucherVersion=2",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy",
+  "body": {
+    "description": "API doc portal prod test comment"
+  }
+}

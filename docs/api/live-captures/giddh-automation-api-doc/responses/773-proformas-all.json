@@ -1,0 +1,37 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "status": "Done",
+        "customerName": "API Doc Customer Three",
+        "customerUniqueName": "apidoc-customer-three",
+        "amount": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0,
+          "currencyForAccount": {
+            "id": null,
+            "name": null,
+            "code": "INR",
+            "symbol": "₹"
+          },
+          "currencyForCompany": {
+            "id": null,
+            "name": null,
+            "code": "INR",
+            "symbol": "₹"
+          }
+        },
+        "action": "invoiced",
+        "grandTotal": 77.0,
+        "expiryDate": "06-11-2026",
+        "proformaNumber": "PR-20261023-1",
+        "proformaDate": "23-10-2026"
+      }
+    ],
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 1
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "status": "success",
+  "body": {
+    "importedAccountOpeningBalance": [],
+    "ledgerView": "T_VIEW",
+    "name": "API Doc Walk-in Customer",
+    "archive": false,
+    "currencySymbol": "\u20b9",
+    "currency": "INR",
+    "country": {
+      "countryName": "India",
+      "countryCode": "IN",
+      "alpha3CountryCode": null
+    },
+    "cashFreeVirtualAccountData": {
+      "virtualAccountNumber": null,
+      "ifscCode": null,
+      "name": null
+    },
+    "applicableTaxes": [],
+    "inheritedTaxes": [],
+    "description": "Updated via API capture 23-10-2026",
+    "yodleeAdded": false,
+    "addresses": [
+      {
+        "address": "API Doc Walk-in Customer address",
+        "stateCode": "MP",
+        "isDefault": true,
+        "partyType": "NOT APPLICABLE",
+        "isComposite": false,
+        "gstinStatus": "NOT_PROVIDED",
+        "state": {
+          "stateGstCode": "23",
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "stateName": "Madhya Pradesh",
+        "stateCodeString": "MP",
+        "stateGstCode": "23"
+      }
+    ],
+    "category": "assets",
+    "emails": [
+      "walkin@example.com"
+    ],
+    "accountOpeningBalance": [],
+    "createdAt": "22-10-2026 13:17:55",
+    "email": "walkin@example.com",
+    "accountBankDetails": [],
+    "mobileNo": "919876543222",
+    "mergedAccounts": "",
+    "openingBalance": 0.0,
+    "updatedBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "openingBalanceType": "DEBIT",
+    "inheritedDiscounts": [],
+    "openingBalanceDate": "01-04-2026",
+    "updatedAt": "22-10-2026 13:17:55",
+    "createdBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "foreignOpeningBalance": 0.0,
+    "isFixed": false,
+    "discounts": [],
+    "applicableDiscounts": [],
+    "otherApplicableTaxes": [],
+    "uniqueName": "apidoc-customer-b2c",
+    "countryName": "India",
+    "accountType": "Debtors",
+    "parentGroups": [
+      {
+        "name": "Current Assets",
+        "uniqueName": "currentassets"
+      },
+      {
+        "name": "Sundry Debtors",
+        "uniqueName": "sundrydebtors"
+      }
+    ]
+  }
+}

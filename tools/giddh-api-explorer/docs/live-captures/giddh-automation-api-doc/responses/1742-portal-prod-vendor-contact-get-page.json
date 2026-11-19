@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "body": {
+    "countOfRecords": 50.0,
+    "page": "INVOICE"
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

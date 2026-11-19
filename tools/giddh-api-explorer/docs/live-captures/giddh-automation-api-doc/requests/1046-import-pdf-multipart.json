@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/imports/import-pdf/bank-statement?entity=pdf&accountUniqueName=apidoc-bank-hdfc",
+  "note": "multipart file"
+}

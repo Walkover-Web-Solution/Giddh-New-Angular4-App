@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/v2/register",
+  "body": {
+    "emailId": "apidoc-website-no-create@example.com",
+    "emailIdAccessToken": "invalid",
+    "emailIdAuthType": "google",
+    "mobileNo": "919999999999",
+    "mobileNoAccessToken": "invalid"
+  }
+}

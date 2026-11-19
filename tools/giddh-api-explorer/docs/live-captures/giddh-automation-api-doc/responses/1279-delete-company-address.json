@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Cannot delete default address.",
+  "code": "INVALID_PARAMETER"
+}

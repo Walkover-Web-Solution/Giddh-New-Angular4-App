@@ -1,0 +1,36 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 5,
+    "totalPages": 1,
+    "totalItems": 5,
+    "results": [
+      {
+        "name": "Sundry Debtors",
+        "uniqueName": "sundrydebtors",
+        "type": "GROUP"
+      },
+      {
+        "name": "API Doc Walk-in Customer",
+        "uniqueName": "apidoc-customer-b2c",
+        "type": "ACCOUNT"
+      },
+      {
+        "name": "API Doc Customer Three",
+        "uniqueName": "apidoc-customer-three",
+        "type": "ACCOUNT"
+      },
+      {
+        "name": "API Doc Customer Two",
+        "uniqueName": "apidoc-customer-two",
+        "type": "ACCOUNT"
+      },
+      {
+        "name": "API Doc Customer One",
+        "uniqueName": "apidoc-customer-one",
+        "type": "ACCOUNT"
+      }
+    ]
+  }
+}

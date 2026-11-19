@@ -1,0 +1,8 @@
+{
+  "status": "success",
+  "body": {
+    "vendorContactUniqueName": "8b51792755886875"
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

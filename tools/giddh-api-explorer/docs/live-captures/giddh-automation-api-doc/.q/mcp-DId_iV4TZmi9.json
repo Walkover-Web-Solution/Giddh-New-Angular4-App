@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"DId_iV4TZmi9","description":"Delete a address record. Part of the Address APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"none"}}}

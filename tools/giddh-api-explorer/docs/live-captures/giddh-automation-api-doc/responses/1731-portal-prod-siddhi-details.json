@@ -1,0 +1,92 @@
+{
+  "status": "success",
+  "body": {
+    "importedAccountOpeningBalance": [],
+    "ledgerView": "T_VIEW",
+    "name": "Siddhi Batra",
+    "archive": false,
+    "currencySymbol": "\u20b9",
+    "currency": "INR",
+    "country": {
+      "countryName": "India",
+      "countryCode": "IN",
+      "alpha3CountryCode": null
+    },
+    "description": "",
+    "category": "assets",
+    "emails": [],
+    "parentGroups": [
+      {
+        "name": "Current Assets",
+        "uniqueName": "currentassets"
+      },
+      {
+        "name": "Sundry Debtors",
+        "uniqueName": "sundrydebtors"
+      }
+    ],
+    "uniqueName": "siddhi",
+    "openingBalance": 0.0,
+    "attentionTo": "",
+    "countryName": "India",
+    "discounts": [],
+    "createdAt": "21-07-2026 07:18:40",
+    "createdBy": {
+      "name": "ankita bhatt",
+      "email": "bhatt.ankita2419@gmail.com",
+      "uniqueName": "bhatt.ankita2419@gmail.com",
+      "mobileNo": "919826139411",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "yodleeAdded": false,
+    "updatedAt": "05-10-2026 10:50:06",
+    "openingBalanceDate": "01-04-2025",
+    "openingBalanceType": "DEBIT",
+    "addresses": [
+      {
+        "gstNumber": "23AAACH7409R1Z9",
+        "address": "",
+        "stateCode": "MP",
+        "isDefault": true,
+        "partyType": "NOT APPLICABLE",
+        "isComposite": false,
+        "gstinStatus": "POTENTIAL_VALID",
+        "state": {
+          "stateGstCode": "23",
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "stateName": "Madhya Pradesh",
+        "stateGstCode": "23",
+        "stateCodeString": "23"
+      }
+    ],
+    "foreignOpeningBalance": 0.0,
+    "isFixed": false,
+    "applicableDiscounts": [],
+    "otherApplicableTaxes": [],
+    "applicableTaxes": [],
+    "inheritedTaxes": [],
+    "mergedAccounts": "",
+    "updatedBy": {
+      "name": "ankita bhatt",
+      "email": "bhatt.ankita2419@gmail.com",
+      "uniqueName": "bhatt.ankita2419@gmail.com",
+      "mobileNo": "919826139411",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "cashFreeVirtualAccountData": {
+      "virtualAccountNumber": null,
+      "ifscCode": null,
+      "name": null
+    },
+    "inheritedDiscounts": [],
+    "closingBalanceTriggerAmountType": "CREDIT",
+    "accountBankDetails": [],
+    "accountOpeningBalance": []
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

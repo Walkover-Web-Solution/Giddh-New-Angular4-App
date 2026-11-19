@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "message": "Request did not originate from Cloudflare.",
+  "code": "INVALID_CF_IP",
+  "httpStatus": 403,
+  "when": "Portal login via MSG91 proxy URL routes.msg91.com/.../v2/verify-portal-user"
+}

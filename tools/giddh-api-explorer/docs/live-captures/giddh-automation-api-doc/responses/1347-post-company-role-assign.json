@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid or missing email address.",
+  "code": "INVALID_PARAMETER"
+}

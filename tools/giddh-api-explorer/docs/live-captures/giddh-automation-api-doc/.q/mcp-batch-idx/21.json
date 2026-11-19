@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"s36BeOFR8FI7","description":"Save Favorite Report Module. Part of the Save Report Data APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"branchUniqueName":{"checked":"true","value":"","description":"Branch uniqueName; omit for default company branch behaviour. Optional.","required":"false"}}}

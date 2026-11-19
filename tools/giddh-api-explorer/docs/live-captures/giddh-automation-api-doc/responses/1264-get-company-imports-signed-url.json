@@ -1,0 +1,8 @@
+{
+  "status": "success",
+  "body": {
+    "requestId": "c2530900-0de8-4c8e-9a73-d371c8de2a94",
+    "signedUrl": "https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/c2530900-0de8-4c8e-9a73-d371c8de2a94/placeholder?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261023T073708Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3599&X-Amz-Credential=AKIAT5PXQ23PX5W2KKS3%2F20261023%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=6d5389302c9c1afc639812aefd027a9e5c6691c48584ed14c3c6ce29943d509f",
+    "filePath": "c2530900-0de8-4c8e-9a73-d371c8de2a94/placeholder"
+  }
+}

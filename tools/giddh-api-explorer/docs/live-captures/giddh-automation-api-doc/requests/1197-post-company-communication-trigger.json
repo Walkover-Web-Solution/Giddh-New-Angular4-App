@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/communication/trigger",
+  "body": {
+    "subject": "api",
+    "html": "<p>api</p>"
+  }
+}

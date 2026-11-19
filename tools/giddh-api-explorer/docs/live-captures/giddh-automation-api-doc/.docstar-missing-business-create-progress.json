@@ -1,0 +1,4 @@
+[
+  {"index": 0, "catalogKey": "GET /company/{companyUniqueName}/batch/all", "endpointId": "TAlxphDPKvBw", "status": "created"},
+  {"index": 5, "catalogKey": "POST /company/{companyUniqueName}/business-documents/{uniqueName}/cancel", "endpointId": "GRJxqxKa6v6N", "status": "created"}
+]

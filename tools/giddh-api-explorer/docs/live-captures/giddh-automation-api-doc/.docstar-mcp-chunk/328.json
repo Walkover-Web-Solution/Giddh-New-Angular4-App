@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "R-d3Ncj14PKm", "description": "Create batch. Mandatory: name (uniqueName generated if omitted). Part of the Batch APIs in Giddh. Requires Auth-Key or Session-Id.", "body": {"type": "none"}}

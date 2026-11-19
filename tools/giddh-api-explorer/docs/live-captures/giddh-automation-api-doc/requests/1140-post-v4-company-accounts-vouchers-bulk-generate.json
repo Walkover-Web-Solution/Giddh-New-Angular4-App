@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/v4/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers/bulk-generate?branchUniqueName=giddhautomationapidoc&voucherVersion=2&combined=placeholder",
+  "body": []
+}

@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "discounts": [],
+    "name": "API Doc Temp SG",
+    "inheritedTaxes": [],
+    "inheritedDiscounts": [],
+    "stocks": [],
+    "uniqueName": "apidoc-temp-sg-3421",
+    "childStockGroups": [],
+    "parentStockGroupNames": []
+  }
+}

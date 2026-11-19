@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stocks exist which use this stock unit. Delete them before performing this action.",
+  "code": "NOT_PERMITTED"
+}

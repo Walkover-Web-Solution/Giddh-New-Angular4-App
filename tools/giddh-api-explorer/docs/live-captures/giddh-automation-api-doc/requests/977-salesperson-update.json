@@ -1,0 +1,10 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson",
+  "body": {
+    "name": "API Doc Sales Person Updated",
+    "email": "apidoc.salesperson@example.invalid",
+    "mobileNumber": "919999990907",
+    "uniqueName": "apidocsalesperson"
+  }
+}

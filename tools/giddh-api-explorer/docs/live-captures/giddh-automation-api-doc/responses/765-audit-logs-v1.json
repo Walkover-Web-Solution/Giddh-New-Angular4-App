@@ -1,0 +1,247 @@
+{
+  "status": "success",
+  "body": {
+    "logs": [
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "utgst1",
+          "name": "UTGST (API Doc GST 5)"
+        },
+        "createdAt": "23-10-2026 11:25:27",
+        "accountUniqueName": "utgst1",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "UTGST (API Doc GST 5)",
+        "groupUniqueName": "utgst",
+        "groupName": "UTGST"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "igst1",
+          "name": "IGST (API Doc GST 5)"
+        },
+        "createdAt": "23-10-2026 11:25:27",
+        "accountUniqueName": "igst1",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "IGST (API Doc GST 5)",
+        "groupUniqueName": "igst",
+        "groupName": "IGST"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "sgst1",
+          "name": "SGST (API Doc GST 5)"
+        },
+        "createdAt": "23-10-2026 11:25:27",
+        "accountUniqueName": "sgst1",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "SGST (API Doc GST 5)",
+        "groupUniqueName": "sgst",
+        "groupName": "SGST"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "cgst1",
+          "name": "CGST (API Doc GST 5)"
+        },
+        "createdAt": "23-10-2026 11:25:27",
+        "accountUniqueName": "cgst1",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "CGST (API Doc GST 5)",
+        "groupUniqueName": "cgst",
+        "groupName": "CGST"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "apidoc-shrinkage-expense",
+          "name": "API Doc Shrinkage Expense"
+        },
+        "createdAt": "23-10-2026 11:09:38",
+        "accountUniqueName": "apidoc-shrinkage-expense",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "API Doc Shrinkage Expense",
+        "groupUniqueName": "otherindirectexpenses",
+        "groupName": "Other Indirect Expenses"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "update",
+        "log": null,
+        "createdAt": "23-10-2026 10:56:03",
+        "accountUniqueName": "apidoc-customer-b2c",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "API Doc Walk-in Customer",
+        "groupUniqueName": "sundrydebtors",
+        "groupName": "Sundry Debtors"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "group",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "apidoc-custom-assets",
+          "name": "API Doc Custom Assets"
+        },
+        "createdAt": "23-10-2026 10:56:02",
+        "accountUniqueName": null,
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": null,
+        "groupUniqueName": "apidoc-custom-assets",
+        "groupName": "API Doc Custom Assets"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "utgst",
+          "name": "UTGST (API Doc GST 18)"
+        },
+        "createdAt": "23-10-2026 10:56:01",
+        "accountUniqueName": "utgst",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "UTGST (API Doc GST 18)",
+        "groupUniqueName": "utgst",
+        "groupName": "UTGST"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "igst",
+          "name": "IGST (API Doc GST 18)"
+        },
+        "createdAt": "23-10-2026 10:56:01",
+        "accountUniqueName": "igst",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "IGST (API Doc GST 18)",
+        "groupUniqueName": "igst",
+        "groupName": "IGST"
+      },
+      {
+        "ledgerUniqueName": null,
+        "entityType": "account",
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "email": "divyanshu@whozzat.com",
+          "uniqueName": "divyanshu@whozzat.com",
+          "mobileNo": "919111525164",
+          "isVerified": true,
+          "hasSubscriptionPermission": false
+        },
+        "operationType": "create",
+        "log": {
+          "uniqueName": "sgst",
+          "name": "SGST (API Doc GST 18)"
+        },
+        "createdAt": "23-10-2026 10:56:01",
+        "accountUniqueName": "sgst",
+        "companyUniqueName": "giddhain1792673422178091xos",
+        "companyName": "Giddh Automation API DOC",
+        "accountName": "SGST (API Doc GST 18)",
+        "groupUniqueName": "sgst",
+        "groupName": "SGST"
+      }
+    ],
+    "totalPages": 3,
+    "size": 10,
+    "totalElements": 21
+  }
+}

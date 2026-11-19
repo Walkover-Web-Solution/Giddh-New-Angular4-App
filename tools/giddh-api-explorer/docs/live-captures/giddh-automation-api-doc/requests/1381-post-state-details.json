@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/state-details?branchUniqueName=giddhautomationapidoc",
+  "body": {}
+}

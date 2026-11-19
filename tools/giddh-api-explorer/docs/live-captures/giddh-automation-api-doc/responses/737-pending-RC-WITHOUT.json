@@ -1,0 +1,56 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "uniqueName": "q39wp1792730978257",
+        "number": "PB-STOCK-001",
+        "date": "23-10-2026",
+        "source": "VOUCHER",
+        "voucherType": "purchase",
+        "documentType": "RC",
+        "account": {
+          "name": "API Doc Vendor Three",
+          "uniqueName": "apidoc-vendor-three"
+        },
+        "grandTotal": {
+          "amountForAccount": 200.0,
+          "amountForCompany": 200.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "₹",
+        "accountCurrencySymbol": "₹",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "statusCode": "",
+        "statusName": "",
+        "invoiceStatus": "NOT_BILLED",
+        "remainingQuantity": 2.0,
+        "linkedInvoiceCount": 0,
+        "isReturn": false,
+        "allowedActions": [
+          "CONVERT_TO_RC"
+        ]
+      }
+    ],
+    "reportType": "WITHOUT_CHALLAN",
+    "balances": {
+      "totalCount": 1,
+      "totalAmount": 200.0,
+      "notInvoicedCount": 0,
+      "notInvoicedAmount": 0.0,
+      "partiallyInvoicedCount": 0,
+      "partiallyInvoicedAmount": 0.0,
+      "fullyInvoicedCount": 0,
+      "fullyInvoicedAmount": 0.0,
+      "openCount": 0,
+      "closedCount": 0,
+      "expiredCount": 0,
+      "cancelledCount": 0
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid value provided for Key: documentType",
+  "code": "INVALID_JSON"
+}

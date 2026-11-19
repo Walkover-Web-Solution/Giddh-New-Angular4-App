@@ -1,0 +1,23 @@
+[
+  {
+    "fieldName": "API Doc CF Flag",
+    "fieldType": {
+      "name": "Boolean",
+      "type": "BOOLEAN"
+    },
+    "fieldInfo": "flag",
+    "isMandatory": false,
+    "dataRange": {
+      "min": null,
+      "max": null
+    },
+    "multipleOptions": false,
+    "modules": [
+      {
+        "uniqueName": "ACCOUNT",
+        "name": "Account"
+      }
+    ],
+    "status": true
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "body": {
+    "currentRatio": 5.56,
+    "debtEquityRatio": 0.22,
+    "proprietaryRatio": 0.82,
+    "fixedAssetRatio": 0.0
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide valid sender email.",
+  "code": "INVALID_REQUEST"
+}

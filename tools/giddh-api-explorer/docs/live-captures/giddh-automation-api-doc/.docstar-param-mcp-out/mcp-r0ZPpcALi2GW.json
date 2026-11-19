@@ -1,0 +1,52 @@
+{
+  "orgId": "83427",
+  "endpointId": "r0ZPpcALi2GW",
+  "description": "Get Detailed UKVat Report. Part of the Vat Report Detailed APIs in Giddh. Requires Auth-Key or Session-Id.",
+  "params": {
+    "branchUniqueName": {
+      "checked": "true",
+      "value": "",
+      "description": "Branch uniqueName; omit for default company branch behaviour.",
+      "required": "false"
+    },
+    "from": {
+      "checked": "true",
+      "value": "",
+      "description": "Range start date (dd-MM-yyyy).",
+      "required": "false"
+    },
+    "to": {
+      "checked": "true",
+      "value": "",
+      "description": "Range end date (dd-MM-yyyy).",
+      "required": "false"
+    },
+    "taxNumber": {
+      "checked": "true",
+      "value": "",
+      "description": "Tax number query parameter. Required.",
+      "required": "false"
+    },
+    "section": {
+      "checked": "true",
+      "value": "",
+      "description": "Section query parameter. Required.",
+      "required": "false"
+    },
+    "page": {
+      "checked": "true",
+      "value": "1",
+      "description": "Page number (1-based). Default: 1.",
+      "required": "false"
+    },
+    "count": {
+      "checked": "true",
+      "value": "20",
+      "description": "Page size (number of items returned). Default: 20.",
+      "required": "false"
+    }
+  },
+  "body": {
+    "type": "none"
+  }
+}

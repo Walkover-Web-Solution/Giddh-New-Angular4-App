@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "body": {
+    "address": "Customer address line 1",
+    "tagNames": null,
+    "mobileCode": null,
+    "name": "API Doc Customer One",
+    "state": "Madhya Pradesh",
+    "currency": "INR",
+    "country": {
+      "countryName": "India",
+      "countryCode": "IN",
+      "alpha3CountryCode": null
+    },
+    "applicableTaxes": [],
+    "description": null,
+    "yodleeAdded": false,
+    "closingBalanceTriggerAmountType": null,
+    "closingBalanceTriggerAmount": null,
+    "emails": [
+      "customer.one@example.com"
+    ],
+    "accountOpeningBalance": [],
+    "isComposite": false,
+    "createdAt": "22-10-2026 13:01:01",
+    "pincode": null,
+    "stateCode": "MP",
+    "salesPerson": null,
+    "email": "customer.one@example.com",
+    "userEntityRoles": [],
+    "mobileNo": "919876543210",
+    "attentionTo": null,
+    "mergedAccounts": "",
+    "updatedBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "openingBalanceType": "DEBIT",
+    "openingBalance": 0.0,
+    "updatedAt": "22-10-2026 13:01:01",
+    "sacNumber": null,
+    "hsnNumber": null,
+    "stocks": null,
+    "createdBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "city": null,
+    "foreignOpeningBalance": 0.0,
+    "isFixed": false,
+    "discounts": [],
+    "uniqueName": "apidoc-customer-one",
+    "accountType": "Debtors",
+    "gstIn": "23AAACC1206D1ZM",
+    "parentGroups": [
+      {
+        "name": "Current Assets",
+        "uniqueName": "currentassets"
+      },
+      {
+        "name": "Sundry Debtors",
+        "uniqueName": "sundrydebtors"
+      }
+    ]
+  }
+}

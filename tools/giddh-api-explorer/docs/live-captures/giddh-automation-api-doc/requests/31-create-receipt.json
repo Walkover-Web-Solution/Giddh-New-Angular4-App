@@ -1,0 +1,113 @@
+{
+  "type": "receipt",
+  "date": "22-10-2026",
+  "exchangeRate": 1,
+  "applyApplicableTaxes": false,
+  "roundOffApplicable": false,
+  "updateAccountDetails": false,
+  "company": {
+    "name": "Giddh Automation API DOC",
+    "uniqueName": "giddhain1792673422178091xos",
+    "billingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "Default Address",
+      "address": [
+        "My new address"
+      ],
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "pincode": "484224",
+      "countryCode": "IN"
+    }
+  },
+  "account": {
+    "uniqueName": "apidoc-customer-one",
+    "name": "API Doc Customer One",
+    "customerName": "API Doc Customer One",
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "billingDetails": {
+      "name": "API Doc Customer One",
+      "address": [
+        "Customer address line 1"
+      ],
+      "gstNumber": "23AAACC1206D1ZM",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    },
+    "shippingDetails": {
+      "name": "API Doc Customer One",
+      "address": [
+        "Customer address line 1"
+      ],
+      "gstNumber": "23AAACC1206D1ZM",
+      "state": {
+        "code": "MP",
+        "name": "Madhya Pradesh",
+        "stateGstCode": "23"
+      },
+      "stateCode": "MP",
+      "countryCode": "IN"
+    }
+  },
+  "entries": [
+    {
+      "date": "22-10-2026",
+      "description": "Receipt against invoice",
+      "voucherType": "receipt",
+      "transactions": [
+        {
+          "account": {
+            "uniqueName": "cash",
+            "name": "Cash"
+          },
+          "amount": {
+            "amountForAccount": 100,
+            "amountForCompany": 100
+          }
+        }
+      ],
+      "taxes": [],
+      "discounts": []
+    }
+  ],
+  "adjustments": [
+    {
+      "uniqueName": "5zkmf1792674363694",
+      "voucherNumber": "261022-1",
+      "voucherType": "sales",
+      "voucherDate": "22-10-2026",
+      "amount": {
+        "amountForAccount": 100,
+        "amountForCompany": 100
+      },
+      "exchangeRate": 1
+    }
+  ]
+}

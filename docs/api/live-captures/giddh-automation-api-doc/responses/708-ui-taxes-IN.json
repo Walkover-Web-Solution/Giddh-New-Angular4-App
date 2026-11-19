@@ -1,0 +1,79 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [
+      {
+        "label": "TDS",
+        "value": "tds",
+        "types": [
+          {
+            "label": "Payable",
+            "value": "tdspay"
+          },
+          {
+            "label": "Receivable",
+            "value": "tdsrc"
+          }
+        ],
+        "countries": [
+          "IN"
+        ]
+      },
+      {
+        "label": "TCS",
+        "value": "tcs",
+        "types": [
+          {
+            "label": "Payable",
+            "value": "tcspay"
+          },
+          {
+            "label": "Receivable",
+            "value": "tcsrc"
+          }
+        ],
+        "countries": [
+          "IN"
+        ]
+      },
+      {
+        "label": "CESS",
+        "value": "gstcess",
+        "types": [],
+        "countries": [
+          "IN"
+        ]
+      },
+      {
+        "label": "GST",
+        "value": "gst",
+        "types": [],
+        "countries": [
+          "IN"
+        ]
+      },
+      {
+        "label": "Others",
+        "value": "others",
+        "types": [],
+        "countries": []
+      },
+      {
+        "label": "InputGST",
+        "value": "inputgst",
+        "types": [],
+        "countries": [
+          "IN"
+        ]
+      },
+      {
+        "label": "COMMONGST",
+        "value": "commongst",
+        "types": [],
+        "countries": [
+          "IN"
+        ]
+      }
+    ]
+  }
+}

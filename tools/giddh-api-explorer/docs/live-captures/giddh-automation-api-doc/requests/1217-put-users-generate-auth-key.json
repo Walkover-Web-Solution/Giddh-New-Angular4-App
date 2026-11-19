@@ -1,0 +1,5 @@
+{
+  "method": "PUT",
+  "path": "/users/apidoc-widget/generate-auth-key",
+  "body": {}
+}

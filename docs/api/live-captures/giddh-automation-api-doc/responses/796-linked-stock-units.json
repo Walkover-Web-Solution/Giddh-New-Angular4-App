@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "Piece",
+      "code": "pcs",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+    }
+  ]
+}

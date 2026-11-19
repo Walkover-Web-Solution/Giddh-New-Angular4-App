@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "body": {
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos"
+    },
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "totalAmount": 0.0,
+    "voucherUniqueNames": [
+      "llvtc1792674364760"
+    ],
+    "vouchers": [
+      {
+        "content": "<omitted base64/pdf 252416 chars>",
+        "contentType": "invoice",
+        "amount": 100.0,
+        "status": "UNPAID",
+        "canPay": false,
+        "message": "No payment gateway integrated in the company.",
+        "number": "261022-2",
+        "balanceTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "dueDate": "05-11-2026",
+        "uniqueName": "llvtc1792674364760"
+      }
+    ]
+  },
+  "httpStatus": 200
+}

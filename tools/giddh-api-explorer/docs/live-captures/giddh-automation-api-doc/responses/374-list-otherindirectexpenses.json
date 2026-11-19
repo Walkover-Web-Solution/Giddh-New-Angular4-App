@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "Round Off",
+      "state": null,
+      "address": "",
+      "applicableTaxes": [],
+      "description": null,
+      "pincode": null,
+      "email": null,
+      "mobileNo": null,
+      "mergedAccounts": "",
+      "openingBalance": 0.0,
+      "openingBalanceType": "DEBIT",
+      "city": null,
+      "uniqueName": "roundoff"
+    }
+  ]
+}

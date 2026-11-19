@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "body": {
+    "state": {
+      "name": "Madhya Pradesh",
+      "code": "MP"
+    },
+    "address": "abcdhdddd",
+    "country": {
+      "name": "India",
+      "code": "IN"
+    },
+    "billingName": "Divyanshu",
+    "pincode": "484223",
+    "email": "g@gmail.com",
+    "companyName": "Arabic Template",
+    "mobileNumber": "917781123456",
+    "uniqueName": "k2b1712141952375",
+    "taxNumber": ""
+  }
+}

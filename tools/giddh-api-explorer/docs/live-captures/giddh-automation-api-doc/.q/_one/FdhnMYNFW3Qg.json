@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"FdhnMYNFW3Qg","description":"Get Sources. Part of the Sources APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"q":{"checked":"true","value":"","description":"Search text (case sensitivity depends on the endpoint). Optional."}},"body":{"type":"none"},"bodyDescription":{}}

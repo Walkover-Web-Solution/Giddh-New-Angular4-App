@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/settings/webhooks",
+  "body": {
+    "url": "https://example.invalid/giddh-webhook",
+    "entity": "sales",
+    "triggerAt": 100
+  }
+}

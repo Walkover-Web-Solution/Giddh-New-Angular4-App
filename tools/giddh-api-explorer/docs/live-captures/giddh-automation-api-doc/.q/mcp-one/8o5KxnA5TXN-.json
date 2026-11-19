@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"8o5KxnA5TXN-","description":"Get All Tax Numbers. Part of the Tax Numbers APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"branchUniqueName":{"checked":"true","value":"","description":"Branch uniqueName; omit for default company branch behaviour. Optional."}},"body":{"type":"none"},"bodyDescription":{}}

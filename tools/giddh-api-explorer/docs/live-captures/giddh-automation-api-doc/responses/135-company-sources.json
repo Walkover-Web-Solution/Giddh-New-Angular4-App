@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "uniqueName": "giddhautomationapidoc",
+      "name": "Giddh Automation API DOC",
+      "entity": "BRANCH",
+      "alias": "Gidd",
+      "isHeadQuarter": true,
+      "isArchived": false,
+      "isConsolidated": false
+    },
+    {
+      "uniqueName": "xbq1792673424418",
+      "name": "Gidd warehouse",
+      "entity": "WAREHOUSE",
+      "alias": "Gidd warehouse",
+      "isHeadQuarter": false,
+      "isArchived": false,
+      "isConsolidated": false
+    }
+  ]
+}

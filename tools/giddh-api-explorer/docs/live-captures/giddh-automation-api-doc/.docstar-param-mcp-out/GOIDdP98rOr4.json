@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"GOIDdP98rOr4","description":"Get Shared List. Part of the Shared With APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"sortBy":{"checked":"true","value":"","description":"Field name to sort by. Optional.","required":false}},"body":{"type":"none"},"bodyDescription":{}}

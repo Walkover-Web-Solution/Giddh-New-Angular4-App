@@ -1,0 +1,33 @@
+{
+  "date": "23-10-2026",
+  "stockUniqueName": "apidoc-finished-good",
+  "manufacturingMultipleOf": 1,
+  "manufacturingQuantity": 1,
+  "manufacturingUnitCode": "pcs",
+  "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+  "warehouseUniqueName": "xbq1792673424418",
+  "variant": {
+    "uniqueName": "apidoc-finished-good1792758621295nj0xkwr8d6"
+  },
+  "linkedStocks": [
+    {
+      "stockUniqueName": "apidoc-gadget",
+      "stockName": "API Doc Gadget",
+      "quantity": 1,
+      "manufacturingQuantity": 1,
+      "manufacturingUnit": "pcs",
+      "stockUnitCode": "pcs",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "rate": 10,
+      "amount": 10,
+      "variant": {
+        "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+      }
+    }
+  ],
+  "otherExpenses": [],
+  "type": "inside",
+  "inventoryType": "PRODUCT",
+  "increaseAssetValue": true,
+  "byProducts": []
+}

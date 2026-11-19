@@ -1,0 +1,195 @@
+{
+  "createdCount": 45,
+  "targetCount": 45,
+  "created": [
+    {
+      "id": "P5dBWc4HicTf",
+      "name": "Get All Batches List",
+      "URL": ".../batch/all"
+    },
+    {
+      "id": "NacniTNLlhYd",
+      "name": "Get Batch Expiry Report"
+    },
+    {
+      "id": "jAaEo6puyZlk",
+      "name": "Get Batch Availability By Stock"
+    },
+    {
+      "id": "bwshO3_93LYc",
+      "name": "Get Batch Availability By Variant"
+    },
+    {
+      "id": "Z3N1gUozF0n_",
+      "name": "Get FIFO Batch Allocation"
+    },
+    {
+      "id": "H5pNSfIjiPc4",
+      "name": "Generate Delivery Challan"
+    },
+    {
+      "id": "h3EzjcmGQeKx",
+      "name": "Generate Receipt Note"
+    },
+    {
+      "id": "rkqVSapyZJ_u",
+      "name": "Generate Business Document"
+    },
+    {
+      "id": "_xE_5Ybxo6Jw",
+      "name": "Get Delivery Challan"
+    },
+    {
+      "id": "Z5O7Mm81RiGi",
+      "name": "Get Receipt Note"
+    },
+    {
+      "id": "3c0KE1gQlUre",
+      "name": "Get Business Document"
+    },
+    {
+      "id": "fQ9PY67VMSjN",
+      "name": "List Delivery Challans"
+    },
+    {
+      "id": "jLK_uu0JtVrL",
+      "name": "List Receipt Notes"
+    },
+    {
+      "id": "HQuycT6WTp9u",
+      "name": "List Business Documents"
+    },
+    {
+      "id": "tnHUbeYSBuaB",
+      "name": "Get All Delivery Challans"
+    },
+    {
+      "id": "YXQJ1D8fLoHP",
+      "name": "Get All Receipt Notes"
+    },
+    {
+      "id": "OVpGOBy0Ys_Q",
+      "name": "Get All Business Documents"
+    },
+    {
+      "id": "0PvzrdIKfUnj",
+      "name": "Bulk Delete Delivery Challans"
+    },
+    {
+      "id": "eVF6LHoDZ1C1",
+      "name": "Bulk Delete Receipt Notes"
+    },
+    {
+      "id": "yX6FB3jOHZtD",
+      "name": "Bulk Delete Business Documents"
+    },
+    {
+      "id": "Ecquotuv6IWm",
+      "name": "Update Delivery Challan"
+    },
+    {
+      "id": "uTuWxQVBOwMb",
+      "name": "Update Receipt Note"
+    },
+    {
+      "id": "Deh0_aCYIxit",
+      "name": "Generate Delivery Challan From Voucher"
+    },
+    {
+      "id": "NeJ4ws3UhhTe",
+      "name": "Generate Receipt Note From Voucher"
+    },
+    {
+      "id": "2Hk_I3bFw3qn",
+      "name": "Generate Business Document From Voucher"
+    },
+    {
+      "id": "epmbUZnS4Cis",
+      "name": "Generate Business Document Via Estimate"
+    },
+    {
+      "id": "hGW_RuSWCz8F",
+      "name": "Cancel Business Document"
+    },
+    {
+      "id": "YOPrMoZ9kaBt",
+      "name": "Get Stock Batch Report"
+    },
+    {
+      "id": "abeE7TNfZ1WT",
+      "name": "Get Variant Batch Report"
+    },
+    {
+      "id": "mR5aGg6VSqEr",
+      "name": "Apply Delivery Challan Event"
+    },
+    {
+      "id": "tt0rq4FrucAj",
+      "name": "Apply Receipt Note Event"
+    },
+    {
+      "id": "sxgleQpNct3S",
+      "name": "Apply Business Document Status"
+    },
+    {
+      "id": "x_7xST_jqUa8",
+      "name": "Post Business Document Event Resolutions"
+    },
+    {
+      "id": "7QOkuSQwUHDS",
+      "name": "Apply Business Document Event"
+    },
+    {
+      "id": "26ssw9IQGT5a",
+      "name": "Get Delivery Challan Event Resolutions"
+    },
+    {
+      "id": "-IzVujwXD9PB",
+      "name": "Post Delivery Challan Event Resolutions"
+    },
+    {
+      "id": "EVLG9VNTDvZB",
+      "name": "Get Receipt Note Event Resolutions"
+    },
+    {
+      "id": "neyOUFvxN96J",
+      "name": "Post Receipt Note Event Resolutions"
+    },
+    {
+      "id": "hMbKJ4EegLgq",
+      "name": "Get Inventory Impact"
+    },
+    {
+      "id": "pKy3RyjvW9rU",
+      "name": "Get Linked Invoices"
+    },
+    {
+      "id": "aGjaB5ap8oC0",
+      "name": "Get Relations"
+    },
+    {
+      "id": "fdpjbhe2RwQk",
+      "name": "Get Case"
+    },
+    {
+      "id": "epifGTNvOY-Y",
+      "name": "Get Relations By Entity"
+    },
+    {
+      "id": "oZ_ldx6KCPwV",
+      "name": "Apply Delivery Challan Event"
+    },
+    {
+      "id": "ZCt5NQPNRPwB",
+      "name": "Apply Receipt Note Event"
+    }
+  ],
+  "stillMissingApprox": [],
+  "parents": [
+    "NLH0VrG17dfS",
+    "azYsDCYD47hV",
+    "R_bS1Khfgr4m"
+  ],
+  "publishedAt": "2026-10-29",
+  "note": "All 44 business-doc/batch missing creates completed 2026-10-29 including event-resolutions, events, relations, linked-invoices, inventory-impact, cases"
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No template found with uniqueName gst_template_a",
+  "code": "INVALID_REQUEST"
+}

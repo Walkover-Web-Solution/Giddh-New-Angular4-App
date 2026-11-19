@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stock 'apidoc-widget' doesnot belong to stock group 'apidoc-products'.",
+  "code": "INVALID_PARAMETER"
+}

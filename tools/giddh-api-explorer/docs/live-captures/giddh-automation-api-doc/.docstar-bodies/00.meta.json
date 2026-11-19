@@ -1,0 +1,1 @@
+{"file": "create-c0-3.json", "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/get-all:PortalController:getAllVouchers"}

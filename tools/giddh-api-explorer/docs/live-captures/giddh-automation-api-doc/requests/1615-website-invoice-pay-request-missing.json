@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/invoice-pay-request/missing-token-apidoc?voucherVersion=2"
+}

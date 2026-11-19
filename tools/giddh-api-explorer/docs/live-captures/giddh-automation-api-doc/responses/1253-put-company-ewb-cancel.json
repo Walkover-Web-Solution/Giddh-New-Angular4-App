@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Cancel reason cannot be left blank.",
+  "code": "INVALID_REQUEST"
+}

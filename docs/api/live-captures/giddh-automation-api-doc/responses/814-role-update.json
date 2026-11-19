@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Role with unique name apidoc-viewer-role not found.",
+  "code": "ROLE_NOT_FOUND"
+}

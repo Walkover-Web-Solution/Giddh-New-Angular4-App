@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/ui/customfields",
+  "note": "no body"
+}

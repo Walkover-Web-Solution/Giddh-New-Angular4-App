@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"auFa7w8t9JP0","description":"Delete Transporter. Part of the Transporters APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"transporterId":{"checked":"true","value":"","description":"Transporter id query parameter. Mandatory.","required":"true"}}}

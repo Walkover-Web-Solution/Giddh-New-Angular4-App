@@ -1,0 +1,84 @@
+{
+  "status": "success",
+  "body": {
+    "businessType": "Registered",
+    "businessNature": "Retail",
+    "addresses": [
+      {
+        "name": "API Doc Addr Two",
+        "address": "API Doc Street 2",
+        "pincode": "560001",
+        "stateCode": "KA",
+        "uniqueName": "rs61792733820379",
+        "isDefault": false,
+        "taxNumber": "",
+        "stateName": "Karnataka",
+        "taxType": "GSTIN"
+      },
+      {
+        "name": "Default Address",
+        "address": "My new address",
+        "pincode": "484224",
+        "stateCode": "MP",
+        "uniqueName": "8rz1792673422372",
+        "isDefault": true,
+        "taxNumber": "23AAACC1206D2ZN",
+        "stateName": "Madhya Pradesh",
+        "taxType": "GSTIN"
+      }
+    ],
+    "parentBranch": {
+      "businessType": "Registered",
+      "businessNature": "Retail",
+      "warehouseResource": [],
+      "isArchived": false,
+      "name": "Giddh Automation API DOC",
+      "alias": "Gidd1",
+      "uniqueName": "42ysmze74chxajowlphz",
+      "consolidatedBranch": true,
+      "taxType": "GSTIN",
+      "defaultBranch": false
+    },
+    "warehouseResource": [
+      {
+        "countryCode": "IN",
+        "currencyCode": "INR",
+        "isDefault": false,
+        "addresses": [],
+        "isArchived": false,
+        "name": "API Doc Warehouse Two",
+        "address": "My new address",
+        "uniqueName": "4gr1792733898078"
+      },
+      {
+        "countryCode": "IN",
+        "currencyCode": "INR",
+        "isDefault": true,
+        "addresses": [
+          {
+            "name": "Default Address",
+            "address": "My new address",
+            "pincode": "484224",
+            "stateCode": "MP",
+            "uniqueName": "8rz1792673422372",
+            "isDefault": true,
+            "taxNumber": "23AAACC1206D2ZN",
+            "stateName": "Madhya Pradesh",
+            "taxType": "GSTIN"
+          }
+        ],
+        "isArchived": false,
+        "name": "Gidd warehouse",
+        "mobileNumber": "91-919111525164",
+        "uniqueName": "xbq1792673424418"
+      }
+    ],
+    "isArchived": false,
+    "name": "Giddh Automation API DOC",
+    "alias": "Gidd",
+    "uniqueName": "giddhautomationapidoc",
+    "consolidatedBranch": false,
+    "taxType": "GSTIN",
+    "defaultBranch": true
+  }
+}

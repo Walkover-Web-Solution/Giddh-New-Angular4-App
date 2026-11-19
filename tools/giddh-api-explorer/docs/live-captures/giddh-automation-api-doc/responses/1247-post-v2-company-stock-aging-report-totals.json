@@ -1,0 +1,28 @@
+{
+  "totals": {
+    "totalQuantity": 9.0,
+    "totalValue": 610.0,
+    "buckets": [
+      {
+        "range": "0-30 days",
+        "quantity": 3.0,
+        "value": 130.0
+      },
+      {
+        "range": "31-60 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "61-90 days",
+        "quantity": 0.0,
+        "value": 0.0
+      },
+      {
+        "range": "91+ days",
+        "quantity": 6.0,
+        "value": 480.0
+      }
+    ]
+  }
+}

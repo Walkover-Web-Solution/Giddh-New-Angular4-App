@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No inventory entry found with inventory entry group unique name tpfal1792733167512.",
+  "code": "INVENTORY_ENTRY_NOT_FOUND"
+}

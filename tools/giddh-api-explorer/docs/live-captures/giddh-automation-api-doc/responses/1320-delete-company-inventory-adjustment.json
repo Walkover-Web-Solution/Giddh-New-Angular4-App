@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "INVALID_REQUEST",
+  "message": "Inventory adjustment with reference no 'placeholder' not found."
+}

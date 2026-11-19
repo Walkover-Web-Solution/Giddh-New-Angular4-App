@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Following Constraints failed : Transactions cannot be empty. URN cannot be empty. Bank name cannot be empty. UniqueName cannot be empty. ",
+  "code": "INVALID_PARAMETERS"
+}

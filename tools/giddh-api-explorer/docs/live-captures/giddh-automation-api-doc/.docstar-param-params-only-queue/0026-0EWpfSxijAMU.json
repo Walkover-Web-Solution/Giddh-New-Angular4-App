@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "0EWpfSxijAMU", "description": "Create. Part of the Ledgers V2 APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"branchUniqueName": {"checked": "true", "value": "", "description": "Branch uniqueName; omit for default company branch behaviour. Optional.", "required": "false"}}}

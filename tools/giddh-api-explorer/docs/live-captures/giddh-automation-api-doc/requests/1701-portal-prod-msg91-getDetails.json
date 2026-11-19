@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "https://routes.msg91.com/api/c/getDetails",
+  "host": "https://api.giddh.com",
+  "origin": "https://portal.giddh.com",
+  "surface": "customer-portal",
+  "env": "prod",
+  "portalSubDomain": "10k",
+  "companyUniqueName": "10kin177424654546509z75a",
+  "note": "Header proxy_auth_token required. External MSG91."
+}

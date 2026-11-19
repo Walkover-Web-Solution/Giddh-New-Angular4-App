@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Enter valid verification code",
+  "code": "INVALID_REQUEST",
+  "httpStatus": 400
+}

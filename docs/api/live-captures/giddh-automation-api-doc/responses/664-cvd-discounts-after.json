@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "stock": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidoc-widget"
+        },
+        "hasVariants": false,
+        "variants": [
+          {
+            "name": "API Doc Widget",
+            "uniqueName": "apidocwidget1792693959876fk8uyv0enl",
+            "defaultQuantity": 1.0,
+            "taxInclusive": false,
+            "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+            "price": 100.0,
+            "discounts": []
+          }
+        ],
+        "dropDownVariants": [],
+        "units": [
+          {
+            "name": "Piece",
+            "code": "pcs",
+            "group": {
+              "name": "Main Group",
+              "uniqueName": "maingroup"
+            },
+            "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+          }
+        ]
+      }
+    ]
+  }
+}

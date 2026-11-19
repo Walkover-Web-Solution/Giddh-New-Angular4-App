@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"zcl4hwaoFWOj","description":"Get All Mappings. Part of the Mappings APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"JSON","raw":{"rawType":"JSON","value":"{\n  \"items\": []\n}"}},"bodyDescription":{"items":{"type":"array","description":"Line items (array). Mandatory.","value":[]}}}

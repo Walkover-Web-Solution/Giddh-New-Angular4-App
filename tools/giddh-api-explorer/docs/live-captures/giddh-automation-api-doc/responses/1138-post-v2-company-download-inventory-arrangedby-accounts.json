@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide to date along with from date",
+  "code": "INVALID_DATE"
+}

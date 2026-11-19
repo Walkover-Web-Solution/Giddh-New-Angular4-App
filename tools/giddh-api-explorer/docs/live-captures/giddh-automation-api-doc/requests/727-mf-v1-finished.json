@@ -1,0 +1,18 @@
+{
+  "date": "23-10-2026",
+  "linkedStocks": [
+    {
+      "stockUniqueName": "apidoc-gadget",
+      "stockName": "API Doc Gadget",
+      "quantity": 1,
+      "manufacturingQuantity": 1,
+      "manufacturingUnit": "pcs",
+      "stockUnitCode": "pcs",
+      "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "rate": 10,
+      "amount": 10
+    }
+  ],
+  "manufacturingMultipleOf": 1,
+  "otherExpenses": []
+}

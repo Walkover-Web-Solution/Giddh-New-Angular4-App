@@ -1,0 +1,1492 @@
+[
+  {
+    "endpointId": "1fzUWcBYCYoK",
+    "name": "Get All User Subscriptions",
+    "catalogKey": "GET /users/subscriptions",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1fzUWcBYCYoK",
+      "description": "Get All User Subscriptions. Part of the Subscriptions APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "scope": {
+          "checked": "true",
+          "value": "",
+          "description": "Scope query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "aZeDr2gyW6Xo",
+    "name": "Get All Voucher Balances",
+    "catalogKey": "POST /company/{companyUniqueName}/vouchers/get-all-vouchers-balances",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "aZeDr2gyW6Xo",
+      "description": "Returns voucher list totals (grand total and total due) for the current filters. Put type, date range, pagination, sort, search, branch, and voucherVersion on the query string. Send optional filter fields in the JSON body — never put type in the body (returns INVALID_PARAMETER). Part of the Get All Vouchers Balances APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Start of voucher date range (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "End of voucher date range (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "sales",
+          "description": "Voucher list type. Send on the query string (not in the JSON body) for a valid response. Allowed values: sales, invoice, payment, receipt, credit note, debit note. Default: sales. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; required when the company uses branches. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Panel sends this on the query string. Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size. Default: 50. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "",
+          "description": "Sort direction. Allowed values: asc, desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "",
+          "description": "Field to sort by. Allowed values: voucherDate, dueDate, voucherNumber. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search on account name, uniqueName, or voucher number. Optional.",
+          "required": false
+        },
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 so the request is handled by the accounting microservice (same as the Giddh panel). Default: 2. Optional.",
+          "required": false
+        },
+        "noteType": {
+          "checked": "true",
+          "value": "",
+          "description": "Optional credit/debit note subtype when type is a note list. Optional.",
+          "required": false
+        },
+        "invoiceCount": {
+          "checked": "true",
+          "value": "",
+          "description": "Related invoice count hint for invoice list queries. Optional.",
+          "required": false
+        },
+        "mail": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, trigger mail export. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"sortBy\": \"\",\n  \"sort\": \"\",\n  \"page\": 1,\n  \"count\": 50,\n  \"q\": \"\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "sortBy": {
+          "type": "string",
+          "description": "Sort field (mirrors query; panel also sends in body). Optional.",
+          "value": ""
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort direction (mirrors query). Optional.",
+          "value": ""
+        },
+        "page": {
+          "type": "string",
+          "description": "Page number (mirrors query). Optional.",
+          "value": 1
+        },
+        "count": {
+          "type": "string",
+          "description": "Page size (mirrors query). Optional.",
+          "value": 50
+        },
+        "q": {
+          "type": "string",
+          "description": "Search text (mirrors query). Optional.",
+          "value": ""
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Column/export field selection for list views. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "grIcgmyYc-CK",
+    "name": "Get All Vouchers",
+    "catalogKey": "POST /portal/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/get-all",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "grIcgmyYc-CK",
+      "description": "Get All Vouchers. Part of the Get All APIs in Giddh. Requires portal session.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "sales",
+          "description": "Voucher or entity type discriminator for the list. Default: sales. Optional.",
+          "required": false
+        },
+        "noteType": {
+          "checked": "true",
+          "value": "",
+          "description": "Credit/debit note subtype when the route supports it. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "desc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "voucherDate",
+          "description": "Field name to sort by. Default: voucherDate. Optional.",
+          "required": false
+        },
+        "voucherCount": {
+          "checked": "true",
+          "value": "20",
+          "description": "Voucher count query parameter. Default: 20. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"noteVoucherType\": \"string\",\n  \"fromDate\": \"01-04-2025\",\n  \"toDate\": \"01-04-2025\",\n  \"receiptType\": \"ADVANCE_RECEIPT\",\n  \"source\": \"string\",\n  \"attachmentExport\": false,\n  \"selectAllFields\": [],\n  \"voucherExport\": false,\n  \"fileNameFormat\": \"string\",\n  \"showVoucherCustomFields\": false,\n  \"showAccountCustomFields\": false,\n  \"showBillingAddress\": false,\n  \"showShippingAddress\": false,\n  \"showTaxableValueBeforeDiscount\": false,\n  \"showDiscountValue\": false,\n  \"showTaxValue\": false,\n  \"showShippingDetails\": false,\n  \"showVoucherNote\": false,\n  \"showEInvoiceDetails\": false,\n  \"showMobileNumber\": false,\n  \"showAttentionTo\": false,\n  \"showEmail\": false,\n  \"showOtherTaxValue\": false,\n  \"dueDate\": \"01-04-2025\",\n  \"dueDateBefore\": false,\n  \"dueDateAfter\": false,\n  \"dueDateEqual\": false,\n  \"voucherDate\": \"01-04-2025\",\n  \"voucherDateBefore\": false,\n  \"voucherDateAfter\": false,\n  \"voucherDateEqual\": false,\n  \"page\": 0,\n  \"count\": 0,\n  \"sort\": \"string\",\n  \"sortBy\": \"string\",\n  \"q\": \"string\",\n  \"fileType\": \"string\",\n  \"voucherCount\": 0,\n  \"groupIds\": [],\n  \"accountIds\": [],\n  \"voucherIds\": [],\n  \"uniqueNames\": [],\n  \"entryUniqueNames\": [],\n  \"balanceDue\": 0,\n  \"balanceEqual\": false,\n  \"balanceMoreThan\": false,\n  \"balanceLessThan\": false,\n  \"total\": 0,\n  \"totalEqual\": false,\n  \"totalMoreThan\": false,\n  \"totalLessThan\": false,\n  \"description\": \"string\",\n  \"accountUniqueName\": \"string\",\n  \"groupUniqueName\": \"string\",\n  \"copyTypes\": [],\n  \"eInvoiceStatus\": [],\n  \"balanceStatus\": [],\n  \"purchaseOrderNumber\": \"string\",\n  \"companyUniqueName\": \"string\",\n  \"userId\": 0,\n  \"exportType\": \"EXPORT_WITH_PAY\",\n  \"totalVouchers\": 0,\n  \"requestId\": \"string\",\n  \"mergePdf\": false,\n  \"exportFromLedger\": false,\n  \"salesPersonUniqueNames\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "noteVoucherType": {
+          "type": "string",
+          "description": "Note voucher type. Optional.",
+          "value": "string"
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "From date. Optional.",
+          "value": "01-04-2025"
+        },
+        "toDate": {
+          "type": "string",
+          "description": "To date. Optional.",
+          "value": "01-04-2025"
+        },
+        "receiptType": {
+          "type": "string",
+          "description": "Receipt type. Allowed values: ADVANCE_RECEIPT, NORMAL_RECEIPT. Optional.",
+          "value": "ADVANCE_RECEIPT",
+          "allowedValues": [
+            "ADVANCE_RECEIPT",
+            "NORMAL_RECEIPT"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": "string"
+        },
+        "attachmentExport": {
+          "type": "boolean",
+          "description": "When true, applies the attachment export filter or flag. Optional.",
+          "value": false
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        },
+        "voucherExport": {
+          "type": "boolean",
+          "description": "When true, applies the voucher export filter or flag. Optional.",
+          "value": false
+        },
+        "fileNameFormat": {
+          "type": "string",
+          "description": "File name format. Optional.",
+          "value": "string"
+        },
+        "showVoucherCustomFields": {
+          "type": "boolean",
+          "description": "When true, applies the show voucher custom fields filter or flag. Optional.",
+          "value": false
+        },
+        "showAccountCustomFields": {
+          "type": "boolean",
+          "description": "When true, applies the show account custom fields filter or flag. Optional.",
+          "value": false
+        },
+        "showBillingAddress": {
+          "type": "boolean",
+          "description": "When true, applies the show billing address filter or flag. Optional.",
+          "value": false
+        },
+        "showShippingAddress": {
+          "type": "boolean",
+          "description": "When true, applies the show shipping address filter or flag. Optional.",
+          "value": false
+        },
+        "showTaxableValueBeforeDiscount": {
+          "type": "boolean",
+          "description": "When true, applies the show taxable value before discount filter or flag. Optional.",
+          "value": false
+        },
+        "showDiscountValue": {
+          "type": "boolean",
+          "description": "When true, applies the show discount value filter or flag. Optional.",
+          "value": false
+        },
+        "showTaxValue": {
+          "type": "boolean",
+          "description": "When true, applies the show tax value filter or flag. Optional.",
+          "value": false
+        },
+        "showShippingDetails": {
+          "type": "boolean",
+          "description": "When true, applies the show shipping details filter or flag. Optional.",
+          "value": false
+        },
+        "showVoucherNote": {
+          "type": "boolean",
+          "description": "When true, applies the show voucher note filter or flag. Optional.",
+          "value": false
+        },
+        "showEInvoiceDetails": {
+          "type": "boolean",
+          "description": "When true, applies the show einvoice details filter or flag. Optional.",
+          "value": false
+        },
+        "showMobileNumber": {
+          "type": "boolean",
+          "description": "When true, applies the show mobile number filter or flag. Optional.",
+          "value": false
+        },
+        "showAttentionTo": {
+          "type": "boolean",
+          "description": "When true, applies the show attention to filter or flag. Optional.",
+          "value": false
+        },
+        "showEmail": {
+          "type": "boolean",
+          "description": "When true, applies the show email filter or flag. Optional.",
+          "value": false
+        },
+        "showOtherTaxValue": {
+          "type": "boolean",
+          "description": "When true, applies the show other tax value filter or flag. Optional.",
+          "value": false
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "01-04-2025"
+        },
+        "dueDateBefore": {
+          "type": "boolean",
+          "description": "When true, applies the due date before filter or flag. Optional.",
+          "value": false
+        },
+        "dueDateAfter": {
+          "type": "boolean",
+          "description": "When true, applies the due date after filter or flag. Optional.",
+          "value": false
+        },
+        "dueDateEqual": {
+          "type": "boolean",
+          "description": "When true, applies the due date equal filter or flag. Optional.",
+          "value": false
+        },
+        "voucherDate": {
+          "type": "string",
+          "description": "Voucher date (dd-MM-yyyy). Optional.",
+          "value": "01-04-2025"
+        },
+        "voucherDateBefore": {
+          "type": "boolean",
+          "description": "When true, applies the voucher date before filter or flag. Optional.",
+          "value": false
+        },
+        "voucherDateAfter": {
+          "type": "boolean",
+          "description": "When true, applies the voucher date after filter or flag. Optional.",
+          "value": false
+        },
+        "voucherDateEqual": {
+          "type": "boolean",
+          "description": "When true, applies the voucher date equal filter or flag. Optional.",
+          "value": false
+        },
+        "page": {
+          "type": "number",
+          "description": "Page. Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "number",
+          "description": "Count. Optional.",
+          "value": 0
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort. Optional.",
+          "value": "string"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Sort by. Optional.",
+          "value": "string"
+        },
+        "q": {
+          "type": "string",
+          "description": "Q. Optional.",
+          "value": "string"
+        },
+        "fileType": {
+          "type": "string",
+          "description": "File type. Optional.",
+          "value": "string"
+        },
+        "voucherCount": {
+          "type": "number",
+          "description": "Voucher count. Optional.",
+          "value": 0
+        },
+        "groupIds": {
+          "type": "array",
+          "description": "Array of group ids values. Optional.",
+          "value": []
+        },
+        "accountIds": {
+          "type": "array",
+          "description": "Array of account ids values. Optional.",
+          "value": []
+        },
+        "voucherIds": {
+          "type": "array",
+          "description": "Array of voucher ids values. Optional.",
+          "value": []
+        },
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        },
+        "entryUniqueNames": {
+          "type": "array",
+          "description": "Array of entry unique names values. Optional.",
+          "value": []
+        },
+        "balanceDue": {
+          "type": "number",
+          "description": "Balance due. Optional.",
+          "value": 0
+        },
+        "balanceEqual": {
+          "type": "boolean",
+          "description": "When true, applies the balance equal filter or flag. Optional.",
+          "value": false
+        },
+        "balanceMoreThan": {
+          "type": "boolean",
+          "description": "When true, applies the balance more than filter or flag. Optional.",
+          "value": false
+        },
+        "balanceLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the balance less than filter or flag. Optional.",
+          "value": false
+        },
+        "total": {
+          "type": "number",
+          "description": "Total. Optional.",
+          "value": 0
+        },
+        "totalEqual": {
+          "type": "boolean",
+          "description": "When true, applies the total equal filter or flag. Optional.",
+          "value": false
+        },
+        "totalMoreThan": {
+          "type": "boolean",
+          "description": "When true, applies the total more than filter or flag. Optional.",
+          "value": false
+        },
+        "totalLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the total less than filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "groupUniqueName": {
+          "type": "string",
+          "description": "Group unique name. Optional.",
+          "value": "string"
+        },
+        "copyTypes": {
+          "type": "array",
+          "description": "Array of copy types values. Optional.",
+          "value": []
+        },
+        "eInvoiceStatus": {
+          "type": "array",
+          "description": "Array of e invoice status values. Optional.",
+          "value": []
+        },
+        "balanceStatus": {
+          "type": "array",
+          "description": "Array of balance status values. Optional.",
+          "value": []
+        },
+        "purchaseOrderNumber": {
+          "type": "string",
+          "description": "Purchase order number. Optional.",
+          "value": "string"
+        },
+        "companyUniqueName": {
+          "type": "string",
+          "description": "Company unique name. Optional.",
+          "value": "string"
+        },
+        "userId": {
+          "type": "number",
+          "description": "User id. Optional.",
+          "value": 0
+        },
+        "exportType": {
+          "type": "string",
+          "description": "Export type. Allowed values: EXPORT_WITH_PAY, EXPORT_WITHOUT_PAY, BULK_INVOICE_EXPORT, ALL_VOUCHERS_EXPORT, MASTER_VOUCHERS_EXPORT. Optional.",
+          "value": "EXPORT_WITH_PAY",
+          "allowedValues": [
+            "EXPORT_WITH_PAY",
+            "EXPORT_WITHOUT_PAY",
+            "BULK_INVOICE_EXPORT",
+            "ALL_VOUCHERS_EXPORT",
+            "MASTER_VOUCHERS_EXPORT"
+          ]
+        },
+        "totalVouchers": {
+          "type": "number",
+          "description": "Total vouchers. Optional.",
+          "value": 0
+        },
+        "requestId": {
+          "type": "string",
+          "description": "Request id. Optional.",
+          "value": "string"
+        },
+        "mergePdf": {
+          "type": "boolean",
+          "description": "When true, applies the merge pdf filter or flag. Optional.",
+          "value": false
+        },
+        "exportFromLedger": {
+          "type": "boolean",
+          "description": "When true, applies the export from ledger filter or flag. Optional.",
+          "value": false
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "zPXGO2aLVvVP",
+    "name": "Get All Vouchers",
+    "catalogKey": "POST /company/{companyUniqueName}/vouchers/get-all",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "zPXGO2aLVvVP",
+      "description": "List vouchers (sales invoices, receipts, payments, credit/debit notes) with pagination, date range, search, and optional JSON filters in the request body. Pass type, page, count, dates, sort, and search on the query string; send VoucherFilter fields in the JSON body. Part of the Get All APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "25",
+          "description": "Page size (number of vouchers per page). Default: 25. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Start of voucher date range (dd-MM-yyyy). Used with to. Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "End of voucher date range (dd-MM-yyyy). Used with from. Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "sales",
+          "description": "Which voucher list to load. Without a supported value the API returns no rows or INVALID_PARAMETER. Allowed values: sales, invoice, payment, receipt, credit note, debit note. Default: sales. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "desc",
+          "description": "Sort direction for sortBy. Allowed values: asc, desc. Default: desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "voucherDate",
+          "description": "Field to sort by. Allowed values: voucherDate, dueDate, voucherNumber. Default: voucherDate. Optional.",
+          "required": false
+        },
+        "invoiceCount": {
+          "checked": "true",
+          "value": "10",
+          "description": "Related invoice count hint used for sales/invoice lists (backend default 10). Default: 10. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Case-sensitive search on account name, account uniqueName, or voucher number. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Limit to a branch. Omit for company default / consolidated behaviour. Optional.",
+          "required": false
+        },
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        },
+        "noteType": {
+          "checked": "true",
+          "value": "",
+          "description": "Credit/debit note subtype when type is a note list. Optional.",
+          "required": false
+        },
+        "mail": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, trigger mail export. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"accountUniqueName\": \"apidoc-customer-one\",\n  \"balanceStatus\": [\n    \"UNPAID\"\n  ],\n  \"status\": [],\n  \"voucherNumber\": \"\",\n  \"proformaNumber\": \"\",\n  \"balanceDue\": 0,\n  \"dueDate\": \"\",\n  \"invoiceDate\": \"\",\n  \"balanceMoreThan\": false,\n  \"balanceEqual\": false,\n  \"balanceLessThan\": false,\n  \"dueDateBefore\": false,\n  \"dueDateAfter\": false,\n  \"dueDateEqual\": false,\n  \"invoiceDateBefore\": false,\n  \"invoiceDateAfter\": false,\n  \"invoiceDateEqual\": false,\n  \"totalMoreThan\": false,\n  \"totalLessThan\": false,\n  \"totalEqual\": false,\n  \"total\": 0,\n  \"description\": \"\",\n  \"groupUniqueName\": \"\",\n  \"voucherUniqueNames\": [],\n  \"copyTypes\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Filter to a single customer/vendor account uniqueName. Optional.",
+          "value": "apidoc-customer-one"
+        },
+        "balanceStatus": {
+          "type": "array",
+          "description": "Filter by balance status. Send one or more values. Allowed values: PAID, UNPAID, PARTIALLY PAID, CANCEL, OVERDUE. Optional.",
+          "value": [
+            "UNPAID"
+          ],
+          "allowedValues": [
+            "PAID",
+            "UNPAID",
+            "PARTIALLY PAID",
+            "CANCEL",
+            "OVERDUE"
+          ]
+        },
+        "status": {
+          "type": "array",
+          "description": "Filter by e-invoice / voucher status codes (when applicable for the type). Optional.",
+          "value": []
+        },
+        "voucherNumber": {
+          "type": "string",
+          "description": "Exact or partial voucher number filter. Optional.",
+          "value": ""
+        },
+        "proformaNumber": {
+          "type": "string",
+          "description": "Filter linked proforma number (sales/invoice). Optional.",
+          "value": ""
+        },
+        "balanceDue": {
+          "type": "string",
+          "description": "Amount to compare when balanceMoreThan, balanceLessThan, or balanceEqual is true. Optional.",
+          "value": 0
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date for dueDateBefore/After/Equal filters (dd-MM-yyyy). Optional.",
+          "value": ""
+        },
+        "invoiceDate": {
+          "type": "string",
+          "description": "Invoice/voucher date for invoiceDateBefore/After/Equal (dd-MM-yyyy). Optional.",
+          "value": ""
+        },
+        "balanceMoreThan": {
+          "type": "string",
+          "description": "When true, balanceDue is a lower bound. Optional.",
+          "value": false
+        },
+        "balanceLessThan": {
+          "type": "string",
+          "description": "When true, balanceDue is an upper bound. Optional.",
+          "value": false
+        },
+        "balanceEqual": {
+          "type": "string",
+          "description": "When true, match exact balanceDue. Optional.",
+          "value": false
+        },
+        "dueDateBefore": {
+          "type": "string",
+          "description": "When true, dueDate is an upper bound. Optional.",
+          "value": false
+        },
+        "dueDateAfter": {
+          "type": "string",
+          "description": "When true, dueDate is a lower bound. Optional.",
+          "value": false
+        },
+        "dueDateEqual": {
+          "type": "string",
+          "description": "When true, match exact dueDate. Optional.",
+          "value": false
+        },
+        "invoiceDateBefore": {
+          "type": "string",
+          "description": "When true, invoiceDate is an upper bound. Optional.",
+          "value": false
+        },
+        "invoiceDateAfter": {
+          "type": "string",
+          "description": "When true, invoiceDate is a lower bound. Optional.",
+          "value": false
+        },
+        "invoiceDateEqual": {
+          "type": "string",
+          "description": "When true, match exact invoiceDate. Optional.",
+          "value": false
+        },
+        "total": {
+          "type": "string",
+          "description": "Grand total amount when totalMoreThan/LessThan/Equal flags are used. Optional.",
+          "value": 0
+        },
+        "totalMoreThan": {
+          "type": "string",
+          "description": "Compare grand total greater than total. Optional.",
+          "value": false
+        },
+        "totalLessThan": {
+          "type": "string",
+          "description": "Compare grand total less than total. Optional.",
+          "value": false
+        },
+        "totalEqual": {
+          "type": "string",
+          "description": "Compare grand total equal to total. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Line description text filter. Optional.",
+          "value": ""
+        },
+        "groupUniqueName": {
+          "type": "string",
+          "description": "Limit to accounts in this account group. Optional.",
+          "value": ""
+        },
+        "companyName": {
+          "type": "string",
+          "description": "Optional company display name filter (export/report flows). Optional."
+        },
+        "voucherUniqueNames": {
+          "type": "array",
+          "description": "Fetch only these voucher uniqueNames (array). Optional.",
+          "value": []
+        },
+        "copyTypes": {
+          "type": "array",
+          "description": "Voucher copy types for export/mail flows. Allowed values: ORIGINAL, CUSTOMER, TRANSPORT. Optional.",
+          "value": [],
+          "allowedValues": [
+            "ORIGINAL",
+            "CUSTOMER",
+            "TRANSPORT"
+          ]
+        },
+        "sendTo": {
+          "type": "string",
+          "description": "Email recipients when bulk export/mail is triggered from filter. Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "s9EipKkHfQog",
+    "name": "Get All Warehouses",
+    "catalogKey": "GET /company/{companyUniqueName}/warehouse",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "s9EipKkHfQog",
+      "description": "Get All Warehouses. Part of the Warehouse APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "includeArchived": {
+          "checked": "true",
+          "value": "true",
+          "description": "Include archived query parameter. Default: true. Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "C9cujUxVL2QD",
+    "name": "Get Audit Log Operation Filter Form",
+    "catalogKey": "GET /ui/auditlogs-form",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "C9cujUxVL2QD",
+      "description": "/. Part of the Auditlogs Form APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Qy6xNltE8ZFC",
+    "name": "Get B2B Invoices",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/gstr-reconcile/invoices",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Qy6xNltE8ZFC",
+      "description": "Get B2b Invoices. Part of the Invoices APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "monthYear": {
+          "checked": "true",
+          "value": "",
+          "description": "Month year query parameter. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "gstin": {
+          "checked": "true",
+          "value": "",
+          "description": "Gstin query parameter. Mandatory.",
+          "required": true
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "action": {
+          "checked": "true",
+          "value": "NOT_ON_GIDDH",
+          "description": "Action to perform. Default: NOT_ON_GIDDH. Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        },
+        "gstReturnType": {
+          "checked": "true",
+          "value": "",
+          "description": "Gst return type query parameter. Optional.",
+          "required": false
+        },
+        "gsp": {
+          "checked": "true",
+          "value": "whitebooks",
+          "description": "Gsp query parameter. Default: whitebooks. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Qq2rADPlymJv",
+    "name": "Get Balance Summary",
+    "catalogKey": "GET /portal/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/balance-summary",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Qq2rADPlymJv",
+      "description": "Get Balance Summary. Part of the Balance Summary APIs in Giddh. Requires portal session.",
+      "params": {
+        "type": {
+          "checked": "true",
+          "value": "sales",
+          "description": "Voucher or entity type discriminator for the list. Default: sales. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Z5A_T874GeWy",
+    "name": "Get Bank Integration Form",
+    "catalogKey": "GET /ui/bank/integration/form",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Z5A_T874GeWy",
+      "description": "/. Part of the Form APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "bankName": {
+          "checked": "true",
+          "value": "",
+          "description": "Bank name query parameter. Mandatory.",
+          "required": true
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "R-d3Ncj14PKm",
+    "name": "Get Batch",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/{batchUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "R-d3Ncj14PKm",
+      "description": "Create batch. Mandatory: name (uniqueName generated if omitted). Part of the Batch APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "2Omu_hXQaJ_u",
+    "name": "Get Batch Availability",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/availability",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "2Omu_hXQaJ_u",
+      "description": "Unified batch availability for picker / batch-to-batch transfer. Part of the Availability APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "uniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Entity uniqueName. Optional.",
+          "required": false
+        },
+        "isVariant": {
+          "checked": "true",
+          "value": "false",
+          "description": "Is variant query parameter. Default: false. Optional.",
+          "required": false
+        },
+        "noStock": {
+          "checked": "true",
+          "value": "false",
+          "description": "No stock query parameter. Default: false. Optional.",
+          "required": false
+        },
+        "warehouseUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Warehouse unique name query parameter. Optional.",
+          "required": false
+        },
+        "excludeBatchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Exclude batch unique name query parameter. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "expiryDate",
+          "description": "Field name to sort by. Default: expiryDate. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "reportNature": {
+          "checked": "true",
+          "value": "",
+          "description": "Report nature query parameter. Optional.",
+          "required": false
+        },
+        "inventoryMode": {
+          "checked": "true",
+          "value": "",
+          "description": "Inventory mode query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "jAaEo6puyZlk",
+    "name": "Get Batch Availability By Stock",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/stock/{stockUniqueName}/availability",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "jAaEo6puyZlk",
+      "description": "Batch-wise availability for a stock (all variants' batches). Prefer {@code GET /availability?isVariant=false}. Part of the Availability APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "warehouseUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Warehouse unique name query parameter. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "expiryDate",
+          "description": "Field name to sort by. Default: expiryDate. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "reportNature": {
+          "checked": "true",
+          "value": "",
+          "description": "Report nature query parameter. Optional.",
+          "required": false
+        },
+        "inventoryMode": {
+          "checked": "true",
+          "value": "",
+          "description": "Inventory mode query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "bwshO3_93LYc",
+    "name": "Get Batch Availability By Variant",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/variant/{variantUniqueName}/availability",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "bwshO3_93LYc",
+      "description": "Batch-wise availability for a variant (batch stock report / picker). Paginated. Part of the Availability APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "warehouseUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Warehouse unique name query parameter. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "expiryDate",
+          "description": "Field name to sort by. Default: expiryDate. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "reportNature": {
+          "checked": "true",
+          "value": "",
+          "description": "Report nature query parameter. Optional.",
+          "required": false
+        },
+        "inventoryMode": {
+          "checked": "true",
+          "value": "",
+          "description": "Inventory mode query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "NacniTNLlhYd",
+    "name": "Get Batch Expiry Report",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/expiry-report",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "NacniTNLlhYd",
+      "description": "Expiry report: expired batches or batches expiring within N days. Part of the Expiry Report APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "withinDays": {
+          "checked": "true",
+          "value": "30",
+          "description": "Within days query parameter. Default: 30. Optional.",
+          "required": false
+        },
+        "expiredOnly": {
+          "checked": "true",
+          "value": "false",
+          "description": "Expired only query parameter. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "BitG4ldye7m8",
+    "name": "Get Branch",
+    "catalogKey": "GET /company/{companyUniqueName}/branch/{branchUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "BitG4ldye7m8",
+      "description": "Get Branch. Part of the Branch APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "3c0KE1gQlUre",
+    "name": "Get Business Document",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/get",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "3c0KE1gQlUre",
+      "description": "Get. Part of the Get APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "uniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Entity uniqueName. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "H8l4xXFncrWl",
+    "name": "Get Business Document Case",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/cases/{caseId}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "H8l4xXFncrWl",
+      "description": "Get Case. Part of the Cases APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "uDjGYnV1d0W3",
+    "name": "Get Business Document Event Resolutions",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/event-resolutions",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "uDjGYnV1d0W3",
+      "description": "Get Event Resolutions. Part of the Event Resolutions APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "event": {
+          "checked": "true",
+          "value": "",
+          "description": "Event query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "b3KN8HaAR2wC",
+    "name": "Get Business Document Inventory Impact",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/inventory-impact",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "b3KN8HaAR2wC",
+      "description": "Get Inventory Impact. Part of the Inventory Impact APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "mjfDEBDKoXmN",
+    "name": "Get Business Document Relations",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}/relations",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "mjfDEBDKoXmN",
+      "description": "Get Relations. Part of the Relations APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "0UsxTDSzZa-9",
+    "name": "Get Business Document Relations By Entity",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/relations",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "0UsxTDSzZa-9",
+      "description": "Get Relations By Entity. Part of the Relations APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "entityType": {
+          "checked": "true",
+          "value": "",
+          "description": "Entity type query parameter. Mandatory.",
+          "required": true
+        },
+        "entityUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Entity unique name query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "kbKH_V_Q5dn9",
+    "name": "Get Business Documents",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/get",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "kbKH_V_Q5dn9",
+      "description": "Get. Part of the Get APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "uniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Entity uniqueName. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "nM6M_yYkszzW",
+    "name": "Get By Unique Name",
+    "catalogKey": "GET /company/{companyUniqueName}/business-documents/{uniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "nM6M_yYkszzW",
+      "description": "Get By Unique Name. Part of the Business Documents APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "QU8HM1RjYQcn",
+    "name": "Get Campaign Fields",
+    "catalogKey": "GET /company/{companyUniqueName}/communication/campaign/{slug}/fields",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "QU8HM1RjYQcn",
+      "description": "Get Campaign Fields. Part of the Fields APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "X3SGPPXjwml3",
+    "name": "Get Campaign List",
+    "catalogKey": "GET /company/{companyUniqueName}/communication/campaign/list",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "X3SGPPXjwml3",
+      "description": "Get Campaign List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

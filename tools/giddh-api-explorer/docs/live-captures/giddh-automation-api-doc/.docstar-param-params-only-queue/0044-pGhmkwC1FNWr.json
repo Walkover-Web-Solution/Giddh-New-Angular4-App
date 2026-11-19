@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "pGhmkwC1FNWr", "description": "Create. Part of the Tax APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"updateEntries": {"checked": "true", "value": "false", "description": "Update entries query parameter. Default: false. Optional.", "required": "false"}}}

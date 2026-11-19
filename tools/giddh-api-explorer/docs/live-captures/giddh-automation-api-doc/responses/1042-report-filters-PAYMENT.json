@@ -1,0 +1,52 @@
+{
+  "status": "success",
+  "body": {
+    "module": "PAYMENT",
+    "reportFilterColumns": [
+      {
+        "label": "Payment #",
+        "value": "payment",
+        "checked": true,
+        "dataType": "String"
+      },
+      {
+        "label": "Date",
+        "value": "date",
+        "checked": true,
+        "dataType": "Date"
+      },
+      {
+        "label": "Vendor Name",
+        "value": "vendor_name",
+        "checked": true,
+        "dataType": "String"
+      },
+      {
+        "label": "Payment Mode",
+        "value": "payment_mode",
+        "checked": true,
+        "dataType": "String"
+      },
+      {
+        "label": "Invoice #",
+        "value": "invoice",
+        "checked": true,
+        "dataType": "String"
+      },
+      {
+        "label": "Total Amt.",
+        "value": "grandTotal",
+        "checked": true,
+        "dataType": "Number"
+      },
+      {
+        "label": "Balance Due",
+        "value": "balanceDue",
+        "checked": true,
+        "dataType": "Number"
+      }
+    ],
+    "reportNature": "BOOKS",
+    "showReportNature": true
+  }
+}

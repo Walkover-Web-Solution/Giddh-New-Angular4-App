@@ -1,0 +1,31 @@
+{
+  "manufacturingDetails": [
+    {
+      "date": "23-10-2026",
+      "stockUniqueName": "apidoc-widget",
+      "manufacturingQuantity": 1,
+      "manufacturingMultipleOf": 1,
+      "warehouseUniqueName": "xbq1792673424418",
+      "increaseAssetValue": true,
+      "variant": {
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl",
+        "name": "API Doc Widget"
+      },
+      "linkedStocks": [
+        {
+          "stockUniqueName": "apidoc-gadget",
+          "quantity": 2,
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "rate": 10,
+          "amount": 20,
+          "variant": {
+            "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2",
+            "name": "API Doc Gadget"
+          }
+        }
+      ],
+      "byProducts": [],
+      "otherExpenses": []
+    }
+  ]
+}

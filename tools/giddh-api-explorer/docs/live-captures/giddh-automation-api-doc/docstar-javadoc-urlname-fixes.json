@@ -1,0 +1,13 @@
+[
+  {"endpointId": "xtnY4fHsEzgq", "name": "Stock Inventory Export All Group Stock Report", "urlName": "stock-inventory-export-all-group-stock-report-get"},
+  {"endpointId": "3LWVKWZifQtj", "name": "Stock Inventory Export All Group Stock Report", "urlName": "stock-inventory-export-all-group-stock-report-post"},
+  {"endpointId": "9Fd247-mBFog", "name": "Stock Inventory Export All Stock In Hierarchy", "urlName": "stock-inventory-export-all-stock-in-hierarchy-get"},
+  {"endpointId": "Wld5x5ifNu8f", "name": "Stock Inventory Export All Stock In Hierarchy", "urlName": "stock-inventory-export-all-stock-in-hierarchy-post"},
+  {"endpointId": "-k3H3k7gUqBx", "name": "Stock Inventory Export Arrangedby Accounts", "urlName": "stock-inventory-export-arrangedby-accounts-post"},
+  {"endpointId": "FIHc4go9eLDj", "name": "Stock Inventory Export Arrangedby Accounts", "urlName": "stock-inventory-export-arrangedby-accounts-get"},
+  {"endpointId": "3_ppzaHDeDhJ", "name": "Stock Inventory Export Group Stock Report", "urlName": "stock-inventory-export-group-stock-report-post"},
+  {"endpointId": "UFhf2-9u5Wvg", "name": "Stock Inventory Export Group Stock Report", "urlName": "stock-inventory-export-group-stock-report-get"},
+  {"endpointId": "eeLqMJdw-d41", "name": "Stock Inventory Export Stock Report", "urlName": "stock-inventory-export-stock-report-get"},
+  {"endpointId": "GyPtUjeYtIV4", "name": "Stock Inventory Export Stock Report", "urlName": "stock-inventory-export-stock-report-post"},
+  {"endpointId": "yQcDmqLHLP9i", "name": "Get Ledgers V2", "urlName": "get-ledgers-v2"}
+]

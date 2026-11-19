@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/vouchers?type=receipt&page=1&count=10&voucherVersion=2",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy"
+}

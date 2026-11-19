@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No user entity role found with uniqueName aft1792738829523.",
+  "code": "UER_NOT_FOUND"
+}

@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/v2/company/giddhain1792673422178091xos/reverse-charge-report?from=01-04-2026&to=23-10-2026&sort=asc&sortBy=&page=1&count=50",
+  "note": "no body"
+}

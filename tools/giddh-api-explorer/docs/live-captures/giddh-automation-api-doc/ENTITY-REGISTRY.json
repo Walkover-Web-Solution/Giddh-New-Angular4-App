@@ -1,0 +1,1004 @@
+{
+  "companyUniqueName": "giddhain1792673422178091xos",
+  "branchUniqueName": "giddhautomationapidoc",
+  "warehouseUniqueName": "xbq1792673424418",
+  "addressUniqueName": "8rz1792673422372",
+  "baseUrl": "https://api.giddh.com",
+  "origin": "https://test.giddh.com",
+  "voucherVersionRequired": 2,
+  "financialYear": {
+    "starts": "01-04-2026",
+    "ends": "31-03-2027"
+  },
+  "hardRules": [
+    "ALWAYS pass voucherVersion=2 on accounting-microservice APIs for this company",
+    "Use browser User-Agent with curl; Python urllib gets Cloudflare 1010",
+    "Voucher amounts must be AmountDetails objects {amountForAccount, amountForCompany}",
+    "Dates dd-MM-yyyy within FY APR2026-MAR2027",
+    "Purchase bills for this company require number (voucher number mandatory)",
+    "Stock create: include stockUnitUniqueName (company unit e.g. pcs WfqOHXSFugRFzJ8HDrLT)",
+    "Do not commit secrets.local.json"
+  ],
+  "knowledgeFiles": [
+    "AGENT-KNOWLEDGE.md",
+    "CONTEXT.md",
+    "MASTER-DATA.md",
+    "ENTITY-REGISTRY.json",
+    "BOOTSTRAP-EXACT-RESPONSES.md",
+    "requests/",
+    "responses/"
+  ],
+  "systemAccounts": {
+    "sales": "sales",
+    "purchases": "purchases",
+    "cash": "cash"
+  },
+  "customers": [
+    {
+      "uniqueName": "apidoc-customer-one",
+      "name": "API Doc Customer One",
+      "file": "responses/20-create-customer.json"
+    },
+    {
+      "uniqueName": "apidoc-customer-two",
+      "name": "API Doc Customer Two",
+      "file": "responses/42-create-customer-1.json"
+    },
+    {
+      "uniqueName": "apidoc-customer-three",
+      "name": "API Doc Customer Three",
+      "file": "responses/42-create-customer-2.json"
+    },
+    {
+      "uniqueName": "apidoc-customer-b2c",
+      "name": "API Doc Walk-in Customer",
+      "file": "responses/42-create-customer-3.json"
+    }
+  ],
+  "vendors": [
+    {
+      "uniqueName": "apidoc-vendor-one",
+      "name": "API Doc Vendor One",
+      "file": "responses/21-create-vendor.json"
+    },
+    {
+      "uniqueName": "apidoc-vendor-two",
+      "name": "API Doc Vendor Two",
+      "file": "responses/43-create-vendor-1.json"
+    },
+    {
+      "uniqueName": "apidoc-vendor-three",
+      "name": "API Doc Vendor Three",
+      "file": "responses/43-create-vendor-2.json"
+    }
+  ],
+  "bankAccounts": [
+    {
+      "uniqueName": "apidoc-bank-hdfc",
+      "name": "API Doc Bank HDFC"
+    }
+  ],
+  "stockGroups": [
+    {
+      "uniqueName": "apidoc-products",
+      "restoredAt": "2026-10-23",
+      "note": "Restored uniqueName after FE-pending PUT rename"
+    },
+    {
+      "uniqueName": "apidoc-services"
+    },
+    {
+      "uniqueName": "apidoc-temp-sg-342",
+      "file": "responses/1160-put-company-stock-group.json",
+      "capturedAt": "2026-10-23",
+      "batch": "FE-pending",
+      "note": "Was rename of apidoc-products (PUT 1160); restored to apidoc-products via fix-sg-rename on Auth-Key resume 2026-10-23",
+      "restoredAt": "2026-10-23",
+      "restoredFile": "runner fix-sg-rename"
+    },
+    {
+      "uniqueName": "apidoc-temp-sg-3421",
+      "file": "responses/1173-post-v5-company-stock-group.json",
+      "capturedAt": "2026-10-23",
+      "batch": "FE-pending",
+      "note": "Created v5 POST 1173"
+    }
+  ],
+  "stockUnits": [
+    {
+      "code": "kg",
+      "uniqueName": "kg",
+      "name": "Kilogram"
+    },
+    {
+      "code": "pcs",
+      "uniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "name": "Piece"
+    }
+  ],
+  "stocks": [
+    {
+      "uniqueName": "apidoc-widget",
+      "group": "apidoc-products",
+      "variant": "apidocwidget1792693959876fk8uyv0enl",
+      "file": "responses/25-get-stock.json"
+    },
+    {
+      "uniqueName": "apidoc-gadget",
+      "group": "apidoc-products",
+      "variant": "apidoc-gadget1792694923893w7fw4lbjd2",
+      "file": "responses/48-get-apidoc-gadget.json"
+    },
+    {
+      "uniqueName": "apidoc-service-hour",
+      "group": "apidoc-services",
+      "variant": "apidoc-service-hour17926949252108gfigdnpr1",
+      "file": "responses/48-get-apidoc-service-hour.json"
+    },
+    {
+      "uniqueName": "apidoc-finished-good",
+      "group": "apidoc-products",
+      "variant": "apidoc-finished-good1792758621295nj0xkwr8d6",
+      "file": "responses/720-create-finished-stock.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8,
+      "note": "Finished good for manufacturing recipe+entry"
+    }
+  ],
+  "discounts": [
+    {
+      "uniqueName": "73m1792675076662",
+      "name": "API Doc Flat 10"
+    },
+    {
+      "uniqueName": "dn31792675100909",
+      "name": "API Doc Percent 5"
+    }
+  ],
+  "taxes": [
+    {
+      "uniqueName": "apidocgst18",
+      "name": "API Doc GST 18",
+      "taxType": "gst",
+      "taxNumber": "APIDOC-GST18",
+      "file": "responses/125-create-tax-gst18.json",
+      "assignedTo": [
+        "revenuefromoperations",
+        "sales"
+      ],
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "uniqueName": "apidocgst5",
+      "name": "API Doc GST 5",
+      "taxType": "gst",
+      "taxNumber": "APIDOC-GST5",
+      "file": "responses/532-create-tax-gst5.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7
+    }
+  ],
+  "customGroups": [
+    {
+      "uniqueName": "apidoc-custom-assets",
+      "name": "API Doc Custom Assets",
+      "parent": "currentassets",
+      "file": "responses/127-create-group.json",
+      "capturedAt": "2026-10-23"
+    }
+  ],
+  "ledgerEntries": [
+    {
+      "uniqueName": "tpfal1792733167512",
+      "account": "cash",
+      "file": "responses/147-ledgers-v2-create.json",
+      "capturedAt": "2026-10-23",
+      "updatedFile": "responses/230-update-ledger-entry.json",
+      "note": "Updated description via PUT ledgers/{entry}; disposable create/delete via 309/310"
+    },
+    {
+      "uniqueName": "vpcpb1792733811111",
+      "account": "cash",
+      "file": "responses/240-bulk-ledgers-v2.json",
+      "capturedAt": "2026-10-23",
+      "batch": 4,
+      "note": "Created via bulk-ledgers-v2"
+    },
+    {
+      "uniqueName": "or1zw1792733841142",
+      "account": "cash",
+      "file": "responses/309-ledgers-v2-disposable.json",
+      "deletedFile": "responses/310-delete-ledger-entry.json",
+      "capturedAt": "2026-10-23",
+      "batch": 4,
+      "status": "DELETED"
+    }
+  ],
+  "vouchers": [
+    {
+      "type": "sales",
+      "number": "261022-1",
+      "uniqueName": "5zkmf1792674363694",
+      "status": "UNPAID",
+      "party": "apidoc-customer-one",
+      "file": "responses/30-create-sales-invoice.json"
+    },
+    {
+      "type": "sales",
+      "number": "261022-2",
+      "uniqueName": "llvtc1792674364760",
+      "status": "UNPAID",
+      "party": "apidoc-customer-one",
+      "file": "responses/30e-entryDate.json"
+    },
+    {
+      "type": "receipt",
+      "number": "RCPT-261022-1",
+      "uniqueName": "vwvyr1792674404154",
+      "status": "ADJUSTED",
+      "party": "apidoc-customer-one",
+      "file": "responses/31-create-receipt.json"
+    },
+    {
+      "type": "purchase",
+      "number": null,
+      "uniqueName": "mgswt1792674404601",
+      "status": "UNPAID",
+      "party": "apidoc-vendor-one",
+      "file": "responses/32-create-purchase.json"
+    },
+    {
+      "type": "payment",
+      "number": "PAY-261022-1",
+      "uniqueName": "9naju1792674418754",
+      "status": "ADJUSTED",
+      "party": "apidoc-vendor-one",
+      "file": "responses/33-create-payment.json"
+    },
+    {
+      "type": "sales",
+      "number": "261022-3",
+      "uniqueName": "rrftm1792675101875",
+      "status": "UNPAID",
+      "party": "apidoc-customer-two",
+      "file": "responses/50-sales-customer-two.json"
+    },
+    {
+      "type": "sales",
+      "number": "261022-4",
+      "uniqueName": "zqosy1792675102358",
+      "status": "UNPAID",
+      "party": "apidoc-customer-three",
+      "file": "responses/51-sales-customer-three.json"
+    },
+    {
+      "type": "sales",
+      "number": "261022-5",
+      "uniqueName": "iiy341792675102708",
+      "status": "PAID",
+      "party": "apidoc-customer-one",
+      "file": "responses/225-get-paid-261022-5.json",
+      "note": "Fully adjusted via RCPT-261023-2 (161); was PARTIAL then PAID"
+    },
+    {
+      "type": "receipt",
+      "number": "RCPT-261022-2",
+      "uniqueName": "xinxa1792675103110",
+      "status": "ADJUSTED",
+      "party": "apidoc-customer-one",
+      "file": "responses/53-receipt-partial.json"
+    },
+    {
+      "type": "purchase",
+      "number": "PB-API-001",
+      "uniqueName": "no1km1792675126040",
+      "status": "PARTIAL-PAID",
+      "party": "apidoc-vendor-two",
+      "file": "responses/54b-get-purchase.json"
+    },
+    {
+      "type": "purchase",
+      "number": "PB-API-002",
+      "uniqueName": "0pwea1792675127009",
+      "status": "UNPAID",
+      "party": "apidoc-vendor-two",
+      "file": "responses/54c-purchase-unpaid.json"
+    },
+    {
+      "type": "payment",
+      "number": "PAY-261022-2",
+      "uniqueName": "n8p781792675148688",
+      "status": "ADJUSTED",
+      "party": "apidoc-vendor-two",
+      "file": "responses/55c-payment-pb002.json"
+    },
+    {
+      "type": "credit note",
+      "number": "CR-261022-1",
+      "uniqueName": "fpzy81792675103770",
+      "status": "UNPAID",
+      "party": "apidoc-customer-two",
+      "file": "responses/56-credit-note.json"
+    },
+    {
+      "type": "credit note",
+      "number": "CR-261022-2",
+      "uniqueName": "5pdez1792675104092",
+      "status": "UNPAID",
+      "party": "apidoc-customer-two",
+      "file": "responses/56b-credit-note.json"
+    },
+    {
+      "type": "debit note",
+      "number": "DR-261022-1",
+      "uniqueName": "flni01792675104491",
+      "status": "UNPAID",
+      "party": "apidoc-vendor-two",
+      "file": "responses/57-debit-note.json"
+    },
+    {
+      "type": "debit note",
+      "number": "DR-261022-2",
+      "uniqueName": "wbljg1792675104958",
+      "status": "UNPAID",
+      "party": "apidoc-vendor-two",
+      "file": "responses/57b-debit-note.json"
+    },
+    {
+      "type": "sales",
+      "number": "261023-1",
+      "uniqueName": "bvvvm1792730977197",
+      "status": "UNPAID",
+      "party": "apidoc-customer-two",
+      "file": "responses/74-sales-with-stock.json",
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "type": "purchase",
+      "number": "PB-STOCK-001",
+      "uniqueName": "q39wp1792730978257",
+      "status": "UNPAID",
+      "party": "apidoc-vendor-three",
+      "file": "responses/76-purchase-with-stock.json",
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "type": "sales",
+      "number": "261023-2",
+      "uniqueName": "lfptf1792730980051",
+      "status": "PAID",
+      "party": "cash",
+      "file": "responses/80-cash-sales.json",
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "type": "receipt",
+      "number": "RCPT-261023-1",
+      "uniqueName": "ncwkd1792731015079",
+      "status": "ADJUSTED",
+      "party": "apidoc-customer-two",
+      "file": "responses/89-receipt-stock-invoice.json",
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "type": "journal",
+      "number": "JV-261023-1",
+      "uniqueName": "znb501792731047289",
+      "status": "PAID",
+      "party": "cash",
+      "file": "responses/94-journal-cash-sales.json",
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "type": "estimate",
+      "number": "EST-20261023-1",
+      "uniqueName": "su71792731047950",
+      "status": null,
+      "party": "apidoc-customer-three",
+      "file": "responses/95-estimate-type-sales.json",
+      "capturedAt": "2026-10-23",
+      "convertedTo": "vitmq1792733952798",
+      "note": "; converted via 358"
+    },
+    {
+      "type": "proforma",
+      "number": "PR-20261023-1",
+      "uniqueName": "q2c1792731068597",
+      "status": null,
+      "party": "apidoc-customer-three",
+      "file": "responses/102-proforma-type-sales.json",
+      "capturedAt": "2026-10-23",
+      "convertedTo": "zzguo1792733957208",
+      "note": "; converted via 360"
+    },
+    {
+      "type": "sales",
+      "number": "261023-3",
+      "uniqueName": "jtovv1792733166464",
+      "status": "CANCEL",
+      "party": "apidoc-customer-b2c",
+      "file": "responses/224-get-cancelled-sales.json",
+      "capturedAt": "2026-10-23",
+      "note": "Created 144 then cancelled via invoices/{un}/action"
+    },
+    {
+      "type": "receipt",
+      "number": "RCPT-261023-2",
+      "uniqueName": "f4bjw1792733243977",
+      "status": "ADJUSTED",
+      "party": "apidoc-customer-one",
+      "file": "responses/161-receipt-adjust-300.json",
+      "capturedAt": "2026-10-23",
+      "note": "Adjusted remaining 300 on 261022-5"
+    },
+    {
+      "type": "sales",
+      "number": "261023-4",
+      "uniqueName": "vkbcg1792733290253",
+      "status": "PAID",
+      "party": "apidoc-customer-three",
+      "file": "responses/210-sales-for-cn-adjust.json",
+      "capturedAt": "2026-10-23",
+      "note": "Fully adjusted by CR-261023-1"
+    },
+    {
+      "type": "credit note",
+      "number": "CR-261023-1",
+      "uniqueName": "xmh271792733290665",
+      "status": "PAID",
+      "party": "apidoc-customer-three",
+      "file": "responses/211-credit-note-adjust.json",
+      "capturedAt": "2026-10-23"
+    },
+    {
+      "type": "sales",
+      "number": "261023-5",
+      "uniqueName": "vitmq1792733952798",
+      "status": "UNPAID",
+      "party": "apidoc-customer-three",
+      "file": "responses/358-generate-via-estimate-number.json",
+      "capturedAt": "2026-10-23",
+      "note": "Converted from EST-20261023-1 via generate-via-estimate with estimateNumber"
+    },
+    {
+      "type": "sales",
+      "number": "261023-6",
+      "uniqueName": "zzguo1792733957208",
+      "status": "UNPAID",
+      "party": "apidoc-customer-three",
+      "file": "responses/360-generate-via-proforma-number.json",
+      "capturedAt": "2026-10-23",
+      "note": "Converted from PR-20261023-1 via generate-via-proforma with proformaNumber"
+    },
+    {
+      "type": "purchase order",
+      "number": "PO-20261023-1",
+      "uniqueName": "pze1792734608469",
+      "status": "OPEN",
+      "party": "apidoc-vendor-one",
+      "file": "responses/427-po-generate.json",
+      "capturedAt": "2026-10-23",
+      "batch": 6,
+      "updatedFile": "responses/633-po-update-put.json",
+      "statusOps": "responses/681-po-status-cancel.json / 682-po-status-open.json",
+      "bulkDueDate": "responses/683-po-bulk-duedate.json",
+      "batch7": true
+    },
+    {
+      "type": "sales",
+      "number": "261023-7",
+      "uniqueName": "fbzat1792738840769",
+      "status": "UNPAID",
+      "party": "apidoc-customer-one",
+      "file": "responses/802-bd-convert-dc.json",
+      "note": "Converted from DC-261023-1 via business-documents/convert",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    },
+    {
+      "type": "purchase",
+      "number": null,
+      "uniqueName": "uj1my1792738843214",
+      "status": "UNPAID",
+      "party": "apidoc-vendor-one",
+      "file": "responses/806-bd-convert-rn.json",
+      "note": "Converted from RN-261023-1 via business-documents/convert",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    }
+  ],
+  "addresses": [
+    {
+      "uniqueName": "8rz1792673422372",
+      "name": "Default Address",
+      "isDefault": true
+    },
+    {
+      "uniqueName": "rs61792733820379",
+      "name": "API Doc Addr Two",
+      "isDefault": false,
+      "file": "responses/272-create-address.json",
+      "capturedAt": "2026-10-23",
+      "batch": 4
+    },
+    {
+      "uniqueName": "vgv1792735015769",
+      "name": null,
+      "isDefault": false,
+      "file": "responses/652-address-post.json",
+      "note": "Created by empty POST /address {} \u2014 treat as accidental capture",
+      "capturedAt": "2026-10-23",
+      "batch": 7
+    }
+  ],
+  "branches": [
+    {
+      "uniqueName": "giddhautomationapidoc",
+      "alias": "Gidd",
+      "name": "Giddh Automation API DOC",
+      "isDefault": true
+    },
+    {
+      "uniqueName": "apidocbranchtwo",
+      "alias": "apidoc-branch-two",
+      "name": "API Doc Branch Two",
+      "file": "responses/273-create-branch.json",
+      "confirmedIn": "responses/326-branches-after-create.json",
+      "capturedAt": "2026-10-23",
+      "batch": 4
+    }
+  ],
+  "warehouses": [
+    {
+      "uniqueName": "xbq1792673424418",
+      "name": "Gidd warehouse",
+      "isDefault": true
+    },
+    {
+      "uniqueName": "0d41792733820723",
+      "name": "apidoc-branch-two warehouse",
+      "branchAlias": "apidoc-branch-two",
+      "file": "responses/306-get-warehouse-list.json",
+      "capturedAt": "2026-10-23",
+      "batch": 4,
+      "note": "Auto-created with branch 273"
+    },
+    {
+      "uniqueName": "4gr1792733898078",
+      "name": "API Doc Warehouse Two",
+      "isDefault": false,
+      "file": "responses/321-create-warehouse-addr.json",
+      "capturedAt": "2026-10-23",
+      "batch": 5
+    }
+  ],
+  "inventoryAdjustmentReasons": [
+    {
+      "uniqueName": "0zn1792733816931",
+      "reason": "API Doc shrinkage reason",
+      "createdFile": "responses/259-inv-adjust-create-reason.json",
+      "listedIn": "responses/334-inv-reasons-refresh.json",
+      "capturedAt": "2026-10-23",
+      "batch": 4
+    }
+  ],
+  "session20261023": {
+    "totalCalls": 989,
+    "successHttp": 552,
+    "failHttp": 437,
+    "continuationFrom226": {
+      "totalCalls": 153,
+      "successHttp": 80,
+      "failHttp": 73,
+      "tagRange": "226-377"
+    },
+    "continuationFrom378": {
+      "totalCalls": 149,
+      "successHttp": 88,
+      "failHttp": 61,
+      "tagRange": "378-526",
+      "highlights": [
+        "branch-transfer generate entity=deliverynote|receiptnote",
+        "PO generate/get",
+        "recipe create+get",
+        "ledgers-v2/reconcile POST",
+        "ledgers/transactions with Content-Type",
+        "dashboard/graph via ui/graph-types",
+        "GSTR2 + gstr3b path",
+        "view/export statement",
+        "cancel-einvoice UI query cnlRsn (no IRN on company)"
+      ]
+    },
+    "callLogFile": "CALL-LOG-2026-10-23.json",
+    "note": "Batch 707+: DC/RN generate+convert; manufacturing nested body; users/roles/CF; currency; activity",
+    "continuationFrom527": {
+      "totalCalls": 187,
+      "successHttp": 115,
+      "failHttp": 72,
+      "tagRange": "527-706",
+      "highlights": [
+        "make-recurring nested UI payload (MONTHLY_DATE/WEEKLY/DAY)",
+        "tax authority create+patch apidoctaxauthoritymp",
+        "tax apidocgst5 create",
+        "pending-report documentType DC|RC + reportType WITHOUT_CHALLAN|NOT_INVOICED",
+        "PO update PUT, status PATCH action+purchaseNumber, bulk duedate/warehouse",
+        "columnar account POST + group FY APR-2026-MAR-2027",
+        "recurring list voucherType=sales; status STOP|RESUME",
+        "assign-discount stock; subscription plans regionCode=IND",
+        "catalog patched make-recurring + pending-report + tax/authority"
+      ]
+    },
+    "continuationFrom707": {
+      "totalCalls": 203,
+      "successHttp": 147,
+      "failHttp": 56,
+      "tagRange": "707-906",
+      "highlights": [
+        "inventory-settings inventoryViaBusinessDocument=true unlocks DC/RN generate",
+        "DC/RN generate + business-documents/convert -> sales/purchase",
+        "MF create: POST v2/.../manufacture with nested {manufacturingDetails:[...]}",
+        "recipe GET shows details even when POST body returns empty array",
+        "stocks?isManufactured=true lists recipe stocks; stocks-manufacture may stay empty",
+        "role create server uniqueName; customfield create is ARRAY body",
+        "email template is v2 path; PUT needs html+subject",
+        "currency/rate + activity-logs + estimate/proforma versions"
+      ]
+    },
+    "continuationFrom1100": {
+      "totalCalls": 125,
+      "successHttp": 24,
+      "failHttp": 101,
+      "tagRange": "1100-1225",
+      "stoppedReason": "DELETE /users/.../destroy-session invalidated Session-Id",
+      "remainingPendingApprox": 196,
+      "highlights": [
+        "GET account + contacts + shared-with",
+        "PATCH v2 accounts; POST accounts/balance; send-mail",
+        "PATCH billing-account; POST subscription/list",
+        "stock-group GET/PUT/download reports; POST v5 stock-group create",
+        "project/all; communication generate-email; bank integration form",
+        "WARNING: PUT stock-group body changed uniqueName apidoc-products->apidoc-temp-sg-342",
+        "WARNING: PUT accounts/move moved customer toward apidoc-custom-assets"
+      ]
+    },
+    "fePendingCoverage": {
+      "beforeCaptured": 315,
+      "beforePending": 321,
+      "batch1100_1225_attempted": 125,
+      "batch1226_1421_attempted": 196,
+      "approxUniqueFeUsed": 636,
+      "approxAttemptedNow": 636,
+      "approxPendingNow": 0,
+      "coveragePctAttempted": 100,
+      "softSuccessApprox": 87,
+      "note": "All FE-used pending endpoints from backlog have been attempted at least once; many remain soft-fails needing better bodies/integrations"
+    },
+    "continuationFrom1226": {
+      "totalCalls": 196,
+      "successHttp": 63,
+      "failHttp": 133,
+      "tagRange": "1226-1421",
+      "auth": "Auth-Key (permanent)",
+      "authKeyRedacted": "dNYPuoiWrFz********go=",
+      "mastersRestored": [
+        "apidoc-products uniqueName restored from apidoc-temp-sg-342",
+        "apidoc-customer-one moved back to sundrydebtors"
+      ],
+      "collateralDeletes": [
+        "1346 role aft1792738829523",
+        "1350 tax authority apidoctaxauthoritymp",
+        "1295 customfield 1792758792191n1ficygh8s7bfds",
+        "1294 customer-vendor-discount"
+      ],
+      "highlights": [
+        "Auth-Key works for company GET and full FE-pending backlog",
+        "groups masters/shared-with/download closing balance",
+        "stock unit PUT; stock inventory-report; v2 stock aging/details/variant",
+        "imports reconciliation + signed-url",
+        "UK/ZW/Kenya VAT report GETs; company PATCH; address/all",
+        "advance-receipt get-all/summary; gocardless refresh",
+        "inventory balance; purchase-bill-setting; company settings/plan",
+        "warehouse PATCH/PUT/default; country/cities; white-label",
+        "v2 GSTR1 download; GSTR3B save; sales/purchase register detailed",
+        "multibranch BS/PL; download inventory hierarchy/report"
+      ]
+    },
+    "authMode": "Auth-Key preferred; Session-Id optional/expired"
+  },
+  "expenseAccounts": [
+    {
+      "uniqueName": "apidoc-shrinkage-expense",
+      "name": "API Doc Shrinkage Expense",
+      "group": "otherindirectexpenses",
+      "file": "responses/375-create-shrinkage-expense.json",
+      "capturedAt": "2026-10-23"
+    }
+  ],
+  "inventoryAdjustments": [
+    {
+      "refNo": "INV-ADJ-API-006",
+      "stock": "apidoc-widget",
+      "expenseAccount": "apidoc-shrinkage-expense",
+      "reason": "0zn1792733816931",
+      "file": "responses/376-inv-adjust-stock-expense.json",
+      "capturedAt": "2026-10-23",
+      "note": "STOCK entity + otherindirectexpenses account required"
+    }
+  ],
+  "companyGstin": "23AAACC1206D2ZN",
+  "companyGstinSource": "default address on warehouse xbq1792673424418",
+  "magicLinkSample": {
+    "account": "apidoc-customer-one",
+    "url": "https://m.9m.io/ljcunuy",
+    "file": "responses/233-magic-link.json"
+  },
+  "branchTransfers": [
+    {
+      "uniqueName": "hsk1792734672951",
+      "challanNo": "DC-20261023-1",
+      "entity": "deliverynote",
+      "file": "responses/478-bt-deliverynote.json",
+      "capturedAt": "2026-10-23",
+      "batch": 6
+    },
+    {
+      "uniqueName": "2rd1792734673327",
+      "challanNo": "DC-20261023-2",
+      "entity": "DeliveryNote",
+      "file": "responses/479-bt-DeliveryNote.json",
+      "capturedAt": "2026-10-23",
+      "batch": 6
+    },
+    {
+      "uniqueName": "8vk1792734673591",
+      "challanNo": "RN-20261023-1",
+      "entity": "receiptnote",
+      "file": "responses/480-bt-receiptnote.json",
+      "capturedAt": "2026-10-23",
+      "batch": 6
+    },
+    {
+      "uniqueName": "v2p1792734673849",
+      "challanNo": "RN-20261023-2",
+      "entity": "ReceiptNote",
+      "file": "responses/481-bt-ReceiptNote.json",
+      "capturedAt": "2026-10-23",
+      "batch": 6
+    },
+    {
+      "uniqueName": "cn11792738855808",
+      "challanNo": "DC-20261023-3",
+      "entity": "deliverynote",
+      "file": "responses/847-bt-dn-regen.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    }
+  ],
+  "recipes": [
+    {
+      "stock": "apidoc-widget",
+      "variant": "apidocwidget1792693959876fk8uyv0enl",
+      "linkedStock": "apidoc-gadget",
+      "createFile": "responses/417-recipe-create.json",
+      "getFile": "responses/494-recipe-get-after.json",
+      "capturedAt": "2026-10-23",
+      "batch": 6,
+      "note": "POST recipe with manufacturingDetails[]; GET via recipe/get with variant uniqueNames array"
+    },
+    {
+      "stock": "apidoc-finished-good",
+      "variant": "apidoc-finished-good1792758621295nj0xkwr8d6",
+      "linkedStock": "apidoc-gadget",
+      "createFile": "responses/723-recipe-finished.json",
+      "getFile": "responses/724-recipe-get-finished.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8,
+      "note": "POST recipe may return empty manufacturingDetails; GET recipe/get returns saved details. Slim UI payload."
+    }
+  ],
+  "taxAuthorities": [
+    {
+      "uniqueName": "apidoctaxauthoritymp",
+      "name": "API Doc Tax Authority MP",
+      "stateCode": "MP",
+      "file": "responses/642-tax-authority-refresh.json",
+      "createFile": "responses/531-tax-authority-create.json",
+      "updatedFile": "responses/689-tax-authority-patch.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7,
+      "deleted": true,
+      "deletedBy": "1350-delete-company-tax-authority",
+      "note": "DELETED by FE-pending 1350 \u2014 recreate before tax-authority tests"
+    }
+  ],
+  "recurringVouchers": [
+    {
+      "recurringVoucherUniqueName": "LUJYfC8PaG",
+      "frequency": "1 month",
+      "existingVoucherUniqueName": "vitmq1792733952798",
+      "accountUniqueName": "apidoc-customer-three",
+      "voucherType": "sales",
+      "listFile": "responses/640-recurring-sales.json",
+      "makeFile": "responses/536-make-recurring-nested.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7,
+      "note": "Nested UI cleanFormValues payload required; list needs voucherType=sales"
+    },
+    {
+      "recurringVoucherUniqueName": "xprYvZ7Rdx",
+      "frequency": "1 month",
+      "existingVoucherUniqueName": "vitmq1792733952798",
+      "accountUniqueName": "apidoc-customer-three",
+      "voucherType": "sales",
+      "listFile": "responses/640-recurring-sales.json",
+      "makeFile": "responses/536-make-recurring-nested.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7,
+      "note": "Nested UI cleanFormValues payload required; list needs voucherType=sales"
+    },
+    {
+      "recurringVoucherUniqueName": "g3Kj558l2U",
+      "frequency": "1 week on [MONDAY]",
+      "existingVoucherUniqueName": "vitmq1792733952798",
+      "accountUniqueName": "apidoc-customer-three",
+      "voucherType": "sales",
+      "listFile": "responses/640-recurring-sales.json",
+      "makeFile": "responses/536-make-recurring-nested.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7,
+      "note": "Nested UI cleanFormValues payload required; list needs voucherType=sales"
+    },
+    {
+      "recurringVoucherUniqueName": "3XRg36iYn4",
+      "frequency": "1 day",
+      "existingVoucherUniqueName": "vitmq1792733952798",
+      "accountUniqueName": "apidoc-customer-three",
+      "voucherType": "sales",
+      "listFile": "responses/640-recurring-sales.json",
+      "makeFile": "responses/536-make-recurring-nested.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7,
+      "note": "Nested UI cleanFormValues payload required; list needs voucherType=sales"
+    }
+  ],
+  "customerVendorDiscounts": [
+    {
+      "stock": "apidoc-widget",
+      "variant": "apidocwidget1792693959876fk8uyv0enl",
+      "account": "apidoc-customer-one",
+      "file": "responses/563-assign-discount-stock.json",
+      "capturedAt": "2026-10-23",
+      "batch": 7,
+      "deleted": true,
+      "deletedBy": "1294-delete-company-customer-vendor-discount",
+      "note": "DELETED by FE-pending 1294"
+    }
+  ],
+  "manufacturingEntries": [
+    {
+      "uniqueName": "u076wqodj05ihjcozc2f",
+      "stock": "apidoc-finished-good",
+      "file": "responses/848-mf-v2-nested-ui.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    },
+    {
+      "uniqueName": "43ojbrv74dekqq8zqfoi",
+      "stock": "apidoc-widget",
+      "file": "responses/849-mf-v2-widget-nested.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    }
+  ],
+  "businessDocuments": [
+    {
+      "type": "DC",
+      "number": "DC-261023-1",
+      "uniqueName": "zyu1792738825009",
+      "party": "apidoc-customer-one",
+      "convertedTo": "fbzat1792738840769",
+      "file": "responses/731-dc-generate.json",
+      "convertFile": "responses/802-bd-convert-dc.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    },
+    {
+      "type": "RC",
+      "number": "RN-261023-1",
+      "uniqueName": "edk1792738826154",
+      "party": "apidoc-vendor-one",
+      "convertedTo": "uj1my1792738843214",
+      "file": "responses/732-rn-generate.json",
+      "convertFile": "responses/806-bd-convert-rn.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8
+    }
+  ],
+  "roles": [
+    {
+      "name": "API Doc Viewer Role",
+      "uniqueName": "aft1792738829523",
+      "file": "responses/748-role-create.json",
+      "updatedFile": "responses/854-role-update-real.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8,
+      "note": "Server assigns uniqueName; client uniqueName ignored | DELETED by FE-pending 1346 \u2014 recreate before role tests",
+      "deleted": true,
+      "deletedBy": "1346-delete-company-role"
+    }
+  ],
+  "customFields": [
+    {
+      "uniqueName": "1792758792191n1ficygh8s7bfds",
+      "fieldName": "API Doc CF Flag",
+      "fieldType": "BOOLEAN",
+      "module": "ACCOUNT",
+      "file": "responses/902-cf-BOOLEAN.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8,
+      "deleted": true,
+      "deletedBy": "1295-delete-company-customfield",
+      "note": "DELETED by FE-pending 1295"
+    },
+    {
+      "uniqueName": "1792758799819yswzbgh521k1smj",
+      "fieldName": "API Doc CF Note",
+      "fieldType": "STRING",
+      "module": "ACCOUNT",
+      "file": "responses/906-cf-STRING.json",
+      "capturedAt": "2026-10-23",
+      "batch": 8,
+      "note": "Create body is ARRAY; STRING dataRange max<=150"
+    }
+  ],
+  "salesPersons": [
+    {
+      "uniqueName": "apidocsalesperson",
+      "name": "API Doc Sales Person Updated",
+      "email": "apidoc.salesperson@example.invalid",
+      "file": "responses/975-salesperson-create.json",
+      "updatedFile": "responses/977-salesperson-update.json",
+      "archiveFile": "responses/978-salesperson-archive.json",
+      "capturedAt": "2026-10-23",
+      "batch": 9,
+      "note": "Archive via POST .../salesperson/{un}/archive with action UNASSIGNED+archiveOnly or UNARCHIVED"
+    }
+  ],
+  "tags": [
+    {
+      "name": "api doc project tag",
+      "description": "capture batch 9",
+      "file": "responses/981-tag-create.json",
+      "capturedAt": "2026-10-23",
+      "batch": 9,
+      "note": "Create/list return name+description only \u2014 no uniqueName in response"
+    }
+  ],
+  "billingAccount": {
+    "uniqueName": "k2b1712141952375",
+    "billingName": "Divyanshu",
+    "file": "responses/996-billing-get.json",
+    "capturedAt": "2026-10-23",
+    "batch": 9,
+    "note": "GET query uses typo billingAccountUnqiueName"
+  },
+  "permissionUer": {
+    "uniqueName": "tgig7awso7imt1h",
+    "userUniqueName": "divyanshu@whozzat.com",
+    "roleUniqueName": "super_admin",
+    "file": "responses/924-shared-with.json",
+    "capturedAt": "2026-10-23",
+    "batch": 9,
+    "note": "Cannot PUT role for self (412)"
+  },
+  "accountContacts": [
+    {
+      "uniqueName": "nqk1792674061347",
+      "account": "apidoc-customer-one",
+      "file": "responses/1105-get-company-accounts-contacts.json",
+      "capturedAt": "2026-10-23",
+      "batch": "FE-pending"
+    }
+  ],
+  "batches": {}
+}

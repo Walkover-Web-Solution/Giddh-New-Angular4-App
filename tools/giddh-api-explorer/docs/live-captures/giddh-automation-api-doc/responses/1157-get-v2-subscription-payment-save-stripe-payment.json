@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Failed to process automatic payment. Please try again or update your payment method.",
+  "code": "STRIPE_API_ERROR"
+}

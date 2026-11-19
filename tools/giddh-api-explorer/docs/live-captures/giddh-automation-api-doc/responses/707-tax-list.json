@@ -1,0 +1,95 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "API Doc GST 18",
+      "duration": "MONTHLY",
+      "taxDetail": [
+        {
+          "date": "01-04-2026",
+          "taxValue": 18.0
+        }
+      ],
+      "taxAuthority": null,
+      "accounts": [
+        {
+          "name": "IGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "igst"
+        },
+        {
+          "name": "CGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "cgst"
+        },
+        {
+          "name": "UTGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "utgst"
+        },
+        {
+          "name": "SGST (API Doc GST 18)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "sgst"
+        }
+      ],
+      "uniqueName": "apidocgst18",
+      "taxNumber": "APIDOC-GST18",
+      "taxType": "gst",
+      "taxFileDate": 1
+    },
+    {
+      "name": "API Doc GST 5",
+      "duration": "MONTHLY",
+      "taxDetail": [
+        {
+          "date": "01-04-2026",
+          "taxValue": 5.0
+        }
+      ],
+      "taxAuthority": null,
+      "accounts": [
+        {
+          "name": "IGST (API Doc GST 5)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "igst1"
+        },
+        {
+          "name": "SGST (API Doc GST 5)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "sgst1"
+        },
+        {
+          "name": "CGST (API Doc GST 5)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "cgst1"
+        },
+        {
+          "name": "UTGST (API Doc GST 5)",
+          "currency": {
+            "code": "INR"
+          },
+          "uniqueName": "utgst1"
+        }
+      ],
+      "uniqueName": "apidocgst5",
+      "taxNumber": "APIDOC-GST5",
+      "taxType": "gst",
+      "taxFileDate": 1
+    }
+  ]
+}

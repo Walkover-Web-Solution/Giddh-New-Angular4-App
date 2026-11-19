@@ -1,0 +1,11 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/contacts",
+  "body": [
+    {
+      "uniqueName": "nqk1792674061347",
+      "email": "divyanshu@whozzat.com",
+      "operationType": "EDIT"
+    }
+  ]
+}

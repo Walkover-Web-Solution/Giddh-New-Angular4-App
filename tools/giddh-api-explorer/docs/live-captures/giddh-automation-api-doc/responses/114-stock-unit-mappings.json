@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Stock unit not found with unique name mappings.",
+  "code": "NOT_FOUND"
+}

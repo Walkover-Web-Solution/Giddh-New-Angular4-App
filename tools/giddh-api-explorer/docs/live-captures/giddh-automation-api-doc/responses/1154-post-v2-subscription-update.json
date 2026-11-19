@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Duration type must be specified.",
+  "code": "INVALID_PARAMETERS"
+}

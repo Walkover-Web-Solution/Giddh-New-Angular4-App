@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/template-preview?voucherVersion=2",
+  "body": {
+    "uniqueName": "gst_template_a",
+    "type": "invoice"
+  }
+}

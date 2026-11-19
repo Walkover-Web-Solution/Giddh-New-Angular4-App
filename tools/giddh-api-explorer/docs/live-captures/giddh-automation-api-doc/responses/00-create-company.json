@@ -1,0 +1,115 @@
+{
+  "status": "success",
+  "body": {
+    "planVersion": 2,
+    "name": "Giddh Automation API DOC",
+    "address": "My new address",
+    "country": "India",
+    "subscription": {
+      "totalTransactions": 0,
+      "totalCompanies": 12,
+      "upgrade": false,
+      "userDetails": {
+        "name": "Divyanshu Shirvastav",
+        "uniqueName": "divyanshu@whozzat.com",
+        "email": "divyanshu@whozzat.com",
+        "signUpOn": "18-05-2023 08:37:55",
+        "mobileno": "919111525164"
+      },
+      "transactionsRemaining": 0,
+      "overdraftTransactions": 0,
+      "duration": "YEARLY",
+      "region": {
+        "name": "India",
+        "code": "IND"
+      },
+      "planDetails": {
+        "countries": [
+          "India"
+        ],
+        "name": "WhiteLabelPlan",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "billsAllowed": 1200,
+        "invoicesAllowed": 1200,
+        "uniqueName": "ltv1768484147685",
+        "yearlyAmount": 4000.0,
+        "companiesLimit": 12,
+        "isCommonPlan": true
+      },
+      "autoPay": false,
+      "status": "active",
+      "expiry": "21-10-2027",
+      "createdAt": "22-10-2026 18:08:15",
+      "balance": 4000.0,
+      "totalInvoices": 1200,
+      "invoicesRemaining": 1200,
+      "totalBills": 1200,
+      "billsRemaining": 1200,
+      "subscriptionId": "SUB-20261022-5",
+      "startedAt": "22-10-2026",
+      "companyCount": 12
+    },
+    "contactNo": "919111525164",
+    "voucherVersion": 2,
+    "createdAt": "22-10-2026 12:50:22",
+    "uniqueName": "giddhain1792673422178091xos",
+    "baseCurrency": "INR",
+    "addresses": [
+      {
+        "name": "Default Address",
+        "address": "My new address",
+        "taxNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "stateCode": "MP",
+        "stateName": "Madhya Pradesh",
+        "isDefault": true,
+        "taxType": "GSTIN",
+        "uniqueName": "8rz1792673422372"
+      }
+    ],
+    "businessNature": "Retail",
+    "businessType": "Registered",
+    "archiveStatus": "UNARCHIVED",
+    "ledgerView": "T_VIEW",
+    "balanceDecimalPlaces": 2,
+    "financialYears": [
+      {
+        "financialYearStarts": "01-04-2026",
+        "financialYearEnds": "31-03-2027",
+        "isLocked": false,
+        "uniqueName": "FY-APR2026-MAR2027"
+      }
+    ],
+    "balanceDisplayFormat": "IND_COMMA_SEPARATED",
+    "currencyDisplayFormat": "SYMBOL",
+    "portalDomain": "GiddhAutomationAPIDOC",
+    "withPay": false,
+    "withHeldTax": 6,
+    "purchaseAsPayment": false,
+    "salesAsReceipt": false,
+    "activeFinancialYear": {
+      "financialYearStarts": "01-04-2026",
+      "financialYearEnds": "31-03-2027",
+      "isLocked": false,
+      "uniqueName": "FY-APR2026-MAR2027"
+    },
+    "baseCurrencySymbol": "\u20b9",
+    "countryV2": {
+      "alpha3CountryCode": "IND",
+      "alpha2CountryCode": "IN",
+      "countryName": "India",
+      "callingCode": "91",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "europeanUnionCountry": false,
+      "india": true
+    },
+    "hasCounty": false,
+    "_note": "userEntityRoles (Super Admin scopes) omitted here for size; present in live API response. Re-paste full body into this file if you need every permission code for docs."
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "name": "Default Address",
+    "address": "",
+    "uniqueName": "vgv1792735015769",
+    "isDefault": false,
+    "taxType": "GSTIN"
+  }
+}

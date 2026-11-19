@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "UserName cannot be null/blank.",
+  "code": "INVALID_REQUEST"
+}

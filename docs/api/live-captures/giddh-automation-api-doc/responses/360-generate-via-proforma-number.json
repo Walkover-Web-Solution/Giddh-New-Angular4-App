@@ -1,0 +1,188 @@
+{
+  "status": "success",
+  "body": {
+    "number": "261023-6",
+    "type": "sales",
+    "date": "23-10-2026",
+    "dueDate": "07-11-2026",
+    "uniqueName": "zzguo1792733957208",
+    "balanceTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0
+    },
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos",
+      "currency": {
+        "code": "INR"
+      },
+      "gstNumber": "23AAACC1206D2ZN",
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "billingDetails": {
+        "gstNumber": "23AAACC1206D2ZN",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "pincode": "484224",
+        "taxNumber": "23AAACC1206D2ZN",
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "country": {
+          "name": "India",
+          "code": "IN"
+        }
+      },
+      "shippingDetails": {
+        "gstNumber": "23AAACC1206D2ZN",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "pincode": "484224",
+        "taxNumber": "23AAACC1206D2ZN",
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "country": {
+          "name": "India",
+          "code": "IN"
+        }
+      }
+    },
+    "account": {
+      "name": "API Doc Customer Three",
+      "uniqueName": "apidoc-customer-three",
+      "customerName": "API Doc Customer Three",
+      "billingDetails": {
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "stateGstCode": "23",
+        "countryName": "India",
+        "countryCode": "IN",
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "country": {
+          "name": "India",
+          "code": "IN"
+        }
+      },
+      "shippingDetails": {
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "stateGstCode": "23",
+        "countryName": "India",
+        "countryCode": "IN",
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "country": {
+          "name": "India",
+          "code": "IN"
+        }
+      },
+      "placeOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "currency": {
+        "code": "INR"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "uuttr1792733957144",
+        "description": "Proforma via sales type",
+        "date": "23-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Sales",
+              "uniqueName": "sales"
+            },
+            "amount": {
+              "amountForAccount": 77.0,
+              "amountForCompany": 77.0
+            },
+            "taxableValue": {
+              "amountForAccount": 77.0,
+              "amountForCompany": 77.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "entryTotal": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "grandTotal": {
+          "amountForAccount": 77.0,
+          "amountForCompany": 77.0
+        },
+        "entryTotalWithoutTcsTds": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "usedQuantity": 0
+      }
+    ],
+    "grandTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0
+    },
+    "voucherTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0
+    },
+    "subTotal": {
+      "amountForAccount": 77.0,
+      "amountForCompany": 77.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Seventy Seven Only",
+      "amountForCompany": "Seventy Seven Only"
+    },
+    "updateAccountDetails": false,
+    "salesPerson": {
+      "linkedEntities": [],
+      "archiveOnly": false
+    },
+    "templateDetails": {
+      "other": {}
+    },
+    "attachedFiles": [],
+    "entryUniqueNames": [],
+    "exchangeRate": 1.0,
+    "valuesInAccountCurrency": true,
+    "isEcommerceInvoice": false,
+    "applyApplicableTaxes": false,
+    "multiCurrency": false,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "touristSchemeApplicable": false,
+    "roundOffApplicable": true,
+    "forNewSubscription": false,
+    "cashInvoice": false,
+    "defaultCompanyAddress": true,
+    "exportInvoice": false
+  }
+}

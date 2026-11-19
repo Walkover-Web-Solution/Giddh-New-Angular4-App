@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invalid number, please provide valid number for min & max values.",
+  "code": "INVALID_REQUEST"
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No RazprPay account exist for this company.",
+  "code": "ACCOUNT_NOT_EXIST"
+}

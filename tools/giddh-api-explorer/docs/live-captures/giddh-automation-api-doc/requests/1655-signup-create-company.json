@@ -1,0 +1,38 @@
+{
+  "method": "POST",
+  "path": "/company",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup",
+  "body": {
+    "name": "CENTRAL WAREHOUSING CORPORATION",
+    "country": "IN",
+    "contactNo": "918319337938",
+    "uniqueName": "centrain17927583331800zu6km",
+    "isBranch": false,
+    "subscriptionRequest": {
+      "planUniqueName": "",
+      "subscriptionId": "SUB-20261023-8",
+      "userUniqueName": "shristi@viasocket.com",
+      "licenceKey": ""
+    },
+    "addresses": [
+      {
+        "stateCode": "MP",
+        "address": "75,  Arera Hills,  Near Central School No 1",
+        "isDefault": false,
+        "stateName": "MP - Madhya Pradesh",
+        "taxNumber": "23AAACC1206D2ZN",
+        "pincode": "462011"
+      }
+    ],
+    "businessNature": "Food",
+    "businessType": "Registered",
+    "baseCurrency": "INR",
+    "taxes": [
+      "gst12",
+      "gst18"
+    ],
+    "creatorSuperAdmin": true
+  }
+}

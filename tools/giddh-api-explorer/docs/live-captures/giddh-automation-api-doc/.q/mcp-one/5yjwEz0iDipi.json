@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"5yjwEz0iDipi","description":"Get All User Subscriptions. Part of the Subscriptions APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"scope":{"checked":"true","value":"","description":"Scope query parameter. Optional."}},"body":{"type":"none"},"bodyDescription":{}}

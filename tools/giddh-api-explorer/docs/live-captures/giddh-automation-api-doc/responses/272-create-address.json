@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": {
+    "name": "API Doc Addr Two",
+    "address": "API Doc Street 2",
+    "pincode": "560001",
+    "stateCode": "KA",
+    "uniqueName": "rs61792733820379",
+    "isDefault": false,
+    "taxNumber": "",
+    "stateName": "Karnataka",
+    "taxType": "GSTIN"
+  }
+}

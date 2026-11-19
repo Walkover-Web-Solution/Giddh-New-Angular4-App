@@ -1,0 +1,286 @@
+{
+  "status": "success",
+  "body": {
+    "number": "PB-STOCK-001",
+    "type": "purchase",
+    "uniqueName": "q39wp1792730978257",
+    "isCustomInvoiceNo": true,
+    "isTouristSchemeApplicable": false,
+    "mergePB": false,
+    "passportNumber": null,
+    "withPay": false,
+    "forNewSubscription": false,
+    "subVoucher": null,
+    "attachedFiles": [],
+    "attachedFileName": null,
+    "roundOffApplicable": false,
+    "updateAccountDetails": false,
+    "copyBillingAddressToShippingAddress": true,
+    "readDetailsFromAccount": null,
+    "tallyUniqueId": null,
+    "templateDetails": {
+      "other": {}
+    },
+    "entryUniqueNames": [],
+    "ecommerceDetails": null,
+    "balanceTotal": {
+      "amountForAccount": 200.0,
+      "amountForCompany": 200.0
+    },
+    "gainLoss": 0.0,
+    "status": "UNPAID",
+    "subTotal": {
+      "amountForAccount": 200.0,
+      "amountForCompany": 200.0
+    },
+    "discountTotal": null,
+    "taxTotal": null,
+    "roundOffTotal": null,
+    "otherTaxTotal": null,
+    "voucherTotal": {
+      "amountForAccount": 200.0,
+      "amountForCompany": 200.0
+    },
+    "grandTotal": {
+      "amountForAccount": 200.0,
+      "amountForCompany": 200.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Two Hundred Only",
+      "amountForCompany": "Two Hundred Only"
+    },
+    "ewayBillDetails": null,
+    "roundOffAccount": null,
+    "items": [],
+    "referenceVoucher": null,
+    "deposits": null,
+    "deposit": null,
+    "adjustments": [],
+    "valuesInAccountCurrency": true,
+    "exchangeRate": 1.0,
+    "purchaseOrders": null,
+    "purchaseOrderDetails": null,
+    "isEInvoiceGenerated": false,
+    "paymentLink": null,
+    "viewInvoiceLink": null,
+    "generateEInvoice": null,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "documentItems": [
+      {
+        "variant": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+        },
+        "stock": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget"
+        },
+        "warehouse": {
+          "name": "Gidd warehouse",
+          "uniqueName": "xbq1792673424418"
+        },
+        "stockUnit": {
+          "name": "Piece",
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "quantity": 2.0,
+        "consumedQuantity": 0.0,
+        "remainingQuantity": 2.0,
+        "rate": 100.0,
+        "amount": 200.0,
+        "discount": 0.0,
+        "taxAmount": 0.0,
+        "description": "Buy gadgets",
+        "sortOrder": 0
+      }
+    ],
+    "invoiceStatus": "NOT_BILLED",
+    "multiCurrency": false,
+    "encodedData": null,
+    "token": null,
+    "salesPerson": {},
+    "fileExtention": null,
+    "fileName": null,
+    "recurrencePreviewRequest": null,
+    "recurringVoucherUniqueName": null,
+    "gstUnitMap": null,
+    "date": "23-10-2026",
+    "cashVoucher": false,
+    "dueDate": "06-11-2026",
+    "einvoiceGenerated": false,
+    "touristSchemeApplicable": false,
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      }
+    },
+    "account": {
+      "name": "API Doc Vendor Three",
+      "uniqueName": "apidoc-vendor-three",
+      "customerName": "API Doc Vendor Three",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Vendor Three",
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Vendor Three",
+        "address": [
+          "addr"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "sourceOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "destinationOfSupply": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "i9cd41792730978146",
+        "description": "Buy gadgets",
+        "date": "23-10-2026",
+        "hsnNumber": "847130",
+        "transactions": [
+          {
+            "account": {
+              "name": "Purchases",
+              "uniqueName": "purchases"
+            },
+            "amount": {
+              "amountForAccount": 200.0,
+              "amountForCompany": 200.0
+            },
+            "stock": {
+              "name": "API Doc Gadget",
+              "uniqueName": "apidoc-gadget",
+              "stockUnit": {
+                "name": "Piece",
+                "code": "pcs",
+                "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+              },
+              "variant": {
+                "name": "API Doc Gadget",
+                "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+              },
+              "sku": "APIDOC-GADGET",
+              "skuCodeHeading": "SKU Code",
+              "customField1": {
+                "key": "Custom field 1",
+                "value": null
+              },
+              "customField2": {
+                "key": "Custom field 2",
+                "value": null
+              },
+              "quantity": 2,
+              "rate": {
+                "rateForAccount": 100.0,
+                "rateForCompany": 100.0
+              },
+              "type": "PRODUCT",
+              "taxInclusive": false,
+              "showVariant": false,
+              "hasVariants": false,
+              "unitRates": []
+            },
+            "taxableValue": {
+              "amountForAccount": 200.0,
+              "amountForCompany": 200.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 200.0,
+          "amountForCompany": 200.0
+        },
+        "entryTotal": {
+          "amountForAccount": 200.0,
+          "amountForCompany": 200.0
+        },
+        "grandTotal": {
+          "amountForAccount": 200.0,
+          "amountForCompany": 200.0
+        },
+        "salesPerson": {},
+        "usedQuantity": 0
+      }
+    ],
+    "warehouse": {
+      "name": "Gidd warehouse",
+      "uniqueName": "xbq1792673424418",
+      "address": "My new address"
+    }
+  }
+}

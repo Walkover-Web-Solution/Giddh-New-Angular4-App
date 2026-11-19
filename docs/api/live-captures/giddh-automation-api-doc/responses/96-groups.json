@@ -1,0 +1,322 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "Indirect Expenses",
+      "groups": [
+        {
+          "name": "Dividend Expense",
+          "groups": [],
+          "category": "expenses",
+          "synonyms": null,
+          "uniqueName": "dividendexpense"
+        },
+        {
+          "name": "Interest Expense",
+          "groups": [],
+          "category": "expenses",
+          "synonyms": null,
+          "uniqueName": "interestexpense"
+        },
+        {
+          "name": "Exchange Loss",
+          "groups": [],
+          "category": "expenses",
+          "synonyms": null,
+          "uniqueName": "exchangeloss"
+        },
+        {
+          "name": "Other Indirect Expenses",
+          "groups": [],
+          "category": "expenses",
+          "synonyms": null,
+          "uniqueName": "otherindirectexpenses"
+        }
+      ],
+      "category": "expenses",
+      "synonyms": "E.g. Office expenses, Administration expenses",
+      "uniqueName": "indirectexpenses"
+    },
+    {
+      "name": "Operating Cost",
+      "groups": [
+        {
+          "name": "Purchases",
+          "groups": [],
+          "category": "expenses",
+          "synonyms": null,
+          "uniqueName": "purchases"
+        },
+        {
+          "name": "Discount",
+          "groups": [],
+          "category": "expenses",
+          "synonyms": null,
+          "uniqueName": "discount"
+        }
+      ],
+      "category": "expenses",
+      "synonyms": "E.g. Purchases, Discount ",
+      "uniqueName": "operatingcost"
+    },
+    {
+      "name": "Other Income",
+      "groups": [
+        {
+          "name": "Dividend Income",
+          "groups": [],
+          "category": "income",
+          "synonyms": null,
+          "uniqueName": "dividendincome"
+        },
+        {
+          "name": "Interest Income",
+          "groups": [],
+          "category": "income",
+          "synonyms": null,
+          "uniqueName": "interestincome"
+        },
+        {
+          "name": "Exchange Gain",
+          "groups": [],
+          "category": "income",
+          "synonyms": null,
+          "uniqueName": "exchangegain"
+        }
+      ],
+      "category": "income",
+      "synonyms": "E.g. Interest on deposits, Profit from sell of assets",
+      "uniqueName": "otherincome"
+    },
+    {
+      "name": "Revenue From Operations",
+      "groups": [
+        {
+          "name": "Sales",
+          "groups": [],
+          "category": "income",
+          "synonyms": null,
+          "uniqueName": "sales"
+        }
+      ],
+      "category": "income",
+      "synonyms": "E.g. Revenues, Sales",
+      "uniqueName": "revenuefromoperations"
+    },
+    {
+      "name": "Current Liabilities",
+      "groups": [
+        {
+          "name": "Loan and Overdraft",
+          "groups": [],
+          "category": "liabilities",
+          "synonyms": null,
+          "uniqueName": "loanandoverdraft"
+        },
+        {
+          "name": "Duties & Taxes",
+          "groups": [
+            {
+              "name": "GST CESS",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "gstcess"
+            },
+            {
+              "name": "TCS payable",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "tcspayable"
+            },
+            {
+              "name": "TDS payable",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "tdspayable"
+            },
+            {
+              "name": "UTGST",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "utgst"
+            },
+            {
+              "name": "IGST",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "igst"
+            },
+            {
+              "name": "CGST",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "cgst"
+            },
+            {
+              "name": "SGST",
+              "groups": [],
+              "category": "liabilities",
+              "synonyms": null,
+              "uniqueName": "sgst"
+            }
+          ],
+          "category": "liabilities",
+          "synonyms": null,
+          "uniqueName": "dutiestaxes"
+        },
+        {
+          "name": "Sundry Creditors",
+          "groups": [],
+          "category": "liabilities",
+          "synonyms": null,
+          "uniqueName": "sundrycreditors"
+        }
+      ],
+      "category": "liabilities",
+      "synonyms": "E.g. Vendors, Creditors, Taxes payable, Cash credits",
+      "uniqueName": "currentliabilities"
+    },
+    {
+      "name": "Non Current Liabilities",
+      "groups": [],
+      "category": "liabilities",
+      "synonyms": "E.g. Loans",
+      "uniqueName": "noncurrentliabilities"
+    },
+    {
+      "name": "Shareholders\u2019 Funds",
+      "groups": [
+        {
+          "name": "Reserves & Surplus",
+          "groups": [],
+          "category": "liabilities",
+          "synonyms": null,
+          "uniqueName": "reservessurplus"
+        }
+      ],
+      "category": "liabilities",
+      "synonyms": "E.g. Capital, Owner or Investor Fund",
+      "uniqueName": "shareholdersfunds"
+    },
+    {
+      "name": "Current Assets",
+      "groups": [
+        {
+          "name": "Tax Receivable",
+          "groups": [
+            {
+              "name": "Input UTGST",
+              "groups": [],
+              "category": "assets",
+              "synonyms": null,
+              "uniqueName": "inpututgst"
+            },
+            {
+              "name": "Input IGST",
+              "groups": [],
+              "category": "assets",
+              "synonyms": null,
+              "uniqueName": "inputigst"
+            },
+            {
+              "name": "Input CGST",
+              "groups": [],
+              "category": "assets",
+              "synonyms": null,
+              "uniqueName": "inputcgst"
+            },
+            {
+              "name": "Input SGST",
+              "groups": [],
+              "category": "assets",
+              "synonyms": null,
+              "uniqueName": "inputsgst"
+            }
+          ],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "taxreceivable"
+        },
+        {
+          "name": "Tax On Export",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "taxonexport"
+        },
+        {
+          "name": "Tax On Advance",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "taxonadvance"
+        },
+        {
+          "name": "TCS receivable",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "tcsreceivable"
+        },
+        {
+          "name": "TDS receivable",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "tdsreceivable"
+        },
+        {
+          "name": "Reverse Charge",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "reversecharge"
+        },
+        {
+          "name": "Bank Accounts",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "bankaccounts"
+        },
+        {
+          "name": "Cash",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "cash"
+        },
+        {
+          "name": "Sundry Debtors",
+          "groups": [],
+          "category": "assets",
+          "synonyms": null,
+          "uniqueName": "sundrydebtors"
+        }
+      ],
+      "category": "assets",
+      "synonyms": "E.g. Debtors, Clients, Cash, Bank",
+      "uniqueName": "currentassets"
+    },
+    {
+      "name": "Non Current Assets",
+      "groups": [],
+      "category": "assets",
+      "synonyms": "E.g. Long term Investments",
+      "uniqueName": "noncurrentassets"
+    },
+    {
+      "name": "Fixed Assets",
+      "groups": [],
+      "category": "assets",
+      "synonyms": "E.g. Land & building, Plant & machinery, Patents",
+      "uniqueName": "fixedassets"
+    }
+  ]
+}

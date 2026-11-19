@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Region not found with code gl.",
+  "code": "INVALID_REQUEST"
+}

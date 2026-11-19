@@ -1,0 +1,57 @@
+[
+  {
+    "endpointId": "xtnY4fHsEzgq",
+    "name": "Stock Inventory Export All Group Stock Report",
+    "description": "Stock Inventory Export All Group Stock Report. Part of the Inventory APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "3LWVKWZifQtj",
+    "name": "Stock Inventory Export All Group Stock Report",
+    "description": "Stock Inventory Export All Group Stock Report. Part of the Inventory APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "9Fd247-mBFog",
+    "name": "Stock Inventory Export All Stock In Hierarchy",
+    "description": "Stock Inventory Export All Stock In Hierarchy. Part of the Inventory APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "Wld5x5ifNu8f",
+    "name": "Stock Inventory Export All Stock In Hierarchy",
+    "description": "Stock Inventory Export All Stock In Hierarchy. Part of the Inventory APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "-k3H3k7gUqBx",
+    "name": "Stock Inventory Export Arrangedby Accounts",
+    "description": "Stock Inventory Export Arrangedby Accounts. Part of the Inventory APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "FIHc4go9eLDj",
+    "name": "Stock Inventory Export Arrangedby Accounts",
+    "description": "Stock Inventory Export Arrangedby Accounts. Part of the Inventory APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "3_ppzaHDeDhJ",
+    "name": "Stock Inventory Export Group Stock Report",
+    "description": "Stock Inventory Export Group Stock Report. Part of the Stock Group APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "UFhf2-9u5Wvg",
+    "name": "Stock Inventory Export Group Stock Report",
+    "description": "Stock Inventory Export Group Stock Report. Part of the Stock Group APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "eeLqMJdw-d41",
+    "name": "Stock Inventory Export Stock Report",
+    "description": "Stock Inventory Export Stock Report. Part of the Stock Group APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "GyPtUjeYtIV4",
+    "name": "Stock Inventory Export Stock Report",
+    "description": "Stock Inventory Export Stock Report. Part of the Stock Group APIs in Giddh. Requires Auth-Key or Session-Id."
+  },
+  {
+    "endpointId": "yQcDmqLHLP9i",
+    "name": "Get Ledgers V2",
+    "description": "Get Ledgers V2. Part of the Magic Link APIs in Giddh. No authentication required."
+  }
+]

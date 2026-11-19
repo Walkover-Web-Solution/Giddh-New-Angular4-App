@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": {
+    "currency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "balancePayable": 15283.0,
+    "noOfInvoices": 1
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

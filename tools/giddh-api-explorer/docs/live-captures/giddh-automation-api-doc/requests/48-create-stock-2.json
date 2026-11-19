@@ -1,0 +1,15 @@
+{
+  "name": "API Doc Consulting Hour",
+  "uniqueName": "apidoc-service-hour",
+  "stockType": "SERVICE",
+  "isSalesActive": true,
+  "isPurchaseActive": true,
+  "salesAccountUniqueNames": [
+    "sales"
+  ],
+  "purchaseAccountUniqueNames": [
+    "purchases"
+  ],
+  "skuCode": "APIDOC-SERVICE-HOUR",
+  "hsnNumber": "998314"
+}

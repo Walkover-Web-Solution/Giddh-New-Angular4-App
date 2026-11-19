@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/templates",
+  "body": {
+    "name": "API Doc Capture Template",
+    "type": "invoice",
+    "templateType": "gst_template_a",
+    "uniqueName": "apidoc-capture-tpl"
+  }
+}

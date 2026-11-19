@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "INVALID_REQUEST",
+  "message": "The voucher sales is not supported for adjustment with sales voucher."
+}

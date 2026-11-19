@@ -1,0 +1,641 @@
+{
+  "status": "success",
+  "body": {
+    "sections": {
+      "footer": {
+        "data": {
+          "taxableAmount": {
+            "label": "Taxable Amount",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showNotesAtLastPage": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "tds": {
+            "label": "TDS",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "imageSignature": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "showMessage2": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "tcs": {
+            "label": "TCS",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "grandTotal": {
+            "label": "Invoice Total",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "totalDue": {
+            "label": "Total Due",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "companyName": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "displayExportMessage": {
+            "label": "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "grandTotalInAccountsCurrency": {
+            "label": "Invoice Total",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "totalInWordsInAccountsCurrency": {
+            "label": "Invoice Total (In words)",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "totalTax": {
+            "label": "Total Tax*",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "thanks": {
+            "label": "Thank you for your business",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "otherDeduction": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxBifurcation": {
+            "label": "hsnSac",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "totalInWords": {
+            "label": "Invoice Total (In words)",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "companyAddress": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "textUnderSlogan": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "slogan": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "message1": {
+            "label": "Declaration:",
+            "secondaryLabel": null,
+            "value": "We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.",
+            "display": true,
+            "width": null
+          }
+        }
+      },
+      "header": {
+        "data": {
+          "warehouseAddress": {
+            "label": null,
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "shippingDate": {
+            "label": "Ship Date",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "customField1": {
+            "label": "Custom Field 1",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "customField2": {
+            "label": "Custom Field 2",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "shippedVia": {
+            "label": "Ship Via",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "customField3": {
+            "label": "Custom Field 2",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "companyName": {
+            "label": "admin",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "dueDate": {
+            "label": "Due Date",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "displayExchangeRate": {
+            "label": "Exchange/Conversion Rate",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showElectronicInvoiceIdentifier": {
+            "label": "IRN",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "gstin": {
+            "label": "GSTIN",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "displayPlaceOfSupply": {
+            "label": "Place Of Supply",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "displayPlaceOfCountry": {
+            "label": "Country of Supply",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "shippingGstin": {
+            "label": "GSTIN",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showElectronicInvoiceDate": {
+            "label": "Ack Date",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "voucherNumber": {
+            "label": "Voucher No.",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "customerEmail": {
+            "label": "Email ID",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "invoiceNumber": {
+            "label": "Invoice No.",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showQrCode": {
+            "label": null,
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "voucherDate": {
+            "label": "Voucher Date",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "customerMobileNumber": {
+            "label": "Mobile Number",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "attentionTo": {
+            "label": "Attention To",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "displayLutNumber": {
+            "label": "LUT Number",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showCompanyAddress": {
+            "label": null,
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "pan": {
+            "label": "PAN",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "trackingNumber": {
+            "label": "Tracking No.",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "shippingCounty": {
+            "label": "County",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "formNameInvoice": {
+            "label": "INVOICE",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "billingGstin": {
+            "label": "GSTIN",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showEInvoiceDetails": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "address": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showElectronicInvoiceReference": {
+            "label": "Ack No",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "billingState": {
+            "label": "State",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "invoiceDate": {
+            "label": "Invoice Date",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "customerName": {
+            "label": "Customer Name",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "formNameTaxInvoice": {
+            "label": "TAX INVOICE",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "shippingAddress": {
+            "label": "Shipping Address",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "shippingState": {
+            "label": "State",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "billingAddress": {
+            "label": "Billing Address",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "billingCounty": {
+            "label": "County",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "gstComposition": {
+            "label": "Register under composition scheme",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          }
+        }
+      },
+      "table": {
+        "data": {
+          "date": {
+            "label": "Date",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "displayBaseCurrency": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxBifurcationTaxableValue": {
+            "label": "Taxable Value",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "description": {
+            "label": "Some label",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "discount": {
+            "label": "Dis./ Item",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "taxes": {
+            "label": "Taxes",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "total": {
+            "label": "Total",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "totalQuantity": {
+            "label": "totalQuantity",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "sNo": {
+            "label": "#",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "rate": {
+            "label": "Rate/ Item",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "amountBeforeDiscount": {
+            "label": "Total Before Dis.",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxBifurcationTotalTaxAmount": {
+            "label": "Total Tax Amount",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "item": {
+            "label": "Description",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "quantity": {
+            "label": "Qty.",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "taxBifurcationRate": {
+            "label": "Rate",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "otherTaxBifurcation": {
+            "label": "Tax",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "sacIndicator": {
+            "label": "(S)",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showDescriptionInRows": {
+            "label": "",
+            "secondaryLabel": null,
+            "display": true,
+            "width": ""
+          },
+          "hsnSac": {
+            "label": "HSN/SAC",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "tradeDiscount": {
+            "label": "Trade Discount",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxBifurcationAmount": {
+            "label": "Amount",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxBifurcationTotal": {
+            "label": "Total",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "entrySummaryPaid": {
+            "label": "Paid",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "unit": {
+            "label": "per",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "showVariantImage": {
+            "label": "Image",
+            "secondaryLabel": null,
+            "display": false,
+            "width": null
+          },
+          "entrySummaryDueAmount": {
+            "label": "Due Amount",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxableValue": {
+            "label": "Taxable Amt.",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          },
+          "RoundOff": {
+            "label": "Round Off",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "previousDue": {
+            "label": "Previous Due",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "taxBifurcationHsnSac": {
+            "label": "HSN/SAC",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "eoe": {
+            "label": "E. & O.E",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "hsnIndicator": {
+            "label": "(H)",
+            "secondaryLabel": null,
+            "display": true,
+            "width": null
+          },
+          "skuCode": {
+            "label": "SkuCode",
+            "secondaryLabel": null,
+            "display": true,
+            "width": "10"
+          }
+        }
+      }
+    },
+    "fontDefault": 0,
+    "fontMedium": 0,
+    "fontSmall": 0,
+    "showSectionsInline": false,
+    "showBankQrCode": false,
+    "accountCustomFieldUniqueNames": null,
+    "enableSecondaryLanguage": false,
+    "language1Code": "en",
+    "language2Code": null,
+    "displayLanguage1": false,
+    "displayLanguage2": false,
+    "showLanguage2DisplayedFirst": false,
+    "name": "Template A",
+    "type": "invoice",
+    "logoUniqueName": null,
+    "createdAt": "06-10-2017 11:46:02",
+    "updatedBy": {
+      "name": "System Admin",
+      "email": "business@giddh.com",
+      "uniqueName": "system_admin",
+      "mobileNo": "99-99999999990",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "updatedAt": "22-10-2026 08:36:13",
+    "createdBy": {
+      "name": "System Admin",
+      "email": "business@giddh.com",
+      "uniqueName": "system_admin",
+      "mobileNo": "99-99999999990",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "uniqueName": "gst_template_a",
+    "isDefault": true,
+    "logoSize": "50",
+    "font": "Open Sans",
+    "primaryColor": "#dF4927",
+    "secondaryColor": "#ffffff",
+    "topMargin": 20.0,
+    "fontSize": "10",
+    "leftMargin": 20.0,
+    "rightMargin": 20.0,
+    "bottomMargin": 20.0,
+    "templateType": "gst_template_a",
+    "copyFrom": null,
+    "qrCodeId": null,
+    "isDefaultForVoucher": false,
+    "templateColor": "#dF4927",
+    "tableColor": "#ffffff",
+    "logoPosition": "center/left/right"
+  }
+}

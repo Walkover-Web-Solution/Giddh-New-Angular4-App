@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "FnWQF1Xbnjh2", "description": "Update Invoice Email. Part of the Invoice Setting APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"branchUniqueName": {"checked": "true", "value": "", "description": "Branch uniqueName; omit for default company branch behaviour. Optional.", "required": false}}, "body": {"type": "none"}}

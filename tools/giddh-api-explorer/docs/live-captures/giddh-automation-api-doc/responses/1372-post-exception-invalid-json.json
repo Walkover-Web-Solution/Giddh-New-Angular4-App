@@ -1,0 +1,6 @@
+{
+  "timestamp": 1792741033471,
+  "status": 500,
+  "error": "Internal Server Error",
+  "path": "/exception/invalid-json"
+}

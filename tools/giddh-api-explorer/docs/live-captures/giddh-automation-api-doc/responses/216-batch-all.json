@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 50,
+    "totalPages": 0,
+    "totalItems": 0,
+    "fromDate": "01-04-2026",
+    "toDate": "31-03-2027",
+    "results": [],
+    "openingQuantity": 0.0,
+    "inwardQuantity": 0.0,
+    "outwardQuantity": 0.0,
+    "availableQuantity": 0.0
+  }
+}

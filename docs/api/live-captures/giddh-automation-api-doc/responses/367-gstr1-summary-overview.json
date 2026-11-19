@@ -1,0 +1,135 @@
+{
+  "status": "success",
+  "body": {
+    "count": 2,
+    "summary": [
+      {
+        "gstReturnType": "b2b",
+        "totalTransactions": 0,
+        "taxableAmount": 0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": "invoices",
+        "pos": null,
+        "name": "B2B Invoices",
+        "transactions": null
+      },
+      {
+        "gstReturnType": "b2cl",
+        "totalTransactions": 0,
+        "taxableAmount": 0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": "invoices",
+        "pos": null,
+        "name": "B2C(Large) Invoices",
+        "transactions": null
+      },
+      {
+        "gstReturnType": "b2cs",
+        "totalTransactions": 0,
+        "taxableAmount": 0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": "invoices",
+        "pos": null,
+        "name": "B2C(Small) Invoices",
+        "transactions": null
+      },
+      {
+        "gstReturnType": "nil",
+        "totalTransactions": 2,
+        "taxableAmount": 176.0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": "invoices",
+        "pos": null,
+        "name": "Exempt",
+        "transactions": null
+      },
+      {
+        "gstReturnType": "at",
+        "totalTransactions": 0,
+        "taxableAmount": 0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": "advance-receipt",
+        "pos": null,
+        "name": "Advance Receipts",
+        "transactions": null
+      },
+      {
+        "gstReturnType": "ata",
+        "totalTransactions": 0,
+        "taxableAmount": 0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": "adjusted-advance-receipt",
+        "pos": null,
+        "name": "Advance Receipts Adjustment",
+        "transactions": null
+      },
+      {
+        "gstReturnType": "CreditNote/DebitNote/RefundVouchers",
+        "totalTransactions": 0,
+        "taxableAmount": 0,
+        "igstAmount": 0,
+        "cgstAmount": 0,
+        "sgstAmount": 0,
+        "cessAmount": 0,
+        "rate": null,
+        "entityType": null,
+        "pos": null,
+        "name": "CreditNote/DebitNote/RefundVouchers",
+        "transactions": [
+          {
+            "gstReturnType": "all",
+            "totalTransactions": 0,
+            "taxableAmount": 0,
+            "igstAmount": 0,
+            "cgstAmount": 0,
+            "sgstAmount": 0,
+            "cessAmount": 0,
+            "rate": null,
+            "entityType": "registered-notes",
+            "pos": null,
+            "name": "Registered credit note/debit note transactions",
+            "transactions": null
+          },
+          {
+            "gstReturnType": "all",
+            "totalTransactions": 0,
+            "taxableAmount": 0,
+            "igstAmount": 0,
+            "cgstAmount": 0,
+            "sgstAmount": 0,
+            "cessAmount": 0,
+            "rate": null,
+            "entityType": "unregistered-notes",
+            "pos": null,
+            "name": "Unregistered credit note/debit note transactions",
+            "transactions": null
+          }
+        ]
+      }
+    ]
+  }
+}

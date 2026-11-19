@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/invoice/preview?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+  "body": {
+    "uniqueName": "5zkmf1792674363694",
+    "voucherType": "sales"
+  }
+}

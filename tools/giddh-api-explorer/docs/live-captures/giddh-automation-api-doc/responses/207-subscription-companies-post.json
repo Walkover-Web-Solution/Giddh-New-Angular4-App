@@ -1,0 +1,24 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "name": "Giddh Automation API DOC",
+        "uniqueName": "giddhain1792673422178091xos",
+        "subId": "SUB-20261022-5",
+        "status": "UNARCHIVED",
+        "totalInvoices": 10,
+        "totalBills": 13,
+        "lastLogin": "23-10-2026",
+        "lastInvoiceAt": "23-10-2026",
+        "lastBillAt": "23-10-2026",
+        "subscriptionStatus": "active",
+        "isOwner": true
+      }
+    ]
+  }
+}

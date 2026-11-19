@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/verify-number",
+  "body": {
+    "email": "apidoc@example.invalid",
+    "password": "InvalidPass1!"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Must provide gstin for this Api.",
+  "code": "INSUFFICIENT_PARAMETERS"
+}

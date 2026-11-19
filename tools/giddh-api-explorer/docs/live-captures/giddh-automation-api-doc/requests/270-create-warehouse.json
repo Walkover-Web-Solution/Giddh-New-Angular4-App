@@ -1,0 +1,10 @@
+{
+  "name": "API Doc Warehouse Two",
+  "address": "API Doc Road",
+  "countries": [
+    {
+      "countryName": "India",
+      "countryCode": "IN"
+    }
+  ]
+}

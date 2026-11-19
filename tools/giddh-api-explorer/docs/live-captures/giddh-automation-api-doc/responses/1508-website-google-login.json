@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Access token is required.",
+  "code": "INVALID_REQUEST",
+  "httpStatus": 401
+}

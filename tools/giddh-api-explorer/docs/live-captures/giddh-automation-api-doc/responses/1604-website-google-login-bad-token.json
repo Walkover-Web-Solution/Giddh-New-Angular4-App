@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Google verification failed.",
+  "code": "VERIFICATION_FAILED",
+  "httpStatus": 401
+}

@@ -1,0 +1,16 @@
+{
+  "method": "POST",
+  "path": "/v2/portal-user/switch",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy",
+  "body": {
+    "account": {
+      "name": "Siddhi Batra",
+      "uniqueName": "siddhi"
+    },
+    "vendorContactUniqueName": "tdl1792756235005",
+    "proxyAuthToken": "<REDACTED>",
+    "subDomain": "10k"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "body": {
+    "page": 0,
+    "count": 0,
+    "totalPages": 0,
+    "totalItems": 0,
+    "results": [],
+    "size": 0,
+    "fromDate": "01-04-2026",
+    "toDate": "31-03-2027"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "NOT_FOUND",
+  "message": "No active Inventory Adjustment not found with refNo : placeholder"
+}

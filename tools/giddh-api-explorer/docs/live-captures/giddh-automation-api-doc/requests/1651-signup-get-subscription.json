@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "path": "/v2/subscription/SUB-20261023-8",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup"
+}

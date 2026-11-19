@@ -1,0 +1,11 @@
+{
+  "method": "POST",
+  "path": "/verify-and-send",
+  "body": {
+    "accessToken": "invalid",
+    "website_url": "https://web.giddh.com/affiliate",
+    "currency_code": "INR",
+    "name": "API Doc Affiliate Test",
+    "email": "apidoc-affiliate@example.com"
+  }
+}

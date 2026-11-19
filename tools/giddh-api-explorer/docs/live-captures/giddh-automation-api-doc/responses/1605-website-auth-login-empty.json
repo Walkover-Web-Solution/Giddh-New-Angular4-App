@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "No access token was provided.",
+  "code": "ACCESS_TOKEN_NOT_PROVIDED",
+  "httpStatus": 400
+}

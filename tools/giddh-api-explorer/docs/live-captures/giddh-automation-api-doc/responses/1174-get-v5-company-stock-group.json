@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No stock group found with apidoc-products in selected `Giddh Automation API DOC` (uniquename: giddhain1792673422178091xos)",
+  "code": "STOCK_GROUP_NOT_FOUND"
+}

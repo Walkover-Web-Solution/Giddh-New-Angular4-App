@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "body": {
+    "countryCode": "IN",
+    "currencyCode": "INR",
+    "isDefault": true,
+    "addresses": [],
+    "isArchived": false,
+    "name": "Gidd warehouse",
+    "mobileNumber": "91-919111525164",
+    "uniqueName": "xbq1792673424418"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "path": "/v2/subscription/get-amount",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup",
+  "body": {
+    "planUniqueName": "dmg1715623569079",
+    "promoCode": "",
+    "duration": "YEARLY",
+    "countryCode": "IND"
+  }
+}

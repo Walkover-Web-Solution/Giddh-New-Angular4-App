@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/v2/subscription/list?page=1&count=50",
+  "body": {}
+}

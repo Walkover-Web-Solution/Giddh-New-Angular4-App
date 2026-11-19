@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "1Iwva5auErLM", "description": "Get City By Pin Code. Part of the Cities APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"pinCode": {"checked": "true", "value": "", "description": "Pin code query parameter. Mandatory.", "required": "true"}}}

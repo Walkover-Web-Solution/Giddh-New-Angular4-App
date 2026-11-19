@@ -1,0 +1,325 @@
+[
+  {
+    "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/{voucherUniqueName}/add-comment:PortalController:addComments",
+    "body": {
+      "name": "Add Comments",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/:voucherUniqueName/add-comment",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: API_PATHS.voucherAddComment. Add Comments. Service: accounting-microservice, PortalController#addComments.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        },
+        "Content-Type": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON body."
+        }
+      },
+      "params": {},
+      "pathVariables": {
+        "0": {
+          "checked": "notApplicable",
+          "key": "companyUniqueName",
+          "value": "",
+          "description": "companyUniqueName"
+        },
+        "1": {
+          "checked": "notApplicable",
+          "key": "accountUniqueName",
+          "value": "",
+          "description": "accountUniqueName"
+        },
+        "2": {
+          "checked": "notApplicable",
+          "key": "voucherUniqueName",
+          "value": "",
+          "description": "voucherUniqueName"
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueName\": \"string\",\n  \"description\": \"string\",\n  \"userName\": \"string\",\n  \"date\": \"01-04-2025\"\n}"
+        }
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /portal/company/{companyUniqueName}/accounts/{accountUniqueName}/{voucherUniqueName}/add-comment",
+          "data": {
+            "status": "success",
+            "body": "success",
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        },
+        {
+          "title": "400 \u00b7 INVALID_SESSION_ID",
+          "status": 400,
+          "description": "Live capture 1532-portal-add-comment",
+          "data": {
+            "status": "error",
+            "code": "INVALID_SESSION_ID",
+            "message": "No session found with Session-Id: in3f3af1********HbI=.",
+            "httpStatus": 401
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_AUTH_KEY",
+          "status": 401,
+          "description": "InvalidAuthKeyException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_AUTH_KEY",
+            "message": "Invalid Auth-Key."
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_SESSION",
+          "status": 401,
+          "description": "InvalidSessionIdException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_SESSION",
+            "message": "Invalid Session-Id."
+          }
+        },
+        {
+          "title": "401 \u00b7 UNAUTHORIZED",
+          "status": 401,
+          "description": "UnAuthorizeException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "UNAUTHORIZED",
+            "message": "Un Authorize"
+          }
+        },
+        {
+          "title": "404 \u00b7 NOT_FOUND",
+          "status": 404,
+          "description": "NotFoundException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "NOT_FOUND",
+            "message": "Not Found"
+          }
+        },
+        {
+          "title": "406 \u00b7 INVALID_REQUEST",
+          "status": 406,
+          "description": "InvalidRequestException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_REQUEST",
+            "message": "Invalid Request"
+          }
+        }
+      ],
+      "state": 1
+    }
+  },
+  {
+    "catalogId": "accounting-microservice:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/{voucherUniqueName}/comments:PortalController:getComments",
+    "body": {
+      "name": "Get Comments",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/:voucherUniqueName/comments",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: API_PATHS.voucherComments. Get Comments. Service: accounting-microservice, PortalController#getComments.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        }
+      },
+      "params": {},
+      "pathVariables": {
+        "0": {
+          "checked": "notApplicable",
+          "key": "companyUniqueName",
+          "value": "",
+          "description": "companyUniqueName"
+        },
+        "1": {
+          "checked": "notApplicable",
+          "key": "accountUniqueName",
+          "value": "",
+          "description": "accountUniqueName"
+        },
+        "2": {
+          "checked": "notApplicable",
+          "key": "voucherUniqueName",
+          "value": "",
+          "description": "voucherUniqueName"
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /portal/company/{companyUniqueName}/accounts/{accountUniqueName}/{voucherUniqueName}/comments",
+          "data": {
+            "status": "success",
+            "body": [],
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_AUTH_KEY",
+          "status": 401,
+          "description": "InvalidAuthKeyException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_AUTH_KEY",
+            "message": "Invalid Auth-Key."
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_SESSION",
+          "status": 401,
+          "description": "InvalidSessionIdException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_SESSION",
+            "message": "Invalid Session-Id."
+          }
+        },
+        {
+          "title": "401 \u00b7 UNAUTHORIZED",
+          "status": 401,
+          "description": "UnAuthorizeException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "UNAUTHORIZED",
+            "message": "Un Authorize"
+          }
+        },
+        {
+          "title": "404 \u00b7 NOT_FOUND",
+          "status": 404,
+          "description": "NotFoundException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "NOT_FOUND",
+            "message": "Not Found"
+          }
+        }
+      ],
+      "state": 1
+    }
+  },
+  {
+    "catalogId": "client-unmatched:customer-portal:GET:api/c/getDetails",
+    "body": {
+      "name": "Customer Portal proxy helper (PROXY_URL), not a Giddh Spring controller.",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/api/c/getDetails",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: PROXY_API_PATHS.GET_DETAILS (PROXY_URL, not Giddh API host). Customer Portal proxy helper (PROXY_URL), not a Giddh Spring controller.. Service: client-unmatched, None#None. Note: client path may not match a single Spring handler one-to-one.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        }
+      },
+      "params": {},
+      "pathVariables": {},
+      "body": {
+        "type": "none"
+      },
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "From catalog",
+          "data": {
+            "status": "success"
+          }
+        }
+      ],
+      "state": 1
+    }
+  },
+  {
+    "catalogId": "client-unmatched:customer-portal:GET:portal/company/{}/accounts/{}/vouchers",
+    "body": {
+      "name": "Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route.",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:id/accounts/:id/vouchers",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: API_PATHS.paymentVouchersList (client route; backend differs). Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route.. Service: client-unmatched, None#None. Note: client path may not match a single Spring handler one-to-one.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        }
+      },
+      "params": {},
+      "pathVariables": {
+        "0": {
+          "checked": "notApplicable",
+          "key": "id",
+          "value": "",
+          "description": "id"
+        },
+        "1": {
+          "checked": "notApplicable",
+          "key": "id",
+          "value": "",
+          "description": "id"
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /portal/company/{id}/accounts/{id}/vouchers",
+          "data": {
+            "timestamp": 1792745366313,
+            "status": 500,
+            "error": "Internal Server Error",
+            "path": "/portal/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers",
+            "httpStatus": 500
+          }
+        },
+        {
+          "title": "400 \u00b7 USER_NOT_FOUND",
+          "status": 400,
+          "description": "Live capture 1739-portal-prod-vouchers-receipt",
+          "data": {
+            "status": "error",
+            "code": "USER_NOT_FOUND",
+            "message": "User not found.",
+            "httpStatus": 404,
+            "env": "prod"
+          }
+        },
+        {
+          "title": "500 \u00b7 500",
+          "status": 500,
+          "description": "Live capture 1522-portal-vouchers-list",
+          "data": {
+            "timestamp": 1792745366313,
+            "status": 500,
+            "error": "Internal Server Error",
+            "path": "/portal/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers",
+            "httpStatus": 500
+          }
+        }
+      ],
+      "state": 1
+    }
+  }
+]

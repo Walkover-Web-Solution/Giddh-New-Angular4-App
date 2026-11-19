@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "stock": {
+      "name": "API Doc Finished Good",
+      "uniqueName": "apidoc-finished-good"
+    },
+    "manufacturingDetails": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "fieldType": {
+        "name": "Boolean",
+        "type": "BOOLEAN"
+      },
+      "fieldName": "API Doc CF Flag",
+      "status": true,
+      "modules": [
+        {
+          "name": "Account",
+          "uniqueName": "ACCOUNT"
+        }
+      ],
+      "dataRange": {
+        "min": null,
+        "max": null
+      },
+      "isMandatory": false,
+      "regex": null,
+      "fieldOptions": null,
+      "fieldInfo": "flag",
+      "isActive": true,
+      "uniqueName": "1792758792191n1ficygh8s7bfds"
+    }
+  ]
+}

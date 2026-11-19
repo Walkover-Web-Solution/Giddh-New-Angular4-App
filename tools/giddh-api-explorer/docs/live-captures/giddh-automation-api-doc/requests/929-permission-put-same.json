@@ -1,0 +1,13 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/uer/tgig7awso7imt1h",
+  "body": {
+    "emailId": "divyanshu@whozzat.com",
+    "entity": "COMPANY",
+    "entityUniqueName": "giddhain1792673422178091xos",
+    "roleUniqueName": "super_admin",
+    "uniqueName": "tgig7awso7imt1h",
+    "allowedIps": [],
+    "allowedCidrs": []
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "nextIndex": 46,
+  "done": false,
+  "items": [
+    {
+      "endpointId": "s36BeOFR8FI7",
+      "name": "Save Favorite Report Module",
+      "args": {
+        "orgId": "83427",
+        "endpointId": "s36BeOFR8FI7",
+        "description": "Save Favorite Report Module. Part of the Reports APIs in Giddh. Requires Auth-Key or Session-Id.",
+        "sampleResponse": [
+          {
+            "title": "Success",
+            "status": 200,
+            "description": "Saved success example from the API catalog capture.",
+            "data": {
+              "status": "success",
+              "body": {
+                "status": "string"
+              }
+            }
+          },
+          {
+            "title": "Invalid value provided for Key:",
+            "status": 400,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "message": "Invalid value provided for Key: ",
+              "code": "INVALID_JSON"
+            }
+          },
+          {
+            "title": "Invalid favorite report type.",
+            "status": 406,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_REQUEST",
+              "message": "Invalid favorite report type."
+            }
+          },
+          {
+            "title": "We apologize we cannot honor your request, Please make sure ",
+            "status": 404,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "COMPANY_NOT_FOUND",
+              "message": "We apologize we cannot honor your request, Please make sure company exist and you have appropriate permissions."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "endpointId": "GcjAwGj0E4HB",
+      "name": "Update Project",
+      "args": {
+        "orgId": "83427",
+        "endpointId": "GcjAwGj0E4HB",
+        "description": "Update Project a project record. Part of the Project APIs in Giddh. Requires Auth-Key or Session-Id.",
+        "sampleResponse": [
+          {
+            "title": "Success",
+            "status": 200,
+            "description": "Saved success example from the API catalog capture.",
+            "data": {
+              "status": "success",
+              "body": {
+                "reference": "response"
+              }
+            }
+          },
+          {
+            "title": "Project with unique name 'placeholder' not found.",
+            "status": 404,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "message": "Project with unique name 'placeholder' not found.",
+              "code": "NOT_FOUND"
+            }
+          },
+          {
+            "title": "We apologize we cannot honor your request, Please make sure ",
+            "status": 404,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "COMPANY_NOT_FOUND",
+              "message": "We apologize we cannot honor your request, Please make sure company exist and you have appropriate permissions."
+            }
+          },
+          {
+            "title": "Invalid Auth-Key.",
+            "status": 401,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_AUTH_KEY",
+              "message": "Invalid Auth-Key."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "endpointId": "UxxJYpK21UMw",
+      "name": "Verify Company Invoice Email",
+      "args": {
+        "orgId": "83427",
+        "endpointId": "UxxJYpK21UMw",
+        "description": "Verify Company Invoice Email. Part of the Auth APIs in Giddh. No authentication required.",
+        "sampleResponse": [
+          {
+            "title": "Success",
+            "status": 200,
+            "description": "Saved success example from the API catalog capture.",
+            "data": {
+              "status": "success",
+              "body": "success.email.verification"
+            }
+          },
+          {
+            "title": "The email: 8rz1792673422372 is invalid.",
+            "status": 400,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "message": "The email: 8rz1792673422372 is invalid.",
+              "code": "INVALID_EMAIL"
+            }
+          },
+          {
+            "title": "We apologize we cannot honor your request, Please make sure ",
+            "status": 404,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "COMPANY_NOT_FOUND",
+              "message": "We apologize we cannot honor your request, Please make sure company exist and you have appropriate permissions."
+            }
+          },
+          {
+            "title": "Invalid Auth-Key.",
+            "status": 401,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_AUTH_KEY",
+              "message": "Invalid Auth-Key."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "endpointId": "PkzGBP3u8mV8",
+      "name": "Get Favorite Report",
+      "args": {
+        "orgId": "83427",
+        "endpointId": "PkzGBP3u8mV8",
+        "description": "Get Favorite Report a reports record. Part of the Reports APIs in Giddh. Requires Auth-Key or Session-Id.",
+        "sampleResponse": [
+          {
+            "title": "Success",
+            "status": 200,
+            "description": "Saved success example from the API catalog capture.",
+            "data": {
+              "status": "success",
+              "body": {
+                "reportList": [
+                  {
+                    "name": "SALES_REGISTER_BY_DURATION",
+                    "uniqueName": "/pages/reports/sales-register?groupBy=duration&required=groupBy"
+                  },
+                  {
+                    "name": "SALES_REGISTER_BY_SALES_PERSON",
+                    "uniqueName": "/pages/reports/sales-register?groupBy=salesPerson&required=groupBy"
+                  },
+                  {
+                    "name": "SALES_REGISTER_BY_STATE",
+                    "uniqueName": "/pages/reports/sales-register?groupBy=state&required=groupBy"
+                  },
+                  {
+                    "name": "SALES_REGISTER_BY_COUNTRY",
+                    "uniqueName": "/pages/reports/sales-register?groupBy=country&required=groupBy"
+                  },
+                  {
+                    "name": "AGING_REPORT_SALES",
+                    "uniqueName": "/pages/contact/sales?tab=sales-aging-report&tabIndex=1"
+                  }
+                ],
+                "favoriteReportList": [],
+                "filterOption": [
+                  {
+                    "name": "Sales",
+                    "reports": [
+                      "SALES_REGISTER_BY_DURATION",
+                      "SALES_REGISTER_BY_SALES_PERSON",
+                      "SALES_REGISTER_BY_STATE",
+                      "SALES_REGISTER_BY_COUNTRY",
+                      "SALES_BIFURCATION"
+                    ]
+                  },
+                  {
+                    "name": "Purchase",
+                    "reports": [
+                      "PURCHASE_REGISTER_BY_DURATION",
+                      "PURCHASE_REGISTER_BY_SALES_PERSON",
+                      "PURCHASE_REGISTER_BY_STATE",
+                      "PURCHASE_REGISTER_BY_COUNTRY"
+                    ]
+                  },
+                  {
+                    "name": "Customers/Vendors",
+                    "reports": [
+                      "AGING_REPORT_SALES",
+                      "AGING_REPORT_PURCHASE",
+                      "CUSTOMER",
+                      "VENDOR"
+                    ]
+                  },
+                  {
+                    "name": "Financial",
+                    "reports": [
+                      "TRIAL_BALANCE",
+                      "PROFIT_AND_LOSS",
+                      "BALANCE_SHEET",
+                      "GST",
+                      "GSTR-1"
+                    ]
+                  },
+                  {
+                    "name": "Accounting",
+                    "reports": [
+                      "DAYBOOK"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "title": "We apologize we cannot honor your request, Please make sure ",
+            "status": 404,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "COMPANY_NOT_FOUND",
+              "message": "We apologize we cannot honor your request, Please make sure company exist and you have appropriate permissions."
+            }
+          },
+          {
+            "title": "Invalid Auth-Key.",
+            "status": 401,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_AUTH_KEY",
+              "message": "Invalid Auth-Key."
+            }
+          },
+          {
+            "title": "Invalid Session-Id.",
+            "status": 401,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_SESSION",
+              "message": "Invalid Session-Id."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "endpointId": "6-Cn1ygbAum1",
+      "name": "Get Project Entries",
+      "args": {
+        "orgId": "83427",
+        "endpointId": "6-Cn1ygbAum1",
+        "description": "Get Project Entries a project record. Part of the Project APIs in Giddh. Requires Auth-Key or Session-Id.",
+        "sampleResponse": [
+          {
+            "title": "Success",
+            "status": 200,
+            "description": "Saved success example from the API catalog capture.",
+            "data": {
+              "status": "success",
+              "body": {
+                "page": 1,
+                "count": 0,
+                "totalPages": 0,
+                "totalItems": 0,
+                "results": []
+              }
+            }
+          },
+          {
+            "title": "We apologize we cannot honor your request, Please make sure ",
+            "status": 404,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "COMPANY_NOT_FOUND",
+              "message": "We apologize we cannot honor your request, Please make sure company exist and you have appropriate permissions."
+            }
+          },
+          {
+            "title": "Invalid Auth-Key.",
+            "status": 401,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_AUTH_KEY",
+              "message": "Invalid Auth-Key."
+            }
+          },
+          {
+            "title": "Invalid Session-Id.",
+            "status": 401,
+            "description": "Example error response for this request.",
+            "data": {
+              "status": "error",
+              "code": "INVALID_SESSION",
+              "message": "Invalid Session-Id."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "code": "INVALID_SESSION_ID",
+  "message": "No session found with Session-Id: in3f3af1********HbI=.",
+  "httpStatus": 401
+}

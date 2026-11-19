@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/login-with-number?countryCode=GB&mobileNumber=placeholder"
+}

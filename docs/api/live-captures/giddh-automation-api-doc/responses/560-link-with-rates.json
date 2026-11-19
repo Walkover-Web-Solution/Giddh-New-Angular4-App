@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "name": "API Doc Widget",
+    "outOfStockSelling": false,
+    "discounts": [],
+    "uniqueName": "apidoc-widget",
+    "taxesToSave": [],
+    "stockUnitGroup": {
+      "name": "Main Group",
+      "uniqueName": "maingroup"
+    },
+    "amazonAsin": "",
+    "lowStockAlertCount": 0,
+    "updateStockUnitsForLinkedCompanies": false,
+    "rowNumber": 0
+  }
+}

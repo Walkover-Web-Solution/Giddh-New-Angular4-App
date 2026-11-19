@@ -1,0 +1,19 @@
+{
+  "method": "POST",
+  "url": "https://api.giddh.com/company/{companyUniqueName}/vouchers/get-all-vouchers-balances?page=1&count=50&from=01-04-2019&to=25-02-2026&type=sales&q=&sort=&sortBy=&voucherVersion=2&branchUniqueName={branchUniqueName}",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Auth-Key": "ENTER_YOUR_GIDDH_AUTH_KEY",
+    "Session-Id": "ENTER_YOUR_GIDDH_SESSION_ID"
+  },
+  "body": {
+    "sortBy": "",
+    "sort": "",
+    "page": 1,
+    "count": 50,
+    "q": "",
+    "selectAllFields": []
+  },
+  "notes": "type must be query param, not JSON body. voucherVersion=2 matches panel/accounting MS."
+}

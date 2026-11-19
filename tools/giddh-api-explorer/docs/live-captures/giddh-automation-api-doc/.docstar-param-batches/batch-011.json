@@ -1,0 +1,1552 @@
+[
+  {
+    "endpointId": "QQp3HyikWUZw",
+    "name": "Fetch Supported Payment Methods",
+    "catalogKey": "GET /portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/payment-method",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "QQp3HyikWUZw",
+      "description": "Fetch Supported Payment Methods. Part of the Payment Method APIs in Giddh. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "78rExkKCRHq4",
+    "name": "Financial Year Limits",
+    "catalogKey": "GET /company/{companyUniqueName}/financial-year-limits",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "78rExkKCRHq4",
+      "description": "Financial Year Limits. Part of the Financial Year Limits APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "slKxI7JGXMxw",
+    "name": "Finish",
+    "catalogKey": "POST /company/{companyUniqueName}/dsc/finish",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "slKxI7JGXMxw",
+      "description": "Finish. Part of the Finish APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"nonce\": \"string\",\n  \"signature\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "nonce": {
+          "type": "string",
+          "description": "Nonce. Optional.",
+          "value": "string"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Signature. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "x8-ZZpS-XHXm",
+    "name": "Finish DSC",
+    "catalogKey": "POST /company/{companyUniqueName}/dsc/finish",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "x8-ZZpS-XHXm",
+      "description": "Finish. Part of the Finish APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"nonce\": \"string\",\n  \"signature\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "nonce": {
+          "type": "string",
+          "description": "Nonce. Optional.",
+          "value": "string"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Signature. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ggd-QCh-cK6V",
+    "name": "Fore Cast Data",
+    "catalogKey": "POST /company/{companyUniqueName}/forecast",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ggd-QCh-cK6V",
+      "description": "Fore Cast Data. Part of the Forecast APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "KuaDnTtornti",
+    "name": "Forgot Password",
+    "catalogKey": "PUT /users/{uniqueKey}/forgot-password",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "KuaDnTtornti",
+      "description": "Forgot Password. Part of the Forgot Password APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "ZVGTNOcGMK-Y",
+    "name": "Form Data",
+    "catalogKey": "GET /ui/forms",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ZVGTNOcGMK-Y",
+      "description": "/. Part of the Forms APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "country": {
+          "checked": "true",
+          "value": "",
+          "description": "Country query parameter. Mandatory.",
+          "required": true
+        },
+        "formName": {
+          "checked": "true",
+          "value": "",
+          "description": "Form name query parameter. Mandatory.",
+          "required": true
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "XLrHTYnh-hJv",
+    "name": "Form Data For Calling Codes",
+    "catalogKey": "GET /ui/calling-code",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "XLrHTYnh-hJv",
+      "description": "/. Part of the Calling Code APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "formName": {
+          "checked": "true",
+          "value": "all",
+          "description": "Form name query parameter. Default: all. Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "YQ0B-90gs25Z",
+    "name": "Generate",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "YQ0B-90gs25Z",
+      "description": "Generate. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        },
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"entryUniqueNames\": [],\n  \"dueDate\": \"string\",\n  \"voucher\": \"string\",\n  \"validateTax\": false,\n  \"taxes\": [],\n  \"applyApplicableTaxes\": false,\n  \"paymentAction\": \"string\",\n  \"updateAccountDetails\": false,\n  \"depositAccountUniqueName\": \"string\",\n  \"oldVersions\": [],\n  \"oldEstimateVersions\": [],\n  \"isEcommerceInvoice\": false,\n  \"action\": \"string\",\n  \"roundOffApplicable\": false,\n  \"branch\": \"string\",\n  \"salesPersonUniqueName\": \"string\",\n  \"salesPerson\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "entryUniqueNames": {
+          "type": "array",
+          "description": "Array of entry unique names values. Optional.",
+          "value": []
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "voucher": {
+          "type": "string",
+          "description": "Voucher. Optional.",
+          "value": "string"
+        },
+        "validateTax": {
+          "type": "boolean",
+          "description": "When true, applies the validate tax filter or flag. Optional.",
+          "value": false
+        },
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "applyApplicableTaxes": {
+          "type": "boolean",
+          "description": "When true, applies the apply applicable taxes filter or flag. Optional.",
+          "value": false
+        },
+        "paymentAction": {
+          "type": "string",
+          "description": "Payment action. Optional.",
+          "value": "string"
+        },
+        "updateAccountDetails": {
+          "type": "boolean",
+          "description": "When true, applies the update account details filter or flag. Optional.",
+          "value": false
+        },
+        "depositAccountUniqueName": {
+          "type": "string",
+          "description": "Deposit account unique name. Optional.",
+          "value": "string"
+        },
+        "oldVersions": {
+          "type": "array",
+          "description": "Array of old versions values. Optional.",
+          "value": []
+        },
+        "oldEstimateVersions": {
+          "type": "array",
+          "description": "Array of old estimate versions values. Optional.",
+          "value": []
+        },
+        "isEcommerceInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the is ecommerce invoice filter or flag. Optional.",
+          "value": false
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "roundOffApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the round off applicable filter or flag. Optional.",
+          "value": false
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch. Optional.",
+          "value": "string"
+        },
+        "salesPersonUniqueName": {
+          "type": "string",
+          "description": "Sales person unique name. Optional.",
+          "value": "string"
+        },
+        "salesPerson": {
+          "type": "string",
+          "description": "Sales person. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "K-BJ-PLHddJD",
+    "name": "Generate Auth Key",
+    "catalogKey": "PUT /users/{uniqueName}/generate-auth-key",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "K-BJ-PLHddJD",
+      "description": "Generate Auth Key. Part of the Generate Auth Key APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "JV2VQwWZwbho",
+    "name": "Generate Auth Key",
+    "catalogKey": "PUT /users/{uniqueName}/generate-auth-key",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "JV2VQwWZwbho",
+      "description": "Generate Auth Key. Part of the Generate Auth Key APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "mR7pSvI8ilw0",
+    "name": "Generate Auth Key",
+    "catalogKey": "POST /company/{companyUniqueName}/auth/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "mR7pSvI8ilw0",
+      "description": "Generate Auth Key. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"emailId\": \"string\",\n  \"from\": \"string\",\n  \"to\": \"string\",\n  \"duration\": 0,\n  \"period\": \"string\",\n  \"allowedIps\": [],\n  \"allowedCidrs\": [],\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"roleName\": \"string\",\n  \"roleUniqueName\": \"string\",\n  \"userName\": \"string\",\n  \"userEmail\": \"string\",\n  \"userUniqueName\": \"string\",\n  \"uniqueName\": \"string\",\n  \"fromDateObj\": \"01-04-2025\",\n  \"toDateObj\": \"01-04-2025\",\n  \"mobileVerified\": false,\n  \"mobileNumber\": \"string\",\n  \"userIsSubscriber\": false,\n  \"companyUniqueName\": \"string\",\n  \"comingFromAdminPanel\": false,\n  \"reGenerateAuthKey\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "emailId": {
+          "type": "string",
+          "description": "Email id. Optional.",
+          "value": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "From. Optional.",
+          "value": "string"
+        },
+        "to": {
+          "type": "string",
+          "description": "To. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration. Optional.",
+          "value": 0
+        },
+        "period": {
+          "type": "string",
+          "description": "Period. Optional.",
+          "value": "string"
+        },
+        "allowedIps": {
+          "type": "array",
+          "description": "Array of allowed ips values. Optional.",
+          "value": []
+        },
+        "allowedCidrs": {
+          "type": "array",
+          "description": "Array of allowed cidrs values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "roleName": {
+          "type": "string",
+          "description": "Role name. Optional.",
+          "value": "string"
+        },
+        "roleUniqueName": {
+          "type": "string",
+          "description": "Role unique name. Optional.",
+          "value": "string"
+        },
+        "userName": {
+          "type": "string",
+          "description": "User name. Optional.",
+          "value": "string"
+        },
+        "userEmail": {
+          "type": "string",
+          "description": "User email. Optional.",
+          "value": "string"
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "fromDateObj": {
+          "type": "string",
+          "description": "From date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "toDateObj": {
+          "type": "string",
+          "description": "To date obj. Optional.",
+          "value": "01-04-2025"
+        },
+        "mobileVerified": {
+          "type": "boolean",
+          "description": "When true, applies the mobile verified filter or flag. Optional.",
+          "value": false
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Optional.",
+          "value": "string"
+        },
+        "userIsSubscriber": {
+          "type": "boolean",
+          "description": "When true, applies the user is subscriber filter or flag. Optional.",
+          "value": false
+        },
+        "companyUniqueName": {
+          "type": "string",
+          "description": "Company unique name. Optional.",
+          "value": "string"
+        },
+        "comingFromAdminPanel": {
+          "type": "boolean",
+          "description": "When true, applies the coming from admin panel filter or flag. Optional.",
+          "value": false
+        },
+        "reGenerateAuthKey": {
+          "type": "boolean",
+          "description": "When true, applies the re generate auth key filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "VLojp9mWiK3M",
+    "name": "Generate Auth Key V2",
+    "catalogKey": "GET /users/{userUniqueName}/get-auth-key",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "VLojp9mWiK3M",
+      "description": "Generate Auth Key V2. Part of the Get Auth Key APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "rkqVSapyZJ_u",
+    "name": "Generate Business Document",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "rkqVSapyZJ_u",
+      "description": "Generate. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"documentType\": \"DC\",\n  \"challanType\": \"string\",\n  \"destinationWarehouse\": \"string\",\n  \"remarks\": \"string\",\n  \"referenceNo\": \"string\",\n  \"dateOfSupply\": \"string\",\n  \"challanNo\": \"string\",\n  \"note\": \"string\",\n  \"sources\": [],\n  \"destinations\": [],\n  \"products\": [],\n  \"entity\": \"string\",\n  \"transferType\": \"string\",\n  \"autoGenerateNote\": false,\n  \"transporterDetails\": \"string\",\n  \"warehouseDetails\": \"string\",\n  \"account\": \"string\",\n  \"variant\": \"string\",\n  \"stock\": \"string\",\n  \"warehouse\": \"string\",\n  \"stockUnit\": \"string\",\n  \"batch\": \"string\",\n  \"batches\": [],\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"discount\": 0,\n  \"taxAmount\": 0,\n  \"description\": \"string\",\n  \"hsnSac\": \"string\",\n  \"sortOrder\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "challanType": {
+          "type": "string",
+          "description": "Challan type. Optional.",
+          "value": "string"
+        },
+        "destinationWarehouse": {
+          "type": "string",
+          "description": "Destination warehouse. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "referenceNo": {
+          "type": "string",
+          "description": "Reference no. Optional.",
+          "value": "string"
+        },
+        "dateOfSupply": {
+          "type": "string",
+          "description": "Date of supply. Optional.",
+          "value": "string"
+        },
+        "challanNo": {
+          "type": "string",
+          "description": "Challan no. Optional.",
+          "value": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "Note. Optional.",
+          "value": "string"
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources values. Optional.",
+          "value": []
+        },
+        "destinations": {
+          "type": "array",
+          "description": "Array of destinations values. Optional.",
+          "value": []
+        },
+        "products": {
+          "type": "array",
+          "description": "Array of products values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "transferType": {
+          "type": "string",
+          "description": "Transfer type. Optional.",
+          "value": "string"
+        },
+        "autoGenerateNote": {
+          "type": "boolean",
+          "description": "When true, applies the auto generate note filter or flag. Optional.",
+          "value": false
+        },
+        "transporterDetails": {
+          "type": "string",
+          "description": "Transporter details. Optional.",
+          "value": "string"
+        },
+        "warehouseDetails": {
+          "type": "string",
+          "description": "Warehouse details. Optional.",
+          "value": "string"
+        },
+        "account": {
+          "type": "string",
+          "description": "Account. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "warehouse": {
+          "type": "string",
+          "description": "Warehouse. Optional.",
+          "value": "string"
+        },
+        "stockUnit": {
+          "type": "string",
+          "description": "Stock unit. Optional.",
+          "value": "string"
+        },
+        "batch": {
+          "type": "string",
+          "description": "Batch. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "discount": {
+          "type": "number",
+          "description": "Discount. Optional.",
+          "value": 0
+        },
+        "taxAmount": {
+          "type": "number",
+          "description": "Tax amount. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "hsnSac": {
+          "type": "string",
+          "description": "Hsn sac. Optional.",
+          "value": "string"
+        },
+        "sortOrder": {
+          "type": "number",
+          "description": "Sort order. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "2Hk_I3bFw3qn",
+    "name": "Generate Business Document From Voucher",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/generate-from-voucher",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "2Hk_I3bFw3qn",
+      "description": "Generate From Voucher. Part of the Generate From Voucher APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherUniqueNames\": [],\n  \"vouchers\": [],\n  \"voucher\": \"string\",\n  \"documentType\": \"DC\",\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherUniqueNames": {
+          "type": "array",
+          "description": "Array of voucher unique names values. Optional.",
+          "value": []
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "voucher": {
+          "type": "string",
+          "description": "Voucher. Optional.",
+          "value": "string"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "epmbUZnS4Cis",
+    "name": "Generate Business Document Via Estimate",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/generate-via-estimate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "epmbUZnS4Cis",
+      "description": "Generate Via Estimate. Part of the Generate Via Estimate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "H5pNSfIjiPc4",
+    "name": "Generate Delivery Challan",
+    "catalogKey": "POST /company/{companyUniqueName}/delivery-challan/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "H5pNSfIjiPc4",
+      "description": "Generate. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"documentType\": \"DC\",\n  \"challanType\": \"string\",\n  \"destinationWarehouse\": \"string\",\n  \"remarks\": \"string\",\n  \"referenceNo\": \"string\",\n  \"dateOfSupply\": \"string\",\n  \"challanNo\": \"string\",\n  \"note\": \"string\",\n  \"sources\": [],\n  \"destinations\": [],\n  \"products\": [],\n  \"entity\": \"string\",\n  \"transferType\": \"string\",\n  \"autoGenerateNote\": false,\n  \"transporterDetails\": \"string\",\n  \"warehouseDetails\": \"string\",\n  \"account\": \"string\",\n  \"variant\": \"string\",\n  \"stock\": \"string\",\n  \"warehouse\": \"string\",\n  \"stockUnit\": \"string\",\n  \"batch\": \"string\",\n  \"batches\": [],\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"discount\": 0,\n  \"taxAmount\": 0,\n  \"description\": \"string\",\n  \"hsnSac\": \"string\",\n  \"sortOrder\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "challanType": {
+          "type": "string",
+          "description": "Challan type. Optional.",
+          "value": "string"
+        },
+        "destinationWarehouse": {
+          "type": "string",
+          "description": "Destination warehouse. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "referenceNo": {
+          "type": "string",
+          "description": "Reference no. Optional.",
+          "value": "string"
+        },
+        "dateOfSupply": {
+          "type": "string",
+          "description": "Date of supply. Optional.",
+          "value": "string"
+        },
+        "challanNo": {
+          "type": "string",
+          "description": "Challan no. Optional.",
+          "value": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "Note. Optional.",
+          "value": "string"
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources values. Optional.",
+          "value": []
+        },
+        "destinations": {
+          "type": "array",
+          "description": "Array of destinations values. Optional.",
+          "value": []
+        },
+        "products": {
+          "type": "array",
+          "description": "Array of products values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "transferType": {
+          "type": "string",
+          "description": "Transfer type. Optional.",
+          "value": "string"
+        },
+        "autoGenerateNote": {
+          "type": "boolean",
+          "description": "When true, applies the auto generate note filter or flag. Optional.",
+          "value": false
+        },
+        "transporterDetails": {
+          "type": "string",
+          "description": "Transporter details. Optional.",
+          "value": "string"
+        },
+        "warehouseDetails": {
+          "type": "string",
+          "description": "Warehouse details. Optional.",
+          "value": "string"
+        },
+        "account": {
+          "type": "string",
+          "description": "Account. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "warehouse": {
+          "type": "string",
+          "description": "Warehouse. Optional.",
+          "value": "string"
+        },
+        "stockUnit": {
+          "type": "string",
+          "description": "Stock unit. Optional.",
+          "value": "string"
+        },
+        "batch": {
+          "type": "string",
+          "description": "Batch. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "discount": {
+          "type": "number",
+          "description": "Discount. Optional.",
+          "value": 0
+        },
+        "taxAmount": {
+          "type": "number",
+          "description": "Tax amount. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "hsnSac": {
+          "type": "string",
+          "description": "Hsn sac. Optional.",
+          "value": "string"
+        },
+        "sortOrder": {
+          "type": "number",
+          "description": "Sort order. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Deh0_aCYIxit",
+    "name": "Generate Delivery Challan From Voucher",
+    "catalogKey": "POST /company/{companyUniqueName}/delivery-challan/generate-from-voucher",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Deh0_aCYIxit",
+      "description": "Generate From Voucher. Part of the Generate From Voucher APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherUniqueNames\": [],\n  \"vouchers\": [],\n  \"voucher\": \"string\",\n  \"documentType\": \"DC\",\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherUniqueNames": {
+          "type": "array",
+          "description": "Array of voucher unique names values. Optional.",
+          "value": []
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "voucher": {
+          "type": "string",
+          "description": "Voucher. Optional.",
+          "value": "string"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ibS32-OCcrPJ",
+    "name": "Generate Eway Bill",
+    "catalogKey": "POST /company/{companyUniqueName}/ewb",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ibS32-OCcrPJ",
+      "description": "Generate EWay Bill. Part of the Ewb APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "zBRqD6ZmXnTw",
+    "name": "Generate From Voucher",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/generate-from-voucher",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "zBRqD6ZmXnTw",
+      "description": "Generate From Voucher. Part of the Generate From Voucher APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherUniqueNames\": [],\n  \"vouchers\": [],\n  \"voucher\": \"string\",\n  \"documentType\": \"DC\",\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherUniqueNames": {
+          "type": "array",
+          "description": "Array of voucher unique names values. Optional.",
+          "value": []
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "voucher": {
+          "type": "string",
+          "description": "Voucher. Optional.",
+          "value": "string"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "qMnjzc-gqvcs",
+    "name": "Generate Invoice",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/invoices/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "qMnjzc-gqvcs",
+      "description": "Generate Invoice. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueNames\": [],\n  \"templateUniqueName\": \"string\",\n  \"imageSignatureUniqueName\": \"string\",\n  \"invoice\": \"string\",\n  \"voucherDoc\": \"string\",\n  \"validateTax\": false,\n  \"invoiceDate\": \"string\",\n  \"dueDate\": \"string\",\n  \"accountUniqueName\": \"string\",\n  \"updateAccountDetails\": false,\n  \"applyApplicableTaxes\": false,\n  \"paymentAction\": \"string\",\n  \"touristSchemeApplicable\": false,\n  \"passportNumber\": \"string\",\n  \"roundOffApplicable\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        },
+        "templateUniqueName": {
+          "type": "string",
+          "description": "Template unique name. Optional.",
+          "value": "string"
+        },
+        "imageSignatureUniqueName": {
+          "type": "string",
+          "description": "Image signature unique name. Optional.",
+          "value": "string"
+        },
+        "invoice": {
+          "type": "string",
+          "description": "Invoice. Optional.",
+          "value": "string"
+        },
+        "voucherDoc": {
+          "type": "string",
+          "description": "Voucher doc. Optional.",
+          "value": "string"
+        },
+        "validateTax": {
+          "type": "boolean",
+          "description": "When true, applies the validate tax filter or flag. Optional.",
+          "value": false
+        },
+        "invoiceDate": {
+          "type": "string",
+          "description": "Invoice date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "updateAccountDetails": {
+          "type": "boolean",
+          "description": "When true, applies the update account details filter or flag. Optional.",
+          "value": false
+        },
+        "applyApplicableTaxes": {
+          "type": "boolean",
+          "description": "When true, applies the apply applicable taxes filter or flag. Optional.",
+          "value": false
+        },
+        "paymentAction": {
+          "type": "string",
+          "description": "Payment action. Optional.",
+          "value": "string"
+        },
+        "touristSchemeApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the tourist scheme applicable filter or flag. Optional.",
+          "value": false
+        },
+        "passportNumber": {
+          "type": "string",
+          "description": "Passport number. Optional.",
+          "value": "string"
+        },
+        "roundOffApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the round off applicable filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "24cpzdCm8A5e",
+    "name": "Generate Invoice",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/invoices/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "24cpzdCm8A5e",
+      "description": "Generate Invoice. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueNames\": [],\n  \"templateUniqueName\": \"string\",\n  \"imageSignatureUniqueName\": \"string\",\n  \"invoice\": \"string\",\n  \"voucherDoc\": \"string\",\n  \"validateTax\": false,\n  \"invoiceDate\": \"string\",\n  \"dueDate\": \"string\",\n  \"accountUniqueName\": \"string\",\n  \"updateAccountDetails\": false,\n  \"applyApplicableTaxes\": false,\n  \"paymentAction\": \"string\",\n  \"touristSchemeApplicable\": false,\n  \"passportNumber\": \"string\",\n  \"roundOffApplicable\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        },
+        "templateUniqueName": {
+          "type": "string",
+          "description": "Template unique name. Optional.",
+          "value": "string"
+        },
+        "imageSignatureUniqueName": {
+          "type": "string",
+          "description": "Image signature unique name. Optional.",
+          "value": "string"
+        },
+        "invoice": {
+          "type": "string",
+          "description": "Invoice. Optional.",
+          "value": "string"
+        },
+        "voucherDoc": {
+          "type": "string",
+          "description": "Voucher doc. Optional.",
+          "value": "string"
+        },
+        "validateTax": {
+          "type": "boolean",
+          "description": "When true, applies the validate tax filter or flag. Optional.",
+          "value": false
+        },
+        "invoiceDate": {
+          "type": "string",
+          "description": "Invoice date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "updateAccountDetails": {
+          "type": "boolean",
+          "description": "When true, applies the update account details filter or flag. Optional.",
+          "value": false
+        },
+        "applyApplicableTaxes": {
+          "type": "boolean",
+          "description": "When true, applies the apply applicable taxes filter or flag. Optional.",
+          "value": false
+        },
+        "paymentAction": {
+          "type": "string",
+          "description": "Payment action. Optional.",
+          "value": "string"
+        },
+        "touristSchemeApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the tourist scheme applicable filter or flag. Optional.",
+          "value": false
+        },
+        "passportNumber": {
+          "type": "string",
+          "description": "Passport number. Optional.",
+          "value": "string"
+        },
+        "roundOffApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the round off applicable filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "aP6gJgy1N84r",
+    "name": "Generate Invoice",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "aP6gJgy1N84r",
+      "description": "Generate Invoice. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueNames\": [],\n  \"taxes\": [],\n  \"providedNumber\": \"string\",\n  \"invoice\": \"string\",\n  \"voucherDoc\": \"string\",\n  \"validateTax\": false,\n  \"invoiceDate\": \"string\",\n  \"dueDate\": \"string\",\n  \"accountUniqueName\": \"string\",\n  \"updateAccountDetails\": false,\n  \"templateUniqueName\": \"string\",\n  \"imageSignatureUniqueName\": \"string\",\n  \"sendToGstr2\": false,\n  \"availItc\": false,\n  \"depositEntry\": \"string\",\n  \"paymentAction\": \"string\",\n  \"depositAccountUniqueName\": \"string\",\n  \"touristSchemeApplicable\": false,\n  \"passportNumber\": \"string\",\n  \"roundOffApplicable\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        },
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "providedNumber": {
+          "type": "string",
+          "description": "Provided number. Optional.",
+          "value": "string"
+        },
+        "invoice": {
+          "type": "string",
+          "description": "Invoice. Optional.",
+          "value": "string"
+        },
+        "voucherDoc": {
+          "type": "string",
+          "description": "Voucher doc. Optional.",
+          "value": "string"
+        },
+        "validateTax": {
+          "type": "boolean",
+          "description": "When true, applies the validate tax filter or flag. Optional.",
+          "value": false
+        },
+        "invoiceDate": {
+          "type": "string",
+          "description": "Invoice date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "updateAccountDetails": {
+          "type": "boolean",
+          "description": "When true, applies the update account details filter or flag. Optional.",
+          "value": false
+        },
+        "templateUniqueName": {
+          "type": "string",
+          "description": "Template unique name. Optional.",
+          "value": "string"
+        },
+        "imageSignatureUniqueName": {
+          "type": "string",
+          "description": "Image signature unique name. Optional.",
+          "value": "string"
+        },
+        "sendToGstr2": {
+          "type": "boolean",
+          "description": "When true, applies the send to gstr2 filter or flag. Optional.",
+          "value": false
+        },
+        "availItc": {
+          "type": "boolean",
+          "description": "When true, applies the avail itc filter or flag. Optional.",
+          "value": false
+        },
+        "depositEntry": {
+          "type": "string",
+          "description": "Deposit entry. Optional.",
+          "value": "string"
+        },
+        "paymentAction": {
+          "type": "string",
+          "description": "Payment action. Optional.",
+          "value": "string"
+        },
+        "depositAccountUniqueName": {
+          "type": "string",
+          "description": "Deposit account unique name. Optional.",
+          "value": "string"
+        },
+        "touristSchemeApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the tourist scheme applicable filter or flag. Optional.",
+          "value": false
+        },
+        "passportNumber": {
+          "type": "string",
+          "description": "Passport number. Optional.",
+          "value": "string"
+        },
+        "roundOffApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the round off applicable filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "qqjVypiAk35s",
+    "name": "Generate Invoice",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "qqjVypiAk35s",
+      "description": "Generate Invoice. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueNames\": [],\n  \"taxes\": [],\n  \"providedNumber\": \"string\",\n  \"invoice\": \"string\",\n  \"voucherDoc\": \"string\",\n  \"validateTax\": false,\n  \"invoiceDate\": \"string\",\n  \"dueDate\": \"string\",\n  \"accountUniqueName\": \"string\",\n  \"updateAccountDetails\": false,\n  \"templateUniqueName\": \"string\",\n  \"imageSignatureUniqueName\": \"string\",\n  \"sendToGstr2\": false,\n  \"availItc\": false,\n  \"depositEntry\": \"string\",\n  \"paymentAction\": \"string\",\n  \"depositAccountUniqueName\": \"string\",\n  \"touristSchemeApplicable\": false,\n  \"passportNumber\": \"string\",\n  \"roundOffApplicable\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueNames": {
+          "type": "array",
+          "description": "Array of unique names values. Optional.",
+          "value": []
+        },
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "providedNumber": {
+          "type": "string",
+          "description": "Provided number. Optional.",
+          "value": "string"
+        },
+        "invoice": {
+          "type": "string",
+          "description": "Invoice. Optional.",
+          "value": "string"
+        },
+        "voucherDoc": {
+          "type": "string",
+          "description": "Voucher doc. Optional.",
+          "value": "string"
+        },
+        "validateTax": {
+          "type": "boolean",
+          "description": "When true, applies the validate tax filter or flag. Optional.",
+          "value": false
+        },
+        "invoiceDate": {
+          "type": "string",
+          "description": "Invoice date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "updateAccountDetails": {
+          "type": "boolean",
+          "description": "When true, applies the update account details filter or flag. Optional.",
+          "value": false
+        },
+        "templateUniqueName": {
+          "type": "string",
+          "description": "Template unique name. Optional.",
+          "value": "string"
+        },
+        "imageSignatureUniqueName": {
+          "type": "string",
+          "description": "Image signature unique name. Optional.",
+          "value": "string"
+        },
+        "sendToGstr2": {
+          "type": "boolean",
+          "description": "When true, applies the send to gstr2 filter or flag. Optional.",
+          "value": false
+        },
+        "availItc": {
+          "type": "boolean",
+          "description": "When true, applies the avail itc filter or flag. Optional.",
+          "value": false
+        },
+        "depositEntry": {
+          "type": "string",
+          "description": "Deposit entry. Optional.",
+          "value": "string"
+        },
+        "paymentAction": {
+          "type": "string",
+          "description": "Payment action. Optional.",
+          "value": "string"
+        },
+        "depositAccountUniqueName": {
+          "type": "string",
+          "description": "Deposit account unique name. Optional.",
+          "value": "string"
+        },
+        "touristSchemeApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the tourist scheme applicable filter or flag. Optional.",
+          "value": false
+        },
+        "passportNumber": {
+          "type": "string",
+          "description": "Passport number. Optional.",
+          "value": "string"
+        },
+        "roundOffApplicable": {
+          "type": "boolean",
+          "description": "When true, applies the round off applicable filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "pG9vfCSLuHlB",
+    "name": "Generate Invoice Invalid Json",
+    "catalogKey": "POST /exception/invalid-json",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "pG9vfCSLuHlB",
+      "description": "Generate Invoice. Part of the Invalid Json APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

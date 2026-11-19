@@ -1,0 +1,1 @@
+{"status":"error","message":"Delivery challan and receipt note can be created or updated only when inventory via business document is enabled","code":"INVENTORY_VIA_BUSINESS_DOCUMENT_REQUIRED"}

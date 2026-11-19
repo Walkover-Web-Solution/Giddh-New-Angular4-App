@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/v2/subscription/plans/all?regionCode=IN",
+  "note": "no body"
+}

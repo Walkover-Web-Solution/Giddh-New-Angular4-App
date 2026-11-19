@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"oBKQCuMtwqV2","description":"Get Revenue Or Expense Total Of Project. Part of the Category Total APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"category":{"checked":"true","value":"income","description":"Category query parameter. Default: income. Optional.","required":"false"}}}

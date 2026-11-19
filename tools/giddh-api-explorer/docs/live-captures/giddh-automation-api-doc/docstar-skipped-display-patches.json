@@ -1,0 +1,1264 @@
+{
+  "count": 59,
+  "unmatchedCount": 0,
+  "patches": [
+    {
+      "endpointId": "Wimr-1AbDmG9",
+      "name": "Get Currency Conversion Rate",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "PBIQUyDqiDHg",
+      "name": "Delete Inventory Adjustment",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Deleted successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "FIHc4go9eLDj",
+      "name": "Stock Inventory Export Arrangedby Accounts",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "string"
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "cpz9o9UkTBwr",
+      "name": "Cancel Einvoice For Account Voucher",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "tlN3PwbSlzme",
+      "name": "Get Company Details",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "headQuarterAlias": "10k",
+              "razorpayIntegrated": false,
+              "name": "10k",
+              "uniqueName": "10kin177424654546509z75a",
+              "baseCurrency": "INR",
+              "balanceDecimalPlaces": 3,
+              "portalDomain": "10k",
+              "addresses": [
+                {
+                  "name": "HINDUSTAN COPPER LTD",
+                  "taxNumber": "24AAACH7409R2Z6",
+                  "stateCode": "GJ",
+                  "isDefault": true
+                },
+                {
+                  "name": "MM new",
+                  "taxNumber": "27GJBPS3366F1ZY",
+                  "stateCode": "MH",
+                  "isDefault": false
+                }
+              ]
+            },
+            "httpStatus": 200,
+            "liveHost": "https://api.giddh.com",
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "G0NGBl7-B3xZ",
+      "name": "Get Inventory Masters",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "FHk_EVqzjr-x",
+      "name": "Get Top Inventory Groups",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "IQro_yA6iyT1",
+      "name": "Get All Batches",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "string"
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "bcyefOtU2XvH",
+      "name": "Verify Ecommerce User",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "4WuVlt2XxZIN",
+      "name": "Petty Cash Action",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "UWsrMZ7M6gL8",
+      "name": "Download All Inventory Hierarchy",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "AXqbQT4VB0H1",
+      "name": "Add Comments",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "success",
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "LyXIyi3m8tUO",
+      "name": "Get Comments",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": [],
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "G3BF9J-8B4NF",
+      "name": "Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route.",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "timestamp": 1792745366313,
+              "status": 500,
+              "error": "Internal Server Error",
+              "path": "/portal/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers",
+              "httpStatus": 500
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "dVsKwEExfZBV",
+      "name": "Bulk Generate Vouchers",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "v3T4hen3lTO3",
+      "name": "Make Recurring Voucher V4",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "9vBOqp4xrflL",
+      "name": "Get All Recurring Vouchers With Filters",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "q4kOc9pfKo7z",
+      "name": "Delete Recurring Voucher",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Recurring voucher deleted successfully"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "Wld5x5ifNu8f",
+      "name": "Stock Inventory Export All Stock In Hierarchy",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Your request is being processed. Please check your mail after some time."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "3LWVKWZifQtj",
+      "name": "Stock Inventory Export All Group Stock Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Your request is being processed. Please check your mail after some time."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "3_ppzaHDeDhJ",
+      "name": "Stock Inventory Export Group Stock Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Your request is being processed. Please check your mail after some time."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "tkmdM6fG4OFO",
+      "name": "Download All Inventory Report V2",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "tuJp5ldg755R",
+      "name": "Get All Recurring Vouchers",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "7G3_3wSV7hyX",
+      "name": "Get All Stock Unit Groups",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "fAwbbp5AaOWC",
+      "name": "Create Stock Group Inventory Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "U_SEE8DGtJKo",
+      "name": "Download Stock Group Inventory Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "QQp3HyikWUZw",
+      "name": "Fetch Supported Payment Methods",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {},
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "n8T7K6ysejA9",
+      "name": "Save Session For Portal User",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "session": {
+                "id": "in3f3af1********KKc=",
+                "expiresAt": "25-10-2026 11:52:15",
+                "createdAt": "23-10-2026 11:52:15"
+              },
+              "companyUniqueName": "10kin177424654546509z75a"
+            },
+            "httpStatus": 200,
+            "liveHost": "https://api.giddh.com",
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "31eP24vmSPjA",
+      "name": "Get Account Details",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "importedAccountOpeningBalance": [],
+              "ledgerView": "T_VIEW",
+              "name": "Siddhi Batra",
+              "archive": false,
+              "currencySymbol": "\u20b9",
+              "currency": "INR",
+              "country": {
+                "countryName": "India",
+                "countryCode": "IN",
+                "alpha3CountryCode": null
+              },
+              "description": "",
+              "category": "assets",
+              "emails": [],
+              "parentGroups": [
+                {
+                  "name": "Current Assets",
+                  "uniqueName": "currentassets"
+                },
+                {
+                  "name": "Sundry Debtors",
+                  "uniqueName": "sundrydebtors"
+                }
+              ],
+              "uniqueName": "siddhi",
+              "openingBalance": 0.0,
+              "attentionTo": "",
+              "countryName": "India",
+              "discounts": [],
+              "createdAt": "21-07-2026 07:18:40",
+              "createdBy": {
+                "name": "ankita bhatt",
+                "email": "bhatt.ankita2419@gmail.com",
+                "uniqueName": "bhatt.ankita2419@gmail.com",
+                "mobileNo": "919826139411",
+                "isVerified": true,
+                "hasSubscriptionPermission": false
+              },
+              "yodleeAdded": false,
+              "updatedAt": "05-10-2026 10:50:06",
+              "openingBalanceDate": "01-04-2025",
+              "openingBalanceType": "DEBIT",
+              "addresses": [
+                {
+                  "gstNumber": "23AAACH7409R1Z9",
+                  "address": "",
+                  "stateCode": "MP",
+                  "isDefault": true,
+                  "partyType": "NOT APPLICABLE",
+                  "isComposite": false,
+                  "gstinStatus": "POTENTIAL_VALID",
+                  "state": {
+                    "stateGstCode": "23",
+                    "name": "Madhya Pradesh",
+                    "code": "MP"
+                  },
+                  "stateName": "Madhya Pradesh",
+                  "stateGstCode": "23",
+                  "stateCodeString": "23"
+                }
+              ],
+              "foreignOpeningBalance": 0.0,
+              "isFixed": false,
+              "applicableDiscounts": [],
+              "otherApplicableTaxes": [],
+              "applicableTaxes": [],
+              "inheritedTaxes": [],
+              "mergedAccounts": "",
+              "updatedBy": {
+                "name": "ankita bhatt",
+                "email": "bhatt.ankita2419@gmail.com",
+                "uniqueName": "bhatt.ankita2419@gmail.com",
+                "mobileNo": "919826139411",
+                "isVerified": true,
+                "hasSubscriptionPermission": false
+              },
+              "cashFreeVirtualAccountData": {
+                "virtualAccountNumber": null,
+                "ifscCode": null,
+                "name": null
+              },
+              "inheritedDiscounts": [],
+              "closingBalanceTriggerAmountType": "CREDIT",
+              "accountBankDetails": [],
+              "accountOpeningBalance": []
+            },
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "FLMaX2KPOOos",
+      "name": "Download Stock Inventory Report V3",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "2Omu_hXQaJ_u",
+      "name": "Get Batch Availability",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "TFy45YbtVVyZ",
+      "name": "Create Batch",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 201,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "string"
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "TI8tKndVky79",
+      "name": "Update Batch",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "string"
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "DC8riPxsvNHc",
+      "name": "Verify Portal User",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": [
+              {
+                "account": {
+                  "name": "Raji",
+                  "uniqueName": "raji1"
+                },
+                "vendorContactUniqueName": "8b51792755886875"
+              },
+              {
+                "account": {
+                  "name": "Siddhi Batra",
+                  "uniqueName": "siddhi"
+                },
+                "vendorContactUniqueName": "tdl1792756235005"
+              }
+            ],
+            "httpStatus": 200,
+            "liveHost": "https://api.giddh.com",
+            "env": "prod"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "2lxdy7ALye2b",
+      "name": "Create",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 201,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Recurring voucher created successfully"
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "F_lB51enHMNJ",
+      "name": "Process Proforma Payment",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "timestamp": 1792755461116,
+              "status": 404,
+              "error": "Not Found",
+              "path": "/company/giddhain1792673422178091xos/invoices/llvtc1792674364760/pay",
+              "httpStatus": 404
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "RImgW_voQqLQ",
+      "name": "Bulk Export Vouchers",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "file": "Your request is being processed.",
+              "type": "message",
+              "name": null,
+              "data": null
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "J8jKc7iiNC2w",
+      "name": "Get All Sales Persons",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "1EpWWk16sW7M",
+      "name": "Archive Sales Person",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "x8-ZZpS-XHXm",
+      "name": "Finish DSC",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "3lmWLglXBRE2",
+      "name": "Bulk Update Vouchers",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "UFhf2-9u5Wvg",
+      "name": "Stock Inventory Export Group Stock Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Your request is being processed. Please check your mail after some time."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "eeLqMJdw-d41",
+      "name": "Stock Inventory Export Stock Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Your request is being processed. Please check your mail after some time."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "R-d3Ncj14PKm",
+      "name": "Get Batch",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "page": 1,
+              "count": 50,
+              "totalPages": 0,
+              "totalItems": 0,
+              "fromDate": "01-04-2026",
+              "toDate": "31-03-2027",
+              "results": [],
+              "openingQuantity": 0.0,
+              "inwardQuantity": 0.0,
+              "outwardQuantity": 0.0,
+              "availableQuantity": 0.0
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "gjsPCSL9F5-z",
+      "name": "Get New Old Sales Data With Filters",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "Y_KZI5UYOHeK",
+      "name": "Get Detailed Sales Register Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "DFtXbso_PzBU",
+      "name": "Get Sales Register Overview",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "aZeDr2gyW6Xo",
+      "name": "Get All Voucher Balances",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "ilhOGontCe5E",
+      "name": "Get Unadjusted Vouchers",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "items": [
+                {
+                  "voucherType": "sales",
+                  "subVoucher": null,
+                  "voucherNumber": "261022-5",
+                  "unadjustedAmount": {
+                    "amountForAccount": 300.0,
+                    "amountForCompany": 300.0
+                  },
+                  "voucherTotal": {
+                    "amountForAccount": 500.0,
+                    "amountForCompany": 500.0
+                  },
+                  "uniqueName": "iiy341792675102708",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": "\u20b9"
+                  },
+                  "exchangeRate": 1.0,
+                  "amount": {
+                    "amountForAccount": -200.0,
+                    "amountForCompany": -200.0
+                  },
+                  "accountUniqueName": null,
+                  "noteVoucherType": null,
+                  "voucherBalanceType": null,
+                  "voucherDate": "22-10-2026"
+                },
+                {
+                  "voucherType": "sales",
+                  "subVoucher": null,
+                  "voucherNumber": "261022-2",
+                  "unadjustedAmount": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  },
+                  "voucherTotal": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  },
+                  "uniqueName": "llvtc1792674364760",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": "\u20b9"
+                  },
+                  "exchangeRate": 1.0,
+                  "amount": {
+                    "amountForAccount": 0.0,
+                    "amountForCompany": 0.0
+                  },
+                  "accountUniqueName": null,
+                  "noteVoucherType": null,
+                  "voucherBalanceType": null,
+                  "voucherDate": "22-10-2026"
+                }
+              ],
+              "page": 1,
+              "count": 50,
+              "totalPages": 1,
+              "totalItems": 2,
+              "fromDate": null,
+              "toDate": null
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "6DlKV44KYgAd",
+      "name": "Invoice Action On Voucher",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "S2fQ0lJbWWvR",
+      "name": "Get Voucher Versions",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "45lIGMs5Lzrt",
+      "name": "Create Stock Unit Group",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "xNc2ASBFlg8T",
+      "name": "Update Stock Unit Group",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "7rKUysvK5BoQ",
+      "name": "Get All Business Nature",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "status": "success"
+            }
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "j1wcKtzq6AJb",
+      "name": "Delete Image",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Payu account has been deleted successfully."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "pG9vfCSLuHlB",
+      "name": "Generate Invoice Invalid Json",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Saved successfully."
+          }
+        }
+      ],
+      "source": "generated-fallback"
+    },
+    {
+      "endpointId": "BqHIxaj3iAGF",
+      "name": "Get Linked Sources",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "page": 1,
+              "count": 2,
+              "totalPages": 1,
+              "totalItems": 2,
+              "results": [
+                {
+                  "name": "Giddh Automation API DOC",
+                  "uniqueName": "giddhautomationapidoc",
+                  "alias": "Gidd",
+                  "warehouses": [
+                    {
+                      "name": "Gidd warehouse",
+                      "isArchived": false,
+                      "uniqueName": "xbq1792673424418",
+                      "taxNumber": "23AAACC1206D2ZN"
+                    }
+                  ],
+                  "isCompany": false,
+                  "isArchived": false,
+                  "isConsolidatedBranch": false
+                },
+                {
+                  "name": "Giddh Automation API DOC",
+                  "uniqueName": "giddhain1792673422178091xos",
+                  "warehouses": [
+                    {
+                      "name": "Gidd warehouse",
+                      "isArchived": false,
+                      "uniqueName": "xbq1792673424418",
+                      "taxNumber": "23AAACC1206D2ZN"
+                    }
+                  ],
+                  "isCompany": true
+                }
+              ],
+              "size": 2
+            }
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "GyPtUjeYtIV4",
+      "name": "Stock Inventory Export Stock Report",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": "Your request is being processed. Please check your mail after some time."
+          }
+        }
+      ],
+      "source": "catalog"
+    },
+    {
+      "endpointId": "9vB4n2uroYJd",
+      "name": "Customer Portal proxy helper",
+      "source": "generated-fallback",
+      "sampleResponse": [
+        {
+          "title": "Success",
+          "status": 200,
+          "description": "Example success response for documentation display.",
+          "data": {
+            "status": "success",
+            "body": {
+              "message": "Portal session validated.",
+              "authenticated": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "unmatched": []
+}

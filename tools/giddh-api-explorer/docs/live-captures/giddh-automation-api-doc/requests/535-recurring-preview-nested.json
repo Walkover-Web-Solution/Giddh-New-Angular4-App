@@ -1,0 +1,15 @@
+{
+  "startDate": "01-11-2026",
+  "repeatOption": "MONTHLY_DATE",
+  "frequency": {
+    "interval": 1,
+    "unit": "MONTH"
+  },
+  "repeatOn": {
+    "type": "DAY_OF_MONTH",
+    "dayOfMonth": 1
+  },
+  "end": {
+    "type": "NEVER"
+  }
+}

@@ -1,0 +1,812 @@
+[
+  {
+    "id": "BuUyXXFfXw2H",
+    "menu": "",
+    "method": "GET",
+    "name": "Get User"
+  },
+  {
+    "id": "M-ssLiz7AGHx",
+    "menu": "",
+    "method": "POST",
+    "name": "Create"
+  },
+  {
+    "id": "0B0WNKbd0Ep3",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Generate Invoice"
+  },
+  {
+    "id": "TdmN5RlN55ip",
+    "menu": "Website",
+    "method": "POST",
+    "name": "Process Proforma Payment"
+  },
+  {
+    "id": "3EBjQOFs_OfG",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Cancel EInvoice"
+  },
+  {
+    "id": "9F2Vt1PMOk8A",
+    "menu": "Voucher",
+    "method": "PUT",
+    "name": "Update Invoice Email"
+  },
+  {
+    "id": "b8mBGu6iMMCl",
+    "menu": "",
+    "method": "POST",
+    "name": "Upload File For Ledger"
+  },
+  {
+    "id": "mUQtpYahkZ6l",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Generate Invoice"
+  },
+  {
+    "id": "asmLtgaORnEG",
+    "menu": "",
+    "method": "GET",
+    "name": "Get groups"
+  },
+  {
+    "id": "O2b6jldSKkdG",
+    "menu": "Sales Person",
+    "method": "GET",
+    "name": "Get Sales Person"
+  },
+  {
+    "id": "fyh6g6UftT9i",
+    "menu": "Sales Person",
+    "method": "PUT",
+    "name": "Update Sales Person"
+  },
+  {
+    "id": "iV2bOwvFAM95",
+    "menu": "Sales Person",
+    "method": "DELETE",
+    "name": "Delete Sales Person"
+  },
+  {
+    "id": "ntxW2V3_mb56",
+    "menu": "Sales Person",
+    "method": "POST",
+    "name": "Archive Sales Person"
+  },
+  {
+    "id": "l7H12ZR_Uc7A",
+    "menu": "Sales Person",
+    "method": "POST",
+    "name": "Create Sales Person"
+  },
+  {
+    "id": "nrJOFlGnLlsf",
+    "menu": "Sales Person",
+    "method": "GET",
+    "name": "Get All Sales Persons"
+  },
+  {
+    "id": "YeYnhb2lnVnm",
+    "menu": "Account",
+    "method": "PUT",
+    "name": "Update Account"
+  },
+  {
+    "id": "KVamZnHn6iW3",
+    "menu": "Account",
+    "method": "GET",
+    "name": "Get Shared List"
+  },
+  {
+    "id": "iwGdDDpHFjRK",
+    "menu": "Account",
+    "method": "GET",
+    "name": "Get Taxes Account Hierarchy"
+  },
+  {
+    "id": "XiFTDI8nqQ-r",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Create Account"
+  },
+  {
+    "id": "ZTfpGw7mPl7n",
+    "menu": "Account",
+    "method": "PUT",
+    "name": "Update Account"
+  },
+  {
+    "id": "rwEiviAb3QxP",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Generate Invoice"
+  },
+  {
+    "id": "6W5jG-7AO9pl",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Generate Invoice"
+  },
+  {
+    "id": "omRjZDFRhqx1",
+    "menu": "Account",
+    "method": "GET",
+    "name": "The pagination requirements are specific to Giddh and may work"
+  },
+  {
+    "id": "62F_RNOsmCXg",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Create Account"
+  },
+  {
+    "id": "s95c2c1JbNxt",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Create Account"
+  },
+  {
+    "id": "3XF01S2CQqik",
+    "menu": "Account",
+    "method": "PUT",
+    "name": "Update Account"
+  },
+  {
+    "id": "uGDH7Za4dn7r",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Get Account"
+  },
+  {
+    "id": "fzEWbvzvBkOl",
+    "menu": "Account",
+    "method": "PUT",
+    "name": "Update Account"
+  },
+  {
+    "id": "p2OA6Fg8pFhy",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Create Account"
+  },
+  {
+    "id": "TFQ83IapiUxO",
+    "menu": "Account",
+    "method": "PUT",
+    "name": "Update Account"
+  },
+  {
+    "id": "q57PAMLkG_8I",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Get Account"
+  },
+  {
+    "id": "36b3LnkttTzH",
+    "menu": "Account",
+    "method": "POST",
+    "name": "Create Account"
+  },
+  {
+    "id": "rq94NO0hReyR",
+    "menu": "Account",
+    "method": "PUT",
+    "name": "Update Account"
+  },
+  {
+    "id": "JYR3P_uXT1ml",
+    "menu": "Account",
+    "method": "GET",
+    "name": "Get Account"
+  },
+  {
+    "id": "dX8vB1xqOM4C",
+    "menu": "Reports",
+    "method": "GET",
+    "name": "Profit Loss For Multi Branch"
+  },
+  {
+    "id": "Wj_6vfz9vFXB",
+    "menu": "Reports",
+    "method": "GET",
+    "name": "Profit Loss For Multi Branch"
+  },
+  {
+    "id": "1Mew-m1hj3IU",
+    "menu": "Group",
+    "method": "GET",
+    "name": "Get Shared List"
+  },
+  {
+    "id": "xkFfpSg1LldT",
+    "menu": "User",
+    "method": "GET",
+    "name": "Get User"
+  },
+  {
+    "id": "VLajJ6gS8MLW",
+    "menu": "Address",
+    "method": "PUT",
+    "name": "Update Address"
+  },
+  {
+    "id": "JU2KwI6DEqWq",
+    "menu": "Address",
+    "method": "DELETE",
+    "name": "Delete Address"
+  },
+  {
+    "id": "jcWtwPchymI8",
+    "menu": "User",
+    "method": "GET",
+    "name": "Get User"
+  },
+  {
+    "id": "OoBvmKCeTYQe",
+    "menu": "Group",
+    "method": "GET",
+    "name": "Get Shared List"
+  },
+  {
+    "id": "RBRFhnW3dc9V",
+    "menu": "Auth",
+    "method": "GET",
+    "name": "Verify Company Invoice Email"
+  },
+  {
+    "id": "9ClU9oZFmAE8",
+    "menu": "User",
+    "method": "POST",
+    "name": "Destroy One User Session"
+  },
+  {
+    "id": "dJtdvBj0N7py",
+    "menu": "Auth",
+    "method": "GET",
+    "name": "Verify Company Invoice Email"
+  },
+  {
+    "id": "LY1c08o63riW",
+    "menu": "Stock",
+    "method": "POST",
+    "name": "Manufacture Stock"
+  },
+  {
+    "id": "KtW-QSH1r5tS",
+    "menu": "Trigger",
+    "method": "DELETE",
+    "name": "Delete Trigger"
+  },
+  {
+    "id": "FmQuORDxDOT5",
+    "menu": "Stock",
+    "method": "GET",
+    "name": "Get Stock"
+  },
+  {
+    "id": "ZIXYMK1P312k",
+    "menu": "Magic Link",
+    "method": "POST",
+    "name": "Generate Magic Link"
+  },
+  {
+    "id": "D_xs4qg1qFFH",
+    "menu": "Custom Field",
+    "method": "PATCH",
+    "name": "Update Custom Field"
+  },
+  {
+    "id": "eO9D0ESx0Emz",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "Create Stock Group"
+  },
+  {
+    "id": "-5BoJEBM1bvK",
+    "menu": "Stock Group",
+    "method": "GET",
+    "name": "Get Stock Group"
+  },
+  {
+    "id": "ItgSm4qDJzXR",
+    "menu": "Custom Field",
+    "method": "GET",
+    "name": "Get Custom Field"
+  },
+  {
+    "id": "oRn4y5zGLBwO",
+    "menu": "Inventory",
+    "method": "GET",
+    "name": "Get Inventory"
+  },
+  {
+    "id": "uvx4pcd-3k6g",
+    "menu": "Custom Field",
+    "method": "DELETE",
+    "name": "Delete Custom Field"
+  },
+  {
+    "id": "o6Ifba_Ur5eG",
+    "menu": "Inventory",
+    "method": "POST",
+    "name": "Create Inventory"
+  },
+  {
+    "id": "SlFU0J15HHuc",
+    "menu": "Stock Group",
+    "method": "PUT",
+    "name": "Update Stock Group"
+  },
+  {
+    "id": "b0kRrf3MfGaY",
+    "menu": "Stock Group",
+    "method": "DELETE",
+    "name": "Delete Stock Group"
+  },
+  {
+    "id": "xeNCG8AbinXe",
+    "menu": "Inventory",
+    "method": "PUT",
+    "name": "Update Inventory"
+  },
+  {
+    "id": "a7-ZSWkBNHaJ",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "Create Stock Group Inventory Report"
+  },
+  {
+    "id": "3kdu20cQlMlA",
+    "menu": "Stock Group",
+    "method": "GET",
+    "name": "Download Stock Group Inventory Report"
+  },
+  {
+    "id": "C6B12vrqp7f2",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "Download Stock Group Inventory Report V2"
+  },
+  {
+    "id": "XETqcUyXDyO9",
+    "menu": "Stock Group",
+    "method": "PUT",
+    "name": "Update Stock In Group"
+  },
+  {
+    "id": "RkjyLVM24asg",
+    "menu": "Stock Group",
+    "method": "DELETE",
+    "name": "Delete Stock From Group"
+  },
+  {
+    "id": "9tQipNU-2oUd",
+    "menu": "Inventory",
+    "method": "POST",
+    "name": "Inventory Report"
+  },
+  {
+    "id": "fnx1ww5F0cWe",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "Get Stock Report V2 With Filters"
+  },
+  {
+    "id": "se2TLRhkJi61",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "Download Stock Inventory Report V3 With Filters"
+  },
+  {
+    "id": "b6Tsu2Dcbvwx",
+    "menu": "GST",
+    "method": "POST",
+    "name": "Prepare DSC"
+  },
+  {
+    "id": "jZCsSSgH2uap",
+    "menu": "Stock Group",
+    "method": "GET",
+    "name": "Download Stock Inventory Report V3"
+  },
+  {
+    "id": "FAHfuQ3H6h6f",
+    "menu": "Stock Group",
+    "method": "GET",
+    "name": "Get Stock Groups With Stocks"
+  },
+  {
+    "id": "iRRm2kllIU8_",
+    "menu": "GST",
+    "method": "GET",
+    "name": "Download GSTR1 With Export Settings"
+  },
+  {
+    "id": "vHix32qvptWQ",
+    "menu": "GST",
+    "method": "POST",
+    "name": "Finish DSC"
+  },
+  {
+    "id": "pzgoCcBCUEAN",
+    "menu": "Trigger",
+    "method": "GET",
+    "name": "Get All Triggers"
+  },
+  {
+    "id": "qfOqmld5N8uF",
+    "menu": "Financial Year",
+    "method": "GET",
+    "name": "Get Financial Year Limits"
+  },
+  {
+    "id": "TIkLGAywZ9bl",
+    "menu": "Inventory",
+    "method": "POST",
+    "name": "Download All Inventory Report V2"
+  },
+  {
+    "id": "2yjNpzINCxyf",
+    "menu": "Inventory",
+    "method": "GET",
+    "name": "Download All Inventory Hierarchy"
+  },
+  {
+    "id": "lJ6qV48ou5Dc",
+    "menu": "Inventory",
+    "method": "POST",
+    "name": "Download All Inventory Hierarchy With Filters"
+  },
+  {
+    "id": "8Fhd2ekaFTj2",
+    "menu": "Inventory",
+    "method": "GET",
+    "name": "Download Inventory Arranged By Accounts"
+  },
+  {
+    "id": "-569z32NyQdO",
+    "menu": "Inventory",
+    "method": "POST",
+    "name": "Download Inventory Arranged By Accounts With Filters"
+  },
+  {
+    "id": "4_xojADQeTyf",
+    "menu": "Inventory",
+    "method": "DELETE",
+    "name": "Delete Inventory Adjustment"
+  },
+  {
+    "id": "wlYwB4caHJP8",
+    "menu": "Inventory",
+    "method": "GET",
+    "name": "Get Inventory Masters"
+  },
+  {
+    "id": "RztgEzHZYseK",
+    "menu": "Inventory",
+    "method": "GET",
+    "name": "Get Top Inventory Groups"
+  },
+  {
+    "id": "b9c2-8OaZTbW",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "Create Stock Group"
+  },
+  {
+    "id": "lirL7Sqa0iyB",
+    "menu": "Stock Group",
+    "method": "GET",
+    "name": "Get Stock Group"
+  },
+  {
+    "id": "8JZgI3sgGh8R",
+    "menu": "Sales Person",
+    "method": "POST",
+    "name": "Update Archive Status"
+  },
+  {
+    "id": "FlBfRrcfgnqM",
+    "menu": "Stock Group",
+    "method": "PUT",
+    "name": "Update Stock Group"
+  },
+  {
+    "id": "u2e5iEQicIpm",
+    "menu": "Stock Group",
+    "method": "DELETE",
+    "name": "Delete Stock Group"
+  },
+  {
+    "id": "OHCXTjFrAW2E",
+    "menu": "Stock Group",
+    "method": "POST",
+    "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_GROUP_STOCK_R\u2026"
+  },
+  {
+    "id": "ZG3gCvGzgjx0",
+    "menu": "Stock Group",
+    "method": "GET",
+    "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_GROUP_STOCK_R\u2026"
+  },
+  {
+    "id": "TirwsCEoczOX",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Bulk Update Vouchers"
+  },
+  {
+    "id": "Ets40GAYbPp7",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Get All Voucher Balances"
+  },
+  {
+    "id": "GZzAdXeG_VH8",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Get Unadjusted Vouchers"
+  },
+  {
+    "id": "X0_Budbw6YDt",
+    "menu": "Voucher",
+    "method": "GET",
+    "name": "Get All Recurring Vouchers"
+  },
+  {
+    "id": "Ax1r3lnbDJ8-",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Get All Recurring Vouchers With Filters"
+  },
+  {
+    "id": "iAEkKljnuu3R",
+    "menu": "Voucher",
+    "method": "DELETE",
+    "name": "Delete Recurring Voucher"
+  },
+  {
+    "id": "q10K_qWHjTa-",
+    "menu": "Voucher",
+    "method": "PUT",
+    "name": "Update Recurring Voucher"
+  },
+  {
+    "id": "EEiTbCc4ZlKs",
+    "menu": "Voucher",
+    "method": "PATCH",
+    "name": "Patch Voucher V4"
+  },
+  {
+    "id": "MuUDQOOsS9lM",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Bulk Generate Vouchers"
+  },
+  {
+    "id": "z3aAKzExRcAd",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Adjust Voucher"
+  },
+  {
+    "id": "eKdcthUzDNyI",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Invoice Action On Voucher"
+  },
+  {
+    "id": "wETmEvuCpb1F",
+    "menu": "Voucher",
+    "method": "GET",
+    "name": "Get Voucher Versions"
+  },
+  {
+    "id": "No4ZV0_8s-yz",
+    "menu": "Voucher",
+    "method": "POST",
+    "name": "Make Recurring Voucher V4"
+  },
+  {
+    "id": "BkRcTkI3xWSi",
+    "menu": "Payment",
+    "method": "POST",
+    "name": "Initiate UK Payment"
+  },
+  {
+    "id": "bSDH7o0dAu0U",
+    "menu": "Stock Unit",
+    "method": "POST",
+    "name": "Create Stock Unit"
+  },
+  {
+    "id": "T5HDilJbnTlN",
+    "menu": "Stock Unit",
+    "method": "PUT",
+    "name": "Update Stock Unit"
+  },
+  {
+    "id": "EX4f4PpFCqUX",
+    "menu": "Stock Unit",
+    "method": "GET",
+    "name": "Get Stock Unit"
+  },
+  {
+    "id": "R_Y9nh6kS30I",
+    "menu": "Stock Unit",
+    "method": "DELETE",
+    "name": "Delete Stock Unit"
+  },
+  {
+    "id": "o1KwZ9hM7yQG",
+    "menu": "Stock Unit",
+    "method": "POST",
+    "name": "Create Stock Unit Group"
+  },
+  {
+    "id": "So5egXgRWapK",
+    "menu": "Stock Unit",
+    "method": "PUT",
+    "name": "Update Stock Unit Group"
+  },
+  {
+    "id": "voDVDaI-YfiZ",
+    "menu": "Stock Unit",
+    "method": "GET",
+    "name": "Get All Stock Unit"
+  },
+  {
+    "id": "wUaAnm6z4wuW",
+    "menu": "Stock Unit",
+    "method": "GET",
+    "name": "Get All Stock Unit Groups"
+  },
+  {
+    "id": "AomBey8OFFhi",
+    "menu": "Stock Unit",
+    "method": "DELETE",
+    "name": "Delete Stock Unit Group"
+  },
+  {
+    "id": "DyQBjVBUnXNm",
+    "menu": "Manufacturing",
+    "method": "GET",
+    "name": "Get Batch Availability"
+  },
+  {
+    "id": "mk9tfjqA29oy",
+    "menu": "Manufacturing",
+    "method": "POST",
+    "name": "Create Batch"
+  },
+  {
+    "id": "dytnpJPtcjJf",
+    "menu": "Manufacturing",
+    "method": "GET",
+    "name": "Get Batch"
+  },
+  {
+    "id": "feqUn-ZVF7AI",
+    "menu": "Manufacturing",
+    "method": "POST",
+    "name": "Get All Batches"
+  },
+  {
+    "id": "Q-HoYem5rc-k",
+    "menu": "Manufacturing",
+    "method": "PUT",
+    "name": "Update Batch"
+  },
+  {
+    "id": "IV33KxIzTNgV",
+    "menu": "Manufacturing",
+    "method": "DELETE",
+    "name": "Delete Batch"
+  },
+  {
+    "id": "TYDBJWcjN2CK",
+    "menu": "Manufacturing",
+    "method": "POST",
+    "name": "Archive Batch"
+  },
+  {
+    "id": "FuySmyeM7zYW",
+    "menu": "Manufacturing",
+    "method": "POST",
+    "name": "Transfer Batch"
+  },
+  {
+    "id": "UMwq5gnxWRxP",
+    "menu": "Template",
+    "method": "GET",
+    "name": "Download Template Preview"
+  },
+  {
+    "id": "bcLwTYFUqwUg",
+    "menu": "E-commerce",
+    "method": "POST",
+    "name": "Verify Ecommerce User"
+  },
+  {
+    "id": "19UYIFmgWf4c",
+    "menu": "Template",
+    "method": "GET",
+    "name": "Get Template Preview"
+  },
+  {
+    "id": "52Hdm3VQj9-H",
+    "menu": "Currency",
+    "method": "GET",
+    "name": "Get Currency Conversion Rate"
+  },
+  {
+    "id": "E_n37xR8V_ga",
+    "menu": "E-Invoice",
+    "method": "POST",
+    "name": "Cancel Einvoice"
+  },
+  {
+    "id": "-Mo9DBs6JXeJ",
+    "menu": "E-Invoice",
+    "method": "POST",
+    "name": "Cancel Einvoice For Account Voucher"
+  },
+  {
+    "id": "Je9YFmLYMQDn",
+    "menu": "Sales Register",
+    "method": "POST",
+    "name": "Get New Old Sales Data With Filters"
+  },
+  {
+    "id": "t_8FlMOjtHho",
+    "menu": "Sales Register",
+    "method": "POST",
+    "name": "Get Detailed Sales Register Report"
+  },
+  {
+    "id": "5VZ5dkiVGeHK",
+    "menu": "Sales Register",
+    "method": "GET",
+    "name": "Get Sales Register Overview"
+  },
+  {
+    "id": "Vl82onUlMQAJ",
+    "menu": "Download File",
+    "method": "POST",
+    "name": "Download File"
+  },
+  {
+    "id": "ygPqZVaAtKX-",
+    "menu": "Business Nature",
+    "method": "GET",
+    "name": "Get All Business Nature"
+  },
+  {
+    "id": "PsphQgBwh-1E",
+    "menu": "Delete Image",
+    "method": "DELETE",
+    "name": "Delete Image"
+  },
+  {
+    "id": "JNIBClB5Tmw8",
+    "menu": "Exception",
+    "method": "POST",
+    "name": "Generate Invoice Invalid Json"
+  },
+  {
+    "id": "vGmAFwzrNLRv",
+    "menu": "Linked Sources",
+    "method": "GET",
+    "name": "Get Linked Sources"
+  },
+  {
+    "id": "0Z7XvgV1t5Qk",
+    "menu": "Petty Cash",
+    "method": "POST",
+    "name": "Petty Cash Action"
+  }
+]

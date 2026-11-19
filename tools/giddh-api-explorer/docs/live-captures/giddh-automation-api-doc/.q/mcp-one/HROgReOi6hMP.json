@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"HROgReOi6hMP","description":"Get All. Part of the Discount APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"variantDiscount":{"checked":"true","value":"false","description":"Variant discount query parameter. Default: false. Optional."}},"body":{"type":"none"},"bodyDescription":{}}

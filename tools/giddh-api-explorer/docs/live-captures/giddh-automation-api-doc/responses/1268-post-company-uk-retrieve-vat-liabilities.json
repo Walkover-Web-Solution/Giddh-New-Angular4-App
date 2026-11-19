@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please connect giddh with hmrc.",
+  "code": "INVALID_REQUEST"
+}

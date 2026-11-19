@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "AhSLgbA4nc3f", "description": "Returns true/false if E-way bill credentials are saved (no credential details exposed). Part of the User APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {}}

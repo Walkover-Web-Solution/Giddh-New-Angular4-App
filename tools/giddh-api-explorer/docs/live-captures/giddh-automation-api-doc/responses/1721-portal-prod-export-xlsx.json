@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "type": "xlsx",
+    "name": "ACCOUNT_STATEMENT_EXPORTRaji.xlsx",
+    "data": "<omitted 5452 chars>"
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

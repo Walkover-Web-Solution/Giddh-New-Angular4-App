@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "voucher module is not supported.",
+  "code": "INVALID_REQUEST"
+}

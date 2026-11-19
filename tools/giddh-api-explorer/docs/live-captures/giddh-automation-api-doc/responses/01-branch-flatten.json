@@ -1,0 +1,54 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "businessType": "Registered",
+      "businessNature": "Retail",
+      "addresses": [
+        {
+          "name": "Default Address",
+          "address": "My new address",
+          "taxNumber": "23AAACC1206D2ZN",
+          "pincode": "484224",
+          "stateCode": "MP",
+          "stateName": "Madhya Pradesh",
+          "isDefault": true,
+          "taxType": "GSTIN",
+          "uniqueName": "8rz1792673422372"
+        }
+      ],
+      "warehouseResource": [
+        {
+          "countryCode": "IN",
+          "currencyCode": "INR",
+          "isDefault": true,
+          "addresses": [
+            {
+              "name": "Default Address",
+              "address": "My new address",
+              "taxNumber": "23AAACC1206D2ZN",
+              "pincode": "484224",
+              "stateCode": "MP",
+              "stateName": "Madhya Pradesh",
+              "isDefault": true,
+              "taxType": "GSTIN",
+              "uniqueName": "8rz1792673422372"
+            }
+          ],
+          "isArchived": false,
+          "name": "Gidd warehouse",
+          "mobileNumber": "91-919111525164",
+          "uniqueName": "xbq1792673424418"
+        }
+      ],
+      "isArchived": false,
+      "nodeId": "giddhautomationapidoc",
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhautomationapidoc",
+      "alias": "Gidd",
+      "taxType": "GSTIN",
+      "consolidatedBranch": false,
+      "defaultBranch": true
+    }
+  ]
+}

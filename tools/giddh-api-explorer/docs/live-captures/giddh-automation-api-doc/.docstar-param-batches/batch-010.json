@@ -1,0 +1,2218 @@
+[
+  {
+    "endpointId": "FLMaX2KPOOos",
+    "name": "Download Stock Inventory Report V3",
+    "catalogKey": "GET /company/{companyUniqueName}/stock-group/{stockGroupUniqueName}/stock/{stockUniqueName}/download-stock-inventory-report-v3",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "FLMaX2KPOOos",
+      "description": "Stock Inventory Export Stock Report. Part of the Download Stock Inventory Report V3 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "PARAMETER_PAGE_1",
+          "description": "Page number (1-based). Default: PARAMETER_PAGE_1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "PARAMETER_COUNT_20",
+          "description": "Page size (number of items returned). Default: PARAMETER_COUNT_20. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "PARAMETER_FORMAT_XLSX",
+          "description": "Response or export format. Default: PARAMETER_FORMAT_XLSX. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "PARAMETER_ENTRY_DATE",
+          "description": "Field name to sort by. Default: PARAMETER_ENTRY_DATE. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "PARAMETER_SORT_ASC",
+          "description": "Sort direction. Allowed values: asc, desc. Default: PARAMETER_SORT_ASC. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"expression\": \"string\",\n  \"param\": \"string\",\n  \"val\": 0,\n  \"accountUniqueName\": \"string\",\n  \"accountName\": \"string\",\n  \"source\": \"string\",\n  \"destination\": \"string\",\n  \"voucherTypes\": [],\n  \"branchUniqueName\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"variant\": \"string\",\n  \"batch\": \"string\",\n  \"newApi\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "expression": {
+          "type": "string",
+          "description": "Expression. Optional.",
+          "value": "string"
+        },
+        "param": {
+          "type": "string",
+          "description": "Param. Optional.",
+          "value": "string"
+        },
+        "val": {
+          "type": "number",
+          "description": "Val. Optional.",
+          "value": 0
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "accountName": {
+          "type": "string",
+          "description": "Account name. Optional.",
+          "value": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": "string"
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination. Optional.",
+          "value": "string"
+        },
+        "voucherTypes": {
+          "type": "array",
+          "description": "Array of voucher types values. Optional.",
+          "value": []
+        },
+        "branchUniqueName": {
+          "type": "string",
+          "description": "Branch unique name. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "batch": {
+          "type": "string",
+          "description": "Batch. Optional.",
+          "value": "string"
+        },
+        "newApi": {
+          "type": "boolean",
+          "description": "When true, applies the new api filter or flag. Optional.",
+          "value": false
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "NDdMIUfyy7hg",
+    "name": "Download Stock Inventory Report V3 With Filters",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-group/{stockGroupUniqueName}/stock/{stockUniqueName}/download-stock-inventory-report-v3",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "NDdMIUfyy7hg",
+      "description": "Stock Inventory Export Stock Report. Part of the Download Stock Inventory Report V3 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "PARAMETER_PAGE_1",
+          "description": "Page number (1-based). Default: PARAMETER_PAGE_1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "PARAMETER_COUNT_20",
+          "description": "Page size (number of items returned). Default: PARAMETER_COUNT_20. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "PARAMETER_FORMAT_XLSX",
+          "description": "Response or export format. Default: PARAMETER_FORMAT_XLSX. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "PARAMETER_ENTRY_DATE",
+          "description": "Field name to sort by. Default: PARAMETER_ENTRY_DATE. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "PARAMETER_SORT_ASC",
+          "description": "Sort direction. Allowed values: asc, desc. Default: PARAMETER_SORT_ASC. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"expression\": \"string\",\n  \"param\": \"string\",\n  \"val\": 0,\n  \"accountUniqueName\": \"string\",\n  \"accountName\": \"string\",\n  \"source\": \"string\",\n  \"destination\": \"string\",\n  \"voucherTypes\": [],\n  \"branchUniqueName\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"variant\": \"string\",\n  \"batch\": \"string\",\n  \"newApi\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "expression": {
+          "type": "string",
+          "description": "Expression. Optional.",
+          "value": "string"
+        },
+        "param": {
+          "type": "string",
+          "description": "Param. Optional.",
+          "value": "string"
+        },
+        "val": {
+          "type": "number",
+          "description": "Val. Optional.",
+          "value": 0
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "accountName": {
+          "type": "string",
+          "description": "Account name. Optional.",
+          "value": "string"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source. Optional.",
+          "value": "string"
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination. Optional.",
+          "value": "string"
+        },
+        "voucherTypes": {
+          "type": "array",
+          "description": "Array of voucher types values. Optional.",
+          "value": []
+        },
+        "branchUniqueName": {
+          "type": "string",
+          "description": "Branch unique name. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "batch": {
+          "type": "string",
+          "description": "Batch. Optional.",
+          "value": "string"
+        },
+        "newApi": {
+          "type": "boolean",
+          "description": "When true, applies the new api filter or flag. Optional.",
+          "value": false
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "hwRu4yEZkCfC",
+    "name": "Download Template Preview",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/templates/{templateUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "hwRu4yEZkCfC",
+      "description": "Get Template. Part of the Templates APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "type": {
+          "checked": "true",
+          "value": "invoice",
+          "description": "Voucher or entity type discriminator for the list. Default: invoice. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "tw4-syfhLSjq",
+    "name": "Download Vat Report Account Wise",
+    "catalogKey": "GET /company/{companyUniqueName}/us/export-sales-report-account-wise",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "tw4-syfhLSjq",
+      "description": "Download Vat Report Account Wise. Part of the Export Sales Report Account Wise APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "taxAuthorityUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax authority unique name query parameter. Optional.",
+          "required": false
+        },
+        "taxUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax unique name query parameter. Optional.",
+          "required": false
+        },
+        "taxAuthorityQuery": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax authority query query parameter. Optional.",
+          "required": false
+        },
+        "taxQuery": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax query query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "sPXwzlknnxQC",
+    "name": "Download Vat Report Currency Wise With Export Settings",
+    "catalogKey": "GET /company/{companyUniqueName}/zw/vat-report-detailed-download-v2",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "sPXwzlknnxQC",
+      "description": "Download Vat Report Currency Wise With Export Settings. Part of the Vat Report Detailed Download V2 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "currencyCode": {
+          "checked": "true",
+          "value": "",
+          "description": "ISO currency code. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "ojvbu3bbpDmq",
+    "name": "Download Vat Report Tax Authority Wise",
+    "catalogKey": "GET /company/{companyUniqueName}/us/export-sales-report-authority-wise",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ojvbu3bbpDmq",
+      "description": "Download Vat Report Tax Authority Wise. Part of the Export Sales Report Authority Wise APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Yqs-fDk_hrr5",
+    "name": "Download Vat Report Tax Wise",
+    "catalogKey": "GET /company/{companyUniqueName}/us/export-sales-report-tax-wise",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Yqs-fDk_hrr5",
+      "description": "Download Vat Report Tax Wise. Part of the Export Sales Report Tax Wise APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "taxAuthorityUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax authority unique name query parameter. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "XDJVUCokz1Qt",
+    "name": "Download Vat Report With Export Settings",
+    "catalogKey": "GET /company/{companyUniqueName}/zw/vat-report-download-v2",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "XDJVUCokz1Qt",
+      "description": "Download Vat Report With Export Settings. Part of the Vat Report Download V2 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "currencyCode": {
+          "checked": "true",
+          "value": "",
+          "description": "ISO currency code. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "J2831RaJ4INt",
+    "name": "Download purchase order Version 3",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/{uniqueName}/download",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "J2831RaJ4INt",
+      "description": "Download purchase order Version 3. Part of the Download APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "QiNIWIiR3_Cd",
+    "name": "Download purchase order Version 3",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/{uniqueName}/download",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "QiNIWIiR3_Cd",
+      "description": "Download purchase order Version 3. Part of the Download APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "debugMode": {
+          "checked": "true",
+          "value": "",
+          "description": "Debug mode query parameter. Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "o8Er20PWwuGD",
+    "name": "Email Account Balance",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/groups/{groupUniqueName}/email-account-closing-balance",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "o8Er20PWwuGD",
+      "description": "Email Account Balance. Part of the Email Account Closing Balance APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"openingBalance\": 0,\n  \"openingBalanceType\": \"string\",\n  \"openingBalanceGreaterThan\": false,\n  \"openingBalanceLessThan\": false,\n  \"openingBalanceEqual\": false,\n  \"openingBalanceNotEqual\": false,\n  \"closingBalance\": 0,\n  \"closingBalanceType\": \"string\",\n  \"closingBalanceGreaterThan\": false,\n  \"closingBalanceLessThan\": false,\n  \"closingBalanceEqual\": false,\n  \"closingBalanceNotEqual\": false,\n  \"creditTotal\": 0,\n  \"creditTotalGreaterThan\": false,\n  \"creditTotalLessThan\": false,\n  \"creditTotalEqual\": false,\n  \"creditTotalNotEqual\": false,\n  \"debitTotal\": 0,\n  \"debitTotalGreaterThan\": false,\n  \"debitTotalLessThan\": false,\n  \"debitTotalEqual\": false,\n  \"debitTotalNotEqual\": false,\n  \"sort\": \"string\",\n  \"sortBy\": \"string\",\n  \"sortType\": \"string\",\n  \"message\": \"string\",\n  \"accounts\": [],\n  \"subject\": \"string\",\n  \"includeParentGroup\": false,\n  \"includeMobileNumber\": false,\n  \"includeEmailId\": false,\n  \"includeState\": false,\n  \"includeTaxNumber\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "openingBalance": {
+          "type": "number",
+          "description": "Opening balance. Optional.",
+          "value": 0
+        },
+        "openingBalanceType": {
+          "type": "string",
+          "description": "Opening balance type. Optional.",
+          "value": "string"
+        },
+        "openingBalanceGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the opening balance greater than filter or flag. Optional.",
+          "value": false
+        },
+        "openingBalanceLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the opening balance less than filter or flag. Optional.",
+          "value": false
+        },
+        "openingBalanceEqual": {
+          "type": "boolean",
+          "description": "When true, applies the opening balance equal filter or flag. Optional.",
+          "value": false
+        },
+        "openingBalanceNotEqual": {
+          "type": "boolean",
+          "description": "When true, applies the opening balance not equal filter or flag. Optional.",
+          "value": false
+        },
+        "closingBalance": {
+          "type": "number",
+          "description": "Closing balance. Optional.",
+          "value": 0
+        },
+        "closingBalanceType": {
+          "type": "string",
+          "description": "Closing balance type. Optional.",
+          "value": "string"
+        },
+        "closingBalanceGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the closing balance greater than filter or flag. Optional.",
+          "value": false
+        },
+        "closingBalanceLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the closing balance less than filter or flag. Optional.",
+          "value": false
+        },
+        "closingBalanceEqual": {
+          "type": "boolean",
+          "description": "When true, applies the closing balance equal filter or flag. Optional.",
+          "value": false
+        },
+        "closingBalanceNotEqual": {
+          "type": "boolean",
+          "description": "When true, applies the closing balance not equal filter or flag. Optional.",
+          "value": false
+        },
+        "creditTotal": {
+          "type": "number",
+          "description": "Credit total. Optional.",
+          "value": 0
+        },
+        "creditTotalGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the credit total greater than filter or flag. Optional.",
+          "value": false
+        },
+        "creditTotalLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the credit total less than filter or flag. Optional.",
+          "value": false
+        },
+        "creditTotalEqual": {
+          "type": "boolean",
+          "description": "When true, applies the credit total equal filter or flag. Optional.",
+          "value": false
+        },
+        "creditTotalNotEqual": {
+          "type": "boolean",
+          "description": "When true, applies the credit total not equal filter or flag. Optional.",
+          "value": false
+        },
+        "debitTotal": {
+          "type": "number",
+          "description": "Debit total. Optional.",
+          "value": 0
+        },
+        "debitTotalGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the debit total greater than filter or flag. Optional.",
+          "value": false
+        },
+        "debitTotalLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the debit total less than filter or flag. Optional.",
+          "value": false
+        },
+        "debitTotalEqual": {
+          "type": "boolean",
+          "description": "When true, applies the debit total equal filter or flag. Optional.",
+          "value": false
+        },
+        "debitTotalNotEqual": {
+          "type": "boolean",
+          "description": "When true, applies the debit total not equal filter or flag. Optional.",
+          "value": false
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort. Optional.",
+          "value": "string"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Sort by. Optional.",
+          "value": "string"
+        },
+        "sortType": {
+          "type": "string",
+          "description": "Sort type. Optional.",
+          "value": "string"
+        },
+        "message": {
+          "type": "string",
+          "description": "Message. Optional.",
+          "value": "string"
+        },
+        "accounts": {
+          "type": "array",
+          "description": "Array of accounts values. Optional.",
+          "value": []
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject. Optional.",
+          "value": "string"
+        },
+        "includeParentGroup": {
+          "type": "boolean",
+          "description": "When true, applies the include parent group filter or flag. Optional.",
+          "value": false
+        },
+        "includeMobileNumber": {
+          "type": "boolean",
+          "description": "When true, applies the include mobile number filter or flag. Optional.",
+          "value": false
+        },
+        "includeEmailId": {
+          "type": "boolean",
+          "description": "When true, applies the include email id filter or flag. Optional.",
+          "value": false
+        },
+        "includeState": {
+          "type": "boolean",
+          "description": "When true, applies the include state filter or flag. Optional.",
+          "value": false
+        },
+        "includeTaxNumber": {
+          "type": "boolean",
+          "description": "When true, applies the include tax number filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "xrqPkd4Qn1KS",
+    "name": "Email Verification Key",
+    "catalogKey": "POST /company/{companyUniqueName}/email-key",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "xrqPkd4Qn1KS",
+      "description": "Email Verification Key. Part of the Email Key APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"authKey\": \"string\",\n  \"subject\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "authKey": {
+          "type": "string",
+          "description": "Auth key. Optional.",
+          "value": "string"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ps9LUT50onlR",
+    "name": "Expiry report: expired batches or batches expiring within N days.",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/expiry-report",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ps9LUT50onlR",
+      "description": "Expiry report: expired batches or batches expiring within N days. Part of the Expiry Report APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "withinDays": {
+          "checked": "true",
+          "value": "30",
+          "description": "Within days query parameter. Default: 30. Optional.",
+          "required": false
+        },
+        "expiredOnly": {
+          "checked": "true",
+          "value": "false",
+          "description": "Expired only query parameter. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "U5_9BMaWX6WR",
+    "name": "Export Account Balances By Group With Export Settings",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/groups/{groupUniqueName}/export/account-balances-v2",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "U5_9BMaWX6WR",
+      "description": "Export Account Balances By Group With Export Settings. Part of the Account Balances V2 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"showHideOpeningClosingBalance\": false,\n  \"balanceTypeAsSign\": false,\n  \"monthYear\": [],\n  \"financialYear\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "showHideOpeningClosingBalance": {
+          "type": "boolean",
+          "description": "When true, applies the show hide opening closing balance filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "monthYear": {
+          "type": "array",
+          "description": "Array of month year values. Optional.",
+          "value": []
+        },
+        "financialYear": {
+          "type": "string",
+          "description": "Financial year. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "QideDDug_Xsq",
+    "name": "Export Account Statement",
+    "catalogKey": "GET /portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/export-account-statement",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "QideDDug_Xsq",
+      "description": "Export Account Statement. Part of the Export Account Statement APIs in Giddh. Requires portal session.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "xlsx",
+          "description": "Output file type. Default: xlsx. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "hk2wEGHFe7zO",
+    "name": "Export Account Statement",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/ledgers-v2/export-account-statement",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "hk2wEGHFe7zO",
+      "description": "Export Account Statement. Part of the Export Account Statement APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "xlsx",
+          "description": "Output file type. Default: xlsx. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        },
+        "includeSalesPersons": {
+          "type": "boolean",
+          "description": "When true, applies the include sales persons filter or flag. Optional.",
+          "value": false
+        },
+        "includeAmount": {
+          "type": "boolean",
+          "description": "When true, applies the include amount filter or flag. Optional.",
+          "value": false
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount greater than filter or flag. Optional.",
+          "value": false
+        },
+        "amountLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount less than filter or flag. Optional.",
+          "value": false
+        },
+        "amountEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the amount equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "When true, applies the include description filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "includeVouchers": {
+          "type": "boolean",
+          "description": "When true, applies the include vouchers filter or flag. Optional.",
+          "value": false
+        },
+        "includeParticulars": {
+          "type": "boolean",
+          "description": "When true, applies the include particulars filter or flag. Optional.",
+          "value": false
+        },
+        "particulars": {
+          "type": "array",
+          "description": "Array of particulars values. Optional.",
+          "value": []
+        },
+        "isInvoiceGenerated": {
+          "type": "boolean",
+          "description": "When true, applies the is invoice generated filter or flag. Optional.",
+          "value": false
+        },
+        "includeTag": {
+          "type": "boolean",
+          "description": "When true, applies the include tag filter or flag. Optional.",
+          "value": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tag names (array). Optional.",
+          "value": []
+        },
+        "chequeNumber": {
+          "type": "string",
+          "description": "Cheque number. Optional.",
+          "value": "string"
+        },
+        "dateOnCheque": {
+          "type": "string",
+          "description": "Date on cheque. Optional.",
+          "value": "string"
+        },
+        "inventory": {
+          "type": "string",
+          "description": "Inventory. Optional.",
+          "value": "string"
+        },
+        "cancelledEntries": {
+          "type": "boolean",
+          "description": "When true, applies the cancelled entries filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "chequeDate": {
+          "type": "string",
+          "description": "Cheque date. Optional.",
+          "value": "01-04-2025"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ouHQFwZu3aZ7",
+    "name": "Export Bill To Bill Report With Export Settings",
+    "catalogKey": "GET /v4/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/bill-to-bill/export-v2",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ouHQFwZu3aZ7",
+      "description": "Export Bill To Bill Report With Export Settings. Part of the Export V2 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "twOxLG65LJ_n",
+    "name": "Export Ledger And Invoice Download File",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/v2/export-ledger-with-invoice/file",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "twOxLG65LJ_n",
+      "description": "Export Ledger And Invoice Download File. Part of the File APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "view-detailed",
+          "description": "Voucher or entity type discriminator for the list. Default: view-detailed. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "xlsx",
+          "description": "Response or export format. Default: xlsx. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        },
+        "includeSalesPersons": {
+          "type": "boolean",
+          "description": "When true, applies the include sales persons filter or flag. Optional.",
+          "value": false
+        },
+        "includeAmount": {
+          "type": "boolean",
+          "description": "When true, applies the include amount filter or flag. Optional.",
+          "value": false
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount greater than filter or flag. Optional.",
+          "value": false
+        },
+        "amountLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount less than filter or flag. Optional.",
+          "value": false
+        },
+        "amountEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the amount equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "When true, applies the include description filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "includeVouchers": {
+          "type": "boolean",
+          "description": "When true, applies the include vouchers filter or flag. Optional.",
+          "value": false
+        },
+        "includeParticulars": {
+          "type": "boolean",
+          "description": "When true, applies the include particulars filter or flag. Optional.",
+          "value": false
+        },
+        "particulars": {
+          "type": "array",
+          "description": "Array of particulars values. Optional.",
+          "value": []
+        },
+        "isInvoiceGenerated": {
+          "type": "boolean",
+          "description": "When true, applies the is invoice generated filter or flag. Optional.",
+          "value": false
+        },
+        "includeTag": {
+          "type": "boolean",
+          "description": "When true, applies the include tag filter or flag. Optional.",
+          "value": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tag names (array). Optional.",
+          "value": []
+        },
+        "chequeNumber": {
+          "type": "string",
+          "description": "Cheque number. Optional.",
+          "value": "string"
+        },
+        "dateOnCheque": {
+          "type": "string",
+          "description": "Date on cheque. Optional.",
+          "value": "string"
+        },
+        "inventory": {
+          "type": "string",
+          "description": "Inventory. Optional.",
+          "value": "string"
+        },
+        "cancelledEntries": {
+          "type": "boolean",
+          "description": "When true, applies the cancelled entries filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "chequeDate": {
+          "type": "string",
+          "description": "Cheque date. Optional.",
+          "value": "01-04-2025"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "FNy_QjY-kuMq",
+    "name": "Export Ledger And Invoice Download File",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/v2/export-ledger-with-invoice/file",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "FNy_QjY-kuMq",
+      "description": "Export Ledger And Invoice Download File. Part of the File APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "view-detailed",
+          "description": "Voucher or entity type discriminator for the list. Default: view-detailed. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "xlsx",
+          "description": "Response or export format. Default: xlsx. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        },
+        "includeSalesPersons": {
+          "type": "boolean",
+          "description": "When true, applies the include sales persons filter or flag. Optional.",
+          "value": false
+        },
+        "includeAmount": {
+          "type": "boolean",
+          "description": "When true, applies the include amount filter or flag. Optional.",
+          "value": false
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount greater than filter or flag. Optional.",
+          "value": false
+        },
+        "amountLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount less than filter or flag. Optional.",
+          "value": false
+        },
+        "amountEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the amount equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "When true, applies the include description filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "includeVouchers": {
+          "type": "boolean",
+          "description": "When true, applies the include vouchers filter or flag. Optional.",
+          "value": false
+        },
+        "includeParticulars": {
+          "type": "boolean",
+          "description": "When true, applies the include particulars filter or flag. Optional.",
+          "value": false
+        },
+        "particulars": {
+          "type": "array",
+          "description": "Array of particulars values. Optional.",
+          "value": []
+        },
+        "isInvoiceGenerated": {
+          "type": "boolean",
+          "description": "When true, applies the is invoice generated filter or flag. Optional.",
+          "value": false
+        },
+        "includeTag": {
+          "type": "boolean",
+          "description": "When true, applies the include tag filter or flag. Optional.",
+          "value": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tag names (array). Optional.",
+          "value": []
+        },
+        "chequeNumber": {
+          "type": "string",
+          "description": "Cheque number. Optional.",
+          "value": "string"
+        },
+        "dateOnCheque": {
+          "type": "string",
+          "description": "Date on cheque. Optional.",
+          "value": "string"
+        },
+        "inventory": {
+          "type": "string",
+          "description": "Inventory. Optional.",
+          "value": "string"
+        },
+        "cancelledEntries": {
+          "type": "boolean",
+          "description": "When true, applies the cancelled entries filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "chequeDate": {
+          "type": "string",
+          "description": "Cheque date. Optional.",
+          "value": "01-04-2025"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "WqAdgr6MBoKa",
+    "name": "Export Ledger Download File V3",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/v3/export-ledger/file",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "WqAdgr6MBoKa",
+      "description": "Export Ledger Download File V3. Part of the File APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "withInvoice": {
+          "checked": "true",
+          "value": "false",
+          "description": "With invoice query parameter. Default: false. Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "view-detailed",
+          "description": "Voucher or entity type discriminator for the list. Default: view-detailed. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "excel",
+          "description": "Response or export format. Default: excel. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        },
+        "includeSalesPersons": {
+          "type": "boolean",
+          "description": "When true, applies the include sales persons filter or flag. Optional.",
+          "value": false
+        },
+        "includeAmount": {
+          "type": "boolean",
+          "description": "When true, applies the include amount filter or flag. Optional.",
+          "value": false
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount greater than filter or flag. Optional.",
+          "value": false
+        },
+        "amountLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount less than filter or flag. Optional.",
+          "value": false
+        },
+        "amountEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the amount equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "When true, applies the include description filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "includeVouchers": {
+          "type": "boolean",
+          "description": "When true, applies the include vouchers filter or flag. Optional.",
+          "value": false
+        },
+        "includeParticulars": {
+          "type": "boolean",
+          "description": "When true, applies the include particulars filter or flag. Optional.",
+          "value": false
+        },
+        "particulars": {
+          "type": "array",
+          "description": "Array of particulars values. Optional.",
+          "value": []
+        },
+        "isInvoiceGenerated": {
+          "type": "boolean",
+          "description": "When true, applies the is invoice generated filter or flag. Optional.",
+          "value": false
+        },
+        "includeTag": {
+          "type": "boolean",
+          "description": "When true, applies the include tag filter or flag. Optional.",
+          "value": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tag names (array). Optional.",
+          "value": []
+        },
+        "chequeNumber": {
+          "type": "string",
+          "description": "Cheque number. Optional.",
+          "value": "string"
+        },
+        "dateOnCheque": {
+          "type": "string",
+          "description": "Date on cheque. Optional.",
+          "value": "string"
+        },
+        "inventory": {
+          "type": "string",
+          "description": "Inventory. Optional.",
+          "value": "string"
+        },
+        "cancelledEntries": {
+          "type": "boolean",
+          "description": "When true, applies the cancelled entries filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "chequeDate": {
+          "type": "string",
+          "description": "Cheque date. Optional.",
+          "value": "01-04-2025"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "KbT5mayI190H",
+    "name": "Export Ledger Download File V3",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/v3/export-ledger/file",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "KbT5mayI190H",
+      "description": "Export Ledger Download File V3. Part of the File APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "withInvoice": {
+          "checked": "true",
+          "value": "false",
+          "description": "With invoice query parameter. Default: false. Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "view-detailed",
+          "description": "Voucher or entity type discriminator for the list. Default: view-detailed. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "excel",
+          "description": "Response or export format. Default: excel. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "base64",
+          "description": "Output file type. Default: base64. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"groupUniqueNames\": [],\n  \"accountUniqueNames\": [],\n  \"salesPersonUniqueNames\": [],\n  \"includeSalesPersons\": false,\n  \"includeAmount\": false,\n  \"amount\": 0,\n  \"amountGreaterThan\": false,\n  \"amountLessThan\": false,\n  \"amountEqualTo\": false,\n  \"includeDescription\": false,\n  \"description\": \"string\",\n  \"vouchers\": [],\n  \"includeVouchers\": false,\n  \"includeParticulars\": false,\n  \"particulars\": [],\n  \"isInvoiceGenerated\": false,\n  \"includeTag\": false,\n  \"tags\": [],\n  \"chequeNumber\": \"string\",\n  \"dateOnCheque\": \"string\",\n  \"inventory\": \"string\",\n  \"cancelledEntries\": false,\n  \"balanceTypeAsSign\": false,\n  \"chequeDate\": \"01-04-2025\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "salesPersonUniqueNames": {
+          "type": "array",
+          "description": "Array of sales person unique names values. Optional.",
+          "value": []
+        },
+        "includeSalesPersons": {
+          "type": "boolean",
+          "description": "When true, applies the include sales persons filter or flag. Optional.",
+          "value": false
+        },
+        "includeAmount": {
+          "type": "boolean",
+          "description": "When true, applies the include amount filter or flag. Optional.",
+          "value": false
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount greater than filter or flag. Optional.",
+          "value": false
+        },
+        "amountLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the amount less than filter or flag. Optional.",
+          "value": false
+        },
+        "amountEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the amount equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeDescription": {
+          "type": "boolean",
+          "description": "When true, applies the include description filter or flag. Optional.",
+          "value": false
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "includeVouchers": {
+          "type": "boolean",
+          "description": "When true, applies the include vouchers filter or flag. Optional.",
+          "value": false
+        },
+        "includeParticulars": {
+          "type": "boolean",
+          "description": "When true, applies the include particulars filter or flag. Optional.",
+          "value": false
+        },
+        "particulars": {
+          "type": "array",
+          "description": "Array of particulars values. Optional.",
+          "value": []
+        },
+        "isInvoiceGenerated": {
+          "type": "boolean",
+          "description": "When true, applies the is invoice generated filter or flag. Optional.",
+          "value": false
+        },
+        "includeTag": {
+          "type": "boolean",
+          "description": "When true, applies the include tag filter or flag. Optional.",
+          "value": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tag names (array). Optional.",
+          "value": []
+        },
+        "chequeNumber": {
+          "type": "string",
+          "description": "Cheque number. Optional.",
+          "value": "string"
+        },
+        "dateOnCheque": {
+          "type": "string",
+          "description": "Date on cheque. Optional.",
+          "value": "string"
+        },
+        "inventory": {
+          "type": "string",
+          "description": "Inventory. Optional.",
+          "value": "string"
+        },
+        "cancelledEntries": {
+          "type": "boolean",
+          "description": "When true, applies the cancelled entries filter or flag. Optional.",
+          "value": false
+        },
+        "balanceTypeAsSign": {
+          "type": "boolean",
+          "description": "When true, applies the balance type as sign filter or flag. Optional.",
+          "value": false
+        },
+        "chequeDate": {
+          "type": "string",
+          "description": "Cheque date. Optional.",
+          "value": "01-04-2025"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "h2T7t_u9W8oX",
+    "name": "Export Vouchers With Export Settings",
+    "catalogKey": "POST /company/{companyUniqueName}/export-invoices-v2",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "h2T7t_u9W8oX",
+      "description": "List or aggregate vouchers for the company. Put type, dates, pagination, sort, search, branch, and voucherVersion on the query string. Optional filter fields go in the JSON body — do not send type only in the body. Part of the Export Invoices V2 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "sales",
+          "description": "Voucher or list type. Send on the query string, not in the JSON body. Allowed values: sales, invoice, payment, receipt, credit note, debit note. Default: sales. Optional.",
+          "required": false
+        },
+        "noteType": {
+          "checked": "true",
+          "value": "",
+          "description": "Credit/debit note subtype when type is a note list. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "",
+          "description": "Sort direction. Allowed values: asc, desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "",
+          "description": "Field to sort by. Allowed values: voucherDate, dueDate, voucherNumber. Optional.",
+          "required": false
+        },
+        "voucherCount": {
+          "checked": "true",
+          "value": "10",
+          "description": "Voucher count query parameter. Default: 10. Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text. Optional.",
+          "required": false
+        },
+        "fileType": {
+          "checked": "true",
+          "value": "xlsx",
+          "description": "Output file type. Default: xlsx. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size. Default: 50. Optional.",
+          "required": false
+        },
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        },
+        "invoiceCount": {
+          "checked": "true",
+          "value": "",
+          "description": "Related invoice count hint for invoice list queries. Optional.",
+          "required": false
+        },
+        "mail": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, trigger mail export. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"sortBy\": \"string\",\n  \"sort\": \"string\",\n  \"page\": 0,\n  \"count\": 0,\n  \"q\": \"string\",\n  \"selectAllFields\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "sortBy": {
+          "type": "string",
+          "description": "Field to sort by. Optional.",
+          "value": "string"
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort direction. Optional.",
+          "value": "string"
+        },
+        "page": {
+          "type": "string",
+          "description": "Page number (1-based). Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "string",
+          "description": "Page size. Optional.",
+          "value": 0
+        },
+        "q": {
+          "type": "string",
+          "description": "Search text. Optional.",
+          "value": "string"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "uxxuetbiBNyl",
+    "name": "FIFO allocation preview for an outward quantity (PRD 6.3 option 1).",
+    "catalogKey": "GET /company/{companyUniqueName}/batch/variant/{variantUniqueName}/fifo-allocation",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "uxxuetbiBNyl",
+      "description": "FIFO allocation preview for an outward quantity (PRD 6.3 option 1). Part of the Fifo Allocation APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "quantity": {
+          "checked": "true",
+          "value": "",
+          "description": "Quantity query parameter. Mandatory.",
+          "required": true
+        },
+        "warehouseUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Warehouse unique name query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "ktzm8fVV_J4Z",
+    "name": "Fetch Account Details",
+    "catalogKey": "POST /company/{companyUniqueName}/gocardless/requisitions/{reference}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ktzm8fVV_J4Z",
+      "description": "Fetch Account Details. Part of the Requisitions APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "NMWBuU906n1Q",
+    "name": "Fetch Account Transactions On Refresh",
+    "catalogKey": "GET /company/{companyUniqueName}/gocardless/refresh",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "NMWBuU906n1Q",
+      "description": "Fetch Account Transactions On Refresh. Part of the Refresh APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "accountUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Account uniqueName. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Manufacturing detail not found.",
+  "code": "INVALID_REQUEST"
+}

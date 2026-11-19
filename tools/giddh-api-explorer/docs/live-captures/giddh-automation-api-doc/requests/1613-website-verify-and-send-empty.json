@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/verify-and-send",
+  "body": {}
+}

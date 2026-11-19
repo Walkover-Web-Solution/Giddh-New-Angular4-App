@@ -1,0 +1,5 @@
+{
+  "voucherType": "sales",
+  "subject": "API Doc Invoice {{voucherNumber}}",
+  "body": "<p>Dear customer, invoice attached.</p>"
+}

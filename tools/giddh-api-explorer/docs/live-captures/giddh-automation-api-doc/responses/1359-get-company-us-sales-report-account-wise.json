@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "body": {
+    "responses": [],
+    "page": 0,
+    "count": 0,
+    "totalPages": 0,
+    "totalItems": 0,
+    "totalTaxCollected": 0.0,
+    "totalGrandTotal": 0.0,
+    "totalTaxableAmount": 0.0,
+    "totalNonTaxableAmount": 0.0,
+    "totalSubTotal": 0.0,
+    "includeNonTaxableSales": false,
+    "isProcessed": false,
+    "from": "01-04-2026",
+    "to": "31-03-2027"
+  }
+}

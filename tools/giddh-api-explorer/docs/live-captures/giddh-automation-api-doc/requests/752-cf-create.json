@@ -1,0 +1,7 @@
+{
+  "fieldName": "API Doc CF Note",
+  "fieldType": "TEXT",
+  "moduleUniqueName": "account",
+  "isMandatory": false,
+  "uniqueName": "apidoc-cf-note"
+}

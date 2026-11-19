@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "body": {
+    "dateOfSupply": "23-10-2026",
+    "challanNo": "DC-20261023-1",
+    "note": "BT deliverynote",
+    "uniqueName": "hsk1792734672951",
+    "sources": [
+      {
+        "name": "Gidd",
+        "uniqueName": "giddhautomationapidoc",
+        "warehouse": {
+          "name": "Gidd warehouse",
+          "uniqueName": "xbq1792673424418",
+          "address": "My new address",
+          "taxNumber": "23AAACC1206D2ZN"
+        }
+      }
+    ],
+    "destinations": [
+      {
+        "name": "apidoc-branch-two",
+        "uniqueName": "apidocbranchtwo",
+        "warehouse": {
+          "name": "apidoc-branch-two warehouse",
+          "uniqueName": "0d41792733820723",
+          "address": "My new address",
+          "taxNumber": "23AAACC1206D2ZN"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "API Doc Widget",
+        "uniqueName": "apidoc-widget",
+        "stockDetails": {
+          "stockUnit": "pcs",
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "amount": 100.0,
+          "rate": 100,
+          "quantity": 1
+        },
+        "description": "BT",
+        "showVariant": false,
+        "variant": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+        }
+      }
+    ],
+    "entity": "deliverynote",
+    "transporterDetails": {
+      "dispatchedDate": "23-10-2026"
+    },
+    "totalAmount": 100.0,
+    "transferType": "products",
+    "autoGenerateNote": false
+  }
+}

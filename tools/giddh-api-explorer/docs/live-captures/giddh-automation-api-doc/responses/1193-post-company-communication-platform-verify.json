@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please add valid communication platform.",
+  "code": "INVALID_REQUEST"
+}

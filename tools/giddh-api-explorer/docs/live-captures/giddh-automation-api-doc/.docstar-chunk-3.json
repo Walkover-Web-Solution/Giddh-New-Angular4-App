@@ -1,0 +1,517 @@
+[
+  {
+    "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/payment-method:PortalController:fetchSupportedPaymentMethods",
+    "body": {
+      "name": "Fetch Supported Payment Methods",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/payment-method",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: API_PATHS.paymentMethodList. Fetch Supported Payment Methods. Service: giddh-api-v2, PortalController#fetchSupportedPaymentMethods.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        }
+      },
+      "params": {},
+      "pathVariables": {
+        "0": {
+          "checked": "notApplicable",
+          "key": "companyUniqueName",
+          "value": "",
+          "description": "companyUniqueName"
+        },
+        "1": {
+          "checked": "notApplicable",
+          "key": "accountUniqueName",
+          "value": "",
+          "description": "accountUniqueName"
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/payment-method",
+          "data": {
+            "status": "success",
+            "body": {},
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        },
+        {
+          "title": "400 \u00b7 IO",
+          "status": 400,
+          "description": "IOException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "IO",
+            "message": "IO"
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_AUTH_KEY",
+          "status": 401,
+          "description": "InvalidAuthKeyException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_AUTH_KEY",
+            "message": "Invalid Auth-Key."
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_SESSION",
+          "status": 401,
+          "description": "InvalidSessionIdException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_SESSION",
+            "message": "Invalid Session-Id."
+          }
+        },
+        {
+          "title": "404 \u00b7 NOT_FOUND",
+          "status": 404,
+          "description": "NotFoundException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "NOT_FOUND",
+            "message": "Not Found"
+          }
+        }
+      ],
+      "state": 1
+    }
+  },
+  {
+    "catalogId": "giddh-api-v2:GET:/portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/view-statement:PortalController:viewStatement",
+    "body": {
+      "name": "View Statement",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/view-statement",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: API_PATHS.viewStatement. View Statement. Service: giddh-api-v2, PortalController#viewStatement.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        }
+      },
+      "params": {},
+      "pathVariables": {
+        "0": {
+          "checked": "notApplicable",
+          "key": "companyUniqueName",
+          "value": "",
+          "description": "companyUniqueName"
+        },
+        "1": {
+          "checked": "notApplicable",
+          "key": "accountUniqueName",
+          "value": "",
+          "description": "accountUniqueName"
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/view-statement",
+          "data": {
+            "status": "success",
+            "body": {
+              "fromDate": "01-04-2025",
+              "toDate": "23-10-2026",
+              "companyName": "10k",
+              "accountName": "Raji",
+              "accountAddress": {
+                "taxType": "GSTIN",
+                "countryName": "India",
+                "countryCode": "IN",
+                "email": "divyanshu@whozzat.com",
+                "taxNumber": "",
+                "stateName": "Delhi",
+                "stateCode": "DL",
+                "address": "delhi ka address",
+                "currency": {
+                  "code": "INR",
+                  "symbol": "\u20b9"
+                }
+              },
+              "companyGstAddress": {
+                "taxType": "GSTIN",
+                "countryName": "India",
+                "countryCode": "IN",
+                "mobileNo": "919826139411",
+                "taxNumber": "24AAACH7409R2Z6",
+                "stateName": "Gujarat",
+                "stateCode": "GJ",
+                "address": "747 GIDC INDUSTRIAL ESTATE JHAGADIA  JHAGADIA",
+                "pinCode": "393110",
+                "currency": {
+                  "code": "INR",
+                  "symbol": "\u20b9"
+                }
+              },
+              "accountSummary": {
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "debitTotal": 0.0,
+                "creditTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "closingBalance": {
+                "amount": 0.0,
+                "type": "DEBIT",
+                "description": "BF_BALANCE"
+              },
+              "accountUniqueName": "raji1",
+              "transactionDetailList": [
+                {
+                  "date": "01-04-2025",
+                  "voucherType": "***Opening Balance***",
+                  "description": "",
+                  "voucherAmount": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  },
+                  "closingBalance": {
+                    "amount": 0.0,
+                    "type": "DEBIT"
+                  }
+                }
+              ],
+              "debitTotal": 0.0,
+              "creditTotal": 0.0,
+              "page": 0,
+              "count": 0,
+              "totalPages": 0,
+              "totalItems": 0
+            },
+            "httpStatus": 200,
+            "env": "prod"
+          }
+        },
+        {
+          "title": "400 \u00b7 PORTAL_CONTACT_NOT_FOUND",
+          "status": 400,
+          "description": "Live capture 1515-portal-view-statement",
+          "data": {
+            "status": "error",
+            "message": "Portal Contact not found.",
+            "code": "PORTAL_CONTACT_NOT_FOUND",
+            "httpStatus": 404
+          }
+        },
+        {
+          "title": "400 \u00b7 EXECUTION",
+          "status": 400,
+          "description": "ExecutionException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "EXECUTION",
+            "message": "Execution"
+          }
+        },
+        {
+          "title": "400 \u00b7 INTERRUPTED",
+          "status": 400,
+          "description": "InterruptedException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INTERRUPTED",
+            "message": "Interrupted"
+          }
+        },
+        {
+          "title": "400 \u00b7 INVALID_DATE_FORMAT",
+          "status": 400,
+          "description": "InvalidDateFormatException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_DATE_FORMAT",
+            "message": "Invalid Date Format"
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_AUTH_KEY",
+          "status": 401,
+          "description": "InvalidAuthKeyException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_AUTH_KEY",
+            "message": "Invalid Auth-Key."
+          }
+        },
+        {
+          "title": "401 \u00b7 INVALID_SESSION",
+          "status": 401,
+          "description": "InvalidSessionIdException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_SESSION",
+            "message": "Invalid Session-Id."
+          }
+        },
+        {
+          "title": "404 \u00b7 NOT_FOUND",
+          "status": 404,
+          "description": "NotFoundException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "NOT_FOUND",
+            "message": "Not Found"
+          }
+        },
+        {
+          "title": "406 \u00b7 INVALID_REQUEST",
+          "status": 406,
+          "description": "InvalidRequestException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_REQUEST",
+            "message": "Invalid Request"
+          }
+        }
+      ],
+      "state": 1
+    }
+  },
+  {
+    "catalogId": "giddh-api-v2:POST:/v2/portal-user/save-session:LoginV2Controller:saveSessionForPortalUser",
+    "body": {
+      "name": "Save Session For Portal User",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/portal-user/save-session",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: PROXY_API_PATHS.SAVE_SESSION. Save Session For Portal User. Service: giddh-api-v2, LoginV2Controller#saveSessionForPortalUser.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        },
+        "Content-Type": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON body."
+        }
+      },
+      "params": {},
+      "pathVariables": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"account\": \"string\",\n  \"vendorContactUniqueName\": \"string\",\n  \"session\": \"string\",\n  \"companyUniqueName\": \"string\",\n  \"subDomain\": \"string\",\n  \"proxyAuthToken\": \"string\"\n}"
+        }
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /v2/portal-user/save-session",
+          "data": {
+            "status": "success",
+            "body": {
+              "session": {
+                "id": "in3f3af1********KKc=",
+                "expiresAt": "25-10-2026 11:52:15",
+                "createdAt": "23-10-2026 11:52:15"
+              },
+              "companyUniqueName": "10kin177424654546509z75a"
+            },
+            "httpStatus": 200,
+            "liveHost": "https://api.giddh.com",
+            "env": "prod"
+          }
+        },
+        {
+          "title": "400 \u00b7 GENERAL_SECURITY",
+          "status": 400,
+          "description": "GeneralSecurityException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "GENERAL_SECURITY",
+            "message": "General Security"
+          }
+        },
+        {
+          "title": "400 \u00b7 IO",
+          "status": 400,
+          "description": "IOException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "IO",
+            "message": "IO"
+          }
+        },
+        {
+          "title": "401 \u00b7 ENCRYPTION",
+          "status": 401,
+          "description": "EncryptionException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "ENCRYPTION",
+            "message": "Encryption"
+          }
+        },
+        {
+          "title": "406 \u00b7 INVALID_REQUEST",
+          "status": 406,
+          "description": "InvalidRequestException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_REQUEST",
+            "message": "Invalid Request"
+          }
+        }
+      ],
+      "state": 1
+    }
+  },
+  {
+    "catalogId": "giddh-api-v2:POST:/v2/verify-portal-user:LoginV2Controller:verifyPortalUser",
+    "body": {
+      "name": "Verify Portal User",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/verify-portal-user",
+      "description": "Customer Portal only (surface: customer-portal). Used by Giddh Ex-Portal: PROXY_API_PATHS.VERIFY_PORTAL_USER. Verify Portal User. Service: giddh-api-v2, LoginV2Controller#verifyPortalUser.",
+      "headers": {
+        "Accept": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON response."
+        },
+        "Content-Type": {
+          "checked": "true",
+          "value": "application/json",
+          "description": "JSON body."
+        }
+      },
+      "params": {},
+      "pathVariables": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"emailId\": \"string\",\n  \"mobileNo\": \"string\",\n  \"accessToken\": \"string\",\n  \"emailIdAccessToken\": \"string\",\n  \"mobileNoAccessToken\": \"string\",\n  \"emailIdAuthType\": \"string\",\n  \"subDomain\": \"string\",\n  \"proxyAuthToken\": \"string\",\n  \"type\": \"string\"\n}"
+        }
+      },
+      "sampleResponse": [
+        {
+          "title": "Success \u00b7 200 OK",
+          "status": 200,
+          "description": "Catalog / live capture for /v2/verify-portal-user",
+          "data": {
+            "status": "success",
+            "body": [
+              {
+                "account": {
+                  "name": "Raji",
+                  "uniqueName": "raji1"
+                },
+                "vendorContactUniqueName": "8b51792755886875"
+              },
+              {
+                "account": {
+                  "name": "Siddhi Batra",
+                  "uniqueName": "siddhi"
+                },
+                "vendorContactUniqueName": "tdl1792756235005"
+              }
+            ],
+            "httpStatus": 200,
+            "liveHost": "https://api.giddh.com",
+            "env": "prod"
+          }
+        },
+        {
+          "title": "400 \u00b7 INVALID_CF_IP",
+          "status": 400,
+          "description": "Live capture 1540-verify-portal-user-proxy-cf",
+          "data": {
+            "status": "error",
+            "message": "Request did not originate from Cloudflare.",
+            "code": "INVALID_CF_IP",
+            "httpStatus": 403,
+            "when": "Portal login via MSG91 proxy URL routes.msg91.com/.../v2/verify-portal-user"
+          }
+        },
+        {
+          "title": "400 \u00b7 INVALID_REQUEST",
+          "status": 400,
+          "description": "Live capture 1523-verify-portal-user",
+          "data": {
+            "status": "error",
+            "message": "Your max limit for using this API has exceeded.",
+            "code": "INVALID_REQUEST",
+            "httpStatus": 406
+          }
+        },
+        {
+          "title": "400 \u00b7 GENERAL_SECURITY",
+          "status": 400,
+          "description": "GeneralSecurityException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "GENERAL_SECURITY",
+            "message": "General Security"
+          }
+        },
+        {
+          "title": "400 \u00b7 IO",
+          "status": 400,
+          "description": "IOException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "IO",
+            "message": "IO"
+          }
+        },
+        {
+          "title": "401 \u00b7 ENCRYPTION",
+          "status": 401,
+          "description": "EncryptionException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "ENCRYPTION",
+            "message": "Encryption"
+          }
+        },
+        {
+          "title": "404 \u00b7 NOT_FOUND",
+          "status": 404,
+          "description": "NotFoundException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "NOT_FOUND",
+            "message": "Not Found"
+          }
+        },
+        {
+          "title": "406 \u00b7 INVALID_REQUEST",
+          "status": 406,
+          "description": "InvalidRequestException raised by controller or shared ExceptionHandler",
+          "data": {
+            "status": "error",
+            "code": "INVALID_REQUEST",
+            "message": "Invalid Request"
+          }
+        }
+      ],
+      "state": 1
+    }
+  }
+]

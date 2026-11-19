@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Invoice number cannot be left null/blank",
+  "code": "INVALID_REQUEST"
+}

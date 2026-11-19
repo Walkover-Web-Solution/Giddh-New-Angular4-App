@@ -1,0 +1,9 @@
+{
+  "method": "PUT",
+  "path": "/company/giddhain1792673422178091xos/tags/apidoc-project-tag",
+  "body": {
+    "name": "API Doc Project Tag",
+    "description": "updated",
+    "uniqueName": "apidoc-project-tag"
+  }
+}

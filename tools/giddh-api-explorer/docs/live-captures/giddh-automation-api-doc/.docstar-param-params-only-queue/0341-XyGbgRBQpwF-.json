@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "XyGbgRBQpwF-", "description": "Get Payors For Payment a banking record. Part of the Banking APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"amount": {"checked": "true", "value": "", "description": "Amount query parameter. Required.", "required": "false"}}}

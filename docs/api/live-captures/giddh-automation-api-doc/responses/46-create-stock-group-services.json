@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "discounts": [],
+    "name": "API Doc Services",
+    "type": "PRODUCT",
+    "stocks": [],
+    "childStockGroups": [],
+    "uniqueName": "apidoc-services",
+    "inheritedDiscounts": [],
+    "inheritedTaxes": [],
+    "parentStockGroupNames": []
+  }
+}

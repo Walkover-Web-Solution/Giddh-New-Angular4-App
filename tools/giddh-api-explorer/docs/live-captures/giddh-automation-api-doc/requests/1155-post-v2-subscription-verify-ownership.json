@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/v2/subscription/verify/ownership?requestId=placeholder",
+  "body": {}
+}

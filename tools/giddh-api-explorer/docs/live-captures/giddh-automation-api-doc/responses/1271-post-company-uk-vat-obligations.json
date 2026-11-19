@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Provided tax number 'APIDOCGST18' not found.",
+  "code": "INVALID_PARAMETER"
+}

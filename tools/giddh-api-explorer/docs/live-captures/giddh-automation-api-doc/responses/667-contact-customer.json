@@ -1,0 +1,92 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 4,
+    "totalPages": 1,
+    "totalItems": 4,
+    "results": [
+      {
+        "creditTotal": 375.0,
+        "debitTotal": 550.0,
+        "closingBalance": {
+          "amount": 175.0,
+          "type": "DEBIT"
+        },
+        "openingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "currency": {
+          "code": "INR",
+          "symbol": null
+        },
+        "name": "API Doc Customer Two",
+        "uniqueName": "apidoc-customer-two",
+        "groupName": "Sundry Debtors"
+      },
+      {
+        "creditTotal": 80.0,
+        "debitTotal": 431.5,
+        "closingBalance": {
+          "amount": 351.5,
+          "type": "DEBIT"
+        },
+        "openingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "currency": {
+          "code": "INR",
+          "symbol": null
+        },
+        "name": "API Doc Customer Three",
+        "uniqueName": "apidoc-customer-three",
+        "groupName": "Sundry Debtors"
+      },
+      {
+        "creditTotal": 600.0,
+        "debitTotal": 700.0,
+        "closingBalance": {
+          "amount": 100.0,
+          "type": "DEBIT"
+        },
+        "openingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "currency": {
+          "code": "INR",
+          "symbol": null
+        },
+        "name": "API Doc Customer One",
+        "uniqueName": "apidoc-customer-one",
+        "groupName": "Sundry Debtors"
+      },
+      {
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "openingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "currency": {
+          "code": "INR",
+          "symbol": null
+        },
+        "name": "API Doc Walk-in Customer",
+        "uniqueName": "apidoc-customer-b2c",
+        "groupName": "Sundry Debtors"
+      }
+    ],
+    "size": 4
+  }
+}

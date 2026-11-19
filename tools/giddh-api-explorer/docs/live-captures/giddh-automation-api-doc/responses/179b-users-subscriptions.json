@@ -1,0 +1,170 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "companiesWithTransactions": [
+        {
+          "uniqueName": "usdivyin17780750878060bea3e",
+          "name": "US Divyanshu 2026",
+          "transactions": 146
+        }
+      ],
+      "upgrade": false,
+      "totalCompanies": 2,
+      "totalTransactions": 0,
+      "userDetails": {
+        "name": "Divyanshu Shirvastav",
+        "uniqueName": "divyanshu@whozzat.com",
+        "email": "divyanshu@whozzat.com",
+        "signUpOn": "18-05-2023 08:37:55",
+        "mobileno": "919111525164"
+      },
+      "overdraftTransactions": 0,
+      "transactionsRemaining": 0,
+      "country": {
+        "countryName": null,
+        "countryCode": null,
+        "alpha3CountryCode": null
+      },
+      "duration": "YEARLY",
+      "region": {
+        "name": "India",
+        "code": "IND"
+      },
+      "status": "active",
+      "expiry": "05-05-2027",
+      "createdAt": "06-05-2026 14:23:29",
+      "startedAt": "06-05-2026",
+      "totalInvoices": 122,
+      "invoicesRemaining": 68,
+      "totalBills": 122,
+      "billsRemaining": 119,
+      "subscriptionId": "SUB-20260506-1",
+      "balance": 0.0,
+      "planDetails": {
+        "countries": [
+          "India"
+        ],
+        "name": "AnshiChnagePlan",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "billsAllowed": 122,
+        "invoicesAllowed": 122,
+        "archiveStatus": "UNARCHIVED",
+        "createdAt": "13-08-2025 11:29:02",
+        "amount": 0.0,
+        "yearlyAmount": 15.0,
+        "monthlyDiscount": {
+          "name": "KJ100",
+          "value": 10.0,
+          "type": "PERCENTAGE",
+          "duration": 5,
+          "period": "BOTH",
+          "archiveStatus": "UNARCHIVED",
+          "isActive": 0,
+          "expiryDate": "31-05-2026",
+          "uniqueName": "tsw1717784373969"
+        },
+        "yearlyDiscount": {
+          "name": "KJ100",
+          "value": 10.0,
+          "type": "PERCENTAGE",
+          "duration": 5,
+          "period": "BOTH",
+          "archiveStatus": "UNARCHIVED",
+          "isActive": 0,
+          "expiryDate": "31-05-2026",
+          "uniqueName": "tsw1717784373969"
+        },
+        "isCommonPlan": true,
+        "restrictedModules": {
+          "Tax filing": null
+        },
+        "uniqueName": "q8g1740663696139",
+        "companiesLimit": 2
+      },
+      "addOnTransactions": 0,
+      "companyCount": 2,
+      "remainingTransactions": 0,
+      "additionalCharges": 0.0,
+      "isPrepaidExist": false,
+      "autoPay": true
+    },
+    {
+      "companiesWithTransactions": [
+        {
+          "uniqueName": "usdivygb177167218031809tmy4",
+          "name": "US Divyanshu 2026",
+          "transactions": 0
+        }
+      ],
+      "upgrade": true,
+      "totalCompanies": 9,
+      "totalTransactions": 0,
+      "userDetails": {
+        "name": "Divyanshu Shirvastav",
+        "uniqueName": "divyanshu@whozzat.com",
+        "email": "divyanshu@whozzat.com",
+        "signUpOn": "18-05-2023 08:37:55",
+        "mobileno": "919111525164"
+      },
+      "overdraftTransactions": 0,
+      "transactionsRemaining": 0,
+      "country": {
+        "countryName": null,
+        "countryCode": null,
+        "alpha3CountryCode": null
+      },
+      "duration": "YEARLY",
+      "region": {
+        "name": "United Kingdom",
+        "code": "GBR"
+      },
+      "status": "pending",
+      "expiry": "22-02-2026",
+      "createdAt": "21-02-2026 16:39:28",
+      "startedAt": "21-02-2026",
+      "totalInvoices": 10,
+      "invoicesRemaining": 10,
+      "totalBills": 10,
+      "billsRemaining": 10,
+      "subscriptionId": "SUB-20260221-3",
+      "balance": 1.0,
+      "planDetails": {
+        "countries": [
+          "United Kingdom"
+        ],
+        "name": "Birch UK",
+        "currency": {
+          "code": "GBP",
+          "symbol": "\u00a3"
+        },
+        "billsAllowed": 10,
+        "invoicesAllowed": 10,
+        "archiveStatus": "UNARCHIVED",
+        "createdAt": "05-12-2024 12:01:28",
+        "amount": 0.0,
+        "monthlyBillsAllowed": 10,
+        "monthlyInvoicesAllowed": 10,
+        "yearlyAmount": 1.0,
+        "monthlyAmount": 1.0,
+        "monthlyCompaniesLimit": 9,
+        "isCommonPlan": true,
+        "restrictedModules": {},
+        "uniqueName": "ndl1716015107649",
+        "companiesLimit": 9
+      },
+      "addOnTransactions": 0,
+      "companyCount": 9,
+      "remainingTransactions": 0,
+      "additionalCharges": 0.0,
+      "isPrepaidExist": false,
+      "autoPay": true
+    },
+    {
+      "_omittedItems": 6
+    }
+  ]
+}

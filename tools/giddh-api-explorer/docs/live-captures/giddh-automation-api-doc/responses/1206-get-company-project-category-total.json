@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Project with unique name 'placeholder' not found.",
+  "code": "NOT_FOUND"
+}

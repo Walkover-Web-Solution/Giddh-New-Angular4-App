@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "name": "API Doc Sales Person Updated",
+        "uniqueName": "apidocsalesperson",
+        "email": "apidoc.salesperson@example.invalid",
+        "mobileNumber": "919999990907",
+        "archiveStatus": "ARCHIVED",
+        "linkedEntities": [],
+        "archiveOnly": false
+      }
+    ],
+    "size": 50
+  }
+}

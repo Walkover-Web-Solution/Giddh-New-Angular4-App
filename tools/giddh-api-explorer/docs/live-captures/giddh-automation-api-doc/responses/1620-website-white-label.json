@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "body": {
+    "googleClientId": "641015054140-uj0d996itggsesgn4okg09jtn8mp0omu.apps.googleusercontent.com",
+    "otpWidgetIdWeb": "33686b716134333831313239",
+    "otpWidgetTokenWeb": "205968TmXguUAwoD633af103P1",
+    "otpWidgetIdElectron": "326a63733354393830313330",
+    "otpWidgetTokenElectron": "205968TmXguUAwoD633af103P1",
+    "calendlyUrl": "https://calendly.com/sales-accounting-software/talk-to-sale",
+    "emailDomains": [
+      "whozzat.com",
+      "walkover.in",
+      "muneem.co",
+      "giddh.com"
+    ],
+    "iciciSupportedCompanies": [
+      "mitti2in16805084405400lx4s8",
+      "walkovin164863366504908yve0",
+      "aaaain16192663354510ja2o4",
+      "iciciiin16929619553650svnjv"
+    ],
+    "razorpayPaymentDetails": {
+      "keyId": "rzp_test_aWNTpuTtWRMJ9u"
+    },
+    "payuPaymentDetails": {},
+    "stripePaymentDetails": {
+      "stripePublishablekey": "pk_test_51TH166C633IiX3tNahGBDHzERIFl1xqM4dusNYN0bjgdAxOUJaLhviUqd4dMeeJVwYn2MaSsbCdoOlNsLz6TFDBh00Psvqk3Yg"
+    },
+    "proxyReferenceId": "117230p1697093599652797df30cea",
+    "proxyUrl": "https://routes.msg91.com",
+    "proxyApiUrl": "https://routes.msg91.com/api/proxy/117230/24lvqun1",
+    "proxyReferenceIdUk": "117230d172709659666f16714325b0",
+    "proxyApiUrlUk": "https://routes.msg91.com/api/proxy/117230/34ytsup2",
+    "websiteDomain": "https://web.giddh.com",
+    "brandName": "Giddh",
+    "legalName": "Giddh",
+    "gstCredentials": {},
+    "vayanaCredentials": {},
+    "hmrcRedirectUri": "https://test.giddh.com/pages/auth-hmrc",
+    "logos": {
+      "primary": "https://apitest.giddh.com/white-label/91368c94526a0e27c91b976e72808f16/logos/uprgsbm00m1779352838538",
+      "dark": "https://apitest.giddh.com/white-label/91368c94526a0e27c91b976e72808f16/logos/uprgsbm00m1779352838538",
+      "light": "https://apitest.giddh.com/white-label/91368c94526a0e27c91b976e72808f16/logos/1zpeuvlr9l1779353304544",
+      "favicon": "https://apitest.giddh.com/white-label/91368c94526a0e27c91b976e72808f16/logos/wfbqzei5qu1779353189812",
+      "icon": "https://apitest.giddh.com/white-label/91368c94526a0e27c91b976e72808f16/logos/kkia82oa6f1779353915337"
+    },
+    "giddhWhiteLabel": {
+      "uniqueName": "91368c94526a0e27c91b976e72808f16",
+      "baseDomain": "https://test.giddh.com",
+      "certificateRequired": true,
+      "certificateStatus": "ISSUED",
+      "domainName": "https://web.giddh.com",
+      "adminDomain": "https://vtest.giddh.com",
+      "portalDomain": "https://testportal.giddh.com",
+      "apiDomain": "https://apitest.giddh.com",
+      "uiDomains": [
+        "https://stage.giddh.com",
+        "https://web.giddh.com",
+        "https://test.giddh.com",
+        "http://localhost:3000"
+      ]
+    },
+    "paymentProviderList": [
+      "CASHFREE",
+      "RAZORPAY",
+      "PAYU",
+      "STRIPE",
+      "PAYPAL",
+      "GOCARDLESS"
+    ]
+  },
+  "httpStatus": 200
+}

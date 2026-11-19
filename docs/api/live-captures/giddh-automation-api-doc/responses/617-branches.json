@@ -1,0 +1,110 @@
+{
+  "status": "success",
+  "body": {
+    "businessType": "Registered",
+    "businessNature": "Retail",
+    "warehouseResource": [],
+    "isArchived": false,
+    "childBranches": [
+      {
+        "businessType": "Registered",
+        "businessNature": "Service",
+        "warehouseResource": [
+          {
+            "countryCode": "IN",
+            "currencyCode": "INR",
+            "isDefault": true,
+            "addresses": [],
+            "isArchived": false,
+            "name": "apidoc-branch-two warehouse",
+            "address": "My new address",
+            "mobileNumber": "91-919111525164",
+            "uniqueName": "0d41792733820723"
+          }
+        ],
+        "isArchived": false,
+        "name": "API Doc Branch Two",
+        "alias": "apidoc-branch-two",
+        "uniqueName": "apidocbranchtwo",
+        "consolidatedBranch": false,
+        "taxType": "GSTIN",
+        "defaultBranch": false
+      },
+      {
+        "businessType": "Registered",
+        "businessNature": "Retail",
+        "addresses": [
+          {
+            "name": "API Doc Addr Two",
+            "address": "API Doc Street 2",
+            "pincode": "560001",
+            "stateCode": "KA",
+            "uniqueName": "rs61792733820379",
+            "isDefault": false,
+            "taxNumber": "",
+            "stateName": "Karnataka",
+            "taxType": "GSTIN"
+          },
+          {
+            "name": "Default Address",
+            "address": "My new address",
+            "pincode": "484224",
+            "stateCode": "MP",
+            "uniqueName": "8rz1792673422372",
+            "isDefault": true,
+            "taxNumber": "23AAACC1206D2ZN",
+            "stateName": "Madhya Pradesh",
+            "taxType": "GSTIN"
+          }
+        ],
+        "warehouseResource": [
+          {
+            "countryCode": "IN",
+            "currencyCode": "INR",
+            "isDefault": false,
+            "addresses": [],
+            "isArchived": false,
+            "name": "API Doc Warehouse Two",
+            "address": "My new address",
+            "uniqueName": "4gr1792733898078"
+          },
+          {
+            "countryCode": "IN",
+            "currencyCode": "INR",
+            "isDefault": true,
+            "addresses": [
+              {
+                "name": "Default Address",
+                "address": "My new address",
+                "pincode": "484224",
+                "stateCode": "MP",
+                "uniqueName": "8rz1792673422372",
+                "isDefault": true,
+                "taxNumber": "23AAACC1206D2ZN",
+                "stateName": "Madhya Pradesh",
+                "taxType": "GSTIN"
+              }
+            ],
+            "isArchived": false,
+            "name": "Gidd warehouse",
+            "mobileNumber": "91-919111525164",
+            "uniqueName": "xbq1792673424418"
+          }
+        ],
+        "isArchived": false,
+        "name": "Giddh Automation API DOC",
+        "alias": "Gidd",
+        "uniqueName": "giddhautomationapidoc",
+        "consolidatedBranch": false,
+        "taxType": "GSTIN",
+        "defaultBranch": true
+      }
+    ],
+    "name": "Giddh Automation API DOC",
+    "alias": "Gidd1",
+    "uniqueName": "42ysmze74chxajowlphz",
+    "consolidatedBranch": true,
+    "taxType": "GSTIN",
+    "defaultBranch": false
+  }
+}

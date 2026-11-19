@@ -1,0 +1,25 @@
+{
+  "status": "success",
+  "body": {
+    "countryCode": "IN",
+    "currencyCode": "INR",
+    "isDefault": true,
+    "addresses": [
+      {
+        "name": "Default Address",
+        "address": "My new address",
+        "pincode": "484224",
+        "stateCode": "MP",
+        "uniqueName": "8rz1792673422372",
+        "isDefault": true,
+        "taxNumber": "23AAACC1206D2ZN",
+        "stateName": "Madhya Pradesh",
+        "taxType": "GSTIN"
+      }
+    ],
+    "isArchived": false,
+    "name": "Gidd warehouse",
+    "mobileNumber": "91-919111525164",
+    "uniqueName": "xbq1792673424418"
+  }
+}

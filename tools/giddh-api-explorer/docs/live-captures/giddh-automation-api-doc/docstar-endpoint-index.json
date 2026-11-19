@@ -1,0 +1,4506 @@
+{
+  "endpoints": {
+    "SqXQKMTZJFtm": {
+      "endpointId": "SqXQKMTZJFtm",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v3/export-ledger/file",
+      "name": "Export Ledger Download File V3"
+    },
+    "DoNKOV2cgd1W": {
+      "endpointId": "DoNKOV2cgd1W",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/generate-order",
+      "name": "Generate Razorpay Order"
+    },
+    "7wUMWPiDu98t": {
+      "endpointId": "7wUMWPiDu98t",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v2/export-ledger-with-invoice/file",
+      "name": "Export Ledger And Invoice Download File"
+    },
+    "l4hVaYJrdknR": {
+      "endpointId": "l4hVaYJrdknR",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/change-plan",
+      "name": "Change Plan Of Subscription"
+    },
+    "SmIcjPVZD2kI": {
+      "endpointId": "SmIcjPVZD2kI",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/buy-plan",
+      "name": "Buy Plan"
+    },
+    "xnVJHprGCofn": {
+      "endpointId": "xnVJHprGCofn",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/mail-ledger",
+      "name": "Mail Ledger All"
+    },
+    "6nnrByatVAyV": {
+      "endpointId": "6nnrByatVAyV",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/users/:uniqueName/generate-auth-key",
+      "name": "Generate Auth Key"
+    },
+    "6q9nfkolDvP3": {
+      "endpointId": "6q9nfkolDvP3",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/update",
+      "name": "Update Subscription After Payment"
+    },
+    "DieUKMKpkOmo": {
+      "endpointId": "DieUKMKpkOmo",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/columnar-report",
+      "name": "This function is used to get columnar report."
+    },
+    "hhh3T4zBApNR": {
+      "endpointId": "hhh3T4zBApNR",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/trial-balance",
+      "name": "Create Trial Balance For Multiple Branch"
+    },
+    "YnmfSlM8XKnz": {
+      "endpointId": "YnmfSlM8XKnz",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/:userUniqueName/company-uer",
+      "name": "API for getting user entity roles for given companyUniqueName and user."
+    },
+    "NGTk7ylvak15": {
+      "endpointId": "NGTk7ylvak15",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/:userUniqueName/v2/companies",
+      "name": "Get All Companies V3"
+    },
+    "TzMkNUMzcbmW": {
+      "endpointId": "TzMkNUMzcbmW",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/invoices/:invoiceUniqueName/action",
+      "name": "Pay Invoice"
+    },
+    "LquC6zMcjP_C": {
+      "endpointId": "LquC6zMcjP_C",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/status/change",
+      "name": "Change Purchase order status API"
+    },
+    "_2xEiFkFds5S": {
+      "endpointId": "_2xEiFkFds5S",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users/:inventoryUserUniqueName/inventory-entries",
+      "name": "Create Inventory Entry"
+    },
+    "KFILeHvUBJwC": {
+      "endpointId": "KFILeHvUBJwC",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users/:inventoryUserUniqueName/inventory-entries/:inventoryEntryUniqueName:.+/description",
+      "name": "Api for updates Job work inventory entry description"
+    },
+    "cgh6aA_OEsys": {
+      "endpointId": "cgh6aA_OEsys",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users",
+      "name": "Create Inventory User"
+    },
+    "NLDOitJ-6vtu": {
+      "endpointId": "NLDOitJ-6vtu",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report",
+      "name": "Get Vat Report"
+    },
+    "RmvC_P8ue7i7": {
+      "endpointId": "RmvC_P8ue7i7",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-users",
+      "name": "Get All Inventory Users"
+    },
+    "xIs7dGjrnuZe": {
+      "endpointId": "xIs7dGjrnuZe",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/bulk-update",
+      "name": "Perform Bulk Action"
+    },
+    "c7B3S34PJMAx": {
+      "endpointId": "c7B3S34PJMAx",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/bulk-update",
+      "name": "Perform Bulk Action"
+    },
+    "oDhzbZIuNmxg": {
+      "endpointId": "oDhzbZIuNmxg",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/country-list",
+      "name": "Get Country List By Subscription Id"
+    },
+    "49Q10ARc672w": {
+      "endpointId": "49Q10ARc672w",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/group-search",
+      "name": "Group Search"
+    },
+    "A8_VokjzP3Ap": {
+      "endpointId": "A8_VokjzP3Ap",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/subscriptions",
+      "name": "Get All User Subscriptions"
+    },
+    "Kts-zyQe_BBE": {
+      "endpointId": "Kts-zyQe_BBE",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/users/send-new-user-info",
+      "name": "Send New User Info"
+    },
+    "n5R8u6l-OL1p": {
+      "endpointId": "n5R8u6l-OL1p",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName",
+      "name": "Update User Entity Role"
+    },
+    "kOalacR_35zI": {
+      "endpointId": "kOalacR_35zI",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName",
+      "name": "Delete User Entity Role"
+    },
+    "KnvVlVaXa9rV": {
+      "endpointId": "KnvVlVaXa9rV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/bulk-export",
+      "name": "Bulk Export Vouchers"
+    },
+    "sM71K_uwiQSW": {
+      "endpointId": "sM71K_uwiQSW",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Get Active Account"
+    },
+    "5-hh5FOuhwto": {
+      "endpointId": "5-hh5FOuhwto",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Delete Account"
+    },
+    "W8lHCdeimE0Y": {
+      "endpointId": "W8lHCdeimE0Y",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/merge",
+      "name": "Merge Account"
+    },
+    "7vq7ZkcmdvfL": {
+      "endpointId": "7vq7ZkcmdvfL",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/un-merge",
+      "name": "Unmerge Account"
+    },
+    "UqlIYjCbZL4e": {
+      "endpointId": "UqlIYjCbZL4e",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/move",
+      "name": "Move Account"
+    },
+    "pNsSHqmWs9s2": {
+      "endpointId": "pNsSHqmWs9s2",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/contacts",
+      "name": "Add And Update Customer Vendor Contact"
+    },
+    "rZYcxv3NoYab": {
+      "endpointId": "rZYcxv3NoYab",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/contacts",
+      "name": "Get Customer Vendor Contact"
+    },
+    "Ja85Tp7MQNXV": {
+      "endpointId": "Ja85Tp7MQNXV",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Get Active Account V2"
+    },
+    "RzKdZK3sh-oM": {
+      "endpointId": "RzKdZK3sh-oM",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Update Account V2Patch"
+    },
+    "l3xKpynOmmCi": {
+      "endpointId": "l3xKpynOmmCi",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/balance",
+      "name": "Calculate Closing Balance"
+    },
+    "TKWdLoLBxlIF": {
+      "endpointId": "TKWdLoLBxlIF",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/send-mail",
+      "name": "Send Mail To Customer Vendor"
+    },
+    "9rd8HZIYABUH": {
+      "endpointId": "9rd8HZIYABUH",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/balance",
+      "name": "Calculate Closing Balance"
+    },
+    "EPW89yNsNcx9": {
+      "endpointId": "EPW89yNsNcx9",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/payment/banks/accounts",
+      "name": "Get all the registered accounts of integrated banks with Giddh."
+    },
+    "AdcGC-9sjOhg": {
+      "endpointId": "AdcGC-9sjOhg",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/flatten-accounts",
+      "name": "Get Flatten Accounts"
+    },
+    "2ZziXzcOQeSK": {
+      "endpointId": "2ZziXzcOQeSK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-proforma",
+      "name": "Convert Proforma into Invoice version 3"
+    },
+    "MCgznRu5_ywz": {
+      "endpointId": "MCgznRu5_ywz",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-estimate",
+      "name": "Convert Estimate into Invoice with multicurrency support."
+    },
+    "YSylQMeNGh-6": {
+      "endpointId": "YSylQMeNGh-6",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/giddh-ledger",
+      "name": "Get Giddh Ledger"
+    },
+    "Oy7qKLSWyPgg": {
+      "endpointId": "Oy7qKLSWyPgg",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/project-entries",
+      "name": "Get Project Entries"
+    },
+    "JKTwPnnpKZaJ": {
+      "endpointId": "JKTwPnnpKZaJ",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/entries/:entryUniqueName:.+",
+      "name": "Delete Entry"
+    },
+    "iCq4EGU51GQv": {
+      "endpointId": "iCq4EGU51GQv",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/entries",
+      "name": "Delete Multiple Entries"
+    },
+    "BUgbSOY8r_UO": {
+      "endpointId": "BUgbSOY8r_UO",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/accounts/:accountUniqueName:.+/transactions",
+      "name": "API : Delete multiple Transactions by transaction unique id"
+    },
+    "RA2xQvCz3qkD": {
+      "endpointId": "RA2xQvCz3qkD",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v3/export-ledger/file",
+      "name": "Export Ledger Download File V3"
+    },
+    "hZOiVKYFckb-": {
+      "endpointId": "hZOiVKYFckb-",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/v2/export-ledger-with-invoice/file",
+      "name": "Export Ledger And Invoice Download File"
+    },
+    "x7arpLLbaS5K": {
+      "endpointId": "x7arpLLbaS5K",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/mail-ledger",
+      "name": "Mail Ledger All"
+    },
+    "504QTmOLRthP": {
+      "endpointId": "504QTmOLRthP",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/invoices",
+      "name": "Update Invoice"
+    },
+    "UYe1_9YzvSqY": {
+      "endpointId": "UYe1_9YzvSqY",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/invoice/preview",
+      "name": "Generated Invoice Preview"
+    },
+    "Kf3FROS8fGOs": {
+      "endpointId": "Kf3FROS8fGOs",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "Get Ledger"
+    },
+    "dBlgxbKU0LXB": {
+      "endpointId": "dBlgxbKU0LXB",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "API to update Ledger"
+    },
+    "uMKyVmaYonGD": {
+      "endpointId": "uMKyVmaYonGD",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/merge",
+      "name": "Retrieve Ledgers"
+    },
+    "HK7rCn_l71Xc": {
+      "endpointId": "HK7rCn_l71Xc",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/view-statement",
+      "name": "View Statement"
+    },
+    "_bNR5zJBdnpt": {
+      "endpointId": "_bNR5zJBdnpt",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/reconcile",
+      "name": "Retrieve All Pending Transactions"
+    },
+    "QDTj7qS2S6ol": {
+      "endpointId": "QDTj7qS2S6ol",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/view-statement",
+      "name": "Account Statement With Advance Search"
+    },
+    "urGp2lEVrxcz": {
+      "endpointId": "urGp2lEVrxcz",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2/export-account-statement",
+      "name": "Export Account Statement"
+    },
+    "f2FgLs6KA-zN": {
+      "endpointId": "f2FgLs6KA-zN",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/status/change",
+      "name": "Change Purchase order status API"
+    },
+    "hqXNWK6cpfu4": {
+      "endpointId": "hqXNWK6cpfu4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/pending-numbers",
+      "name": "Get Pending Purchase Numbers"
+    },
+    "GzFw9nqyN6qe": {
+      "endpointId": "GzFw9nqyN6qe",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/versions/all",
+      "name": "Get all versions of a particular purchase order with provided purchase number"
+    },
+    "RUC1gNA8lktl": {
+      "endpointId": "RUC1gNA8lktl",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/:uniqueName/download",
+      "name": "Download purchase order Version 3"
+    },
+    "4nGS-CaWC4jK": {
+      "endpointId": "4nGS-CaWC4jK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/:uniqueName/mail",
+      "name": "Mail Purchase Order"
+    },
+    "HqtmRJzK76VJ": {
+      "endpointId": "HqtmRJzK76VJ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate",
+      "name": "Generate"
+    },
+    "YF3iOEIOOTV3": {
+      "endpointId": "YF3iOEIOOTV3",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/download-file",
+      "name": "Download"
+    },
+    "BSElH4TGXgzC": {
+      "endpointId": "BSElH4TGXgzC",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/mail",
+      "name": "Mail"
+    },
+    "UFziKx65n2vW": {
+      "endpointId": "UFziKx65n2vW",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Delete Account"
+    },
+    "I3a0czzkqCiU": {
+      "endpointId": "I3a0czzkqCiU",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/preview",
+      "name": "Get Invoice Preview"
+    },
+    "k6VhDShXC_Xe": {
+      "endpointId": "k6VhDShXC_Xe",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ledger/upload",
+      "name": "Upload File For Ledger"
+    },
+    "0mUZ7ukKA_fk": {
+      "endpointId": "0mUZ7ukKA_fk",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/us/sales-report-authority-wise",
+      "name": "Get Vat Report Tax Authority Wise"
+    },
+    "8Khf2u1edude": {
+      "endpointId": "8Khf2u1edude",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/cancel",
+      "name": "Cancel Eway Bill"
+    },
+    "ml8JpJfz-o7p": {
+      "endpointId": "ml8JpJfz-o7p",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/platform/verify",
+      "name": "Verify Auth Key"
+    },
+    "F1q57gO1MFRb": {
+      "endpointId": "F1q57gO1MFRb",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ledger/upload/:attachedFileUniqueName",
+      "name": "Get Uploaded File"
+    },
+    "dKhmk2Z5Xc7Y": {
+      "endpointId": "dKhmk2Z5Xc7Y",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/:uniqueName",
+      "name": "Get Email Trigger"
+    },
+    "NG2lj3RGqmts": {
+      "endpointId": "NG2lj3RGqmts",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/vehicle",
+      "name": "Update Vehicle Number"
+    },
+    "db0ovBF0qDAh": {
+      "endpointId": "db0ovBF0qDAh",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName:.+/move",
+      "name": "Move Stock"
+    },
+    "o6oub9muyNeG": {
+      "endpointId": "o6oub9muyNeG",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/us/sales-report-tax-wise",
+      "name": "Get Vat Report Tax Wise"
+    },
+    "RIwC2Im5BX1g": {
+      "endpointId": "RIwC2Im5BX1g",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/platform/:uniqueName",
+      "name": "Delete Platform"
+    },
+    "_2g3wu6yMvKV": {
+      "endpointId": "_2g3wu6yMvKV",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/all",
+      "name": "Get All Email Trigger"
+    },
+    "cgBJ_PGV0VFl": {
+      "endpointId": "cgBJ_PGV0VFl",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/pettycash-manager/ledger/:entryUniqueName",
+      "name": "Get Cash Entry For Admin By Unique Name"
+    },
+    "pzs126h84WXi": {
+      "endpointId": "pzs126h84WXi",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName:.+/variants",
+      "name": "Get Stock Variants"
+    },
+    "OZBZ8V9YApR5": {
+      "endpointId": "OZBZ8V9YApR5",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/campaign/list",
+      "name": "Get Campaign List"
+    },
+    "Rr8NSJ0e6FBk": {
+      "endpointId": "Rr8NSJ0e6FBk",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/us/export-sales-report-tax-wise",
+      "name": "Download Vat Report Tax Wise"
+    },
+    "7U6HITJrJdnY": {
+      "endpointId": "7U6HITJrJdnY",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/validate-invoice",
+      "name": "Validate Invoice"
+    },
+    "bS15zuIOWARy": {
+      "endpointId": "bS15zuIOWARy",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/campaign/:slug/fields",
+      "name": "Get Campaign Fields"
+    },
+    "dmxhhbY6wQ9t": {
+      "endpointId": "dmxhhbY6wQ9t",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock-v2",
+      "name": "Get Rate For Stock V2"
+    },
+    "BIniKY79y6-m": {
+      "endpointId": "BIniKY79y6-m",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/triggers",
+      "name": "Create Trigger"
+    },
+    "eHpW2CKnpdG2": {
+      "endpointId": "eHpW2CKnpdG2",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/us/sales-report-account-wise",
+      "name": "Get Vat Report Account Wise"
+    },
+    "-CtfKDjUtzgj": {
+      "endpointId": "-CtfKDjUtzgj",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/suggestions/:platformUniqueName/:entity",
+      "name": "Get Suggestion"
+    },
+    "mdDmZZVd1ajI": {
+      "endpointId": "mdDmZZVd1ajI",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName",
+      "name": "Get By Unique Name"
+    },
+    "a-Y7V8WLEctz": {
+      "endpointId": "a-Y7V8WLEctz",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/email-content-suggestion",
+      "name": "Get Email Content Suggestion"
+    },
+    "0dOuYhSM3tMU": {
+      "endpointId": "0dOuYhSM3tMU",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/magic-link/:magicLink",
+      "name": "<p> Use {@link MagicLinkController getLedgersV2(String, String, String, int, …"
+    },
+    "T2yH__hy4CnY": {
+      "endpointId": "T2yH__hy4CnY",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/recipe",
+      "name": "Create Manufacturing Recipe"
+    },
+    "WGF3iZWYBl2d": {
+      "endpointId": "WGF3iZWYBl2d",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/triggers/:triggerUniqueName:.+",
+      "name": "Update Trigger"
+    },
+    "AGzFrGHNx9wo": {
+      "endpointId": "AGzFrGHNx9wo",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/condition-suggestion",
+      "name": "Get Condition Suggestion"
+    },
+    "clAIOqr44oae": {
+      "endpointId": "clAIOqr44oae",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/magic-link/:magicLink/download-invoice/:invoiceNumber",
+      "name": "Download Invoice"
+    },
+    "C61OeM2nsIUs": {
+      "endpointId": "C61OeM2nsIUs",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName/action",
+      "name": "Apply Action"
+    },
+    "Ec-dJQQ9bnEc": {
+      "endpointId": "Ec-dJQQ9bnEc",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/generate-email",
+      "name": "This function is used to generate mailId for mail forwarding"
+    },
+    "b2Obnfk3_5yU": {
+      "endpointId": "b2Obnfk3_5yU",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/recipe/get",
+      "name": "CASE a). WHEN variantUniqueNames is empty then all the variant of the given s…"
+    },
+    "zNEbnY-dqTXH": {
+      "endpointId": "zNEbnY-dqTXH",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName",
+      "name": "Delete Business Documents"
+    },
+    "YP6Z1hD_PVp-": {
+      "endpointId": "YP6Z1hD_PVp-",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/sms-key",
+      "name": "Get Sms Verification Key"
+    },
+    "6fDN9Lfq5Ajd": {
+      "endpointId": "6fDN9Lfq5Ajd",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock/:stockUniqueName:.+",
+      "name": "Get V2"
+    },
+    "V6im491hAdcL": {
+      "endpointId": "V6im491hAdcL",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/email-key",
+      "name": "Email Verification Key"
+    },
+    "c5Tdztdv4lXi": {
+      "endpointId": "c5Tdztdv4lXi",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/convert",
+      "name": "Convert"
+    },
+    "drgX7EfDjN1X": {
+      "endpointId": "drgX7EfDjN1X",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock",
+      "name": "Get Data For Inventory Table"
+    },
+    "qCGikN7ZPAfA": {
+      "endpointId": "qCGikN7ZPAfA",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/sms-key",
+      "name": "Sms Verification Key"
+    },
+    "92W7BAFUUwPh": {
+      "endpointId": "92W7BAFUUwPh",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/generate-mail-token",
+      "name": "Generate Mail Token"
+    },
+    "7K5wHjDICnDy": {
+      "endpointId": "7K5wHjDICnDy",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/hierarchical-stock-groups",
+      "name": "Get All Hierarchical Stock Groups"
+    },
+    "a31cqPMp6MV2": {
+      "endpointId": "a31cqPMp6MV2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-history",
+      "name": "Get Stock History"
+    },
+    "U6jL9vgkgQJr": {
+      "endpointId": "U6jL9vgkgQJr",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName/history",
+      "name": "Get History"
+    },
+    "0fN2iERxTngp": {
+      "endpointId": "0fN2iERxTngp",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock/:stockUniqueName/variant/:variantUniqueName",
+      "name": "Update Patch"
+    },
+    "LwedytLHWRgB": {
+      "endpointId": "LwedytLHWRgB",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/flatten-stock-groups-with-stocks",
+      "name": "Get Flatten Stock Groups With Stocks"
+    },
+    "sZUn3XPC-1A_": {
+      "endpointId": "sZUn3XPC-1A_",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gmail-token",
+      "name": "Get Token"
+    },
+    "v_nCRtzr0IIO": {
+      "endpointId": "v_nCRtzr0IIO",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/:uniqueName/versions",
+      "name": "Get Versions"
+    },
+    "SxBIAad9jbyL": {
+      "endpointId": "SxBIAad9jbyL",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gmail-token",
+      "name": "Delete Token"
+    },
+    "K2nNBGmZ-pbz": {
+      "endpointId": "K2nNBGmZ-pbz",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock",
+      "name": "Get Stocks"
+    },
+    "fqzoZdwdkGi0": {
+      "endpointId": "fqzoZdwdkGi0",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/save-mail-token",
+      "name": "Save Mail Token"
+    },
+    "PwXUwL0HhenA": {
+      "endpointId": "PwXUwL0HhenA",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/statuses",
+      "name": "Get Statuses"
+    },
+    "hfjhpT5kQrSa": {
+      "endpointId": "hfjhpT5kQrSa",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock/:stockUniqueName/details",
+      "name": "Get Stock Variants With Variant Unit Based On User Type"
+    },
+    "PSNZ6vlybYtC": {
+      "endpointId": "PSNZ6vlybYtC",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting/:uniqueName",
+      "name": "Update Gstsetting"
+    },
+    "Mm67ArGh8M4N": {
+      "endpointId": "Mm67ArGh8M4N",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customfield",
+      "name": "Create Custom Field"
+    },
+    "ygpXew4QS-J4": {
+      "endpointId": "ygpXew4QS-J4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting",
+      "name": "Create Gstsetting"
+    },
+    "dWhjn4jOY32s": {
+      "endpointId": "dWhjn4jOY32s",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting/list",
+      "name": "Get All Gstsetting"
+    },
+    "e5n6SJODI9t-": {
+      "endpointId": "e5n6SJODI9t-",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gst-setting/:uniqueName",
+      "name": "Delete Gstsetting"
+    },
+    "4Fcz6oG33DMS": {
+      "endpointId": "4Fcz6oG33DMS",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/gst-info",
+      "name": "Get Gst Info"
+    },
+    "0ni-GyWOjlOV": {
+      "endpointId": "0ni-GyWOjlOV",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr1",
+      "name": "Get Gstr1Data"
+    },
+    "dVjfD77g35fV": {
+      "endpointId": "dVjfD77g35fV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/save-gstr1",
+      "name": "Save Gstr1Data"
+    },
+    "rFSoC8gypIo_": {
+      "endpointId": "rFSoC8gypIo_",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/custom-fields",
+      "name": "Set Custom Fields"
+    },
+    "p2oXeBs469v1": {
+      "endpointId": "p2oXeBs469v1",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-adjustment/adjustment-report",
+      "name": "Get Adjustment Report"
+    },
+    "yD2hHYemCdAN": {
+      "endpointId": "yD2hHYemCdAN",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customfield/module/:moduleUniqueName:.+",
+      "name": "Get All By Module"
+    },
+    "-XJMefIpp4MI": {
+      "endpointId": "-XJMefIpp4MI",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year",
+      "name": "Create Financial Year"
+    },
+    "QZNLJqSXane4": {
+      "endpointId": "QZNLJqSXane4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/save-gstr3b",
+      "name": "Save Gstr3Bdata"
+    },
+    "ncvpu1M2MEbe": {
+      "endpointId": "ncvpu1M2MEbe",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/save-gstr1-status",
+      "name": "Save Gstr1Status"
+    },
+    "tWkCRDsceh2p": {
+      "endpointId": "tWkCRDsceh2p",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/custom-fields",
+      "name": "API to fetch custom fields on the company"
+    },
+    "tZSuXvCtuKzW": {
+      "endpointId": "tZSuXvCtuKzW",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr1-referenceIds",
+      "name": "Get Gstr1Reference Ids"
+    },
+    "SQ-0nEZxhKR7": {
+      "endpointId": "SQ-0nEZxhKR7",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-adjustment/reason/get-all",
+      "name": "Get All Inventory"
+    },
+    "PGt45wszoASy": {
+      "endpointId": "PGt45wszoASy",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year",
+      "name": "Get Financial Year"
+    },
+    "78NlQIuvDHCs": {
+      "endpointId": "78NlQIuvDHCs",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr-reconcile/invoices",
+      "name": "Get B2B Invoices"
+    },
+    "WW1LlRbHS6y6": {
+      "endpointId": "WW1LlRbHS6y6",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/transaction-report",
+      "name": "Get Stock Transaction Report"
+    },
+    "uVhBggsubsQk": {
+      "endpointId": "uVhBggsubsQk",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr3b-excel-export/email",
+      "name": "API for send mail of GSTR3B excel file"
+    },
+    "KxP0uz9kPHtR": {
+      "endpointId": "KxP0uz9kPHtR",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year",
+      "name": "Update Financial Year"
+    },
+    "QP38vt8tuRoE": {
+      "endpointId": "QP38vt8tuRoE",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gst/unit-mapping",
+      "name": "Map Gst Units"
+    },
+    "ClNpTFvQWwVz": {
+      "endpointId": "ClNpTFvQWwVz",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-lock",
+      "name": "Lock Financial Year"
+    },
+    "i6Aw-4idpZoD": {
+      "endpointId": "i6Aw-4idpZoD",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gst/unit-mapping",
+      "name": "Get Gst Unit Mapping"
+    },
+    "w7NreuUcjfmA": {
+      "endpointId": "w7NreuUcjfmA",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/balance",
+      "name": "Get Inventory Balance"
+    },
+    "sGKpGX0goPDs": {
+      "endpointId": "sGKpGX0goPDs",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gstr1/download-v2",
+      "name": "Download Gstr1Data With Export Settings"
+    },
+    "W4gLKPHt91QF": {
+      "endpointId": "W4gLKPHt91QF",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-unlock",
+      "name": "Unlock Financial Year"
+    },
+    "N4XnsEvPsWd7": {
+      "endpointId": "N4XnsEvPsWd7",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/dsc/prepare",
+      "name": "Prepare"
+    },
+    "kNzsX--o67ff": {
+      "endpointId": "kNzsX--o67ff",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/future-financial-year",
+      "name": "Create Future Financial Year"
+    },
+    "XZOJ3E-DnNa5": {
+      "endpointId": "XZOJ3E-DnNa5",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+/report",
+      "name": "Get Stock Group Report"
+    },
+    "xU26tvoA7NcU": {
+      "endpointId": "xU26tvoA7NcU",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/dsc/finish",
+      "name": "Finish"
+    },
+    "AFObMVrBFYbr": {
+      "endpointId": "AFObMVrBFYbr",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-limits",
+      "name": "Financial Year Limits"
+    },
+    "v7ZFdagWLsxc": {
+      "endpointId": "v7ZFdagWLsxc",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/role",
+      "name": "Get All Roles"
+    },
+    "EpRAgR3YPn3-": {
+      "endpointId": "EpRAgR3YPn3-",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2",
+      "name": "Get Stock Report V2"
+    },
+    "LbfEEry8XsX8": {
+      "endpointId": "LbfEEry8XsX8",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/inventory-report",
+      "name": "Inventory Report"
+    },
+    "3qbIgU2X2b4P": {
+      "endpointId": "3qbIgU2X2b4P",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/role",
+      "name": "Create Role"
+    },
+    "EziDltO7LaRz": {
+      "endpointId": "EziDltO7LaRz",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/financial-year-unlock",
+      "name": "Unlock Financial Year"
+    },
+    "kCRaqRWyjGIZ": {
+      "endpointId": "kCRaqRWyjGIZ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/future-financial-year",
+      "name": "Create Future Financial Year"
+    },
+    "o5jJ74cl2ON4": {
+      "endpointId": "o5jJ74cl2ON4",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/role/:roleUniqueName",
+      "name": "Update Role"
+    },
+    "a8ax2pt-yM-v": {
+      "endpointId": "a8ax2pt-yM-v",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-report-v2",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_ALL_GROUP_STO…"
+    },
+    "SYddzAXcZ2WI": {
+      "endpointId": "SYddzAXcZ2WI",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/role/:roleUniqueName",
+      "name": "Delete Role"
+    },
+    "jknAR7RqskoY": {
+      "endpointId": "jknAR7RqskoY",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-report-v2",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_ALL_GROUP_STO…"
+    },
+    "OUm2m1cWmFPV": {
+      "endpointId": "OUm2m1cWmFPV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/role/:roleUniqueName/assign",
+      "name": "Assign Role"
+    },
+    "AnRJVv_M2GnF": {
+      "endpointId": "AnRJVv_M2GnF",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName",
+      "name": "Delete User Entity Role"
+    },
+    "d-7Pm8aIxMJI": {
+      "endpointId": "d-7Pm8aIxMJI",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-hierarchy",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_ALL_STOCK_IN_…"
+    },
+    "Ui-AnfXi78bJ": {
+      "endpointId": "Ui-AnfXi78bJ",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uer/:entityRoleUniqueName",
+      "name": "Update User Entity Role"
+    },
+    "gQs3Lc9p7Htj": {
+      "endpointId": "gQs3Lc9p7Htj",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-all-inventory-hierarchy",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_ALL_STOCK_IN_…"
+    },
+    "xrIYcVu7hLMM": {
+      "endpointId": "xrIYcVu7hLMM",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/forms",
+      "name": "Form Data"
+    },
+    "s5NvPWs1uJHn": {
+      "endpointId": "s5NvPWs1uJHn",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-inventory-arrangedby-accounts",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_ARRANGEDBY_AC…"
+    },
+    "wE1gM9j9c9Qp": {
+      "endpointId": "wE1gM9j9c9Qp",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/graph-types",
+      "name": "Graph Types"
+    },
+    "0vNvfzdZyW-Q": {
+      "endpointId": "0vNvfzdZyW-Q",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/calling-code",
+      "name": "Form Data For Calling Codes"
+    },
+    "bIFgSrYrwBVL": {
+      "endpointId": "bIFgSrYrwBVL",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/taxes",
+      "name": "API to fetch Form Data based on country and form name"
+    },
+    "FhNmKjLvuaMq": {
+      "endpointId": "FhNmKjLvuaMq",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/download-inventory-arrangedby-accounts",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_ARRANGEDBY_AC…"
+    },
+    "GYU1iGpKWmbf": {
+      "endpointId": "GYU1iGpKWmbf",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/party-types",
+      "name": "API to fetch party types for account"
+    },
+    "xMEJQtJJH1_U": {
+      "endpointId": "xMEJQtJJH1_U",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-adjustment/:refNo",
+      "name": "Delete Inventory"
+    },
+    "ioEvy3msNZFd": {
+      "endpointId": "ioEvy3msNZFd",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/:stockGroupUniqueName/masters",
+      "name": "Inventory Masters"
+    },
+    "exBh4qqTfh_O": {
+      "endpointId": "exBh4qqTfh_O",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/bank/integration/form",
+      "name": "Get Bank Integration Form"
+    },
+    "CVg-k9a4FRrl": {
+      "endpointId": "CVg-k9a4FRrl",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/ui/auditlogs-form",
+      "name": "Get Audit Log Operation Filter Form"
+    },
+    "-F9WxVZwemxQ": {
+      "endpointId": "-F9WxVZwemxQ",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/top-inventory-groups",
+      "name": "Top Inventory Groups"
+    },
+    "v5pzHpDn6BvA": {
+      "endpointId": "v5pzHpDn6BvA",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/generate",
+      "name": "Generate Transfer Note"
+    },
+    "yig7FvKuQMBP": {
+      "endpointId": "yig7FvKuQMBP",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory-search",
+      "name": "Inventory Search"
+    },
+    "67wF43PeTgB1": {
+      "endpointId": "67wF43PeTgB1",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/:transferNoteUniqueName",
+      "name": "Get Transfer Note"
+    },
+    "1U6j5U2I7Bsp": {
+      "endpointId": "1U6j5U2I7Bsp",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/hierarchical-stock-groups",
+      "name": "Get All Hierarchical Stock Groups"
+    },
+    "ejeiDYj106Bh": {
+      "endpointId": "ejeiDYj106Bh",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/all",
+      "name": "Get All Branch Transfers"
+    },
+    "cdjozGSLI7gK": {
+      "endpointId": "cdjozGSLI7gK",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/:transferNoteUniqueName",
+      "name": "Delete Branch Transfer Note"
+    },
+    "tgxy3Z3zfcOi": {
+      "endpointId": "tgxy3Z3zfcOi",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/flatten-stock-groups-with-stocks",
+      "name": "Get Flatten Stock Groups With Stocks"
+    },
+    "kDJfJkka4aaH": {
+      "endpointId": "kDJfJkka4aaH",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/:transferNoteUniqueName",
+      "name": "Update Branch Transfer Note"
+    },
+    "1K9TcfpOuKlo": {
+      "endpointId": "1K9TcfpOuKlo",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch-transfer/download",
+      "name": "Download"
+    },
+    "cMUwqfi2ktvK": {
+      "endpointId": "cMUwqfi2ktvK",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/salesperson",
+      "name": "Get All Sales Person"
+    },
+    "noaemP9UnEdg": {
+      "endpointId": "noaemP9UnEdg",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse",
+      "name": "Create Warehouse"
+    },
+    "7c92p7LcDeJ0": {
+      "endpointId": "7c92p7LcDeJ0",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName",
+      "name": "Update Warehouse"
+    },
+    "CTahR--wm933": {
+      "endpointId": "CTahR--wm933",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+/report",
+      "name": "Get Stock Group Report"
+    },
+    "cOW354bJEnxT": {
+      "endpointId": "cOW354bJEnxT",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName/default",
+      "name": "Set Default Warehouse"
+    },
+    "lfKeypdHtx3f": {
+      "endpointId": "lfKeypdHtx3f",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+/inventory-report-v3",
+      "name": "Create Stock Group Report"
+    },
+    "28Py3zyjsX-8": {
+      "endpointId": "28Py3zyjsX-8",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName",
+      "name": "Get Warehouse"
+    },
+    "DwgjLVrvH60G": {
+      "endpointId": "DwgjLVrvH60G",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse",
+      "name": "Get All Warehouses"
+    },
+    "vPM-TFAFBQZ9": {
+      "endpointId": "vPM-TFAFBQZ9",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/warehouse/:warehouseUniqueName",
+      "name": "Update Warehouse V2"
+    },
+    "5Al7Qb4rcpjq": {
+      "endpointId": "5Al7Qb4rcpjq",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2",
+      "name": "Get Stock Report V2"
+    },
+    "tvC2OBNHzdQZ": {
+      "endpointId": "tvC2OBNHzdQZ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/get-all",
+      "name": "Get All Vouchers"
+    },
+    "VFsV9F_INDRb": {
+      "endpointId": "VFsV9F_INDRb",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2",
+      "name": "Get Stock Report V2"
+    },
+    "pflQyAwW0smn": {
+      "endpointId": "pflQyAwW0smn",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/recurring-voucher",
+      "name": "Add Recurring Voucher"
+    },
+    "xVG1F2-pUnKK": {
+      "endpointId": "xVG1F2-pUnKK",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-stock-inventory-report-v3",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_STOCK_REPORT_…"
+    },
+    "0APVgC88ZrIQ": {
+      "endpointId": "0APVgC88ZrIQ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/voucher-status-count",
+      "name": "Get Voucher Status Count"
+    },
+    "roG_y0xOOFT1": {
+      "endpointId": "roG_y0xOOFT1",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/download-stock-inventory-report-v3",
+      "name": "API : {@link ApiConstants.StockInventory#STOCK_INVENTORY_EXPORT_STOCK_REPORT_…"
+    },
+    "OsFly2KwEy1W": {
+      "endpointId": "OsFly2KwEy1W",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/payu",
+      "name": "Add Payu User"
+    },
+    "Eyj9I3be27OI": {
+      "endpointId": "Eyj9I3be27OI",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-groups-with-stocks",
+      "name": "Stock Groups With Stocks"
+    },
+    "YVdb8xkkkzw_": {
+      "endpointId": "YVdb8xkkkzw_",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay",
+      "name": "Get Razor Pay Account"
+    },
+    "AN1vSznH4o5s": {
+      "endpointId": "AN1vSznH4o5s",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/payu",
+      "name": "Get Payu User"
+    },
+    "jkL1hGptEAy-": {
+      "endpointId": "jkL1hGptEAy-",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/payu",
+      "name": "Delete Payu User"
+    },
+    "nOs56SYSOxXk": {
+      "endpointId": "nOs56SYSOxXk",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token",
+      "name": "Save Razorpay Token"
+    },
+    "Q6wjzkmLVDLx": {
+      "endpointId": "Q6wjzkmLVDLx",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/paypal",
+      "name": "Add Paypal Account"
+    },
+    "spPwv3QjrIF8": {
+      "endpointId": "spPwv3QjrIF8",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/paypal",
+      "name": "Get Paypal Account"
+    },
+    "-N8QfQ3Z_tSS": {
+      "endpointId": "-N8QfQ3Z_tSS",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/paypal",
+      "name": "Delete Paypal Account For Company"
+    },
+    "MAhHN367rjOp": {
+      "endpointId": "MAhHN367rjOp",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/paypal",
+      "name": "Update Paypal Account"
+    },
+    "GzIhZxv48w7t": {
+      "endpointId": "GzIhZxv48w7t",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/subscription/paypal/order/:orderId/capture",
+      "name": "Capture Order"
+    },
+    "rezWmKqyy_Wb": {
+      "endpointId": "rezWmKqyy_Wb",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay",
+      "name": "Add Razor Pay Account"
+    },
+    "T62AFuQv8mwf": {
+      "endpointId": "T62AFuQv8mwf",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay",
+      "name": "Update Or Map Razor Pay Account"
+    },
+    "jk7-BuMZ9RvH": {
+      "endpointId": "jk7-BuMZ9RvH",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/razorpay",
+      "name": "Delete Razor Pay Account For Company"
+    },
+    "H6TWoUAD4HBc": {
+      "endpointId": "H6TWoUAD4HBc",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/stock-units",
+      "name": "Get Stocks"
+    },
+    "zqpm6vaJ02v-": {
+      "endpointId": "zqpm6vaJ02v-",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-unit/mappings",
+      "name": "Get All Mappings"
+    },
+    "CWbjMbppg_0g": {
+      "endpointId": "CWbjMbppg_0g",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-unit/:stockUnitUniqueName/linked-stock-units",
+      "name": "Get All Mapped Unit Of Stock"
+    },
+    "RMaDKegsiZLX": {
+      "endpointId": "RMaDKegsiZLX",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/manufacture/:manufactureUniqueName",
+      "name": "Update Manufacture Stock"
+    },
+    "z4scgnOxIlCJ": {
+      "endpointId": "z4scgnOxIlCJ",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/manufacture/:manufactureUniqueName",
+      "name": "Get Manufacturing Details"
+    },
+    "5HggLZKh1VJ5": {
+      "endpointId": "5HggLZKh1VJ5",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/manufacture/:manufactureUniqueName",
+      "name": "Delete Manufacturing Details"
+    },
+    "sbWMBsjuQEfd": {
+      "endpointId": "sbWMBsjuQEfd",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/communication/email-template/:templateOf",
+      "name": "Update Email Template"
+    },
+    "U3iNodhZjaqv": {
+      "endpointId": "U3iNodhZjaqv",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/communication/email-template/:templateOf",
+      "name": "Get Email Template"
+    },
+    "fk78zR8-7jL0": {
+      "endpointId": "fk78zR8-7jL0",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates",
+      "name": "Create Template"
+    },
+    "94H9oSkc_5uM": {
+      "endpointId": "94H9oSkc_5uM",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates",
+      "name": "Get All Templates V2"
+    },
+    "YmkZ3UMaHCdr": {
+      "endpointId": "YmkZ3UMaHCdr",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+",
+      "name": "Get Template"
+    },
+    "iQEWysvWnirl": {
+      "endpointId": "iQEWysvWnirl",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+",
+      "name": "Update Template"
+    },
+    "ROIGbsqxyjvP": {
+      "endpointId": "ROIGbsqxyjvP",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates",
+      "name": "Create Template"
+    },
+    "R7pYzqT5B_K4": {
+      "endpointId": "R7pYzqT5B_K4",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates",
+      "name": "Get All Templates V2"
+    },
+    "SXv_kNZ3nEqT": {
+      "endpointId": "SXv_kNZ3nEqT",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+",
+      "name": "Get Template"
+    },
+    "dhiO9Qw0EjHS": {
+      "endpointId": "dhiO9Qw0EjHS",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+",
+      "name": "Update Template"
+    },
+    "qgQcZma1Cbv5": {
+      "endpointId": "qgQcZma1Cbv5",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+",
+      "name": "Delete Template"
+    },
+    "gZXAcyaGPc13": {
+      "endpointId": "gZXAcyaGPc13",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/templates/:templateUniqueName:.+/default",
+      "name": "Set Default Template"
+    },
+    "ygxSSQ8IkDwl": {
+      "endpointId": "ygxSSQ8IkDwl",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/sample-templates",
+      "name": "Get Sample Templates"
+    },
+    "qQTW_oF-7SUR": {
+      "endpointId": "qQTW_oF-7SUR",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ecommerce/email",
+      "name": "Send Email"
+    },
+    "uRu5HMsjCmgq": {
+      "endpointId": "uRu5HMsjCmgq",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tags",
+      "name": "Create Tag"
+    },
+    "r4vi3Y5B3IH8": {
+      "endpointId": "r4vi3Y5B3IH8",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tags/:tagUniqueName",
+      "name": "Update Tag"
+    },
+    "0ezl-0Y74Z-_": {
+      "endpointId": "0ezl-0Y74Z-_",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tags",
+      "name": "Get All Tags"
+    },
+    "GuU2xfHmECce": {
+      "endpointId": "GuU2xfHmECce",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tags/:tagUniqueName",
+      "name": "Delete Tag"
+    },
+    "F8m9jBATgQmv": {
+      "endpointId": "F8m9jBATgQmv",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/transporters",
+      "name": "Add Transporter"
+    },
+    "J9ZF3D909a-8": {
+      "endpointId": "J9ZF3D909a-8",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/transporters",
+      "name": "Update Transporter"
+    },
+    "KD_hhwChklle": {
+      "endpointId": "KD_hhwChklle",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/new-old-sales/details",
+      "name": "Get Detailed Sales List"
+    },
+    "fNdpG2_wKkeV": {
+      "endpointId": "fNdpG2_wKkeV",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/transporters",
+      "name": "Delete Transporter"
+    },
+    "xCvfh3K6O6pb": {
+      "endpointId": "xCvfh3K6O6pb",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/transporters",
+      "name": "Get All Transporter"
+    },
+    "__xBBbFgcj27": {
+      "endpointId": "__xBBbFgcj27",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/advance-receipt/adjust",
+      "name": "Adjust Advance Receipt Entry With Invoice"
+    },
+    "ln0ycgoMoT4U": {
+      "endpointId": "ln0ycgoMoT4U",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/advance-receipt/get-all",
+      "name": "Get Receipts"
+    },
+    "jNnDWVR8lUhP": {
+      "endpointId": "jNnDWVR8lUhP",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/advance-receipt/summary",
+      "name": "Get Receipt Summary"
+    },
+    "u5io7qwg1ZKT": {
+      "endpointId": "u5io7qwg1ZKT",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/currency",
+      "name": "Get Currency List"
+    },
+    "EWzyvMKbHmDE": {
+      "endpointId": "EWzyvMKbHmDE",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/currency-converter/:baseCurrency/:toCurrency",
+      "name": "Get Currency Rates"
+    },
+    "LagzJA0PLP0U": {
+      "endpointId": "LagzJA0PLP0U",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/voucher/:voucherUniqueName/cancel-einvoice",
+      "name": "Cancel EInvoice For Voucher"
+    },
+    "JqqEE5Zypepr": {
+      "endpointId": "JqqEE5Zypepr",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/us/export-sales-report-account-wise",
+      "name": "Download Vat Report Account Wise"
+    },
+    "OkC9rRFiw8LR": {
+      "endpointId": "OkC9rRFiw8LR",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/new-old-sales",
+      "name": "Get New Old Sales Data"
+    },
+    "anUoH3_oNgMK": {
+      "endpointId": "anUoH3_oNgMK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/v2/sales-register-overview",
+      "name": "Get Sales Register Overview V2"
+    },
+    "dxdVKypxKccK": {
+      "endpointId": "dxdVKypxKccK",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/due-days-range",
+      "name": "Get Due Amount Range"
+    },
+    "ZGnYbJpktYb0": {
+      "endpointId": "ZGnYbJpktYb0",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/state-details",
+      "name": "Get Last State"
+    },
+    "C9tqQHz3fL-g": {
+      "endpointId": "C9tqQHz3fL-g",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/state-details",
+      "name": "Update Last State"
+    },
+    "oqrd8tFrpdXP": {
+      "endpointId": "oqrd8tFrpdXP",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/due-days-range",
+      "name": "Add Due Amount Range"
+    },
+    "JOmFNiZyl3iV": {
+      "endpointId": "JOmFNiZyl3iV",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/scope-v2",
+      "name": "Get Scopes"
+    },
+    "2wdg7BFpmUSy": {
+      "endpointId": "2wdg7BFpmUSy",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-groups-with-stocks",
+      "name": "Stock Groups With Stocks"
+    },
+    "Tu4U9Z5kYrh2": {
+      "endpointId": "Tu4U9Z5kYrh2",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/triggers",
+      "name": "Get All Trigger"
+    },
+    "652kl30BFy1e": {
+      "endpointId": "652kl30BFy1e",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/users/:userUniqueName/destroy-session",
+      "name": "Destroy User Session2"
+    },
+    "j8BrJRJf_eUe": {
+      "endpointId": "j8BrJRJf_eUe",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/activity-logs",
+      "name": "Get Activity Logs"
+    },
+    "1oOy1v8etrOf": {
+      "endpointId": "1oOy1v8etrOf",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/cmdk",
+      "name": "Cmd Ksearch"
+    },
+    "v81bHKliE7Lf": {
+      "endpointId": "v81bHKliE7Lf",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/completed-document-count",
+      "name": "Get Completed Document"
+    },
+    "JeC4egz2Wt9O": {
+      "endpointId": "JeC4egz2Wt9O",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/dashboard/graph",
+      "name": "Create Graph Based On Type"
+    },
+    "mWkvfi7zu6am": {
+      "endpointId": "mWkvfi7zu6am",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/forecast",
+      "name": "Fore Cast Data"
+    },
+    "Nw1bEI3eQAtZ": {
+      "endpointId": "Nw1bEI3eQAtZ",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/get-domain-list",
+      "name": "Get Domains"
+    },
+    "s9eUgP_5140T": {
+      "endpointId": "s9eUgP_5140T",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/images",
+      "name": "Set Company Image"
+    },
+    "yNeGy1X6jYzv": {
+      "endpointId": "yNeGy1X6jYzv",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/logs",
+      "name": "Get Company Logs"
+    },
+    "cqAukwqdRbGS": {
+      "endpointId": "cqAukwqdRbGS",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ocr-data",
+      "name": "Get Ocr Uploaded Data"
+    },
+    "a6Q2w8Wd9WAG": {
+      "endpointId": "a6Q2w8Wd9WAG",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-bill-setting",
+      "name": "Update Invoice Email"
+    },
+    "Y3QFMhOSpKhk": {
+      "endpointId": "Y3QFMhOSpKhk",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/save-authorization-code",
+      "name": "Save Authorization Code"
+    },
+    "Qr-fw5zay-Oh": {
+      "endpointId": "Qr-fw5zay-Oh",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/send-data",
+      "name": "Send Lead Data To Slack"
+    },
+    "xYs3qW3rmluU": {
+      "endpointId": "xYs3qW3rmluU",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/sources",
+      "name": "Get Sources"
+    },
+    "FAJq66rjal40": {
+      "endpointId": "FAJq66rjal40",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/time",
+      "name": "Get Server Time"
+    },
+    "o9BoZJ8GOuyv": {
+      "endpointId": "o9BoZJ8GOuyv",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ui_side_bar_items",
+      "name": "Ui Side Bar Menu Items"
+    },
+    "Ph6GGUND5WW2": {
+      "endpointId": "Ph6GGUND5WW2",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/auth/all",
+      "name": "Get All Auth Keys"
+    },
+    "YDMFIQLvDiPK": {
+      "endpointId": "YDMFIQLvDiPK",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/top-shared-groups",
+      "name": "Top Shared Groups"
+    },
+    "hjL32MTz94ad": {
+      "endpointId": "hjL32MTz94ad",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/download-file",
+      "name": "Download File"
+    },
+    "OQSfs-8qmTKB": {
+      "endpointId": "OQSfs-8qmTKB",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/:uniqueName",
+      "name": "Get Purchase Order"
+    },
+    "gUfWuTvUFpfd": {
+      "endpointId": "gUfWuTvUFpfd",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/kenya/v2/vat-report-download",
+      "name": "Download Kenya Vat Report V2"
+    },
+    "FBzNxxyYz0cI": {
+      "endpointId": "FBzNxxyYz0cI",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority",
+      "name": "Get All Tax Authority"
+    },
+    "97fbUCVr3sy7": {
+      "endpointId": "97fbUCVr3sy7",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/validate",
+      "name": "Same account unique name, same tax number, same purchase Date"
+    },
+    "ZKMC2ODr85g2": {
+      "endpointId": "ZKMC2ODr85g2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/entry",
+      "name": "Create Project Entry"
+    },
+    "VcRKvkkTRLqf": {
+      "endpointId": "VcRKvkkTRLqf",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/group-search",
+      "name": "Group Search"
+    },
+    "HZoSepzIACkQ": {
+      "endpointId": "HZoSepzIACkQ",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/auth/:authUniqueName",
+      "name": "Unmask Auth Key"
+    },
+    "UD1U_kKoQjI-": {
+      "endpointId": "UD1U_kKoQjI-",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/all",
+      "name": "Get All Project"
+    },
+    "hIeKNxCl0v3e": {
+      "endpointId": "hIeKNxCl0v3e",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/preview",
+      "name": "Preview"
+    },
+    "e0SCNuutUQIr": {
+      "endpointId": "e0SCNuutUQIr",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/kenya/vat-report",
+      "name": "Get Kenya Vat Report"
+    },
+    "mbC6W2wxr8IN": {
+      "endpointId": "mbC6W2wxr8IN",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record",
+      "name": "Update Purchase Register"
+    },
+    "3I6Re3HexqFN": {
+      "endpointId": "3I6Re3HexqFN",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority",
+      "name": "Create Tax Authority"
+    },
+    "E_8eCIdIg7Tk": {
+      "endpointId": "E_8eCIdIg7Tk",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName",
+      "name": "Delete Project"
+    },
+    "8FyM85SpDNSx": {
+      "endpointId": "8FyM85SpDNSx",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report",
+      "name": "Get Stock Aging Report"
+    },
+    "GunhOOr9rq7N": {
+      "endpointId": "GunhOOr9rq7N",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/activate",
+      "name": "Activate Subscription After Payment"
+    },
+    "KM2ysfEJHYfw": {
+      "endpointId": "KM2ysfEJHYfw",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/settings",
+      "name": "Get Company Settings"
+    },
+    "zmixGHSoLHqw": {
+      "endpointId": "zmixGHSoLHqw",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority/:taxAuthorityUniqueName",
+      "name": "Update Tax Authority"
+    },
+    "Hgu0SDSr6ivU": {
+      "endpointId": "Hgu0SDSr6ivU",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:uniqueName/mail",
+      "name": "Mail Purchase Order"
+    },
+    "K1DprpWB5bDp": {
+      "endpointId": "K1DprpWB5bDp",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/activate-prepaid",
+      "name": "Activate Prepaid Subscription"
+    },
+    "2EGU-GqFfNsK": {
+      "endpointId": "2EGU-GqFfNsK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report/totals",
+      "name": "Get Stock Aging Totals"
+    },
+    "pWimK55ECo0X": {
+      "endpointId": "pWimK55ECo0X",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/settings",
+      "name": "Update Company Settings"
+    },
+    "YREH5h6ia4xO": {
+      "endpointId": "YREH5h6ia4xO",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax/authority/:taxAuthorityUniqueName",
+      "name": "Delete Tax Authority"
+    },
+    "dVB_RQdLdynB": {
+      "endpointId": "dVB_RQdLdynB",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/versions/all",
+      "name": "Get all versions of a particular purchase record with provided purchase recor…"
+    },
+    "e_FdkLmux6sJ": {
+      "endpointId": "e_FdkLmux6sJ",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/entry/:entryUniqueName",
+      "name": "Update Project Entry"
+    },
+    "dXExnkspSjrx": {
+      "endpointId": "dXExnkspSjrx",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/vat-report",
+      "name": "Get Ukvat Report"
+    },
+    "BO5J2zMYOTQ9": {
+      "endpointId": "BO5J2zMYOTQ9",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/entry-settings",
+      "name": "Get User Company Entry Settings"
+    },
+    "sUbp8Sz2WuRW": {
+      "endpointId": "sUbp8Sz2WuRW",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/authenticate-gsp-session",
+      "name": "Authenticate Gsp Session"
+    },
+    "5Ecw0Lmy-rK_": {
+      "endpointId": "5Ecw0Lmy-rK_",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/net-profit",
+      "name": "Profit Loss For Multi Branch"
+    },
+    "cLd4ikBjx3Be": {
+      "endpointId": "cLd4ikBjx3Be",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:uniqueName/download",
+      "name": "Download purchase order Version 3"
+    },
+    "2i2NuMdm12Bg": {
+      "endpointId": "2i2NuMdm12Bg",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/vat-report-detailed",
+      "name": "Get Detailed UKVat Report"
+    },
+    "WjsVcXqxTVQT": {
+      "endpointId": "WjsVcXqxTVQT",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/entry-settings",
+      "name": "Update User Company Entry Settings"
+    },
+    "903vn8LAmS4O": {
+      "endpointId": "903vn8LAmS4O",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/vat-obligations",
+      "name": "Get Vat Obligations"
+    },
+    "iwogPsv3M_c9": {
+      "endpointId": "iwogPsv3M_c9",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-record/get-all",
+      "name": "Get Purchase Records"
+    },
+    "T80AQSe4t-mk": {
+      "endpointId": "T80AQSe4t-mk",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/institutions",
+      "name": "Get All Institution"
+    },
+    "ycRvVl_JSZdV": {
+      "endpointId": "ycRvVl_JSZdV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/details",
+      "name": "Get Stock Aging Drilldown"
+    },
+    "WE5Fp7sI_2cS": {
+      "endpointId": "WE5Fp7sI_2cS",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/users/:userUniqueName/settings",
+      "name": "Update User Settings"
+    },
+    "brd4sl_eZ1EN": {
+      "endpointId": "brd4sl_eZ1EN",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount",
+      "name": "Delete Customer Variant Discount"
+    },
+    "McJhSdeorxYs": {
+      "endpointId": "McJhSdeorxYs",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-record",
+      "name": "Delete Purchase Record"
+    },
+    "v_NzArzBQDod": {
+      "endpointId": "v_NzArzBQDod",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/agreement-requisitions",
+      "name": "Create End User Agreement And Requisitions"
+    },
+    "GqVPOxFnLhiG": {
+      "endpointId": "GqVPOxFnLhiG",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/country/country-list",
+      "name": "Get Country List"
+    },
+    "K8EnCZFJeALw": {
+      "endpointId": "K8EnCZFJeALw",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-aging-report/:stockUniqueName/variants",
+      "name": "Get Stock Aging Variants"
+    },
+    "_S2V-x7RSaHc": {
+      "endpointId": "_S2V-x7RSaHc",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/view-vat-return",
+      "name": "View Vat Return"
+    },
+    "OpBqE_rI0G3g": {
+      "endpointId": "OpBqE_rI0G3g",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/country/:countryCode",
+      "name": "This function is used to get country list."
+    },
+    "wiFLoC5R0iY0": {
+      "endpointId": "wiFLoC5R0iY0",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/get-all-users",
+      "name": "Get Customer Vendor List"
+    },
+    "DNtg-V-CW6Ev": {
+      "endpointId": "DNtg-V-CW6Ev",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/:bankDetailsUniqueName",
+      "name": "Delete Bank Integration Details"
+    },
+    "QChI-0w2Rbi7": {
+      "endpointId": "QChI-0w2Rbi7",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/submit-vat-return",
+      "name": "Submit Vat Return"
+    },
+    "OyDbjn0YqYkj": {
+      "endpointId": "OyDbjn0YqYkj",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/purchases-register-overview",
+      "name": "The purpose of this API is to create the Purchases Register Overview of a com…"
+    },
+    "lUtBmv3-URWC": {
+      "endpointId": "lUtBmv3-URWC",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/requisitions/:reference",
+      "name": "Fetch Account Details"
+    },
+    "yWup73aE_b2d": {
+      "endpointId": "yWup73aE_b2d",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/retrieve-vat-payments",
+      "name": "Retrieve Vat Payments"
+    },
+    "c9cGISlvERKq": {
+      "endpointId": "c9cGISlvERKq",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/country/country-list",
+      "name": "Get Country List"
+    },
+    "HliiH8mgQhSU": {
+      "endpointId": "HliiH8mgQhSU",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/get-all-discounts",
+      "name": "Get Discount Info For For Customer"
+    },
+    "3NUBjpQor0KN": {
+      "endpointId": "3NUBjpQor0KN",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/discount",
+      "name": "Create Discount"
+    },
+    "RoWLVFz0zy7X": {
+      "endpointId": "RoWLVFz0zy7X",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/registration",
+      "name": "Bank Registration"
+    },
+    "TE_4Vgj-27pq": {
+      "endpointId": "TE_4Vgj-27pq",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report",
+      "name": "Get Vat Report"
+    },
+    "0y7oAU2POwJT": {
+      "endpointId": "0y7oAU2POwJT",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount",
+      "name": "Update Customer Variant Discount"
+    },
+    "tj81fqandFz5": {
+      "endpointId": "tj81fqandFz5",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/updateDetails",
+      "name": "Update Details"
+    },
+    "PQwKkcFfwPty": {
+      "endpointId": "PQwKkcFfwPty",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings",
+      "name": "Get All Export Settings"
+    },
+    "wjh2pfdXI_V1": {
+      "endpointId": "wjh2pfdXI_V1",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/purchases-register-detailed",
+      "name": "The purpose of this API is to create the Detailed Purchases Register Report o…"
+    },
+    "UI5u8cYOCI_L": {
+      "endpointId": "UI5u8cYOCI_L",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/country/cities",
+      "name": "Get City By Pin Code"
+    },
+    "5QG8TKFhzWrj": {
+      "endpointId": "5QG8TKFhzWrj",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/gocardless/refresh",
+      "name": "Fetch Account Transactions On Refresh"
+    },
+    "voVh0VEMnpKz": {
+      "endpointId": "voVh0VEMnpKz",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount",
+      "name": "Create Customer Variant Discount"
+    },
+    "giuxTp3HGu7L": {
+      "endpointId": "giuxTp3HGu7L",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/v2/purchases-register-overview",
+      "name": "Get Purchases Register Overview2"
+    },
+    "sX9T2-iKibF6": {
+      "endpointId": "sX9T2-iKibF6",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/uk/retrieve-vat-liabilities",
+      "name": "Retrieve Vat Liabilities"
+    },
+    "1JIlLIjPdiOP": {
+      "endpointId": "1JIlLIjPdiOP",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/discount/:discountUniqueName:.+",
+      "name": "Update Discount"
+    },
+    "pED0VSYtiyGT": {
+      "endpointId": "pED0VSYtiyGT",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report-detailed",
+      "name": "Get Vat Report Detailed"
+    },
+    "zqgTBsbrM-5K": {
+      "endpointId": "zqgTBsbrM-5K",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/deregistration",
+      "name": "Bank De Registration"
+    },
+    "_Vl7MhxNHkb-": {
+      "endpointId": "_Vl7MhxNHkb-",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/add-domain",
+      "name": "Add Domain"
+    },
+    "_W-8bbNEe_-P": {
+      "endpointId": "_W-8bbNEe_-P",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank",
+      "name": "Get All Registration"
+    },
+    "aPywVTMFw4Sx": {
+      "endpointId": "aPywVTMFw4Sx",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings",
+      "name": "Update Export Settings"
+    },
+    "P1aAxRmpFJ5m": {
+      "endpointId": "P1aAxRmpFJ5m",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report-download-v2",
+      "name": "Download Vat Report With Export Settings"
+    },
+    "8CAXDD28BPjb": {
+      "endpointId": "8CAXDD28BPjb",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/discount",
+      "name": "Get All Discount"
+    },
+    "gn-hJee4Qptd": {
+      "endpointId": "gn-hJee4Qptd",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report",
+      "name": "Get Zwvat Report"
+    },
+    "pyVyR125168S": {
+      "endpointId": "pyVyR125168S",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/generateotp",
+      "name": "Generate Otp"
+    },
+    "aXyCB9HRA_Vz": {
+      "endpointId": "aXyCB9HRA_Vz",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/bulk-export",
+      "name": "Bulk Export"
+    },
+    "ZwWw2zyvPube": {
+      "endpointId": "ZwWw2zyvPube",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/verify-domain",
+      "name": "Verify Domain"
+    },
+    "5fOwMnNlPKev": {
+      "endpointId": "5fOwMnNlPKev",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/payments",
+      "name": "Bulk Payment"
+    },
+    "9scrjjxA0Pf0": {
+      "endpointId": "9scrjjxA0Pf0",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stocks",
+      "name": "Get All Stocks"
+    },
+    "iyPkNnV7Ex4q": {
+      "endpointId": "iyPkNnV7Ex4q",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/domain/:domainUniqueName",
+      "name": "Update Domain"
+    },
+    "A_jTPfpD5Szy": {
+      "endpointId": "A_jTPfpD5Szy",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/discount/assign",
+      "name": "Assigned Discounts"
+    },
+    "xSl1PoaoylIQ": {
+      "endpointId": "xSl1PoaoylIQ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/export-invoices-v2",
+      "name": "Export Vouchers With Export Settings"
+    },
+    "WUbZ981l5W14": {
+      "endpointId": "WUbZ981l5W14",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report-detailed-download-v2",
+      "name": "Download Vat Report Currency Wise With Export Settings"
+    },
+    "CXRbWn4zN79z": {
+      "endpointId": "CXRbWn4zN79z",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/payments/confirm",
+      "name": "API : confirm payment with OTP and sent to bank for payment"
+    },
+    "LAg5OpnAxT8j": {
+      "endpointId": "LAg5OpnAxT8j",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/domain/:domainUniqueName/share",
+      "name": "Share Domain"
+    },
+    "bluQvCifTQ6O": {
+      "endpointId": "bluQvCifTQ6O",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/discount/assign/list",
+      "name": "Get All Assigned Discount List"
+    },
+    "3lfgRvcbj7wL": {
+      "endpointId": "3lfgRvcbj7wL",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stocks/v2",
+      "name": "Get All Stocks V2"
+    },
+    "zT68lcoXgHdU": {
+      "endpointId": "zT68lcoXgHdU",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/bank/resend-otp",
+      "name": "API : resent OTP to user"
+    },
+    "qJfWQklsgr5f": {
+      "endpointId": "qJfWQklsgr5f",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/zw/vat-report-detailed",
+      "name": "Get Detailed ZWVat Report"
+    },
+    "-IgJt3stpfU6": {
+      "endpointId": "-IgJt3stpfU6",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax-numbers",
+      "name": "Get All Tax Numbers"
+    },
+    "BHdgBqj_Ch5u": {
+      "endpointId": "BHdgBqj_Ch5u",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stocks-manufacture",
+      "name": "Get All Manufactured Stocks"
+    },
+    "wqCewonMbmPH": {
+      "endpointId": "wqCewonMbmPH",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/logs",
+      "name": "API to fetch Audit Logs"
+    },
+    "JRnuI8MVRbfI": {
+      "endpointId": "JRnuI8MVRbfI",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/plaid/create/link-token",
+      "name": "Create Link Token"
+    },
+    "EuSPB1mqwznF": {
+      "endpointId": "EuSPB1mqwznF",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/discount/assign-v2",
+      "name": "API to assign discounts on group / account"
+    },
+    "f5UVMol3W7a3": {
+      "endpointId": "f5UVMol3W7a3",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/plaid/create/access-token",
+      "name": "Set Access Token"
+    },
+    "xX7kA9mT2-yB": {
+      "endpointId": "xX7kA9mT2-yB",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/platform/:platformUniqueName/trigger/form",
+      "name": "Get Form"
+    },
+    "W839xiz9MC1o": {
+      "endpointId": "W839xiz9MC1o",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax",
+      "name": "Create India Tax"
+    },
+    "Y5sVLyEFIGC8": {
+      "endpointId": "Y5sVLyEFIGC8",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company",
+      "name": "Create Company"
+    },
+    "_rLinHKkGKb8": {
+      "endpointId": "_rLinHKkGKb8",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb",
+      "name": "Generate Eway Bill"
+    },
+    "JA45qvbxmRxs": {
+      "endpointId": "JA45qvbxmRxs",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufactureUniqueName",
+      "name": "Update Manufacturing Stock"
+    },
+    "TjRJHj7xUMrK": {
+      "endpointId": "TjRJHj7xUMrK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank",
+      "name": "Bank Registration For ICICI"
+    },
+    "9wFQbRPHxH9n": {
+      "endpointId": "9wFQbRPHxH9n",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/triggers",
+      "name": "Create Trigger"
+    },
+    "jL-nLUX3Z3Ad": {
+      "endpointId": "jL-nLUX3Z3Ad",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax",
+      "name": "Get India Tax"
+    },
+    "f1RojyNwn4uc": {
+      "endpointId": "f1RojyNwn4uc",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName:.+",
+      "name": "Get Company"
+    },
+    "KOLx12hfQFDP": {
+      "endpointId": "KOLx12hfQFDP",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/user",
+      "name": "Authenticate User"
+    },
+    "xfvj7coSZoc1": {
+      "endpointId": "xfvj7coSZoc1",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/triggers/:triggerUniqueName:.+",
+      "name": "Update Trigger"
+    },
+    "cOF4yeBkCNjA": {
+      "endpointId": "cOF4yeBkCNjA",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax/assign",
+      "name": "Assign Taxes On Groups And Accounts"
+    },
+    "x4ILD4Xertbu": {
+      "endpointId": "x4ILD4Xertbu",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName:.+",
+      "name": "Update Company"
+    },
+    "n7OoY-ddQMrU": {
+      "endpointId": "n7OoY-ddQMrU",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufactureUniqueName",
+      "name": "Delete Manufacturing Details"
+    },
+    "GfqUjNoU_Buw": {
+      "endpointId": "GfqUjNoU_Buw",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+",
+      "name": "Update Bank Details"
+    },
+    "2OVqmXkhHhO0": {
+      "endpointId": "2OVqmXkhHhO0",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb",
+      "name": "Get All E-Way Bill"
+    },
+    "f-hJ_A_LkANE": {
+      "endpointId": "f-hJ_A_LkANE",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+/payor/:urn:.+",
+      "name": "Update Payor Details"
+    },
+    "-XpABT1bcnZR": {
+      "endpointId": "-XpABT1bcnZR",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/trigger/:triggerUniqueName",
+      "name": "Update Patch"
+    },
+    "B2cGPNPCRRGp": {
+      "endpointId": "B2cGPNPCRRGp",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/link-with-rates",
+      "name": "Get Linked Stocks With Rates"
+    },
+    "4hNazgv_D0oe": {
+      "endpointId": "4hNazgv_D0oe",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/gsp-session",
+      "name": "Create Gsp Session"
+    },
+    "4JV9t0hK5uKx": {
+      "endpointId": "4JV9t0hK5uKx",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/invoice-setting",
+      "name": "Update Invoice Email"
+    },
+    "pjFVGtCrC72r": {
+      "endpointId": "pjFVGtCrC72r",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+/payor/:urn:.+/status",
+      "name": "API : Get registration status of the integrated bank account ."
+    },
+    "uEVAoO6n8DJA": {
+      "endpointId": "uEVAoO6n8DJA",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/trigger",
+      "name": "Get Trigger List"
+    },
+    "e4WhPg_atlkL": {
+      "endpointId": "e4WhPg_atlkL",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName:.+",
+      "name": "Update Company V2"
+    },
+    "TViTPVKFUEeV": {
+      "endpointId": "TViTPVKFUEeV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/multi-registration",
+      "name": "In Once ICICI Bank Account Integration - There can be multiple login credenti…"
+    },
+    "3AIUCye6XhjX": {
+      "endpointId": "3AIUCye6XhjX",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/user",
+      "name": "Returns true/false if E-way bill credentials are saved (no credential details…"
+    },
+    "ci3k0iG1u2aE": {
+      "endpointId": "ci3k0iG1u2aE",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/invoices",
+      "name": "Delete Invoice"
+    },
+    "sTGo5qASkp7x": {
+      "endpointId": "sTGo5qASkp7x",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/manufacture-report",
+      "name": "Get Manufacturing Report"
+    },
+    "PWDpsUjC1jnu": {
+      "endpointId": "PWDpsUjC1jnu",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank",
+      "name": "Only super Admin can perform the operation on this ."
+    },
+    "6gPB1aZu_J7w": {
+      "endpointId": "6gPB1aZu_J7w",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication/trigger/:triggerUniqueName",
+      "name": "Get Trigger"
+    },
+    "26mV7-bY-pub": {
+      "endpointId": "26mV7-bY-pub",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/particular",
+      "name": "Get Active Particular Account V3"
+    },
+    "ppeuCHUw_c-C": {
+      "endpointId": "ppeuCHUw_c-C",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/invoices/:invoiceUniqueName/action",
+      "name": "Pay Invoice"
+    },
+    "UdoGGov4zQZj": {
+      "endpointId": "UdoGGov4zQZj",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/:ewbno/download-v2",
+      "name": "Download EWBWith Export Settings"
+    },
+    "jyN3gW6CgJQx": {
+      "endpointId": "jyN3gW6CgJQx",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/session",
+      "name": "Get Session"
+    },
+    "b5AgjaDnw5wz": {
+      "endpointId": "b5AgjaDnw5wz",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/invoices/list",
+      "name": "Get All Invoices With Invoice Number"
+    },
+    "5ZBN8_Nrdzou": {
+      "endpointId": "5ZBN8_Nrdzou",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock",
+      "name": "Get Rate For Stock"
+    },
+    "-rVys_TLcYJR": {
+      "endpointId": "-rVys_TLcYJR",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/bank/:bankDetailsUniqueName:.+/payor",
+      "name": "Get Payors For Payment"
+    },
+    "02iGqF2pGFEL": {
+      "endpointId": "02iGqF2pGFEL",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger",
+      "name": "Create Email Trigger"
+    },
+    "hQDqFbBqKzsX": {
+      "endpointId": "hQDqFbBqKzsX",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ewb/:ewbno/download-detailed-v2",
+      "name": "Download EWBDetailed With Export Settings"
+    },
+    "EE86A6D-FoNr": {
+      "endpointId": "EE86A6D-FoNr",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/us/export-sales-report-authority-wise",
+      "name": "Download Vat Report Tax Authority Wise"
+    },
+    "LAofu6cZulNG": {
+      "endpointId": "LAofu6cZulNG",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/import-pdf/bank-statement",
+      "name": "Importpdf"
+    },
+    "qezm3yycgXMa": {
+      "endpointId": "qezm3yycgXMa",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/:uniqueName",
+      "name": "Update Email Trigger"
+    },
+    "B4p79_LBK-3x": {
+      "endpointId": "B4p79_LBK-3x",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/email-key",
+      "name": "Get Email Verification Key"
+    },
+    "Sz0YNoG8MgmS": {
+      "endpointId": "Sz0YNoG8MgmS",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ledgers",
+      "name": "Get All Ledgers"
+    },
+    "q73WV6m0nbuW": {
+      "endpointId": "q73WV6m0nbuW",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/communication",
+      "name": "Get Platform"
+    },
+    "IYpACfPEBQba": {
+      "endpointId": "IYpACfPEBQba",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/trigger/:uniqueName",
+      "name": "Delete Email Trigger"
+    },
+    "N1w7YNG2eQgv": {
+      "endpointId": "N1w7YNG2eQgv",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/account-closing-balance",
+      "name": "Calculate Account Balance"
+    },
+    "ZcAp3VLpm1MG": {
+      "endpointId": "ZcAp3VLpm1MG",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances-v2",
+      "name": "Export Account Balances By Group With Export Settings"
+    },
+    "c1aAjlyx6P1P": {
+      "endpointId": "c1aAjlyx6P1P",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/flatten-accounts",
+      "name": "Get Flatten Groups And Accounts Of Group"
+    },
+    "bdxVmC8cSKM3": {
+      "endpointId": "bdxVmC8cSKM3",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate",
+      "name": "This function is used to generate proforma via estimate ."
+    },
+    "ARwx7gac5mTh": {
+      "endpointId": "ARwx7gac5mTh",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/country/company/:companyUniqueName/account-countries",
+      "name": "Get Account Countries By Company"
+    },
+    "2gENSvPKOBGj": {
+      "endpointId": "2gENSvPKOBGj",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-generate",
+      "name": "Bulk Generate"
+    },
+    "HdgupnVXkYM5": {
+      "endpointId": "HdgupnVXkYM5",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/advance-receipt/all",
+      "name": "This function is use to get all the advanced receipts for a company and accou…"
+    },
+    "tuljelQn7rdC": {
+      "endpointId": "tuljelQn7rdC",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export-v2",
+      "name": "Export Bill To Bill Report With Export Settings"
+    },
+    "WEoHYBUModk0": {
+      "endpointId": "WEoHYBUModk0",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/yodlee/accounts/:accountUniqueName:.+/eledgers",
+      "name": "Get Transactions"
+    },
+    "KC40V2cAWP05": {
+      "endpointId": "KC40V2cAWP05",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/autopaid",
+      "name": "Auto Adjust Vouchers"
+    },
+    "4Y_qxtXhQ-Tg": {
+      "endpointId": "4Y_qxtXhQ-Tg",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/bulk-ledgers-v2",
+      "name": "Bulk Create"
+    },
+    "wK90T2GWRIGR": {
+      "endpointId": "wK90T2GWRIGR",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Delete Account"
+    },
+    "PeGBwTM8Tsky": {
+      "endpointId": "PeGBwTM8Tsky",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/entries",
+      "name": "Delete Multiple"
+    },
+    "KJkEPu-akg1H": {
+      "endpointId": "KJkEPu-akg1H",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bulk-export",
+      "name": "Bulk Export"
+    },
+    "MTSvtoNB8g7J": {
+      "endpointId": "MTSvtoNB8g7J",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/brief-accounts",
+      "name": "Brief Accounts"
+    },
+    "xhRrNaKY29bC": {
+      "endpointId": "xhRrNaKY29bC",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/v3/account-search",
+      "name": "Account Search V3"
+    },
+    "dmsAgZYkSpoN": {
+      "endpointId": "dmsAgZYkSpoN",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/account-search-2",
+      "name": "Account Search2"
+    },
+    "ppTwFHtQzHty": {
+      "endpointId": "ppTwFHtQzHty",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/account-search-predicted",
+      "name": "Account Search Predicted"
+    },
+    "eznmrJUPBVs-": {
+      "endpointId": "eznmrJUPBVs-",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/transfer/ownership",
+      "name": "Owner Ship Transfer"
+    },
+    "OK2-GBqvJPSH": {
+      "endpointId": "OK2-GBqvJPSH",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/verify/ownership",
+      "name": "Verify Owner Ship"
+    },
+    "qTpv47S8Tnu3": {
+      "endpointId": "qTpv47S8Tnu3",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/billing-account/get",
+      "name": "Get Subscription Billing Account By User"
+    },
+    "ZYEzXJElX0cM": {
+      "endpointId": "ZYEzXJElX0cM",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/v2/subscription/billing-account/:billingAccountUniqueName",
+      "name": "Update Subscription Billing Account"
+    },
+    "Wr1ehkf9kTbn": {
+      "endpointId": "Wr1ehkf9kTbn",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/list",
+      "name": "Get Subscriptions"
+    },
+    "EOPUvPuFzNut": {
+      "endpointId": "EOPUvPuFzNut",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription",
+      "name": "Also it add plan info to subscription if user selects plan without selecting …"
+    },
+    "PDO1IQh-FZ-a": {
+      "endpointId": "PDO1IQh-FZ-a",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/cancel",
+      "name": "Cancel Subscription"
+    },
+    "NTxVoqQl4OFU": {
+      "endpointId": "NTxVoqQl4OFU",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/plans/all",
+      "name": "Get All Plans"
+    },
+    "bpA51yrq5cIP": {
+      "endpointId": "bpA51yrq5cIP",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/payment-methods",
+      "name": "Get All Subscription Payment Methods"
+    },
+    "vsN0nSE7c-9I": {
+      "endpointId": "vsN0nSE7c-9I",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/v2/subscription/payment-method/:paymentUniqueName",
+      "name": "Update Default Subscription Payment Info"
+    },
+    "OAmjU71ZQqRK": {
+      "endpointId": "OAmjU71ZQqRK",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/v2/subscription/payment-method/:paymentUniqueName",
+      "name": "Delete Subscription Payment Info"
+    },
+    "14LlOOvKQTLE": {
+      "endpointId": "14LlOOvKQTLE",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/charge/:subscriptionId",
+      "name": "Charge Subscription"
+    },
+    "ycK60KvF22yE": {
+      "endpointId": "ycK60KvF22yE",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId",
+      "name": "Get Subscription"
+    },
+    "XQOEZZdDPMvW": {
+      "endpointId": "XQOEZZdDPMvW",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/company-list/:subscriptionId",
+      "name": "Get Companies By Subscription Id"
+    },
+    "6GenGA0uUEoY": {
+      "endpointId": "6GenGA0uUEoY",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/payment/:paymentIntentId/save-stripe-payment",
+      "name": "Save Stripe Payment Method"
+    },
+    "mBBmbWjPy1yA": {
+      "endpointId": "mBBmbWjPy1yA",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/generate-order",
+      "name": "Generate Razorpay Order"
+    },
+    "2TkLhu_J8EoK": {
+      "endpointId": "2TkLhu_J8EoK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/change-plan",
+      "name": "Change Plan Of Subscription"
+    },
+    "ZX17bIwwxXCM": {
+      "endpointId": "ZX17bIwwxXCM",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/buy-plan",
+      "name": "Buy Plan"
+    },
+    "vzhlqGsO6GM-": {
+      "endpointId": "vzhlqGsO6GM-",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/update",
+      "name": "Update Subscription After Payment"
+    },
+    "3EjboX_rfYCf": {
+      "endpointId": "3EjboX_rfYCf",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/country-list",
+      "name": "Get Country List By Subscription Id"
+    },
+    "bwGeoJTqyBYm": {
+      "endpointId": "bwGeoJTqyBYm",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/add-payment-method",
+      "name": "Add Payment Method"
+    },
+    "J_0--uWnwEl8": {
+      "endpointId": "J_0--uWnwEl8",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/company-list",
+      "name": "Get Company List By Subscription Region"
+    },
+    "jOlUZw8kEKSR": {
+      "endpointId": "jOlUZw8kEKSR",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/get-amount",
+      "name": "Get Subscription Amount"
+    },
+    "9DlwgvD0mGN2": {
+      "endpointId": "9DlwgvD0mGN2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/add-wallet-amount",
+      "name": "Add Wallet Amount"
+    },
+    "2_kiton6mWRk": {
+      "endpointId": "2_kiton6mWRk",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/wallet",
+      "name": "Get Wallet Details"
+    },
+    "Z_zROShkEN9r": {
+      "endpointId": "Z_zROShkEN9r",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/wallet-logs",
+      "name": "Get Subscription Wallet Logs"
+    },
+    "ULGuiJ1Dt3xN": {
+      "endpointId": "ULGuiJ1Dt3xN",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/capture-wallet-payment",
+      "name": "Capture Wallet Payment"
+    },
+    "CT2-TdhbRJfm": {
+      "endpointId": "CT2-TdhbRJfm",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/subscription/:subscriptionId/create-pre-paid",
+      "name": "Create Pre Paid Of Subscription"
+    },
+    "xEVgW01-tsGA": {
+      "endpointId": "xEVgW01-tsGA",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName:.+/plan",
+      "name": "Update Company Plan"
+    },
+    "FUQYc_6HjBpe": {
+      "endpointId": "FUQYc_6HjBpe",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/subscription/generateOrder",
+      "name": "Generate Order For Subscription Payment"
+    },
+    "GRlPqfyuyqM1": {
+      "endpointId": "GRlPqfyuyqM1",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/subscriptions",
+      "name": "Get All User Subscriptions"
+    },
+    "8gal9JV9cmwS": {
+      "endpointId": "8gal9JV9cmwS",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/report-filters",
+      "name": "Save Report Filter Columns"
+    },
+    "jIBzlXf1Et2h": {
+      "endpointId": "jIBzlXf1Et2h",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/report-filters",
+      "name": "Get Report Filter Columns"
+    },
+    "YZlqdLmz6chs": {
+      "endpointId": "YZlqdLmz6chs",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/report-comment",
+      "name": "Add Comment"
+    },
+    "2uEZsLAbxywj": {
+      "endpointId": "2uEZsLAbxywj",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/report-comment",
+      "name": "Delete Comment"
+    },
+    "GhJt7-GXS2Tl": {
+      "endpointId": "GhJt7-GXS2Tl",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/business-documents/pending-report",
+      "name": "Pending Report"
+    },
+    "9Dgu0gb_XJm0": {
+      "endpointId": "9Dgu0gb_XJm0",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/daybook",
+      "name": "Get Daybook V2"
+    },
+    "0Of9ubnNnCVz": {
+      "endpointId": "0Of9ubnNnCVz",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/due-amount-report",
+      "name": "Get Debtor Due Amount Report"
+    },
+    "RtKXX9Lg_Vb6": {
+      "endpointId": "RtKXX9Lg_Vb6",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings/daybook-v2",
+      "name": "Get Daybook Export V3With Export Settings"
+    },
+    "T-nW-s0v1z0H": {
+      "endpointId": "T-nW-s0v1z0H",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/export-settings/daybook-v2",
+      "name": "Get Daybook Export V3With Export Settings"
+    },
+    "XTYVIw-D33WR": {
+      "endpointId": "XTYVIw-D33WR",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/columnar-report",
+      "name": "This function is used to get columnar report."
+    },
+    "4g1ZlwOG2zQC": {
+      "endpointId": "4g1ZlwOG2zQC",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/v2/balance-sheet-collapsed-download-v2",
+      "name": "Balance Sheet Collapsed V2With Export Setting"
+    },
+    "OdfWefdmCppX": {
+      "endpointId": "OdfWefdmCppX",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/v2/profit-loss-collapsed-download-v2",
+      "name": "Profit And Loss Collapsed V2With Export Setting"
+    },
+    "njPLU4XYC7pD": {
+      "endpointId": "njPLU4XYC7pD",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/trial-balance-export-v2",
+      "name": "Trial Balance Export V2"
+    },
+    "T_prPyneR5gs": {
+      "endpointId": "T_prPyneR5gs",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/calculateRatios",
+      "name": "Calculate Ratios"
+    },
+    "dHiVgsTz25U2": {
+      "endpointId": "dHiVgsTz25U2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/entity-status",
+      "name": "Update Reports Entity Status"
+    },
+    "HE0EK9yFHVXg": {
+      "endpointId": "HE0EK9yFHVXg",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/trial-balance",
+      "name": "Create Trial Balance For Multiple Branch"
+    },
+    "tK5NalBX78lR": {
+      "endpointId": "tK5NalBX78lR",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multicompany/:reportType",
+      "name": "Create Multi Currency Report For Multiple Companies"
+    },
+    "-li9FCHQNbc3": {
+      "endpointId": "-li9FCHQNbc3",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multicompany/:reportType",
+      "name": "The purpose of this API is to fetch the Reports from mongo"
+    },
+    "1-IP9izkK3au": {
+      "endpointId": "1-IP9izkK3au",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/users",
+      "name": "Get Users"
+    },
+    "AeyIxLtbbYRQ": {
+      "endpointId": "AeyIxLtbbYRQ",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/balance-sheet",
+      "name": "Balance Sheet For Multi Branch"
+    },
+    "dVlFN4wu65U7": {
+      "endpointId": "dVlFN4wu65U7",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/address",
+      "name": "Create Address"
+    },
+    "cTuNydnmO_E0": {
+      "endpointId": "cTuNydnmO_E0",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports",
+      "name": "View Import Requests"
+    },
+    "SByPOWuP9shi": {
+      "endpointId": "SByPOWuP9shi",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups-with-accounts",
+      "name": "Get Groups With Accounts New"
+    },
+    "JjmiBZAYzpOw": {
+      "endpointId": "JjmiBZAYzpOw",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/cogs",
+      "name": "Calculate Cogs"
+    },
+    "qqg7uc6LFr_K": {
+      "endpointId": "qqg7uc6LFr_K",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reverse-charge-report",
+      "name": "Get Reverse Charge Report"
+    },
+    "X8Cl_KI_fl1N": {
+      "endpointId": "X8Cl_KI_fl1N",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups",
+      "name": "Create Group"
+    },
+    "vXE5A4cjtMWq": {
+      "endpointId": "vXE5A4cjtMWq",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/users/:uniqueName/generate-auth-key",
+      "name": "Generate Auth Key"
+    },
+    "uvWf9lV4SWK8": {
+      "endpointId": "uvWf9lV4SWK8",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/upload",
+      "name": "Create Import Request"
+    },
+    "Jhjkx8VhgL77": {
+      "endpointId": "Jhjkx8VhgL77",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName:.+",
+      "name": "Update Group"
+    },
+    "eo8F08lfai_S": {
+      "endpointId": "eo8F08lfai_S",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName:.+",
+      "name": "Delete Group"
+    },
+    "ceux_udQ1qol": {
+      "endpointId": "ceux_udQ1qol",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/address/all",
+      "name": "Get All Address"
+    },
+    "WGXsuEpkfk7S": {
+      "endpointId": "WGXsuEpkfk7S",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName/move",
+      "name": "Move Groups"
+    },
+    "hyyKTtGJECuO": {
+      "endpointId": "hyyKTtGJECuO",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/address/all",
+      "name": "Get All Address"
+    },
+    "Va7-jGoICi4Y": {
+      "endpointId": "Va7-jGoICi4Y",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/:userUniqueName/company-uer",
+      "name": "API for getting user entity roles for given companyUniqueName and user."
+    },
+    "IxvTCgvwt_3r": {
+      "endpointId": "IxvTCgvwt_3r",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance",
+      "name": "Download Account Balance"
+    },
+    "uLTye-IHMbq7": {
+      "endpointId": "uLTye-IHMbq7",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch",
+      "name": "Create Branch"
+    },
+    "muK-d0gPoUyA": {
+      "endpointId": "muK-d0gPoUyA",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy",
+      "name": "Get Taxes Account Hierarchy"
+    },
+    "bcLHYb4Hqr4n": {
+      "endpointId": "bcLHYb4Hqr4n",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch",
+      "name": "Get All Branches"
+    },
+    "fYlphS2JfNoV": {
+      "endpointId": "fYlphS2JfNoV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance",
+      "name": "Download Account Balance"
+    },
+    "0VEvUbCETEr9": {
+      "endpointId": "0VEvUbCETEr9",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/authorize",
+      "name": "MTD: Making Tax Digital"
+    },
+    "rhsaqARLceCJ": {
+      "endpointId": "rhsaqARLceCJ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/email-account-closing-balance",
+      "name": "Email Account Balance"
+    },
+    "E4_DXzu81MyO": {
+      "endpointId": "E4_DXzu81MyO",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/sms-account-closing-balance",
+      "name": "Sms Account Balance"
+    },
+    "dWqFyOQf9uRH": {
+      "endpointId": "dWqFyOQf9uRH",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/:userUniqueName/v2/companies",
+      "name": "Get All Companies V3"
+    },
+    "LdiDh1M949ya": {
+      "endpointId": "LdiDh1M949ya",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch/:branchUniqueName:.+",
+      "name": "Get Branch"
+    },
+    "HBgt6EDETDyq": {
+      "endpointId": "HBgt6EDETDyq",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/users/:userUniqueName/destroy-session",
+      "name": "Destroy User Session"
+    },
+    "YGov7uxlaxel": {
+      "endpointId": "YGov7uxlaxel",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch/:branchUniqueName:.+",
+      "name": "Update Branch"
+    },
+    "p0KgoFgvRx88": {
+      "endpointId": "p0KgoFgvRx88",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/login-with-number",
+      "name": "Login With Number"
+    },
+    "omWTAuRhIMYr": {
+      "endpointId": "omWTAuRhIMYr",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/signup-with-email",
+      "name": "Sign Up With Email"
+    },
+    "sQU3x6dSkLyg": {
+      "endpointId": "sQU3x6dSkLyg",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch/:branchUniqueName:.+",
+      "name": "Update Branch V2"
+    },
+    "H8UbC3hk4buE": {
+      "endpointId": "H8UbC3hk4buE",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName:.+",
+      "name": "Get Group V2"
+    },
+    "ejEHbCr5-kEp": {
+      "endpointId": "ejEHbCr5-kEp",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/process",
+      "name": "Process Data V2"
+    },
+    "5V9FfbajHYGX": {
+      "endpointId": "5V9FfbajHYGX",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/get-all",
+      "name": "Get Purchase Orders UIView"
+    },
+    "-VRPpaL9ZR7Y": {
+      "endpointId": "-VRPpaL9ZR7Y",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/flatten-groups-with-accounts",
+      "name": "Get Flatten Groups And Accounts Of Groups"
+    },
+    "n40EMZa-tvLi": {
+      "endpointId": "n40EMZa-tvLi",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/signed-url",
+      "name": "Confirmation is received."
+    },
+    "u_z2foHGElAl": {
+      "endpointId": "u_z2foHGElAl",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/generate-otp",
+      "name": "Generate Otp"
+    },
+    "rgsUt5WiPDuC": {
+      "endpointId": "rgsUt5WiPDuC",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName/masters",
+      "name": "Group Masters"
+    },
+    "lP2RVzpwrLlx": {
+      "endpointId": "lP2RVzpwrLlx",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/reset-password",
+      "name": "Reset Password"
+    },
+    "Ss5EPNtg2Lir": {
+      "endpointId": "Ss5EPNtg2Lir",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/cash-flow-download-v2",
+      "name": "Download Cash Flow Statement V2"
+    },
+    "NW1F-e4urn1m": {
+      "endpointId": "NW1F-e4urn1m",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/v2/upload",
+      "name": "Get Confirmation On Upload Through Signed URL"
+    },
+    "4IKLHMrGKwgs": {
+      "endpointId": "4IKLHMrGKwgs",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/signup-with-google",
+      "name": "Sign Up With Google V2"
+    },
+    "kYZI-VrqKqYe": {
+      "endpointId": "kYZI-VrqKqYe",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/document/upload",
+      "name": "Upload Document"
+    },
+    "60j9QCaxaELB": {
+      "endpointId": "60j9QCaxaELB",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/download-import-logs",
+      "name": "Download Import Logs"
+    },
+    "2pSuW8szlD-5": {
+      "endpointId": "2pSuW8szlD-5",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/compared-profit-loss",
+      "name": "Compared Profit Loss For Multi Branch"
+    },
+    "6GlTa0ZnnI6C": {
+      "endpointId": "6GlTa0ZnnI6C",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/verify-email",
+      "name": "Verify Email V2"
+    },
+    "5UDfAnP1JScr": {
+      "endpointId": "5UDfAnP1JScr",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/reconciliation/upload",
+      "name": "Upload a bank statement file (PDF or Excel/CSV) to initiate reconciliation."
+    },
+    "Zex1gNzQJkd0": {
+      "endpointId": "Zex1gNzQJkd0",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/verify-number",
+      "name": "Verify Mobile V2"
+    },
+    "-zY5sWTATbxf": {
+      "endpointId": "-zY5sWTATbxf",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/reconciliation/process",
+      "name": "Process a previously uploaded Excel/CSV reconciliation file with user-provide…"
+    },
+    "_Li0puNhyeiT": {
+      "endpointId": "_Li0puNhyeiT",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/login-with-password",
+      "name": "Login With Password"
+    },
+    "uM-qdrjOKTtT": {
+      "endpointId": "uM-qdrjOKTtT",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/entity-selection",
+      "name": "Get Report Mode Status"
+    },
+    "Ao099WdUGeiS": {
+      "endpointId": "Ao099WdUGeiS",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/users/:userUniqueName/sessions",
+      "name": "Delete All Sessions"
+    },
+    "KVFrgUeHE-pC": {
+      "endpointId": "KVFrgUeHE-pC",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/imports/reconciliation",
+      "name": "Process a previously uploaded Excel/CSV reconciliation file with user-provide…"
+    },
+    "QzK2fBdstnUx": {
+      "endpointId": "QzK2fBdstnUx",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/signup",
+      "name": "Signup"
+    },
+    "SoR0B7KkUG-p": {
+      "endpointId": "SoR0B7KkUG-p",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/users/:userUniqueName/increment-session",
+      "name": "Increment User Session"
+    },
+    "9WbEUkkRI-_M": {
+      "endpointId": "9WbEUkkRI-_M",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/:userUniqueName/get-auth-key",
+      "name": "Generate Auth Key V2"
+    },
+    "SIpFxPBDkjii": {
+      "endpointId": "SIpFxPBDkjii",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/users/:uniqueKey/forgot-password",
+      "name": "Forgot Password"
+    },
+    "LI_-sZ9fnDn-": {
+      "endpointId": "LI_-sZ9fnDn-",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/users/:userUniqueName/sessions",
+      "name": "Get All Sessions"
+    },
+    "SRbGb3wbzz-J": {
+      "endpointId": "SRbGb3wbzz-J",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/signup-with-apple",
+      "name": "API to support signup with apple"
+    },
+    "Vm8fUOiBpbT9": {
+      "endpointId": "Vm8fUOiBpbT9",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName",
+      "name": "Get Project"
+    },
+    "tczb-HXIeIVI": {
+      "endpointId": "tczb-HXIeIVI",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/:uniqueName",
+      "name": "Use to get purchase record"
+    },
+    "RNrjQCdGHRcx": {
+      "endpointId": "RNrjQCdGHRcx",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/auth/generate",
+      "name": "Generate Auth Key"
+    },
+    "vIvneph322Yk": {
+      "endpointId": "vIvneph322Yk",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/users/send-new-user-info",
+      "name": "Send New User Info"
+    },
+    "QPFEeIlvdqUo": {
+      "endpointId": "QPFEeIlvdqUo",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project",
+      "name": "Create Project"
+    },
+    "62SEnOs8A7JV": {
+      "endpointId": "62SEnOs8A7JV",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/save-report-data",
+      "name": "Save Favorite Report Module"
+    },
+    "IHKDe0dPwz_4": {
+      "endpointId": "IHKDe0dPwz_4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/auth-login",
+      "name": "API to support login with otp"
+    },
+    "SZYTyZbR-UVP": {
+      "endpointId": "SZYTyZbR-UVP",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName",
+      "name": "Update Project"
+    },
+    "OrRqnmlTHGlZ": {
+      "endpointId": "OrRqnmlTHGlZ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-record/generate",
+      "name": "Create Purchase Register"
+    },
+    "1liSK-Ej6z2-": {
+      "endpointId": "1liSK-Ej6z2-",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/reports/all-reports",
+      "name": "Get Favorite Report"
+    },
+    "JSG1V-ngn7Ra": {
+      "endpointId": "JSG1V-ngn7Ra",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/entries",
+      "name": "Get Project Entries"
+    },
+    "2U-8soBahlRR": {
+      "endpointId": "2U-8soBahlRR",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/auth/:authUniqueName/update",
+      "name": "Update Auth User"
+    },
+    "xoiPEreiLtuB": {
+      "endpointId": "xoiPEreiLtuB",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/auth/:authUniqueName/remove",
+      "name": "Remove Auth Key"
+    },
+    "ykhnO3TVsy5V": {
+      "endpointId": "ykhnO3TVsy5V",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/project/:projectUniqueName/category-total",
+      "name": "Get Revenue Or Expense Total Of Project"
+    },
+    "LIlR6YtXkarK": {
+      "endpointId": "LIlR6YtXkarK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/pettycash-manager/report",
+      "name": "Get Petty Cash Admin Report"
+    },
+    "PdhETHHZZS-a": {
+      "endpointId": "PdhETHHZZS-a",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order",
+      "name": "Delete Purchase Order"
+    },
+    "xPdYugvoPz-k": {
+      "endpointId": "xPdYugvoPz-k",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/download-file",
+      "name": null
+    },
+    "xjZ3WpIt1dI_": {
+      "endpointId": "xjZ3WpIt1dI_",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/invoice-pay-request",
+      "name": null
+    },
+    "RCgIHXPsjANv": {
+      "endpointId": "RCgIHXPsjANv",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/trial-balance",
+      "name": "Create Trial Balance For Multiple Branch"
+    },
+    "VYzepKaCj43L": {
+      "endpointId": "VYzepKaCj43L",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/accounts",
+      "name": "Create"
+    },
+    "yrvvcWRCotYJ": {
+      "endpointId": "yrvvcWRCotYJ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/invoices/:invoiceUniqueName/action",
+      "name": "Pay Invoice"
+    },
+    "mMFK9Tl0TTQn": {
+      "endpointId": "mMFK9Tl0TTQn",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/status/change",
+      "name": "Change Purchase order status API"
+    },
+    "PRoUrJ2fbr-5": {
+      "endpointId": "PRoUrJ2fbr-5",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/bulk-update",
+      "name": "Perform Bulk Action"
+    },
+    "dUZ4LbYxe29X": {
+      "endpointId": "dUZ4LbYxe29X",
+      "requestType": "PATCH",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/bulk-update",
+      "name": "Perform Bulk Action"
+    },
+    "cx28eqtjptKM": {
+      "endpointId": "cx28eqtjptKM",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/ledger/upload",
+      "name": "Upload File For Ledger"
+    },
+    "Vm88Ay6rHCUS": {
+      "endpointId": "Vm88Ay6rHCUS",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/vat-report",
+      "name": "Get Vat Report"
+    },
+    "BIFNf4ztaQhy": {
+      "endpointId": "BIFNf4ztaQhy",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/bulk-export",
+      "name": "Bulk Export Vouchers"
+    },
+    "NslqICL9uAoP": {
+      "endpointId": "NslqICL9uAoP",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/invoices/:invoiceUniqueName/action",
+      "name": "Pay Invoice"
+    },
+    "csjPP_3xiJBh": {
+      "endpointId": "csjPP_3xiJBh",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/balance-sheet",
+      "name": "Balance Sheet For Multi Branch"
+    },
+    "ODsxDg7JNUGb": {
+      "endpointId": "ODsxDg7JNUGb",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/group-search",
+      "name": "Group Search"
+    },
+    "sTdSIbheX88t": {
+      "endpointId": "sTdSIbheX88t",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/bulk-update",
+      "name": "Update Invoices"
+    },
+    "dmF5TWk7n3XB": {
+      "endpointId": "dmF5TWk7n3XB",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/entries",
+      "name": "Delete Multiple Entries"
+    },
+    "mYCSlrelh7cK": {
+      "endpointId": "mYCSlrelh7cK",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName:.+",
+      "name": "Update Group"
+    },
+    "Z8lG8_P7Fegy": {
+      "endpointId": "Z8lG8_P7Fegy",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Delete Account"
+    },
+    "3i4BcGSOcjcg": {
+      "endpointId": "3i4BcGSOcjcg",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v3/company/:companyUniqueName/accounts/:accountUniqueName/proformas/generate-via-estimate",
+      "name": "This function is used to generate proforma via estimate ."
+    },
+    "kDF8Hc2T8y1c": {
+      "endpointId": "kDF8Hc2T8y1c",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/multibranch/profit-loss",
+      "name": "Profit Loss For Multi Branch"
+    },
+    "so5eNOzZChe2": {
+      "endpointId": "so5eNOzZChe2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups",
+      "name": "Create"
+    },
+    "so3VkFdvQcWx": {
+      "endpointId": "so3VkFdvQcWx",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax",
+      "name": "Create"
+    },
+    "p1U6lkCO_IyO": {
+      "endpointId": "p1U6lkCO_IyO",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax/assign",
+      "name": "Assign Taxes On Groups And Accounts"
+    },
+    "O3DXboWwI0tg": {
+      "endpointId": "O3DXboWwI0tg",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/voucher-status-count",
+      "name": "Get Voucher Status Count"
+    },
+    "4O6dpOJNsaL8": {
+      "endpointId": "4O6dpOJNsaL8",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/tax",
+      "name": "Get"
+    },
+    "gFiJhvJQQKIT": {
+      "endpointId": "gFiJhvJQQKIT",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/branch",
+      "name": "Get All Branches"
+    },
+    "eYZIdP98Yp6I": {
+      "endpointId": "eYZIdP98Yp6I",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/activity-logs",
+      "name": "Get Activity Logs"
+    },
+    "XNhR7307qW0B": {
+      "endpointId": "XNhR7307qW0B",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/get-all-vouchers-balances",
+      "name": "Get All Balances Vouchers"
+    },
+    "irtUW6kG6GXA": {
+      "endpointId": "irtUW6kG6GXA",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/pettycash-manager/ledger/:entryUniqueName",
+      "name": "Get Cash Entry For Admin By Unique Name"
+    },
+    "hNVuCgAb7cMK": {
+      "endpointId": "hNVuCgAb7cMK",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName:.+/balance",
+      "name": "Calculate Closing Balance"
+    },
+    "F88RkhvHqafz": {
+      "endpointId": "F88RkhvHqafz",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/get-all",
+      "name": "Get All Vouchers"
+    },
+    "MiT4koqTgYCm": {
+      "endpointId": "MiT4koqTgYCm",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/pettycash-manager/report",
+      "name": "Get Petty Cash Admin Report"
+    },
+    "PLpcJtmozKW2": {
+      "endpointId": "PLpcJtmozKW2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/accounts",
+      "name": "Create"
+    },
+    "tw9Ywhd1a1Fz": {
+      "endpointId": "tw9Ywhd1a1Fz",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/accounts/:accountUniqueName:.+",
+      "name": "Update Account"
+    },
+    "i97OvtUY5Ew4": {
+      "endpointId": "i97OvtUY5Ew4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/groups/:groupUniqueName/download-account-closing-balance",
+      "name": "Download Account Balance"
+    },
+    "3KRhYvyTWrzY": {
+      "endpointId": "3KRhYvyTWrzY",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/entries",
+      "name": "Delete Multiple Entries"
+    },
+    "mVC1gb9z45N-": {
+      "endpointId": "mVC1gb9z45N-",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/sales-register-overview",
+      "name": "The purpose of this API is to create the Sales Register Overview of a company."
+    },
+    "2zJwdKQGI8hp": {
+      "endpointId": "2zJwdKQGI8hp",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/get-all",
+      "name": "Get Purchase Orders UIView"
+    },
+    "O7r7BOOy4tRx": {
+      "endpointId": "O7r7BOOy4tRx",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+",
+      "name": "Get"
+    },
+    "GY5jA5uoe3zj": {
+      "endpointId": "GY5jA5uoe3zj",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName:.+",
+      "name": "Delete"
+    },
+    "OmY7bY3WcP9B": {
+      "endpointId": "OmY7bY3WcP9B",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2",
+      "name": "Create"
+    },
+    "OK9Tf8ULMgBG": {
+      "endpointId": "OK9Tf8ULMgBG",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/generate",
+      "name": "Create"
+    },
+    "5WH1x2ye6sfv": {
+      "endpointId": "5WH1x2ye6sfv",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers-v2",
+      "name": "Create"
+    },
+    "qNzNSt_IRlXo": {
+      "endpointId": "qNzNSt_IRlXo",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/vouchers/bulk-generate",
+      "name": "Bulk Create"
+    },
+    "5k3dwrZ5KnAw": {
+      "endpointId": "5k3dwrZ5KnAw",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "API to update Ledger"
+    },
+    "4R_cfZviuaW-": {
+      "endpointId": "4R_cfZviuaW-",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-estimate",
+      "name": "Convert Estimate into Invoice with multicurrency support."
+    },
+    "HXBRpYsIpoiI": {
+      "endpointId": "HXBRpYsIpoiI",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/due-amount-report",
+      "name": "Get Debtor Due Amount Report"
+    },
+    "PhU1KEW4A1sc": {
+      "endpointId": "PhU1KEW4A1sc",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/groups/:groupUniqueName:.+",
+      "name": "Delete Group"
+    },
+    "TU4Re_ChMNV4": {
+      "endpointId": "TU4Re_ChMNV4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate",
+      "name": "This function will create new voucher based on provided request"
+    },
+    "0Hgvl8G_YFM9": {
+      "endpointId": "0Hgvl8G_YFM9",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+",
+      "name": "Delete"
+    },
+    "VLwCgD0H2aic": {
+      "endpointId": "VLwCgD0H2aic",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order/generate",
+      "name": "Create"
+    },
+    "4snJsvUPJ5hl": {
+      "endpointId": "4snJsvUPJ5hl",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order",
+      "name": "Update"
+    },
+    "yPCPvSsdoi8H": {
+      "endpointId": "yPCPvSsdoi8H",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group",
+      "name": "Create"
+    },
+    "Otl1y3Gzkyyi": {
+      "endpointId": "Otl1y3Gzkyyi",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group",
+      "name": "Create"
+    },
+    "W6z8X2sgsiaO": {
+      "endpointId": "W6z8X2sgsiaO",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order/:uniqueName",
+      "name": "/"
+    },
+    "BVnTMxK210DQ": {
+      "endpointId": "BVnTMxK210DQ",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "API to update Ledger"
+    },
+    "bMsuBbTGTCOM": {
+      "endpointId": "bMsuBbTGTCOM",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/transaction-report",
+      "name": "Get Stock Transaction Report"
+    },
+    "sfIrfH8PvqEZ": {
+      "endpointId": "sfIrfH8PvqEZ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock",
+      "name": "Create"
+    },
+    "WOyd327QN8GS": {
+      "endpointId": "WOyd327QN8GS",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "Get Ledger"
+    },
+    "tZjAE5hEfVpM": {
+      "endpointId": "tZjAE5hEfVpM",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate",
+      "name": "This function will create new voucher based on provided request"
+    },
+    "ydRX6Q-1JKcZ": {
+      "endpointId": "ydRX6Q-1JKcZ",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName/purchase-order",
+      "name": "Update"
+    },
+    "dDgdfqqpUNE9": {
+      "endpointId": "dDgdfqqpUNE9",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/purchases-register-overview",
+      "name": "The purpose of this API is to create the Purchases Register Overview of a com…"
+    },
+    "LEufs8kOgUWg": {
+      "endpointId": "LEufs8kOgUWg",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/daybook",
+      "name": "Get Daybook V2"
+    },
+    "ffQiI8Hchh8o": {
+      "endpointId": "ffQiI8Hchh8o",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/stock-group/:stockGroupUniqueName:.+",
+      "name": "Update"
+    },
+    "GA9b6xedCVIN": {
+      "endpointId": "GA9b6xedCVIN",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/transaction-report",
+      "name": "Get Stock Transaction Report"
+    },
+    "MS0P-I3zbyr5": {
+      "endpointId": "MS0P-I3zbyr5",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "API to update Ledger"
+    },
+    "wVdFjY3NXAIZ": {
+      "endpointId": "wVdFjY3NXAIZ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/inventory/balance",
+      "name": "Get Inventory Balance"
+    },
+    "d1PNWdlqlV5U": {
+      "endpointId": "d1PNWdlqlV5U",
+      "requestType": "DELETE",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/purchase-order",
+      "name": "Delete Purchase Order"
+    },
+    "nNOuxxlh7SX8": {
+      "endpointId": "nNOuxxlh7SX8",
+      "requestType": "PUT",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers",
+      "name": "this function will update the voucher based on provided request"
+    },
+    "KGgiON9wbdy2": {
+      "endpointId": "KGgiON9wbdy2",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate",
+      "name": "This function will create new voucher based on provided request"
+    },
+    "sqgvTjzm6ex4": {
+      "endpointId": "sqgvTjzm6ex4",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock",
+      "name": "Get Data For Inventory Table"
+    },
+    "OISrNWn9t7sF": {
+      "endpointId": "OISrNWn9t7sF",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock",
+      "name": "Create"
+    },
+    "0z0Y3xu7K4sG": {
+      "endpointId": "0z0Y3xu7K4sG",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/accounts/:accountUniqueName:.+/ledgers/:ledgerUniqueName:.+",
+      "name": "Get Ledger"
+    },
+    "rRjnUdJA8roT": {
+      "endpointId": "rRjnUdJA8roT",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/company/:companyUniqueName/vouchers/accounts/:accountUniqueName/v3/generate-via-proforma",
+      "name": "Convert Proforma into Invoice version 3"
+    },
+    "4Fn52OAvoUsJ": {
+      "endpointId": "4Fn52OAvoUsJ",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/invoices/:paymentId/pay",
+      "name": null
+    },
+    "jskGLn1iLN2t": {
+      "endpointId": "jskGLn1iLN2t",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/payment-methods",
+      "name": null
+    },
+    "Qq2rADPlymJv": {
+      "endpointId": "Qq2rADPlymJv",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/balance-summary",
+      "name": null
+    },
+    "grIcgmyYc-CK": {
+      "endpointId": "grIcgmyYc-CK",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/get-all",
+      "name": null
+    },
+    "AXqbQT4VB0H1": {
+      "endpointId": "AXqbQT4VB0H1",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/:voucherUniqueName/add-comment",
+      "name": null
+    },
+    "LyXIyi3m8tUO": {
+      "endpointId": "LyXIyi3m8tUO",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/:voucherUniqueName/comments",
+      "name": null
+    },
+    "9vB4n2uroYJd": {
+      "endpointId": "9vB4n2uroYJd",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/api/c/getDetails",
+      "name": null
+    },
+    "G3BF9J-8B4NF": {
+      "endpointId": "G3BF9J-8B4NF",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:id/accounts/:id/vouchers",
+      "name": null
+    },
+    "WWDeCHCyPKL1": {
+      "endpointId": "WWDeCHCyPKL1",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/contacts",
+      "name": null
+    },
+    "31eP24vmSPjA": {
+      "endpointId": "31eP24vmSPjA",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/details",
+      "name": null
+    },
+    "QideDDug_Xsq": {
+      "endpointId": "QideDDug_Xsq",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/export-account-statement",
+      "name": null
+    },
+    "tlN3PwbSlzme": {
+      "endpointId": "tlN3PwbSlzme",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/get-company-details",
+      "name": null
+    },
+    "QQp3HyikWUZw": {
+      "endpointId": "QQp3HyikWUZw",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/payment-method",
+      "name": null
+    },
+    "VHbpHbpM_C7S": {
+      "endpointId": "VHbpHbpM_C7S",
+      "requestType": "GET",
+      "URL": "https://api.giddh.com/portal/company/:companyUniqueName/accounts/:accountUniqueName/view-statement",
+      "name": null
+    },
+    "n8T7K6ysejA9": {
+      "endpointId": "n8T7K6ysejA9",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/portal-user/save-session",
+      "name": null
+    },
+    "DC8riPxsvNHc": {
+      "endpointId": "DC8riPxsvNHc",
+      "requestType": "POST",
+      "URL": "https://api.giddh.com/v2/verify-portal-user",
+      "name": null
+    }
+  },
+  "byRoute": {
+    "POST /company/{}/accounts/{}/v3/export-ledger/file": "SqXQKMTZJFtm",
+    "GET /v2/subscription/{}/generate-order": "DoNKOV2cgd1W",
+    "POST /company/{}/accounts/{}/v2/export-ledger-with-invoice/file": "7wUMWPiDu98t",
+    "POST /v2/subscription/change-plan": "l4hVaYJrdknR",
+    "POST /v2/subscription/buy-plan": "SmIcjPVZD2kI",
+    "POST /company/{}/accounts/{}/mail-ledger": "xnVJHprGCofn",
+    "PUT /users/{}/generate-auth-key": "6nnrByatVAyV",
+    "POST /v2/subscription/update": "6q9nfkolDvP3",
+    "POST /company/{}/accounts/{}/columnar-report": "DieUKMKpkOmo",
+    "GET /v2/company/{}/multibranch/trial-balance": "hhh3T4zBApNR",
+    "GET /users/{}/company-uer": "YnmfSlM8XKnz",
+    "GET /users/{}/v2/companies": "NGTk7ylvak15",
+    "POST /company/{}/invoices/{}/action": "TzMkNUMzcbmW",
+    "PATCH /company/{}/accounts/{}/purchase-order/status/change": "LquC6zMcjP_C",
+    "POST /company/{}/inventory-users/{}/inventory-entries": "_2xEiFkFds5S",
+    "PATCH /company/{}/inventory-users/{}/inventory-entries/{}/description": "KFILeHvUBJwC",
+    "POST /company/{}/inventory-users": "cgh6aA_OEsys",
+    "GET /v2/company/{}/vat-report": "NLDOitJ-6vtu",
+    "GET /company/{}/inventory-users": "RmvC_P8ue7i7",
+    "PATCH /company/{}/purchase-order/bulk-update": "xIs7dGjrnuZe",
+    "GET /v2/subscription/{}/country-list": "oDhzbZIuNmxg",
+    "GET /company/{}/group-search": "49Q10ARc672w",
+    "GET /users/subscriptions": "A8_VokjzP3Ap",
+    "POST /users/send-new-user-info": "Kts-zyQe_BBE",
+    "PUT /company/{}/uer/{}": "n5R8u6l-OL1p",
+    "DELETE /company/{}/uer/{}": "kOalacR_35zI",
+    "POST /company/{}/vouchers/bulk-export": "KnvVlVaXa9rV",
+    "GET /company/{}/accounts/{}": "sM71K_uwiQSW",
+    "DELETE /company/{}/accounts/{}": "5-hh5FOuhwto",
+    "PUT /company/{}/accounts/{}/merge": "W8lHCdeimE0Y",
+    "POST /company/{}/accounts/{}/un-merge": "7vq7ZkcmdvfL",
+    "PUT /company/{}/accounts/{}/move": "UqlIYjCbZL4e",
+    "PUT /company/{}/accounts/{}/contacts": "pNsSHqmWs9s2",
+    "GET /company/{}/accounts/{}/contacts": "rZYcxv3NoYab",
+    "GET /v2/company/{}/accounts/{}": "Ja85Tp7MQNXV",
+    "PATCH /v2/company/{}/accounts/{}": "RzKdZK3sh-oM",
+    "GET /v2/company/{}/accounts/{}/balance": "l3xKpynOmmCi",
+    "POST /v2/company/{}/accounts/send-mail": "TKWdLoLBxlIF",
+    "POST /v2/company/{}/accounts/{}/balance": "9rd8HZIYABUH",
+    "GET /company/{}/payment/banks/accounts": "EPW89yNsNcx9",
+    "GET /company/{}/flatten-accounts": "AdcGC-9sjOhg",
+    "POST /company/{}/vouchers/accounts/{}/v3/generate-via-proforma": "2ZziXzcOQeSK",
+    "POST /company/{}/vouchers/accounts/{}/v3/generate-via-estimate": "MCgznRu5_ywz",
+    "GET /company/{}/accounts/{}/giddh-ledger": "YSylQMeNGh-6",
+    "GET /company/{}/accounts/{}/project-entries": "Oy7qKLSWyPgg",
+    "DELETE /company/{}/accounts/{}/entries/{}": "JKTwPnnpKZaJ",
+    "DELETE /company/{}/accounts/{}/entries": "iCq4EGU51GQv",
+    "DELETE /company/{}/bank/accounts/{}/transactions": "BUgbSOY8r_UO",
+    "PUT /v2/company/{}/accounts/{}/invoices": "504QTmOLRthP",
+    "POST /v2/company/{}/accounts/{}/invoice/preview": "UYe1_9YzvSqY",
+    "GET /company/{}/accounts/{}/ledgers/{}": "Kf3FROS8fGOs",
+    "PUT /company/{}/accounts/{}/ledgers/{}": "dBlgxbKU0LXB",
+    "POST /company/{}/accounts/{}/ledgers/merge": "uMKyVmaYonGD",
+    "GET /company/{}/accounts/{}/ledgers-v2/view-statement": "HK7rCn_l71Xc",
+    "POST /company/{}/accounts/{}/ledgers-v2/reconcile": "_bNR5zJBdnpt",
+    "POST /company/{}/accounts/{}/ledgers-v2/view-statement": "QDTj7qS2S6ol",
+    "POST /company/{}/accounts/{}/ledgers-v2/export-account-statement": "urGp2lEVrxcz",
+    "POST /company/{}/accounts/{}/purchase-order/pending-numbers": "hqXNWK6cpfu4",
+    "POST /company/{}/accounts/{}/purchase-order/versions/all": "GzFw9nqyN6qe",
+    "GET /company/{}/accounts/{}/purchase-order/{}/download": "RUC1gNA8lktl",
+    "POST /company/{}/accounts/{}/purchase-order/{}/mail": "4nGS-CaWC4jK",
+    "POST /company/{}/accounts/{}/vouchers/generate": "HqtmRJzK76VJ",
+    "POST /company/{}/accounts/{}/vouchers/download-file": "YF3iOEIOOTV3",
+    "POST /company/{}/accounts/{}/vouchers/mail": "BSElH4TGXgzC",
+    "POST /company/{}/accounts/{}/vouchers/preview": "I3a0czzkqCiU",
+    "POST /company/{}/ledger/upload": "k6VhDShXC_Xe",
+    "GET /company/{}/us/sales-report-authority-wise": "0mUZ7ukKA_fk",
+    "PUT /company/{}/ewb/cancel": "8Khf2u1edude",
+    "POST /company/{}/communication/platform/verify": "ml8JpJfz-o7p",
+    "GET /company/{}/ledger/upload/{}": "F1q57gO1MFRb",
+    "GET /v2/company/{}/trigger/{}": "dKhmk2Z5Xc7Y",
+    "PUT /company/{}/ewb/vehicle": "NG2lj3RGqmts",
+    "PUT /company/{}/stock/{}/move": "db0ovBF0qDAh",
+    "GET /company/{}/us/sales-report-tax-wise": "o6oub9muyNeG",
+    "DELETE /company/{}/communication/platform/{}": "RIwC2Im5BX1g",
+    "GET /v2/company/{}/trigger/all": "_2g3wu6yMvKV",
+    "GET /company/{}/pettycash-manager/ledger/{}": "cgBJ_PGV0VFl",
+    "GET /company/{}/stock/{}/variants": "pzs126h84WXi",
+    "GET /company/{}/communication/campaign/list": "OZBZ8V9YApR5",
+    "GET /company/{}/us/export-sales-report-tax-wise": "Rr8NSJ0e6FBk",
+    "POST /company/{}/ewb/validate-invoice": "7U6HITJrJdnY",
+    "GET /company/{}/communication/campaign/{}/fields": "bS15zuIOWARy",
+    "POST /company/{}/stock/{}/rate-for-stock-v2": "dmxhhbY6wQ9t",
+    "POST /company/{}/triggers": "BIniKY79y6-m",
+    "GET /company/{}/us/sales-report-account-wise": "eHpW2CKnpdG2",
+    "GET /company/{}/communication/suggestions/{}/{}": "-CtfKDjUtzgj",
+    "GET /company/{}/business-documents/{}": "mdDmZZVd1ajI",
+    "GET /company/{}/communication/email-content-suggestion": "a-Y7V8WLEctz",
+    "GET /magic-link/{}": "0dOuYhSM3tMU",
+    "POST /company/{}/stock/{}/recipe": "T2yH__hy4CnY",
+    "PUT /company/{}/triggers/{}": "WGF3iZWYBl2d",
+    "GET /company/{}/communication/condition-suggestion": "AGzFrGHNx9wo",
+    "GET /magic-link/{}/download-invoice/{}": "clAIOqr44oae",
+    "POST /company/{}/business-documents/{}/action": "C61OeM2nsIUs",
+    "GET /company/{}/communication/generate-email": "Ec-dJQQ9bnEc",
+    "POST /company/{}/stock/{}/recipe/get": "b2Obnfk3_5yU",
+    "DELETE /company/{}/business-documents/{}": "zNEbnY-dqTXH",
+    "GET /company/{}/sms-key": "YP6Z1hD_PVp-",
+    "GET /v2/company/{}/stock/{}": "6fDN9Lfq5Ajd",
+    "POST /company/{}/email-key": "V6im491hAdcL",
+    "POST /company/{}/business-documents/convert": "c5Tdztdv4lXi",
+    "POST /v2/company/{}/stock": "drgX7EfDjN1X",
+    "POST /company/{}/sms-key": "qCGikN7ZPAfA",
+    "POST /company/{}/generate-mail-token": "92W7BAFUUwPh",
+    "GET /company/{}/hierarchical-stock-groups": "7K5wHjDICnDy",
+    "POST /v2/company/{}/stock-history": "a31cqPMp6MV2",
+    "GET /company/{}/business-documents/{}/history": "U6jL9vgkgQJr",
+    "PATCH /v2/company/{}/stock/{}/variant/{}": "0fN2iERxTngp",
+    "GET /company/{}/flatten-stock-groups-with-stocks": "LwedytLHWRgB",
+    "GET /company/{}/gmail-token": "sZUn3XPC-1A_",
+    "GET /company/{}/business-documents/{}/versions": "v_nCRtzr0IIO",
+    "DELETE /company/{}/gmail-token": "SxBIAad9jbyL",
+    "GET /v2/company/{}/stock": "K2nNBGmZ-pbz",
+    "POST /company/{}/save-mail-token": "fqzoZdwdkGi0",
+    "GET /company/{}/business-documents/statuses": "PwXUwL0HhenA",
+    "GET /v2/company/{}/stock/{}/details": "hfjhpT5kQrSa",
+    "PUT /company/{}/gst-setting/{}": "PSNZ6vlybYtC",
+    "POST /company/{}/customfield": "Mm67ArGh8M4N",
+    "POST /company/{}/gst-setting": "ygpXew4QS-J4",
+    "GET /company/{}/gst-setting/list": "dWhjn4jOY32s",
+    "DELETE /company/{}/gst-setting/{}": "e5n6SJODI9t-",
+    "GET /gst-info": "4Fcz6oG33DMS",
+    "GET /v2/company/{}/gstr1": "0ni-GyWOjlOV",
+    "POST /v2/company/{}/save-gstr1": "dVjfD77g35fV",
+    "POST /company/{}/custom-fields": "rFSoC8gypIo_",
+    "POST /company/{}/inventory-adjustment/adjustment-report": "p2oXeBs469v1",
+    "GET /company/{}/customfield/module/{}": "yD2hHYemCdAN",
+    "POST /company/{}/financial-year": "-XJMefIpp4MI",
+    "POST /v2/company/{}/save-gstr3b": "QZNLJqSXane4",
+    "GET /v2/company/{}/save-gstr1-status": "ncvpu1M2MEbe",
+    "GET /company/{}/custom-fields": "tWkCRDsceh2p",
+    "GET /v2/company/{}/gstr1-referenceids": "tZSuXvCtuKzW",
+    "GET /company/{}/inventory-adjustment/reason/get-all": "SQ-0nEZxhKR7",
+    "GET /company/{}/financial-year": "PGt45wszoASy",
+    "GET /v2/company/{}/gstr-reconcile/invoices": "78NlQIuvDHCs",
+    "POST /company/{}/inventory/transaction-report": "WW1LlRbHS6y6",
+    "GET /v2/company/{}/gstr3b-excel-export/email": "uVhBggsubsQk",
+    "PUT /company/{}/financial-year": "KxP0uz9kPHtR",
+    "PATCH /v2/company/{}/gst/unit-mapping": "QP38vt8tuRoE",
+    "PATCH /company/{}/financial-year-lock": "ClNpTFvQWwVz",
+    "GET /v2/company/{}/gst/unit-mapping": "i6Aw-4idpZoD",
+    "POST /company/{}/inventory/balance": "w7NreuUcjfmA",
+    "GET /v2/company/{}/gstr1/download-v2": "sGKpGX0goPDs",
+    "PATCH /company/{}/financial-year-unlock": "W4gLKPHt91QF",
+    "POST /company/{}/dsc/prepare": "N4XnsEvPsWd7",
+    "POST /company/{}/future-financial-year": "kNzsX--o67ff",
+    "GET /company/{}/stock-group/{}/report": "XZOJ3E-DnNa5",
+    "POST /company/{}/dsc/finish": "xU26tvoA7NcU",
+    "GET /company/{}/financial-year-limits": "AFObMVrBFYbr",
+    "GET /company/{}/role": "v7ZFdagWLsxc",
+    "GET /company/{}/stock-group/{}/stock/{}/report-v2": "EpRAgR3YPn3-",
+    "GET /company/{}/stock/{}/inventory-report": "LbfEEry8XsX8",
+    "POST /company/{}/role": "3qbIgU2X2b4P",
+    "PUT /company/{}/role/{}": "o5jJ74cl2ON4",
+    "GET /v2/company/{}/download-all-inventory-report-v2": "a8ax2pt-yM-v",
+    "DELETE /company/{}/role/{}": "SYddzAXcZ2WI",
+    "POST /v2/company/{}/download-all-inventory-report-v2": "jknAR7RqskoY",
+    "POST /company/{}/role/{}/assign": "OUm2m1cWmFPV",
+    "GET /v2/company/{}/download-all-inventory-hierarchy": "d-7Pm8aIxMJI",
+    "POST /v2/company/{}/download-all-inventory-hierarchy": "gQs3Lc9p7Htj",
+    "GET /ui/forms": "xrIYcVu7hLMM",
+    "GET /v2/company/{}/download-inventory-arrangedby-accounts": "s5NvPWs1uJHn",
+    "GET /ui/graph-types": "wE1gM9j9c9Qp",
+    "GET /ui/calling-code": "0vNvfzdZyW-Q",
+    "GET /ui/taxes": "bIFgSrYrwBVL",
+    "POST /v2/company/{}/download-inventory-arrangedby-accounts": "FhNmKjLvuaMq",
+    "GET /ui/party-types": "GYU1iGpKWmbf",
+    "DELETE /company/{}/inventory-adjustment/{}": "xMEJQtJJH1_U",
+    "GET /company/{}/inventory/{}/masters": "ioEvy3msNZFd",
+    "GET /ui/bank/integration/form": "exBh4qqTfh_O",
+    "GET /ui/auditlogs-form": "CVg-k9a4FRrl",
+    "GET /company/{}/top-inventory-groups": "-F9WxVZwemxQ",
+    "POST /company/{}/branch-transfer/generate": "v5pzHpDn6BvA",
+    "POST /company/{}/inventory-search": "yig7FvKuQMBP",
+    "GET /company/{}/branch-transfer/{}": "67wF43PeTgB1",
+    "POST /company/{}/branch-transfer/all": "ejeiDYj106Bh",
+    "DELETE /company/{}/branch-transfer/{}": "cdjozGSLI7gK",
+    "PUT /company/{}/branch-transfer/{}": "kDJfJkka4aaH",
+    "POST /company/{}/branch-transfer/download": "1K9TcfpOuKlo",
+    "GET /company/{}/salesperson": "cMUwqfi2ktvK",
+    "POST /company/{}/warehouse": "noaemP9UnEdg",
+    "PUT /company/{}/warehouse/{}": "7c92p7LcDeJ0",
+    "PATCH /company/{}/warehouse/{}/default": "cOW354bJEnxT",
+    "POST /company/{}/stock-group/{}/inventory-report-v3": "lfKeypdHtx3f",
+    "GET /company/{}/warehouse/{}": "28Py3zyjsX-8",
+    "GET /company/{}/warehouse": "DwgjLVrvH60G",
+    "PATCH /company/{}/warehouse/{}": "vPM-TFAFBQZ9",
+    "POST /company/{}/vouchers/get-all": "tvC2OBNHzdQZ",
+    "POST /company/{}/stock-group/{}/stock/{}/report-v2": "VFsV9F_INDRb",
+    "POST /company/{}/recurring-voucher": "pflQyAwW0smn",
+    "GET /company/{}/stock-group/{}/stock/{}/download-stock-inventory-report-v3": "xVG1F2-pUnKK",
+    "POST /company/{}/vouchers/voucher-status-count": "0APVgC88ZrIQ",
+    "POST /company/{}/stock-group/{}/stock/{}/download-stock-inventory-report-v3": "roG_y0xOOFT1",
+    "POST /company/{}/payu": "OsFly2KwEy1W",
+    "GET /company/{}/stock-groups-with-stocks": "Eyj9I3be27OI",
+    "GET /company/{}/razorpay": "YVdb8xkkkzw_",
+    "GET /company/{}/payu": "AN1vSznH4o5s",
+    "DELETE /company/{}/payu": "jkL1hGptEAy-",
+    "GET /v2/subscription/{}/payment/{}/save-razorpay-token": "nOs56SYSOxXk",
+    "POST /company/{}/paypal": "Q6wjzkmLVDLx",
+    "GET /company/{}/paypal": "spPwv3QjrIF8",
+    "DELETE /company/{}/paypal": "-N8QfQ3Z_tSS",
+    "PUT /company/{}/paypal": "MAhHN367rjOp",
+    "POST /subscription/paypal/order/{}/capture": "GzIhZxv48w7t",
+    "POST /company/{}/razorpay": "rezWmKqyy_Wb",
+    "PUT /company/{}/razorpay": "T62AFuQv8mwf",
+    "DELETE /company/{}/razorpay": "jk7-BuMZ9RvH",
+    "GET /stock-units": "H6TWoUAD4HBc",
+    "POST /company/{}/stock-unit/mappings": "zqpm6vaJ02v-",
+    "GET /company/{}/stock-unit/{}/linked-stock-units": "CWbjMbppg_0g",
+    "PUT /v2/company/{}/manufacture/{}": "RMaDKegsiZLX",
+    "GET /v2/company/{}/manufacture/{}": "z4scgnOxIlCJ",
+    "DELETE /v2/company/{}/manufacture/{}": "5HggLZKh1VJ5",
+    "PUT /v2/company/{}/communication/email-template/{}": "sbWMBsjuQEfd",
+    "GET /v2/company/{}/communication/email-template/{}": "U3iNodhZjaqv",
+    "POST /v2/company/{}/templates": "fk78zR8-7jL0",
+    "GET /v2/company/{}/templates": "94H9oSkc_5uM",
+    "GET /v2/company/{}/templates/{}": "YmkZ3UMaHCdr",
+    "PUT /v2/company/{}/templates/{}": "iQEWysvWnirl",
+    "DELETE /v2/company/{}/templates/{}": "qgQcZma1Cbv5",
+    "PATCH /v2/company/{}/templates/{}/default": "gZXAcyaGPc13",
+    "GET /v2/company/{}/sample-templates": "ygxSSQ8IkDwl",
+    "POST /company/{}/ecommerce/email": "qQTW_oF-7SUR",
+    "POST /company/{}/tags": "uRu5HMsjCmgq",
+    "PUT /company/{}/tags/{}": "r4vi3Y5B3IH8",
+    "GET /company/{}/tags": "0ezl-0Y74Z-_",
+    "DELETE /company/{}/tags/{}": "GuU2xfHmECce",
+    "POST /company/{}/transporters": "F8m9jBATgQmv",
+    "PUT /company/{}/transporters": "J9ZF3D909a-8",
+    "GET /company/{}/new-old-sales/details": "KD_hhwChklle",
+    "DELETE /company/{}/transporters": "fNdpG2_wKkeV",
+    "GET /company/{}/transporters": "xCvfh3K6O6pb",
+    "POST /company/{}/advance-receipt/adjust": "__xBBbFgcj27",
+    "POST /company/{}/advance-receipt/get-all": "ln0ycgoMoT4U",
+    "GET /company/{}/advance-receipt/summary": "jNnDWVR8lUhP",
+    "GET /currency": "u5io7qwg1ZKT",
+    "GET /company/{}/currency-converter/{}/{}": "EWzyvMKbHmDE",
+    "POST /company/{}/voucher/{}/cancel-einvoice": "LagzJA0PLP0U",
+    "GET /company/{}/us/export-sales-report-account-wise": "JqqEE5Zypepr",
+    "GET /company/{}/new-old-sales": "OkC9rRFiw8LR",
+    "POST /v2/company/{}/v2/sales-register-overview": "anUoH3_oNgMK",
+    "GET /company/{}/due-days-range": "dxdVKypxKccK",
+    "GET /state-details": "ZGnYbJpktYb0",
+    "POST /state-details": "C9tqQHz3fL-g",
+    "POST /company/{}/due-days-range": "oqrd8tFrpdXP",
+    "GET /scope-v2": "JOmFNiZyl3iV",
+    "GET /company/{}/triggers": "Tu4U9Z5kYrh2",
+    "POST /users/{}/destroy-session": "652kl30BFy1e",
+    "POST /v2/company/{}/activity-logs": "j8BrJRJf_eUe",
+    "GET /company/{}/cmdk": "1oOy1v8etrOf",
+    "GET /company/{}/completed-document-count": "v81bHKliE7Lf",
+    "GET /company/{}/dashboard/graph": "JeC4egz2Wt9O",
+    "POST /company/{}/forecast": "mWkvfi7zu6am",
+    "GET /company/{}/get-domain-list": "Nw1bEI3eQAtZ",
+    "POST /company/{}/images": "s9eUgP_5140T",
+    "POST /company/{}/logs": "yNeGy1X6jYzv",
+    "GET /company/{}/ocr-data": "cqAukwqdRbGS",
+    "PUT /company/{}/purchase-bill-setting": "a6Q2w8Wd9WAG",
+    "POST /company/{}/save-authorization-code": "Y3QFMhOSpKhk",
+    "POST /send-data": "Qr-fw5zay-Oh",
+    "GET /company/{}/sources": "xYs3qW3rmluU",
+    "GET /time": "FAJq66rjal40",
+    "GET /company/{}/ui_side_bar_items": "o9BoZJ8GOuyv",
+    "GET /company/{}/auth/all": "Ph6GGUND5WW2",
+    "GET /company/{}/top-shared-groups": "YDMFIQLvDiPK",
+    "GET /company/{}/accounts/{}/purchase-record/download-file": "hjL32MTz94ad",
+    "GET /company/{}/purchase-order/{}": "OQSfs-8qmTKB",
+    "GET /company/{}/kenya/v2/vat-report-download": "gUfWuTvUFpfd",
+    "GET /company/{}/tax/authority": "FBzNxxyYz0cI",
+    "GET /company/{}/accounts/{}/purchase-record/validate": "97fbUCVr3sy7",
+    "POST /company/{}/project/{}/entry": "ZKMC2ODr85g2",
+    "GET /company/{}/auth/{}": "HZoSepzIACkQ",
+    "GET /company/{}/project/all": "UD1U_kKoQjI-",
+    "GET /company/{}/purchase-order/preview": "hIeKNxCl0v3e",
+    "GET /company/{}/kenya/vat-report": "e0SCNuutUQIr",
+    "PATCH /company/{}/accounts/{}/purchase-record": "mbC6W2wxr8IN",
+    "POST /company/{}/tax/authority": "3I6Re3HexqFN",
+    "DELETE /company/{}/project/{}": "E_8eCIdIg7Tk",
+    "POST /v2/company/{}/stock-aging-report": "8FyM85SpDNSx",
+    "GET /v2/subscription/{}/activate": "GunhOOr9rq7N",
+    "GET /company/{}/settings": "KM2ysfEJHYfw",
+    "PATCH /company/{}/tax/authority/{}": "zmixGHSoLHqw",
+    "POST /company/{}/accounts/{}/purchase-record/{}/mail": "Hgu0SDSr6ivU",
+    "POST /v2/subscription/{}/activate-prepaid": "K1DprpWB5bDp",
+    "POST /v2/company/{}/stock-aging-report/totals": "2EGU-GqFfNsK",
+    "PUT /company/{}/settings": "pWimK55ECo0X",
+    "DELETE /company/{}/tax/authority/{}": "YREH5h6ia4xO",
+    "POST /company/{}/accounts/{}/purchase-record/versions/all": "dVB_RQdLdynB",
+    "PUT /company/{}/project/{}/entry/{}": "e_FdkLmux6sJ",
+    "GET /company/{}/uk/vat-report": "dXExnkspSjrx",
+    "GET /company/{}/entry-settings": "BO5J2zMYOTQ9",
+    "POST /v2/company/{}/authenticate-gsp-session": "sUbp8Sz2WuRW",
+    "GET /company/{}/project/{}/net-profit": "5Ecw0Lmy-rK_",
+    "GET /company/{}/accounts/{}/purchase-record/{}/download": "cLd4ikBjx3Be",
+    "GET /company/{}/uk/vat-report-detailed": "2i2NuMdm12Bg",
+    "PUT /company/{}/entry-settings": "WjsVcXqxTVQT",
+    "POST /company/{}/uk/vat-obligations": "903vn8LAmS4O",
+    "POST /company/{}/purchase-record/get-all": "iwogPsv3M_c9",
+    "GET /company/{}/gocardless/institutions": "T80AQSe4t-mk",
+    "POST /v2/company/{}/stock-aging-report/{}/details": "ycRvVl_JSZdV",
+    "PUT /users/{}/settings": "WE5Fp7sI_2cS",
+    "DELETE /company/{}/customer-vendor-discount": "brd4sl_eZ1EN",
+    "DELETE /company/{}/purchase-record": "McJhSdeorxYs",
+    "POST /company/{}/gocardless/agreement-requisitions": "v_NzArzBQDod",
+    "GET /country/country-list": "GqVPOxFnLhiG",
+    "POST /v2/company/{}/stock-aging-report/{}/variants": "K8EnCZFJeALw",
+    "POST /company/{}/uk/view-vat-return": "_S2V-x7RSaHc",
+    "GET /country/{}": "OpBqE_rI0G3g",
+    "GET /company/{}/customer-vendor-discount/get-all-users": "wiFLoC5R0iY0",
+    "DELETE /company/{}/gocardless/{}": "DNtg-V-CW6Ev",
+    "POST /company/{}/uk/submit-vat-return": "QChI-0w2Rbi7",
+    "GET /v2/company/{}/purchases-register-overview": "OyDbjn0YqYkj",
+    "POST /company/{}/gocardless/requisitions/{}": "lUtBmv3-URWC",
+    "POST /company/{}/uk/retrieve-vat-payments": "yWup73aE_b2d",
+    "GET /company/{}/customer-vendor-discount/get-all-discounts": "HliiH8mgQhSU",
+    "POST /company/{}/discount": "3NUBjpQor0KN",
+    "POST /company/{}/bank/registration": "RoWLVFz0zy7X",
+    "PATCH /company/{}/customer-vendor-discount/stock/{}/variant/{}/update-discount": "0y7oAU2POwJT",
+    "PUT /company/{}/bank/updatedetails": "tj81fqandFz5",
+    "GET /company/{}/export-settings": "PQwKkcFfwPty",
+    "POST /v2/company/{}/purchases-register-detailed": "wjh2pfdXI_V1",
+    "GET /country/cities": "UI5u8cYOCI_L",
+    "GET /company/{}/gocardless/refresh": "5QG8TKFhzWrj",
+    "POST /company/{}/customer-vendor-discount/stock/{}/assign-discount": "voVh0VEMnpKz",
+    "POST /v2/company/{}/v2/purchases-register-overview": "giuxTp3HGu7L",
+    "POST /company/{}/uk/retrieve-vat-liabilities": "sX9T2-iKibF6",
+    "PUT /company/{}/discount/{}": "1JIlLIjPdiOP",
+    "GET /v2/company/{}/vat-report-detailed": "pED0VSYtiyGT",
+    "DELETE /company/{}/bank/deregistration": "zqgTBsbrM-5K",
+    "POST /company/{}/add-domain": "_Vl7MhxNHkb-",
+    "GET /company/{}/bank": "_W-8bbNEe_-P",
+    "PATCH /company/{}/export-settings": "aPywVTMFw4Sx",
+    "GET /company/{}/zw/vat-report-download-v2": "P1aAxRmpFJ5m",
+    "GET /company/{}/discount": "8CAXDD28BPjb",
+    "GET /company/{}/zw/vat-report": "gn-hJee4Qptd",
+    "GET /company/{}/bank/generateotp": "pyVyR125168S",
+    "GET /company/{}/verify-domain": "ZwWw2zyvPube",
+    "POST /company/{}/bank/payments": "5fOwMnNlPKev",
+    "GET /company/{}/stocks": "9scrjjxA0Pf0",
+    "PATCH /company/{}/domain/{}": "iyPkNnV7Ex4q",
+    "POST /company/{}/discount/assign": "A_jTPfpD5Szy",
+    "POST /company/{}/export-invoices-v2": "xSl1PoaoylIQ",
+    "GET /company/{}/zw/vat-report-detailed-download-v2": "WUbZ981l5W14",
+    "POST /company/{}/bank/payments/confirm": "CXRbWn4zN79z",
+    "POST /company/{}/domain/{}/share": "LAg5OpnAxT8j",
+    "GET /company/{}/discount/assign/list": "bluQvCifTQ6O",
+    "GET /company/{}/stocks/v2": "3lfgRvcbj7wL",
+    "GET /company/{}/bank/resend-otp": "zT68lcoXgHdU",
+    "GET /company/{}/zw/vat-report-detailed": "qJfWQklsgr5f",
+    "GET /company/{}/tax-numbers": "-IgJt3stpfU6",
+    "GET /company/{}/stocks-manufacture": "BHdgBqj_Ch5u",
+    "POST /v2/company/{}/logs": "wqCewonMbmPH",
+    "GET /company/{}/plaid/create/link-token": "JRnuI8MVRbfI",
+    "POST /company/{}/discount/assign-v2": "EuSPB1mqwznF",
+    "POST /company/{}/plaid/create/access-token": "f5UVMol3W7a3",
+    "GET /company/{}/communication/platform/{}/trigger/form": "xX7kA9mT2-yB",
+    "POST /company/{}/tax": "W839xiz9MC1o",
+    "POST /company": "Y5sVLyEFIGC8",
+    "POST /company/{}/ewb": "_rLinHKkGKb8",
+    "PUT /company/{}/stock/{}/manufacture/{}": "JA45qvbxmRxs",
+    "POST /v2/company/{}/bank": "TjRJHj7xUMrK",
+    "GET /company/{}/tax": "jL-nLUX3Z3Ad",
+    "GET /company/{}": "f1RojyNwn4uc",
+    "POST /company/{}/ewb/user": "KOLx12hfQFDP",
+    "POST /company/{}/tax/assign": "cOF4yeBkCNjA",
+    "PUT /company/{}": "x4ILD4Xertbu",
+    "DELETE /company/{}/stock/{}/manufacture/{}": "n7OoY-ddQMrU",
+    "PUT /v2/company/{}/bank/{}": "GfqUjNoU_Buw",
+    "GET /company/{}/ewb": "2OVqmXkhHhO0",
+    "PUT /v2/company/{}/bank/{}/payor/{}": "f-hJ_A_LkANE",
+    "PATCH /company/{}/communication/trigger/{}": "-XpABT1bcnZR",
+    "GET /company/{}/stock/{}/link-with-rates": "B2cGPNPCRRGp",
+    "POST /v2/company/{}/gsp-session": "4hNazgv_D0oe",
+    "PUT /company/{}/invoice-setting": "4JV9t0hK5uKx",
+    "GET /v2/company/{}/bank/{}/payor/{}/status": "pjFVGtCrC72r",
+    "GET /company/{}/communication/trigger": "uEVAoO6n8DJA",
+    "PATCH /company/{}": "e4WhPg_atlkL",
+    "POST /v2/company/{}/bank/multi-registration": "TViTPVKFUEeV",
+    "GET /company/{}/ewb/user": "3AIUCye6XhjX",
+    "DELETE /company/{}/invoices": "ci3k0iG1u2aE",
+    "GET /company/{}/stock/manufacture-report": "sTGo5qASkp7x",
+    "GET /v2/company/{}/bank": "PWDpsUjC1jnu",
+    "GET /company/{}/communication/trigger/{}": "6gPB1aZu_J7w",
+    "GET /v4/company/{}/particular": "26mV7-bY-pub",
+    "GET /company/{}/ewb/{}/download-v2": "UdoGGov4zQZj",
+    "GET /v2/company/{}/session": "jyN3gW6CgJQx",
+    "GET /v2/company/{}/invoices/list": "b5AgjaDnw5wz",
+    "POST /company/{}/stock/{}/rate-for-stock": "5ZBN8_Nrdzou",
+    "GET /v2/company/{}/bank/{}/payor": "-rVys_TLcYJR",
+    "POST /v2/company/{}/trigger": "02iGqF2pGFEL",
+    "GET /company/{}/ewb/{}/download-detailed-v2": "hQDqFbBqKzsX",
+    "GET /company/{}/us/export-sales-report-authority-wise": "EE86A6D-FoNr",
+    "POST /company/{}/imports/import-pdf/bank-statement": "LAofu6cZulNG",
+    "PUT /v2/company/{}/trigger/{}": "qezm3yycgXMa",
+    "GET /company/{}/email-key": "B4p79_LBK-3x",
+    "POST /company/{}/ledgers": "Sz0YNoG8MgmS",
+    "GET /company/{}/communication": "q73WV6m0nbuW",
+    "DELETE /v2/company/{}/trigger/{}": "IYpACfPEBQba",
+    "POST /v2/company/{}/groups/{}/account-closing-balance": "N1w7YNG2eQgv",
+    "POST /v2/company/{}/groups/{}/export/account-balances-v2": "ZcAp3VLpm1MG",
+    "GET /v2/company/{}/groups/{}/flatten-accounts": "c1aAjlyx6P1P",
+    "POST /v3/company/{}/accounts/{}/proformas/generate-via-estimate": "bdxVmC8cSKM3",
+    "GET /country/company/{}/account-countries": "ARwx7gac5mTh",
+    "POST /v4/company/{}/accounts/{}/vouchers/bulk-generate": "2gENSvPKOBGj",
+    "GET /v4/company/{}/accounts/{}/vouchers/advance-receipt/all": "HdgupnVXkYM5",
+    "GET /v4/company/{}/accounts/{}/vouchers/bill-to-bill/export-v2": "tuljelQn7rdC",
+    "GET /company/{}/yodlee/accounts/{}/eledgers": "WEoHYBUModk0",
+    "GET /company/{}/accounts/{}/autopaid": "KC40V2cAWP05",
+    "POST /company/{}/accounts/{}/bulk-ledgers-v2": "4Y_qxtXhQ-Tg",
+    "POST /company/{}/accounts/{}/vouchers/bulk-export": "KJkEPu-akg1H",
+    "GET /company/{}/brief-accounts": "MTSvtoNB8g7J",
+    "GET /company/{}/v3/account-search": "xhRrNaKY29bC",
+    "GET /company/{}/account-search-2": "dmsAgZYkSpoN",
+    "POST /company/{}/account-search-predicted": "ppTwFHtQzHty",
+    "POST /v2/subscription/transfer/ownership": "eznmrJUPBVs-",
+    "POST /v2/subscription/verify/ownership": "OK2-GBqvJPSH",
+    "GET /v2/subscription/billing-account/get": "qTpv47S8Tnu3",
+    "PATCH /v2/subscription/billing-account/{}": "ZYEzXJElX0cM",
+    "POST /v2/subscription/list": "Wr1ehkf9kTbn",
+    "POST /v2/subscription": "EOPUvPuFzNut",
+    "GET /v2/subscription/{}/cancel": "PDO1IQh-FZ-a",
+    "GET /v2/subscription/plans/all": "NTxVoqQl4OFU",
+    "GET /v2/subscription/{}/payment-methods": "bpA51yrq5cIP",
+    "PATCH /v2/subscription/payment-method/{}": "vsN0nSE7c-9I",
+    "DELETE /v2/subscription/payment-method/{}": "OAmjU71ZQqRK",
+    "POST /v2/subscription/charge/{}": "14LlOOvKQTLE",
+    "GET /v2/subscription/{}": "ycK60KvF22yE",
+    "POST /v2/subscription/company-list/{}": "XQOEZZdDPMvW",
+    "GET /v2/subscription/{}/payment/{}/save-stripe-payment": "6GenGA0uUEoY",
+    "POST /v2/subscription/add-payment-method": "bwGeoJTqyBYm",
+    "GET /v2/subscription/{}/company-list": "J_0--uWnwEl8",
+    "POST /v2/subscription/get-amount": "jOlUZw8kEKSR",
+    "POST /v2/subscription/add-wallet-amount": "9DlwgvD0mGN2",
+    "GET /v2/subscription/{}/wallet": "2_kiton6mWRk",
+    "GET /v2/subscription/{}/wallet-logs": "Z_zROShkEN9r",
+    "POST /v2/subscription/{}/capture-wallet-payment": "ULGuiJ1Dt3xN",
+    "POST /v2/subscription/{}/create-pre-paid": "CT2-TdhbRJfm",
+    "PATCH /company/{}/plan": "xEVgW01-tsGA",
+    "GET /subscription/generateorder": "FUQYc_6HjBpe",
+    "POST /report-filters": "8gal9JV9cmwS",
+    "GET /report-filters": "jIBzlXf1Et2h",
+    "POST /v2/company/{}/accounts/{}/report-comment": "YZlqdLmz6chs",
+    "DELETE /v2/company/{}/accounts/{}/report-comment": "2uEZsLAbxywj",
+    "POST /company/{}/business-documents/pending-report": "GhJt7-GXS2Tl",
+    "POST /company/{}/daybook": "9Dgu0gb_XJm0",
+    "POST /company/{}/due-amount-report": "0Of9ubnNnCVz",
+    "GET /company/{}/export-settings/daybook-v2": "RtKXX9Lg_Vb6",
+    "POST /company/{}/export-settings/daybook-v2": "T-nW-s0v1z0H",
+    "GET /company/{}/v2/balance-sheet-collapsed-download-v2": "4g1ZlwOG2zQC",
+    "GET /company/{}/v2/profit-loss-collapsed-download-v2": "OdfWefdmCppX",
+    "GET /company/{}/trial-balance-export-v2": "njPLU4XYC7pD",
+    "GET /company/{}/calculateratios": "T_prPyneR5gs",
+    "POST /v2/company/{}/reports/entity-status": "dHiVgsTz25U2",
+    "POST /v2/company/{}/multicompany/{}": "tK5NalBX78lR",
+    "GET /v2/company/{}/multicompany/{}": "-li9FCHQNbc3",
+    "GET /company/{}/users": "1-IP9izkK3au",
+    "GET /v2/company/{}/multibranch/balance-sheet": "AeyIxLtbbYRQ",
+    "POST /company/{}/address": "dVlFN4wu65U7",
+    "GET /company/{}/imports": "cTuNydnmO_E0",
+    "GET /company/{}/groups-with-accounts": "SByPOWuP9shi",
+    "GET /v2/company/{}/cogs": "JjmiBZAYzpOw",
+    "POST /v2/company/{}/reverse-charge-report": "qqg7uc6LFr_K",
+    "POST /company/{}/groups": "X8Cl_KI_fl1N",
+    "POST /company/{}/imports/upload": "uvWf9lV4SWK8",
+    "PUT /company/{}/groups/{}": "Jhjkx8VhgL77",
+    "DELETE /company/{}/groups/{}": "eo8F08lfai_S",
+    "GET /company/{}/address/all": "ceux_udQ1qol",
+    "PUT /company/{}/groups/{}/move": "WGXsuEpkfk7S",
+    "POST /company/{}/address/all": "hyyKTtGJECuO",
+    "GET /v2/company/{}/groups/{}/download-account-closing-balance": "IxvTCgvwt_3r",
+    "POST /company/{}/branch": "uLTye-IHMbq7",
+    "GET /company/{}/groups/{}/tax-hierarchy": "muK-d0gPoUyA",
+    "GET /company/{}/branch": "bcLHYb4Hqr4n",
+    "POST /v2/company/{}/groups/{}/download-account-closing-balance": "fYlphS2JfNoV",
+    "GET /company/{}/authorize": "0VEvUbCETEr9",
+    "POST /v2/company/{}/groups/{}/email-account-closing-balance": "rhsaqARLceCJ",
+    "POST /v2/company/{}/groups/{}/sms-account-closing-balance": "E4_DXzu81MyO",
+    "GET /company/{}/branch/{}": "LdiDh1M949ya",
+    "DELETE /users/{}/destroy-session": "HBgt6EDETDyq",
+    "PUT /company/{}/branch/{}": "YGov7uxlaxel",
+    "GET /login-with-number": "p0KgoFgvRx88",
+    "POST /signup-with-email": "omWTAuRhIMYr",
+    "PATCH /company/{}/branch/{}": "sQU3x6dSkLyg",
+    "GET /v2/company/{}/groups/{}": "H8UbC3hk4buE",
+    "POST /company/{}/imports/process": "ejEHbCr5-kEp",
+    "POST /company/{}/purchase-order/get-all": "5V9FfbajHYGX",
+    "POST /v2/company/{}/groups/flatten-groups-with-accounts": "-VRPpaL9ZR7Y",
+    "GET /company/{}/imports/signed-url": "n40EMZa-tvLi",
+    "POST /generate-otp": "u_z2foHGElAl",
+    "GET /company/{}/groups/{}/masters": "rgsUt5WiPDuC",
+    "PUT /reset-password": "lP2RVzpwrLlx",
+    "GET /v2/company/{}/cash-flow-download-v2": "Ss5EPNtg2Lir",
+    "POST /company/{}/imports/v2/upload": "NW1F-e4urn1m",
+    "POST /v2/signup-with-google": "4IKLHMrGKwgs",
+    "POST /company/{}/imports/document/upload": "kYZI-VrqKqYe",
+    "GET /company/{}/download-import-logs": "60j9QCaxaELB",
+    "GET /v2/company/{}/multibranch/compared-profit-loss": "2pSuW8szlD-5",
+    "POST /v2/verify-email": "6GlTa0ZnnI6C",
+    "POST /company/{}/imports/reconciliation/upload": "5UDfAnP1JScr",
+    "POST /v2/verify-number": "Zex1gNzQJkd0",
+    "POST /company/{}/imports/reconciliation/process": "-zY5sWTATbxf",
+    "POST /v2/login-with-password": "_Li0puNhyeiT",
+    "POST /v2/company/{}/reports/entity-selection": "uM-qdrjOKTtT",
+    "DELETE /users/{}/sessions": "Ao099WdUGeiS",
+    "GET /company/{}/imports/reconciliation": "KVFrgUeHE-pC",
+    "POST /v2/signup": "QzK2fBdstnUx",
+    "PUT /users/{}/increment-session": "SoR0B7KkUG-p",
+    "GET /users/{}/get-auth-key": "9WbEUkkRI-_M",
+    "PUT /users/{}/forgot-password": "SIpFxPBDkjii",
+    "GET /users/{}/sessions": "LI_-sZ9fnDn-",
+    "POST /v2/signup-with-apple": "SRbGb3wbzz-J",
+    "GET /company/{}/project/{}": "Vm8fUOiBpbT9",
+    "GET /company/{}/accounts/{}/purchase-record/{}": "tczb-HXIeIVI",
+    "POST /company/{}/auth/generate": "RNrjQCdGHRcx",
+    "POST /company/{}/project": "QPFEeIlvdqUo",
+    "POST /v2/company/{}/reports/save-report-data": "62SEnOs8A7JV",
+    "POST /v2/auth-login": "IHKDe0dPwz_4",
+    "PATCH /company/{}/project/{}": "SZYTyZbR-UVP",
+    "POST /company/{}/accounts/{}/purchase-record/generate": "OrRqnmlTHGlZ",
+    "GET /v2/company/{}/reports/all-reports": "1liSK-Ej6z2-",
+    "GET /company/{}/project/{}/entries": "JSG1V-ngn7Ra",
+    "PUT /company/{}/auth/{}/update": "2U-8soBahlRR",
+    "DELETE /company/{}/auth/{}/remove": "xoiPEreiLtuB",
+    "GET /company/{}/project/{}/category-total": "ykhnO3TVsy5V",
+    "POST /company/{}/pettycash-manager/report": "LIlR6YtXkarK",
+    "DELETE /company/{}/purchase-order": "PdhETHHZZS-a",
+    "POST /portal/company/{}/accounts/{}/download-file": "xPdYugvoPz-k",
+    "POST /portal/company/{}/accounts/{}/invoice-pay-request": "xjZ3WpIt1dI_",
+    "POST /v2/company/{}/groups/{}/accounts": "VYzepKaCj43L",
+    "POST /company/{}/vouchers/bulk-update": "sTdSIbheX88t",
+    "GET /v2/company/{}/multibranch/profit-loss": "kDF8Hc2T8y1c",
+    "POST /company/{}/vouchers/get-all-vouchers-balances": "XNhR7307qW0B",
+    "PUT /v2/company/{}/groups/{}/accounts/{}": "tw9Ywhd1a1Fz",
+    "GET /v2/company/{}/sales-register-overview": "mVC1gb9z45N-",
+    "GET /company/{}/stock-group/{}": "O7r7BOOy4tRx",
+    "DELETE /v2/company/{}/stock-group/{}/stock/{}": "GY5jA5uoe3zj",
+    "POST /company/{}/accounts/{}/ledgers-v2": "OmY7bY3WcP9B",
+    "POST /company/{}/accounts/{}/purchase-order/generate": "OK9Tf8ULMgBG",
+    "POST /v4/company/{}/vouchers/bulk-generate": "qNzNSt_IRlXo",
+    "POST /v4/company/{}/accounts/{}/vouchers/generate": "TU4Re_ChMNV4",
+    "DELETE /company/{}/stock-group/{}": "0Hgvl8G_YFM9",
+    "PUT /company/{}/accounts/{}/purchase-order": "4snJsvUPJ5hl",
+    "POST /company/{}/stock-group": "yPCPvSsdoi8H",
+    "POST /company/{}/stock-group/{}/stock": "sfIrfH8PvqEZ",
+    "PUT /company/{}/stock-group/{}": "ffQiI8Hchh8o",
+    "PUT /v4/company/{}/accounts/{}/vouchers": "nNOuxxlh7SX8",
+    "POST /v2/company/{}/stock-group/{}/stock": "OISrNWn9t7sF",
+    "POST /portal/company/{}/accounts/{}/invoices/{}/pay": "4Fn52OAvoUsJ",
+    "GET /portal/company/{}/accounts/{}/payment-methods": "jskGLn1iLN2t",
+    "GET /portal/company/{}/accounts/{}/vouchers/balance-summary": "Qq2rADPlymJv",
+    "POST /portal/company/{}/accounts/{}/vouchers/get-all": "grIcgmyYc-CK",
+    "POST /portal/company/{}/accounts/{}/{}/add-comment": "AXqbQT4VB0H1",
+    "GET /portal/company/{}/accounts/{}/{}/comments": "LyXIyi3m8tUO",
+    "GET /api/c/getdetails": "9vB4n2uroYJd",
+    "GET /portal/company/{}/accounts/{}/vouchers": "G3BF9J-8B4NF",
+    "GET /portal/company/{}/accounts/{}/contacts": "WWDeCHCyPKL1",
+    "GET /portal/company/{}/accounts/{}/details": "31eP24vmSPjA",
+    "GET /portal/company/{}/accounts/{}/export-account-statement": "QideDDug_Xsq",
+    "GET /portal/company/{}/accounts/{}/get-company-details": "tlN3PwbSlzme",
+    "GET /portal/company/{}/accounts/{}/payment-method": "QQp3HyikWUZw",
+    "GET /portal/company/{}/accounts/{}/view-statement": "VHbpHbpM_C7S",
+    "POST /v2/portal-user/save-session": "n8T7K6ysejA9",
+    "POST /v2/verify-portal-user": "DC8riPxsvNHc"
+  },
+  "count": 656
+}

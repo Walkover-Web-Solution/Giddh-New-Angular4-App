@@ -1,0 +1,14 @@
+{
+  "name": "API Doc GST 18",
+  "taxNumber": "APIDOC-GST18",
+  "taxType": "gst",
+  "duration": "MONTHLY",
+  "taxFileDate": 1,
+  "taxDetail": [
+    {
+      "date": "01-04-2026",
+      "taxValue": 18
+    }
+  ],
+  "accounts": []
+}

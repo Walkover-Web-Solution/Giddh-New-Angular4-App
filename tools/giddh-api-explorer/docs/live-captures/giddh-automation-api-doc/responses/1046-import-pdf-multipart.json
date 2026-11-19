@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "MISSING_PARAMETER",
+  "message": "Must provide pdfpassword for this API."
+}

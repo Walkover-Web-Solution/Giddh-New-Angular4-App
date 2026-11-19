@@ -1,0 +1,1793 @@
+[
+  {
+    "endpointId": "RTSfU9NHkBPk",
+    "name": "Create Inventory User",
+    "catalogKey": "POST /company/{companyUniqueName}/inventory-users",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "RTSfU9NHkBPk",
+      "description": "Create Inventory User. Part of the Inventory Users APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "-tc8VPZ68RE-",
+    "name": "Create Link Token",
+    "catalogKey": "GET /company/{companyUniqueName}/plaid/create/link-token",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "-tc8VPZ68RE-",
+      "description": "Create Link Token. Part of the Link Token APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "itemId": {
+          "checked": "true",
+          "value": "",
+          "description": "Item id query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "d5dcpNSO9T9V",
+    "name": "Create Manufacturing Recipe",
+    "catalogKey": "POST /company/{companyUniqueName}/stock/{stockUniqueName}/recipe",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "d5dcpNSO9T9V",
+      "description": "Create Manufacturing Recipe. Part of the Recipe APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"date\": \"string\",\n  \"stock\": \"string\",\n  \"manufacturingDetails\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "date": {
+          "type": "string",
+          "description": "Date (dd-MM-yyyy unless documented otherwise). Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "manufacturingDetails": {
+          "type": "array",
+          "description": "Array of manufacturing details values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "V-aX4-ST-yGb",
+    "name": "Create Multi Currency Report For Multiple Companies",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/multicompany/{reportType}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "V-aX4-ST-yGb",
+      "description": "Create Multi Currency Report For Multiple Companies. Part of the Multicompany APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"reportCurrency\": \"string\",\n  \"from\": \"string\",\n  \"to\": \"string\",\n  \"companies\": [],\n  \"name\": \"string\",\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "reportCurrency": {
+          "type": "string",
+          "description": "Report currency. Optional.",
+          "value": "string"
+        },
+        "from": {
+          "type": "string",
+          "description": "From. Optional.",
+          "value": "string"
+        },
+        "to": {
+          "type": "string",
+          "description": "To. Optional.",
+          "value": "string"
+        },
+        "companies": {
+          "type": "array",
+          "description": "Array of companies values. Optional.",
+          "value": []
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "wXcGnkDJaPMQ",
+    "name": "Create Pre Paid Of Subscription",
+    "catalogKey": "POST /v2/subscription/{subscriptionId}/create-pre-paid",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "wXcGnkDJaPMQ",
+      "description": "Create Pre Paid Of Subscription. Part of the Create Pre Paid APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"planUniqueName\": \"string\",\n  \"balance\": 0,\n  \"userUniqueName\": \"string\",\n  \"expireDate\": \"string\",\n  \"status\": \"string\",\n  \"subscriptionId\": \"string\",\n  \"duration\": \"string\",\n  \"licenceKey\": \"string\",\n  \"promoCode\": \"string\",\n  \"addOnTransactions\": 0,\n  \"paymentProvider\": \"CASHFREE\",\n  \"billingAccount\": \"string\",\n  \"returnUrl\": \"string\",\n  \"affiliateId\": \"string\",\n  \"trialExtendedDays\": 0,\n  \"paymentId\": \"string\",\n  \"amountPaid\": 0,\n  \"razorpaySignature\": \"string\",\n  \"razorpayOrderId\": \"string\",\n  \"payuTransactionId\": \"string\",\n  \"paymentIntentId\": \"string\",\n  \"paypalOrderId\": \"string\",\n  \"payNow\": false,\n  \"taxTotal\": 0,\n  \"bankDetails\": \"string\",\n  \"razorpayAuthType\": \"CARD\",\n  \"countryCode\": \"string\",\n  \"prePaid\": false,\n  \"prepaidUniqueName\": \"string\",\n  \"includeNextBill\": false,\n  \"googlePayPurchaseToken\": \"string\",\n  \"providerPlanName\": \"string\",\n  \"autoPay\": false,\n  \"renew\": false,\n  \"walletAmount\": 0,\n  \"reactivateFromSubscriptionId\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "planUniqueName": {
+          "type": "string",
+          "description": "Plan unique name. Optional.",
+          "value": "string"
+        },
+        "balance": {
+          "type": "number",
+          "description": "Balance. Optional.",
+          "value": 0
+        },
+        "userUniqueName": {
+          "type": "string",
+          "description": "User unique name. Optional.",
+          "value": "string"
+        },
+        "expireDate": {
+          "type": "string",
+          "description": "Expire date. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Subscription id. Optional.",
+          "value": "string"
+        },
+        "duration": {
+          "type": "string",
+          "description": "Duration. Mandatory.",
+          "value": "string"
+        },
+        "licenceKey": {
+          "type": "string",
+          "description": "Licence key. Optional.",
+          "value": "string"
+        },
+        "promoCode": {
+          "type": "string",
+          "description": "Promo code. Optional.",
+          "value": "string"
+        },
+        "addOnTransactions": {
+          "type": "string",
+          "description": "Add on transactions. Optional.",
+          "value": 0
+        },
+        "paymentProvider": {
+          "type": "string",
+          "description": "Payment provider. Allowed values: CASHFREE, STRIPE, RAZORPAY, GOCARDLESS, PAYPAL, APPLE, GOOGLEPAY_ANDROID, PAYU. Optional.",
+          "value": "CASHFREE",
+          "allowedValues": [
+            "CASHFREE",
+            "STRIPE",
+            "RAZORPAY",
+            "GOCARDLESS",
+            "PAYPAL",
+            "APPLE",
+            "GOOGLEPAY_ANDROID",
+            "PAYU"
+          ]
+        },
+        "billingAccount": {
+          "type": "string",
+          "description": "Billing account. Optional.",
+          "value": "string"
+        },
+        "returnUrl": {
+          "type": "string",
+          "description": "Return url. Optional.",
+          "value": "string"
+        },
+        "affiliateId": {
+          "type": "string",
+          "description": "Affiliate id. Optional.",
+          "value": "string"
+        },
+        "trialExtendedDays": {
+          "type": "number",
+          "description": "Trial extended days. Optional.",
+          "value": 0
+        },
+        "paymentId": {
+          "type": "string",
+          "description": "Payment id. Optional.",
+          "value": "string"
+        },
+        "amountPaid": {
+          "type": "number",
+          "description": "Amount paid. Optional.",
+          "value": 0
+        },
+        "razorpaySignature": {
+          "type": "string",
+          "description": "Razorpay signature. Optional.",
+          "value": "string"
+        },
+        "razorpayOrderId": {
+          "type": "string",
+          "description": "Razorpay order id. Optional.",
+          "value": "string"
+        },
+        "payuTransactionId": {
+          "type": "string",
+          "description": "Payu transaction id. Optional.",
+          "value": "string"
+        },
+        "paymentIntentId": {
+          "type": "string",
+          "description": "Payment intent id. Optional.",
+          "value": "string"
+        },
+        "paypalOrderId": {
+          "type": "string",
+          "description": "Paypal order id. Optional.",
+          "value": "string"
+        },
+        "payNow": {
+          "type": "boolean",
+          "description": "When true, applies the pay now filter or flag. Optional.",
+          "value": false
+        },
+        "taxTotal": {
+          "type": "number",
+          "description": "Tax total. Optional.",
+          "value": 0
+        },
+        "bankDetails": {
+          "type": "string",
+          "description": "Bank details. Optional.",
+          "value": "string"
+        },
+        "razorpayAuthType": {
+          "type": "string",
+          "description": "Razorpay auth type. Allowed values: CARD, NETBANKING, AADHAAR, UPI. Optional.",
+          "value": "CARD",
+          "allowedValues": [
+            "CARD",
+            "NETBANKING",
+            "AADHAAR",
+            "UPI"
+          ]
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "prePaid": {
+          "type": "boolean",
+          "description": "When true, applies the pre paid filter or flag. Optional.",
+          "value": false
+        },
+        "prepaidUniqueName": {
+          "type": "string",
+          "description": "Prepaid unique name. Optional.",
+          "value": "string"
+        },
+        "includeNextBill": {
+          "type": "boolean",
+          "description": "When true, applies the include next bill filter or flag. Optional.",
+          "value": false
+        },
+        "googlePayPurchaseToken": {
+          "type": "string",
+          "description": "Google pay purchase token. Optional.",
+          "value": "string"
+        },
+        "providerPlanName": {
+          "type": "string",
+          "description": "Provider plan name. Optional.",
+          "value": "string"
+        },
+        "autoPay": {
+          "type": "boolean",
+          "description": "When true, applies the auto pay filter or flag. Optional.",
+          "value": false
+        },
+        "renew": {
+          "type": "boolean",
+          "description": "When true, applies the renew filter or flag. Optional.",
+          "value": false
+        },
+        "walletAmount": {
+          "type": "number",
+          "description": "Wallet amount. Optional.",
+          "value": 0
+        },
+        "reactivateFromSubscriptionId": {
+          "type": "string",
+          "description": "Reactivate from subscription id. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "rmnCLIhM8VQ0",
+    "name": "Create Project",
+    "catalogKey": "POST /company/{companyUniqueName}/project",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "rmnCLIhM8VQ0",
+      "description": "Create Project. Part of the Project APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"archiveStatus\": \"string\",\n  \"status\": \"string\",\n  \"projectEntries\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "archiveStatus": {
+          "type": "string",
+          "description": "Archive status. Optional.",
+          "value": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status. Optional.",
+          "value": "string"
+        },
+        "projectEntries": {
+          "type": "array",
+          "description": "Array of project entries values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ErXTBZ8zuzRd",
+    "name": "Create Project Entry",
+    "catalogKey": "POST /company/{companyUniqueName}/project/{projectUniqueName}/entry",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ErXTBZ8zuzRd",
+      "description": "Create Project Entry. Part of the Entry APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"account\": \"string\",\n  \"entryUniqueName\": \"string\",\n  \"particular\": \"string\",\n  \"stock\": \"string\",\n  \"accountUniqueName\": \"string\",\n  \"category\": \"string\",\n  \"calculationMethod\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "account": {
+          "type": "string",
+          "description": "Account. Optional.",
+          "value": "string"
+        },
+        "entryUniqueName": {
+          "type": "string",
+          "description": "Entry unique name. Optional.",
+          "value": "string"
+        },
+        "particular": {
+          "type": "string",
+          "description": "Particular. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category. Optional.",
+          "value": "string"
+        },
+        "calculationMethod": {
+          "type": "string",
+          "description": "Calculation method. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "number",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Q5MMxqUowY0U",
+    "name": "Create Purchase Register",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Q5MMxqUowY0U",
+      "description": "Create. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"version\": 0,\n  \"number\": \"string\",\n  \"type\": \"string\",\n  \"date\": \"string\",\n  \"dueDate\": \"string\",\n  \"uniqueName\": \"string\",\n  \"balanceTotal\": \"string\",\n  \"balanceStatus\": \"PAID\",\n  \"gainLoss\": 0,\n  \"company\": \"string\",\n  \"account\": \"string\",\n  \"entries\": [],\n  \"grandTotal\": \"string\",\n  \"subTotal\": \"string\",\n  \"taxTotal\": \"string\",\n  \"discountTotal\": \"string\",\n  \"roundOffTotal\": \"string\",\n  \"totalAsWords\": \"string\",\n  \"deposit\": \"string\",\n  \"base64\": \"string\",\n  \"updateAccountDetails\": false,\n  \"templateDetails\": \"string\",\n  \"entryUniqueNames\": [],\n  \"exchangeRate\": 0,\n  \"valuesInAccountCurrency\": false,\n  \"purchaseOrders\": [],\n  \"purchaseOrderDetails\": [],\n  \"subVoucher\": \"string\",\n  \"isEcommerceInvoice\": false,\n  \"applyApplicableTaxes\": false,\n  \"attachedFiles\": [],\n  \"warehouse\": \"string\",\n  \"attachedFileName\": \"string\",\n  \"invoiceLinkingRequest\": \"string\",\n  \"branch\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "version": {
+          "type": "number",
+          "description": "Version. Optional.",
+          "value": 0
+        },
+        "number": {
+          "type": "string",
+          "description": "Number. Optional.",
+          "value": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date (dd-MM-yyyy unless documented otherwise). Optional.",
+          "value": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "Due date (dd-MM-yyyy). Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "balanceTotal": {
+          "type": "string",
+          "description": "Balance total. Optional.",
+          "value": "string"
+        },
+        "balanceStatus": {
+          "type": "string",
+          "description": "Balance status. Allowed values: PAID, UNPAID, CANCEL, CANCELLED, PARTIAL_PAID, HOLD, EMPTY, CREDIT_ISSUED. Optional.",
+          "value": "PAID",
+          "allowedValues": [
+            "PAID",
+            "UNPAID",
+            "CANCEL",
+            "CANCELLED",
+            "PARTIAL_PAID",
+            "HOLD",
+            "EMPTY",
+            "CREDIT_ISSUED"
+          ]
+        },
+        "gainLoss": {
+          "type": "number",
+          "description": "Gain loss. Optional.",
+          "value": 0
+        },
+        "company": {
+          "type": "string",
+          "description": "Company. Optional.",
+          "value": "string"
+        },
+        "account": {
+          "type": "string",
+          "description": "Account. Optional.",
+          "value": "string"
+        },
+        "entries": {
+          "type": "array",
+          "description": "Line entries or ledger rows (array). Optional.",
+          "value": []
+        },
+        "grandTotal": {
+          "type": "string",
+          "description": "Grand total. Optional.",
+          "value": "string"
+        },
+        "subTotal": {
+          "type": "string",
+          "description": "Sub total. Optional.",
+          "value": "string"
+        },
+        "taxTotal": {
+          "type": "string",
+          "description": "Tax total. Optional.",
+          "value": "string"
+        },
+        "discountTotal": {
+          "type": "string",
+          "description": "Discount total. Optional.",
+          "value": "string"
+        },
+        "roundOffTotal": {
+          "type": "string",
+          "description": "Round off total. Optional.",
+          "value": "string"
+        },
+        "totalAsWords": {
+          "type": "string",
+          "description": "Total as words. Optional.",
+          "value": "string"
+        },
+        "deposit": {
+          "type": "string",
+          "description": "Deposit. Optional.",
+          "value": "string"
+        },
+        "base64": {
+          "type": "string",
+          "description": "Base64. Optional.",
+          "value": "string"
+        },
+        "updateAccountDetails": {
+          "type": "boolean",
+          "description": "When true, applies the update account details filter or flag. Optional.",
+          "value": false
+        },
+        "templateDetails": {
+          "type": "string",
+          "description": "Template details. Optional.",
+          "value": "string"
+        },
+        "entryUniqueNames": {
+          "type": "array",
+          "description": "Array of entry unique names values. Optional.",
+          "value": []
+        },
+        "exchangeRate": {
+          "type": "number",
+          "description": "Exchange rate. Optional.",
+          "value": 0
+        },
+        "valuesInAccountCurrency": {
+          "type": "boolean",
+          "description": "When true, applies the values in account currency filter or flag. Optional.",
+          "value": false
+        },
+        "purchaseOrders": {
+          "type": "array",
+          "description": "Array of purchase orders values. Optional.",
+          "value": []
+        },
+        "purchaseOrderDetails": {
+          "type": "array",
+          "description": "Array of purchase order details values. Optional.",
+          "value": []
+        },
+        "subVoucher": {
+          "type": "string",
+          "description": "Sub voucher. Optional.",
+          "value": "string"
+        },
+        "isEcommerceInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the is ecommerce invoice filter or flag. Optional.",
+          "value": false
+        },
+        "applyApplicableTaxes": {
+          "type": "boolean",
+          "description": "When true, applies the apply applicable taxes filter or flag. Optional.",
+          "value": false
+        },
+        "attachedFiles": {
+          "type": "array",
+          "description": "Array of attached files values. Optional.",
+          "value": []
+        },
+        "warehouse": {
+          "type": "string",
+          "description": "Warehouse. Optional.",
+          "value": "string"
+        },
+        "attachedFileName": {
+          "type": "string",
+          "description": "Attached file name. Optional.",
+          "value": "string"
+        },
+        "invoiceLinkingRequest": {
+          "type": "string",
+          "description": "Invoice linking request. Optional.",
+          "value": "string"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ZsaBQPVQm3Om",
+    "name": "Create Role",
+    "catalogKey": "POST /company/{companyUniqueName}/role",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ZsaBQPVQm3Om",
+      "description": "Create Role. Part of the Role APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "fObI-i6gjCZt",
+    "name": "Create Sales Person",
+    "catalogKey": "POST /company/{companyUniqueName}/salesperson",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "fObI-i6gjCZt",
+      "description": "Create. Part of the Salesperson APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"email\": \"string\",\n  \"mobileNumber\": \"string\",\n  \"archiveStatus\": \"string\",\n  \"linkedEntities\": [],\n  \"archiveOnly\": false,\n  \"action\": \"PRINCIPAL\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Mandatory.",
+          "value": "string"
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Mandatory.",
+          "value": "string"
+        },
+        "archiveStatus": {
+          "type": "string",
+          "description": "Archive status. Optional.",
+          "value": "string"
+        },
+        "linkedEntities": {
+          "type": "array",
+          "description": "Array of linked entities values. Optional.",
+          "value": []
+        },
+        "archiveOnly": {
+          "type": "boolean",
+          "description": "When true, applies the archive only filter or flag. Optional.",
+          "value": false
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Allowed values: PRINCIPAL, COMPANY_UNIQUE_NAME_PATH_PARAM, DUEPERIOD, PAGE, COUNT, RAZORPAY, TRANSFER, UNASSIGNED, UNARCHIVED, CONTENT_TYPE, MESSAGING_PRODUCT, TYPE, POLICY, LANGUAGE_CODE. Optional.",
+          "value": "PRINCIPAL",
+          "allowedValues": [
+            "PRINCIPAL",
+            "COMPANY_UNIQUE_NAME_PATH_PARAM",
+            "DUEPERIOD",
+            "PAGE",
+            "COUNT",
+            "RAZORPAY",
+            "TRANSFER",
+            "UNASSIGNED",
+            "UNARCHIVED",
+            "CONTENT_TYPE",
+            "MESSAGING_PRODUCT",
+            "TYPE",
+            "POLICY",
+            "LANGUAGE_CODE"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "1gKjHg5YucGM",
+    "name": "Create Stock Group",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-group",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1gKjHg5YucGM",
+      "description": "Create. Part of the Stock Group APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"taxes\": [],\n  \"discounts\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "discounts": {
+          "type": "array",
+          "description": "Array of discounts values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Tg--D2J5X86H",
+    "name": "Create Stock Group",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-group",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Tg--D2J5X86H",
+      "description": "Create. Part of the Stock Group APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"taxes\": [],\n  \"discounts\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "discounts": {
+          "type": "array",
+          "description": "Array of discounts values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "fAwbbp5AaOWC",
+    "name": "Create Stock Group Inventory Report",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-group/{stockGroupUniqueName:.+}/inventory-report-v3",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "fAwbbp5AaOWC",
+      "description": "Create Stock Group Report. Part of the Inventory Report V3 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "stock_name",
+          "description": "Field name to sort by. Default: stock_name. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"transactionType\": \"string\",\n  \"stockName\": \"string\",\n  \"entity\": \"string\",\n  \"condition\": \"string\",\n  \"number\": \"string\",\n  \"branchUniqueName\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"totalCount\": 0,\n  \"variant\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "transactionType": {
+          "type": "string",
+          "description": "Transaction type. Optional.",
+          "value": "string"
+        },
+        "stockName": {
+          "type": "string",
+          "description": "Stock name. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition. Optional.",
+          "value": "string"
+        },
+        "number": {
+          "type": "string",
+          "description": "Number. Optional.",
+          "value": "string"
+        },
+        "branchUniqueName": {
+          "type": "string",
+          "description": "Branch unique name. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "totalCount": {
+          "type": "number",
+          "description": "Total count. Optional.",
+          "value": 0
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "kF29g9hZtMuk",
+    "name": "Create Stock Group Report",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-group/{stockGroupUniqueName:.+}/inventory-report-v3",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "kF29g9hZtMuk",
+      "description": "Create Stock Group Report. Part of the Inventory Report V3 APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "stock_name",
+          "description": "Field name to sort by. Default: stock_name. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"transactionType\": \"string\",\n  \"stockName\": \"string\",\n  \"entity\": \"string\",\n  \"condition\": \"string\",\n  \"number\": \"string\",\n  \"branchUniqueName\": \"string\",\n  \"warehouseUniqueName\": \"string\",\n  \"totalCount\": 0,\n  \"variant\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "transactionType": {
+          "type": "string",
+          "description": "Transaction type. Optional.",
+          "value": "string"
+        },
+        "stockName": {
+          "type": "string",
+          "description": "Stock name. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "condition": {
+          "type": "string",
+          "description": "Condition. Optional.",
+          "value": "string"
+        },
+        "number": {
+          "type": "string",
+          "description": "Number. Optional.",
+          "value": "string"
+        },
+        "branchUniqueName": {
+          "type": "string",
+          "description": "Branch unique name. Optional.",
+          "value": "string"
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "totalCount": {
+          "type": "number",
+          "description": "Total count. Optional.",
+          "value": 0
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "cK36nWLTAOcm",
+    "name": "Create Stock Unit",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-unit",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "cK36nWLTAOcm",
+      "description": "Create. Part of the Stock Unit APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "45lIGMs5Lzrt",
+    "name": "Create Stock Unit Group",
+    "catalogKey": "POST /company/{companyUniqueName}/stock-unit-group",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "45lIGMs5Lzrt",
+      "description": "Create. Part of the Stock Unit Group APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "IKqWuu9To2sn",
+    "name": "Create Tag",
+    "catalogKey": "POST /company/{companyUniqueName}/tags",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "IKqWuu9To2sn",
+      "description": "Create Tag. Part of the Tags APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "RTUETS6h4YZo",
+    "name": "Create Tax Authority",
+    "catalogKey": "POST /company/{companyUniqueName}/tax/authority",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "RTUETS6h4YZo",
+      "description": "Create Tax Authority. Part of the Authority APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"stateCode\": \"string\",\n  \"uniqueName\": \"string\",\n  \"description\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "stateCode": {
+          "type": "string",
+          "description": "State code. Mandatory.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "HMx-npGldQoU",
+    "name": "Create Template",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/templates",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "HMx-npGldQoU",
+      "description": "Create Template. Part of the Templates APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"isSample\": false,\n  \"sections\": {},\n  \"templateColor\": \"string\",\n  \"tableColor\": \"string\",\n  \"font\": \"string\",\n  \"fontDefault\": 0,\n  \"topMargin\": 0,\n  \"leftMargin\": 0,\n  \"bottomMargin\": 0,\n  \"rightMargin\": 0,\n  \"logoPosition\": \"string\",\n  \"logoSize\": \"string\",\n  \"isDefault\": false,\n  \"isDefaultForVoucher\": false,\n  \"copyFrom\": \"string\",\n  \"logoUniqueName\": \"string\",\n  \"qrCodeId\": \"string\",\n  \"showBankQrCode\": false,\n  \"isActive\": \"string\",\n  \"type\": \"string\",\n  \"templateType\": \"string\",\n  \"isThermal\": false,\n  \"showSectionsInline\": false,\n  \"accountCustomFieldUniqueNames\": [],\n  \"enableSecondaryLanguage\": false,\n  \"language1Code\": \"string\",\n  \"language2Code\": \"string\",\n  \"displayLanguage1\": false,\n  \"displayLanguage2\": false,\n  \"showLanguage2DisplayedFirst\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "isSample": {
+          "type": "boolean",
+          "description": "When true, applies the is sample filter or flag. Optional.",
+          "value": false
+        },
+        "sections": {
+          "type": "string",
+          "description": "Sections. Optional.",
+          "value": {}
+        },
+        "templateColor": {
+          "type": "string",
+          "description": "Template color. Optional.",
+          "value": "string"
+        },
+        "tableColor": {
+          "type": "string",
+          "description": "Table color. Optional.",
+          "value": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "Font. Optional.",
+          "value": "string"
+        },
+        "fontDefault": {
+          "type": "number",
+          "description": "Font default. Optional.",
+          "value": 0
+        },
+        "topMargin": {
+          "type": "number",
+          "description": "Top margin. Optional.",
+          "value": 0
+        },
+        "leftMargin": {
+          "type": "number",
+          "description": "Left margin. Optional.",
+          "value": 0
+        },
+        "bottomMargin": {
+          "type": "number",
+          "description": "Bottom margin. Optional.",
+          "value": 0
+        },
+        "rightMargin": {
+          "type": "number",
+          "description": "Right margin. Optional.",
+          "value": 0
+        },
+        "logoPosition": {
+          "type": "string",
+          "description": "Logo position. Optional.",
+          "value": "string"
+        },
+        "logoSize": {
+          "type": "string",
+          "description": "Logo size. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "isDefaultForVoucher": {
+          "type": "boolean",
+          "description": "When true, applies the is default for voucher filter or flag. Optional.",
+          "value": false
+        },
+        "copyFrom": {
+          "type": "string",
+          "description": "Copy from. Optional.",
+          "value": "string"
+        },
+        "logoUniqueName": {
+          "type": "string",
+          "description": "Logo unique name. Optional.",
+          "value": "string"
+        },
+        "qrCodeId": {
+          "type": "string",
+          "description": "Qr code id. Optional.",
+          "value": "string"
+        },
+        "showBankQrCode": {
+          "type": "boolean",
+          "description": "When true, applies the show bank qr code filter or flag. Optional.",
+          "value": false
+        },
+        "isActive": {
+          "type": "string",
+          "description": "Is active. Optional.",
+          "value": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        },
+        "templateType": {
+          "type": "string",
+          "description": "Template type. Optional.",
+          "value": "string"
+        },
+        "isThermal": {
+          "type": "boolean",
+          "description": "When true, applies the is thermal filter or flag. Optional.",
+          "value": false
+        },
+        "showSectionsInline": {
+          "type": "boolean",
+          "description": "When true, applies the show sections inline filter or flag. Optional.",
+          "value": false
+        },
+        "accountCustomFieldUniqueNames": {
+          "type": "array",
+          "description": "Array of account custom field unique names values. Optional.",
+          "value": []
+        },
+        "enableSecondaryLanguage": {
+          "type": "boolean",
+          "description": "When true, applies the enable secondary language filter or flag. Optional.",
+          "value": false
+        },
+        "language1Code": {
+          "type": "string",
+          "description": "Language1 code. Optional.",
+          "value": "string"
+        },
+        "language2Code": {
+          "type": "string",
+          "description": "Language2 code. Optional.",
+          "value": "string"
+        },
+        "displayLanguage1": {
+          "type": "boolean",
+          "description": "When true, applies the display language1 filter or flag. Optional.",
+          "value": false
+        },
+        "displayLanguage2": {
+          "type": "boolean",
+          "description": "When true, applies the display language2 filter or flag. Optional.",
+          "value": false
+        },
+        "showLanguage2DisplayedFirst": {
+          "type": "boolean",
+          "description": "When true, applies the show language2 displayed first filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ht36VkqA0m-C",
+    "name": "Create Template",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/templates",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ht36VkqA0m-C",
+      "description": "Create Template. Part of the Templates APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"isSample\": false,\n  \"sections\": {},\n  \"templateColor\": \"string\",\n  \"tableColor\": \"string\",\n  \"font\": \"string\",\n  \"fontDefault\": 0,\n  \"topMargin\": 0,\n  \"leftMargin\": 0,\n  \"bottomMargin\": 0,\n  \"rightMargin\": 0,\n  \"logoPosition\": \"string\",\n  \"logoSize\": \"string\",\n  \"isDefault\": false,\n  \"isDefaultForVoucher\": false,\n  \"copyFrom\": \"string\",\n  \"logoUniqueName\": \"string\",\n  \"qrCodeId\": \"string\",\n  \"showBankQrCode\": false,\n  \"isActive\": \"string\",\n  \"type\": \"string\",\n  \"templateType\": \"string\",\n  \"isThermal\": false,\n  \"showSectionsInline\": false,\n  \"accountCustomFieldUniqueNames\": [],\n  \"enableSecondaryLanguage\": false,\n  \"language1Code\": \"string\",\n  \"language2Code\": \"string\",\n  \"displayLanguage1\": false,\n  \"displayLanguage2\": false,\n  \"showLanguage2DisplayedFirst\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "isSample": {
+          "type": "boolean",
+          "description": "When true, applies the is sample filter or flag. Optional.",
+          "value": false
+        },
+        "sections": {
+          "type": "string",
+          "description": "Sections. Optional.",
+          "value": {}
+        },
+        "templateColor": {
+          "type": "string",
+          "description": "Template color. Optional.",
+          "value": "string"
+        },
+        "tableColor": {
+          "type": "string",
+          "description": "Table color. Optional.",
+          "value": "string"
+        },
+        "font": {
+          "type": "string",
+          "description": "Font. Optional.",
+          "value": "string"
+        },
+        "fontDefault": {
+          "type": "number",
+          "description": "Font default. Optional.",
+          "value": 0
+        },
+        "topMargin": {
+          "type": "number",
+          "description": "Top margin. Optional.",
+          "value": 0
+        },
+        "leftMargin": {
+          "type": "number",
+          "description": "Left margin. Optional.",
+          "value": 0
+        },
+        "bottomMargin": {
+          "type": "number",
+          "description": "Bottom margin. Optional.",
+          "value": 0
+        },
+        "rightMargin": {
+          "type": "number",
+          "description": "Right margin. Optional.",
+          "value": 0
+        },
+        "logoPosition": {
+          "type": "string",
+          "description": "Logo position. Optional.",
+          "value": "string"
+        },
+        "logoSize": {
+          "type": "string",
+          "description": "Logo size. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "isDefaultForVoucher": {
+          "type": "boolean",
+          "description": "When true, applies the is default for voucher filter or flag. Optional.",
+          "value": false
+        },
+        "copyFrom": {
+          "type": "string",
+          "description": "Copy from. Optional.",
+          "value": "string"
+        },
+        "logoUniqueName": {
+          "type": "string",
+          "description": "Logo unique name. Optional.",
+          "value": "string"
+        },
+        "qrCodeId": {
+          "type": "string",
+          "description": "Qr code id. Optional.",
+          "value": "string"
+        },
+        "showBankQrCode": {
+          "type": "boolean",
+          "description": "When true, applies the show bank qr code filter or flag. Optional.",
+          "value": false
+        },
+        "isActive": {
+          "type": "string",
+          "description": "Is active. Optional.",
+          "value": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        },
+        "templateType": {
+          "type": "string",
+          "description": "Template type. Optional.",
+          "value": "string"
+        },
+        "isThermal": {
+          "type": "boolean",
+          "description": "When true, applies the is thermal filter or flag. Optional.",
+          "value": false
+        },
+        "showSectionsInline": {
+          "type": "boolean",
+          "description": "When true, applies the show sections inline filter or flag. Optional.",
+          "value": false
+        },
+        "accountCustomFieldUniqueNames": {
+          "type": "array",
+          "description": "Array of account custom field unique names values. Optional.",
+          "value": []
+        },
+        "enableSecondaryLanguage": {
+          "type": "boolean",
+          "description": "When true, applies the enable secondary language filter or flag. Optional.",
+          "value": false
+        },
+        "language1Code": {
+          "type": "string",
+          "description": "Language1 code. Optional.",
+          "value": "string"
+        },
+        "language2Code": {
+          "type": "string",
+          "description": "Language2 code. Optional.",
+          "value": "string"
+        },
+        "displayLanguage1": {
+          "type": "boolean",
+          "description": "When true, applies the display language1 filter or flag. Optional.",
+          "value": false
+        },
+        "displayLanguage2": {
+          "type": "boolean",
+          "description": "When true, applies the display language2 filter or flag. Optional.",
+          "value": false
+        },
+        "showLanguage2DisplayedFirst": {
+          "type": "boolean",
+          "description": "When true, applies the show language2 displayed first filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ck6VmHyWM8-5",
+    "name": "Create Trial Balance For Multiple Branch",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/multibranch/trial-balance",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ck6VmHyWM8-5",
+      "description": "Create Trial Balance For Multiple Branch. Part of the Trial Balance APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        },
+        "tagName": {
+          "checked": "true",
+          "value": "",
+          "description": "Tag name filter for reports. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "paJQ5QbuS6uK",
+    "name": "Create Trial Balance For Multiple Branch",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/multibranch/trial-balance",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "paJQ5QbuS6uK",
+      "description": "Create Trial Balance For Multiple Branch. Part of the Trial Balance APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        },
+        "tagName": {
+          "checked": "true",
+          "value": "",
+          "description": "Tag name filter for reports. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "NBXBHExwjCjr",
+    "name": "Create Trigger",
+    "catalogKey": "POST /company/{companyUniqueName}/triggers",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "NBXBHExwjCjr",
+      "description": "Create Trigger. Part of the Triggers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"description\": \"string\",\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"scope\": \"string\",\n  \"filter\": \"string\",\n  \"action\": \"string\",\n  \"url\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope. Optional.",
+          "value": "string"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter. Optional.",
+          "value": "string"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "url": {
+          "type": "string",
+          "description": "Url. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "SaMlyDDqYCjQ",
+    "name": "Create Trigger",
+    "catalogKey": "POST /company/{companyUniqueName}/triggers",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "SaMlyDDqYCjQ",
+      "description": "Create Trigger. Part of the Triggers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"description\": \"string\",\n  \"entity\": \"string\",\n  \"entityUniqueName\": \"string\",\n  \"scope\": \"string\",\n  \"filter\": \"string\",\n  \"action\": \"string\",\n  \"url\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "entityUniqueName": {
+          "type": "string",
+          "description": "Entity unique name. Optional.",
+          "value": "string"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope. Optional.",
+          "value": "string"
+        },
+        "filter": {
+          "type": "string",
+          "description": "Filter. Optional.",
+          "value": "string"
+        },
+        "action": {
+          "type": "string",
+          "description": "Action. Optional.",
+          "value": "string"
+        },
+        "url": {
+          "type": "string",
+          "description": "Url. Optional.",
+          "value": "string"
+        },
+        "value": {
+          "type": "string",
+          "description": "Optional."
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Rm6SoZp2qcIX",
+    "name": "Create Warehouse",
+    "catalogKey": "POST /company/{companyUniqueName}/warehouse",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Rm6SoZp2qcIX",
+      "description": "Create Warehouse. Part of the Warehouse APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"countryCode\": \"string\",\n  \"currencyCode\": \"string\",\n  \"stateCode\": \"string\",\n  \"isDefault\": false,\n  \"callingCode\": \"string\",\n  \"addresses\": [],\n  \"linkAddresses\": [],\n  \"isArchived\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Optional.",
+          "value": "string"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "Currency code. Optional.",
+          "value": "string"
+        },
+        "stateCode": {
+          "type": "string",
+          "description": "State code. Optional.",
+          "value": "string"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "When true, applies the is default filter or flag. Optional.",
+          "value": false
+        },
+        "callingCode": {
+          "type": "string",
+          "description": "Calling code. Optional.",
+          "value": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "description": "Array of addresses values. Optional.",
+          "value": []
+        },
+        "linkAddresses": {
+          "type": "array",
+          "description": "Array of link addresses values. Optional.",
+          "value": []
+        },
+        "isArchived": {
+          "type": "boolean",
+          "description": "When true, applies the is archived filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  }
+]

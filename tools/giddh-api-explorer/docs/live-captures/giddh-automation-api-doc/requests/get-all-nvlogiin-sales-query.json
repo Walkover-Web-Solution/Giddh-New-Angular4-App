@@ -1,0 +1,6 @@
+{
+  "method": "POST",
+  "url": "https://api.giddh.com/company/nvlogiin165868912755901st49/vouchers/get-all?type=sales&voucherVersion=2&branchUniqueName=goa&page=1&count=3",
+  "headers": { "Auth-Key": "REDACTED", "Accept": "application/json", "Content-Type": "application/json" },
+  "body": { "sortBy": "", "sort": "", "page": 1, "count": 3, "q": "", "selectAllFields": [] }
+}

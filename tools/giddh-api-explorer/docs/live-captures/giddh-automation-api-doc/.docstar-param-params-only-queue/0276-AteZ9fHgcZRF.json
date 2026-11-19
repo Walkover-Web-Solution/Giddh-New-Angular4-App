@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "AteZ9fHgcZRF", "description": "Get Company Settings. Part of the Settings APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"branchUniqueName": {"checked": "true", "value": "", "description": "Branch uniqueName; omit for default company branch behaviour. Optional.", "required": "false"}}}

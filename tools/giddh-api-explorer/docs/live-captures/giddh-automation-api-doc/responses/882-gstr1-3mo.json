@@ -1,0 +1,58 @@
+{
+  "status": "success",
+  "body": {
+    "type": "GSTR1",
+    "validatedAgainstSchema": false,
+    "data": {
+      "gstin": "23AAACC1206D2ZN",
+      "fp": "102026",
+      "b2b": [],
+      "b2cl": [],
+      "cdnr": [],
+      "b2cs": [],
+      "nil": {
+        "inv": [
+          {
+            "sply_ty": "INTRAB2C",
+            "expt_amt": 176.0,
+            "nil_amt": 0.0,
+            "ngsup_amt": 0.0
+          }
+        ]
+      },
+      "doc_issue": {
+        "doc_det": [
+          {
+            "doc_name": "Invoices for outward supply",
+            "docs": [
+              {
+                "num": 1,
+                "from": "261023-5",
+                "to": "261023-6",
+                "totnum": 2,
+                "cancel": 0,
+                "net_issue": 2
+              }
+            ]
+          },
+          {
+            "doc_name": "Debit Note",
+            "docs": []
+          },
+          {
+            "doc_name": "Credit Note",
+            "docs": []
+          },
+          {
+            "doc_name": "Receipt Voucher",
+            "docs": []
+          }
+        ]
+      },
+      "cdnur": [],
+      "at": [],
+      "ata": []
+    },
+    "errors": []
+  }
+}

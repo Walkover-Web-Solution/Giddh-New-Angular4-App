@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/un-merge",
+  "body": {
+    "uniqueNames": [
+      "apidoc-customer-one"
+    ]
+  }
+}

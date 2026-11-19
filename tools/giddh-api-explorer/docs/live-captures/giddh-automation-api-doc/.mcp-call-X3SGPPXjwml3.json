@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "X3SGPPXjwml3", "description": "Get Campaign List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"lang": {"checked": "true", "value": "StaticMessageSource.DEFAULT_LANG", "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG."}}, "body": {"type": "none"}}

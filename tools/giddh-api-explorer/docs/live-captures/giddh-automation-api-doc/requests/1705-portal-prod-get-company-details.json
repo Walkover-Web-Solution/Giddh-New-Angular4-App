@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/get-company-details",
+  "host": "https://api.giddh.com",
+  "origin": "https://portal.giddh.com",
+  "surface": "customer-portal",
+  "env": "prod",
+  "portalSubDomain": "10k",
+  "companyUniqueName": "10kin177424654546509z75a",
+  "viaProxy": "https://routes.msg91.com/api/proxy/117230/24yrfox2/portal/company/10kin177424654546509z75a/accounts/raji1/get-company-details"
+}

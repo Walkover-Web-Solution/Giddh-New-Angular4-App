@@ -1,0 +1,403 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "countries": [
+        "India"
+      ],
+      "yearlyAmountAfterDiscount": 1000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "3 Disc plandf",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 1000,
+      "invoicesAllowed": 10000,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "10-03-2026 18:17:28",
+      "monthlyBillsAllowed": 10000,
+      "monthlyInvoicesAllowed": 10000,
+      "yearlyAmount": 1000.0,
+      "yearlyDiscount": {
+        "name": "2 times (50%)",
+        "value": 50.0,
+        "type": "PERCENTAGE",
+        "duration": 2,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "30-11-2025",
+        "uniqueName": "7rt1715339285584"
+      },
+      "monthlyCompaniesLimit": 1,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "nef1715342227198",
+      "companiesLimit": 1
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 999.0,
+      "yearlyAmountAfterDiscount": 2500.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "Monthly Null",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 2500,
+      "invoicesAllowed": 2500,
+      "description": "testing descirption",
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "25-09-2025 10:15:52",
+      "monthlyBillsAllowed": 120,
+      "monthlyInvoicesAllowed": 120,
+      "yearlyAmount": 2500.0,
+      "monthlyDiscount": {
+        "name": "2 times (50%)",
+        "value": 50.0,
+        "type": "PERCENTAGE",
+        "duration": 2,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "30-11-2025",
+        "uniqueName": "7rt1715339285584"
+      },
+      "monthlyAmount": 999.0,
+      "monthlyCompaniesLimit": 1,
+      "isCommonPlan": true,
+      "restrictedModules": {
+        "Users": 100
+      },
+      "uniqueName": "lel1717588638765",
+      "companiesLimit": 99
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 170.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "PlanVersion3",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "23-06-2026 13:33:01",
+      "monthlyBillsAllowed": 100,
+      "monthlyInvoicesAllowed": 100,
+      "monthlyAmount": 170.0,
+      "monthlyCompaniesLimit": 10,
+      "isCommonPlan": true,
+      "restrictedModules": {
+        "E-invoice": null,
+        "Users": 3
+      },
+      "uniqueName": "w101729762963155"
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 4.0,
+      "yearlyAmountAfterDiscount": 4.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "Single user permission",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 4,
+      "invoicesAllowed": 4,
+      "description": "only one",
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "09-10-2026 17:03:24",
+      "monthlyBillsAllowed": 4,
+      "monthlyInvoicesAllowed": 4,
+      "yearlyAmount": 4.0,
+      "monthlyDiscount": {
+        "name": "100% Discount",
+        "value": 100.0,
+        "type": "PERCENTAGE",
+        "duration": 1,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "31-08-2026",
+        "uniqueName": "lto1715584674791"
+      },
+      "yearlyDiscount": {
+        "name": "100% Discount",
+        "value": 100.0,
+        "type": "PERCENTAGE",
+        "duration": 1,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "31-08-2026",
+        "uniqueName": "lto1715584674791"
+      },
+      "monthlyAmount": 4.0,
+      "monthlyCompaniesLimit": 34,
+      "isCommonPlan": true,
+      "restrictedModules": {
+        "Users": 24
+      },
+      "uniqueName": "5t21735042281858",
+      "companiesLimit": 43
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "yearlyAmountAfterDiscount": 15.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "AnshiChnagePlan",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 122,
+      "invoicesAllowed": 122,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "13-08-2025 11:29:02",
+      "yearlyAmount": 15.0,
+      "monthlyDiscount": {
+        "name": "KJ100",
+        "value": 10.0,
+        "type": "PERCENTAGE",
+        "duration": 5,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "31-05-2026",
+        "uniqueName": "tsw1717784373969"
+      },
+      "yearlyDiscount": {
+        "name": "KJ100",
+        "value": 10.0,
+        "type": "PERCENTAGE",
+        "duration": 5,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "31-05-2026",
+        "uniqueName": "tsw1717784373969"
+      },
+      "isCommonPlan": true,
+      "restrictedModules": {
+        "Tax filing": null
+      },
+      "uniqueName": "q8g1740663696139",
+      "companiesLimit": 2
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 2000.0,
+      "yearlyAmountAfterDiscount": 18000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 2000.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "Ashish Plan",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 10000,
+      "invoicesAllowed": 10000,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "06-01-2026 17:02:01",
+      "monthlyBillsAllowed": 4000,
+      "monthlyInvoicesAllowed": 4000,
+      "yearlyAmount": 20000.0,
+      "monthlyDiscount": {
+        "name": "100% Discount",
+        "value": 100.0,
+        "type": "PERCENTAGE",
+        "duration": 1,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "31-08-2026",
+        "uniqueName": "lto1715584674791"
+      },
+      "yearlyDiscount": {
+        "name": "Ashish Discount",
+        "value": 10.0,
+        "type": "PERCENTAGE",
+        "duration": 6,
+        "period": "BOTH",
+        "archiveStatus": "UNARCHIVED",
+        "isActive": 0,
+        "expiryDate": "31-12-2100",
+        "uniqueName": "3531759139002416"
+      },
+      "monthlyAmount": 2000.0,
+      "monthlyCompaniesLimit": 5,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "htk1759138965394",
+      "companiesLimit": 50
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "yearlyAmountAfterDiscount": 11000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "MYCheck",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 100,
+      "invoicesAllowed": 100,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "14-01-2026 17:49:39",
+      "yearlyAmount": 11000.0,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "gs71768393179071",
+      "companiesLimit": 12
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 260.0,
+      "yearlyAmountAfterDiscount": 4000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "WhiteLabelPlan",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 1200,
+      "invoicesAllowed": 1200,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "15-01-2026 19:05:47",
+      "monthlyBillsAllowed": 120,
+      "monthlyInvoicesAllowed": 120,
+      "yearlyAmount": 4000.0,
+      "monthlyAmount": 260.0,
+      "monthlyCompaniesLimit": 6,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "ltv1768484147685",
+      "companiesLimit": 12
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 500.0,
+      "yearlyAmountAfterDiscount": 4000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "Oak",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 10000,
+      "invoicesAllowed": 10000,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "05-05-2026 13:44:13",
+      "monthlyBillsAllowed": 1000,
+      "monthlyInvoicesAllowed": 1000,
+      "yearlyAmount": 4000.0,
+      "monthlyAmount": 500.0,
+      "monthlyCompaniesLimit": 20,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "q0e1773724976580",
+      "companiesLimit": 50
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 300.0,
+      "yearlyAmountAfterDiscount": 3000.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "new plan psy",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billsAllowed": 3000,
+      "invoicesAllowed": 3000,
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "20-03-2026 10:07:16",
+      "monthlyBillsAllowed": 300,
+      "monthlyInvoicesAllowed": 300,
+      "yearlyAmount": 3000.0,
+      "monthlyAmount": 300.0,
+      "monthlyCompaniesLimit": 1,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "gh71773981436754",
+      "companiesLimit": 1
+    },
+    {
+      "countries": [
+        "India"
+      ],
+      "monthlyAmountAfterDiscount": 0.0,
+      "yearlyAmountAfterDiscount": 0.0,
+      "monthlyDiscountAmount": 0.0,
+      "yearlyDiscountAmount": 0.0,
+      "entity": "region",
+      "entityCode": "IND",
+      "name": "30days",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "archiveStatus": "UNARCHIVED",
+      "createdAt": "28-07-2026 15:54:17",
+      "monthlyBillsAllowed": 30,
+      "monthlyInvoicesAllowed": 30,
+      "yearlyAmount": 0.0,
+      "monthlyAmount": 0.0,
+      "monthlyCompaniesLimit": 1,
+      "isCommonPlan": true,
+      "restrictedModules": {},
+      "uniqueName": "g3h1781096930513"
+    }
+  ]
+}

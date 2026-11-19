@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please enter Paypal email.",
+  "code": "PARAM_MISSING"
+}

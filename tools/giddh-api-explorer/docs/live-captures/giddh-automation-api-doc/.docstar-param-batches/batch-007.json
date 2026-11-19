@@ -1,0 +1,557 @@
+[
+  {
+    "endpointId": "G3BF9J-8B4NF",
+    "name": "Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route.",
+    "catalogKey": "GET /portal/company/{id}/accounts/{id}/vouchers",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "G3BF9J-8B4NF",
+      "description": "Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route. Part of the Vouchers APIs in Giddh. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "9vB4n2uroYJd",
+    "name": "Customer Portal proxy helper (PROXY_URL), not a Giddh Spring controller.",
+    "catalogKey": "GET /api/c/getDetails",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "9vB4n2uroYJd",
+      "description": "Customer Portal proxy helper (PROXY_URL), not a Giddh Spring controller. Part of the Getdetails APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "o8UmEjoh9MXt",
+    "name": "Delete Account",
+    "catalogKey": "DELETE /company/{companyUniqueName}/accounts/{accountUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "o8UmEjoh9MXt",
+      "description": "Delete Account. Part of the Giddh APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Ay934ZSA2npl",
+    "name": "Delete Account",
+    "catalogKey": "DELETE /company/{companyUniqueName}/accounts/{accountUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Ay934ZSA2npl",
+      "description": "Delete Account. Part of the Giddh APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "csZQCvlFcM-S",
+    "name": "Delete Account",
+    "catalogKey": "DELETE /company/{companyUniqueName}/accounts/{accountUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "csZQCvlFcM-S",
+      "description": "Delete Account. Part of the Giddh APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "DId_iV4TZmi9",
+    "name": "Delete Address",
+    "catalogKey": "DELETE /company/{companyUniqueName}/address/{addressUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "DId_iV4TZmi9",
+      "description": "Delete. Part of the Address APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "dofO48aOsK86",
+    "name": "Delete All Sessions",
+    "catalogKey": "DELETE /users/{userUniqueName}/sessions",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "dofO48aOsK86",
+      "description": "Delete All Sessions. Part of the Sessions APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "m9qFjeuTGeYq",
+    "name": "Delete Bank Integration Details",
+    "catalogKey": "DELETE /company/{companyUniqueName}/gocardless/{bankDetailsUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "m9qFjeuTGeYq",
+      "description": "Delete Bank Integration Details. Part of the Gocardless APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "bankName": {
+          "checked": "true",
+          "value": "",
+          "description": "Bank name query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "3Hl6dNwO0Yhh",
+    "name": "Delete Batch",
+    "catalogKey": "DELETE /company/{companyUniqueName}/batch/{batchUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "3Hl6dNwO0Yhh",
+      "description": "Update batch details (name, manufacturing/expiry dates, optional rename via newBatchNumber,. Part of the Batch APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Is2jOkYxWx8I",
+    "name": "Delete Branch Transfer Note",
+    "catalogKey": "DELETE /company/{companyUniqueName}/branch-transfer/{transferNoteUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Is2jOkYxWx8I",
+      "description": "Delete Branch Transfer Note. Part of the Branch Transfer APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "gHIBWn0oM60W",
+    "name": "Delete Business Documents",
+    "catalogKey": "DELETE /company/{companyUniqueName}/business-documents/{uniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "gHIBWn0oM60W",
+      "description": "Delete. Part of the Business Documents APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "j91VBCTGH7ad",
+    "name": "Delete Comment",
+    "catalogKey": "DELETE /v2/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/report-comment",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "j91VBCTGH7ad",
+      "description": "Delete Comment. Part of the Report Comment APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "6iyKoNBvJx09",
+    "name": "Delete Custom Field",
+    "catalogKey": "DELETE /company/{companyUniqueName}/customfield/{customFieldUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "6iyKoNBvJx09",
+      "description": "Delete. Part of the Customfield APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "wl5QMcsBIe6Y",
+    "name": "Delete Customer Variant Discount",
+    "catalogKey": "DELETE /company/{companyUniqueName}/customer-vendor-discount",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "wl5QMcsBIe6Y",
+      "description": "Delete Customer Variant Discount. Part of the Customer Vendor Discount APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "stockUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Stock/inventory item uniqueName. Optional.",
+          "required": false
+        },
+        "variantUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Variant unique name query parameter. Optional.",
+          "required": false
+        },
+        "userUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "User unique name query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "-lwlOwGk5O87",
+    "name": "Delete Email Trigger",
+    "catalogKey": "DELETE /v2/company/{companyUniqueName}/trigger/{uniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "-lwlOwGk5O87",
+      "description": "Delete Email Trigger. Part of the Trigger APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "Uq6ms3YywyiP",
+    "name": "Delete Entry",
+    "catalogKey": "DELETE /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/entries/{entryUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Uq6ms3YywyiP",
+      "description": "Delete Entry. Part of the Entries APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "4Uwc4mGzKQVq",
+    "name": "Delete Group",
+    "catalogKey": "DELETE /company/{companyUniqueName}/groups/{groupUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "4Uwc4mGzKQVq",
+      "description": "Delete Group. Part of the Groups APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "AdNkz5OIou4k",
+    "name": "Delete Gstsetting",
+    "catalogKey": "DELETE /company/{companyUniqueName}/gst-setting/{uniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "AdNkz5OIou4k",
+      "description": "Delete GSTSetting. Part of the Gst Setting APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "j1wcKtzq6AJb",
+    "name": "Delete Image",
+    "catalogKey": "DELETE /company/{companyUniqueName}/delete-image",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "j1wcKtzq6AJb",
+      "description": "API - Deleting image by image unique name. Part of the Delete Image APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "imgUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Img unique name query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "XNp-G6eZGzAW",
+    "name": "Delete Inventory",
+    "catalogKey": "DELETE /company/{companyUniqueName}/inventory-adjustment/{refNo}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "XNp-G6eZGzAW",
+      "description": "Delete. Part of the Inventory Adjustment APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "PBIQUyDqiDHg",
+    "name": "Delete Inventory Adjustment",
+    "catalogKey": "DELETE /company/{companyUniqueName}/inventory-adjustment/{refNo}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "PBIQUyDqiDHg",
+      "description": "Delete. Part of the Inventory Adjustment APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "uDHS2upDyR46",
+    "name": "Delete Invoice",
+    "catalogKey": "DELETE /company/{companyUniqueName}/invoices",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "uDHS2upDyR46",
+      "description": "Delete Invoice. Part of the Invoices APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"proformaNumber\": \"string\",\n  \"estimateNumber\": \"string\",\n  \"invoiceNumber\": \"string\",\n  \"voucherType\": \"string\",\n  \"estimateVersionNumber\": \"string\",\n  \"debugMode\": false,\n  \"generateEInvoice\": false,\n  \"emailId\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "proformaNumber": {
+          "type": "string",
+          "description": "Proforma number. Optional.",
+          "value": "string"
+        },
+        "estimateNumber": {
+          "type": "string",
+          "description": "Estimate number. Optional.",
+          "value": "string"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "estimateVersionNumber": {
+          "type": "string",
+          "description": "Estimate version number. Optional.",
+          "value": "string"
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        },
+        "generateEInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the generate einvoice filter or flag. Optional.",
+          "value": false
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "ylkYJDwi0xOo",
+    "name": "Delete Manufacturing Details",
+    "catalogKey": "DELETE /company/{companyUniqueName}/stock/{stockUniqueName}/manufacture/{manufactureUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "ylkYJDwi0xOo",
+      "description": "Delete Manufacturing Details. Part of the Manufacture APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "CLrcyjcOOm0V",
+    "name": "Delete Manufacturing Details",
+    "catalogKey": "DELETE /v2/company/{companyUniqueName}/manufacture/{manufactureUniqueName}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "CLrcyjcOOm0V",
+      "description": "Delete Manufacturing Details. Part of the Manufacture APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "_SRmF5Ump0Bc",
+    "name": "Delete Multiple",
+    "catalogKey": "DELETE /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/entries",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "_SRmF5Ump0Bc",
+      "description": "Delete Multiple Entries. Part of the Entries APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"accountUniqueName\": \"string\",\n  \"entryUniqueNames\": [],\n  \"transactionIds\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "accountUniqueName": {
+          "type": "string",
+          "description": "Account unique name. Optional.",
+          "value": "string"
+        },
+        "entryUniqueNames": {
+          "type": "array",
+          "description": "Array of entry unique names values. Optional.",
+          "value": []
+        },
+        "transactionIds": {
+          "type": "array",
+          "description": "Array of transaction ids values. Optional.",
+          "value": []
+        }
+      }
+    }
+  }
+]

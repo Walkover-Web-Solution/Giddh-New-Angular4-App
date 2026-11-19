@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"S4L4X05UPpzx","description":"Get All Assigned Discount List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"accountUniqueName":{"checked":"true","value":"","description":"Account uniqueName. Optional."}},"body":{"type":"none"},"bodyDescription":{}}

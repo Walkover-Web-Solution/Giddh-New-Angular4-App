@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "CONTACT module is not supported.",
+  "code": "INVALID_REQUEST"
+}

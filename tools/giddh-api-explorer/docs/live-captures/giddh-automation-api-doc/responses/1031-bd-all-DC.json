@@ -1,0 +1,113 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "uniqueName": "edk1792738826154",
+        "number": "RN-261023-1",
+        "date": "23-10-2026",
+        "source": "BUSINESS_DOCUMENT",
+        "documentType": "RC",
+        "challanType": "STOCK_TRANSFER",
+        "account": {
+          "name": "API Doc Vendor One",
+          "uniqueName": "apidoc-vendor-one"
+        },
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "exchangeRate": 1,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "status": {
+          "documentType": "RC",
+          "statusCode": "COMPLETED",
+          "statusName": "Completed",
+          "statusCategory": "COMPLETED",
+          "defaultStatusCategory": "COMPLETED",
+          "stage": "END"
+        },
+        "statusCode": "COMPLETED",
+        "statusName": "Completed",
+        "invoiceStatus": "FULLY_BILLED",
+        "adjustmentStatus": "NOT_ADJUSTED",
+        "remainingQuantity": 0.0,
+        "linkedInvoiceCount": 1,
+        "linkedInvoiceNumber": "NA",
+        "isReturn": false,
+        "allowedActions": [
+          "PREVIEW",
+          "EDIT",
+          "RETURN",
+          "CANCEL",
+          "DELETE"
+        ]
+      },
+      {
+        "uniqueName": "zyu1792738825009",
+        "number": "DC-261023-1",
+        "date": "23-10-2026",
+        "source": "BUSINESS_DOCUMENT",
+        "documentType": "DC",
+        "challanType": "STOCK_TRANSFER",
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one"
+        },
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "exchangeRate": 1,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "status": {
+          "documentType": "DC",
+          "statusCode": "DELIVERED",
+          "statusName": "Delivered",
+          "statusCategory": "COMPLETED",
+          "defaultStatusCategory": "COMPLETED",
+          "stage": "END"
+        },
+        "statusCode": "DELIVERED",
+        "statusName": "Delivered",
+        "invoiceStatus": "FULLY_INVOICED",
+        "adjustmentStatus": "NOT_ADJUSTED",
+        "remainingQuantity": 0.0,
+        "linkedInvoiceCount": 1,
+        "linkedInvoiceNumber": "261023-7",
+        "isReturn": false,
+        "allowedActions": [
+          "PREVIEW",
+          "EDIT",
+          "RETURN",
+          "CANCEL",
+          "DELETE"
+        ]
+      }
+    ],
+    "balances": {
+      "totalCount": 2,
+      "totalAmount": 200.0,
+      "notInvoicedCount": 0,
+      "notInvoicedAmount": 0.0,
+      "partiallyInvoicedCount": 0,
+      "partiallyInvoicedAmount": 0.0,
+      "fullyInvoicedCount": 2,
+      "fullyInvoicedAmount": 200.0,
+      "openCount": 0,
+      "closedCount": 2,
+      "expiredCount": 0,
+      "cancelledCount": 0
+    }
+  }
+}

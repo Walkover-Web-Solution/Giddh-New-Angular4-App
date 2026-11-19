@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "kg": "KGS",
+    "l": "LTR",
+    "nos": "NOS",
+    "m": "MTR",
+    "hr": "OTH"
+  }
+}

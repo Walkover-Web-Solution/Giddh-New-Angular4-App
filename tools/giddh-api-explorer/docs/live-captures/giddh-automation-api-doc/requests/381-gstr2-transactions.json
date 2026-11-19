@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/v2/company/giddhain1792673422178091xos/gstr2-transactions?gstin=23AAACC1206D2ZN&entityType=all&type=all&page=1&count=50&status=&from=01-10-2026&to=31-10-2026",
+  "note": "no body"
+}

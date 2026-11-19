@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"3c0KE1gQlUre","description":"Get. Part of the Get APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"uniqueName":{"checked":"true","value":"","description":"Entity uniqueName. Mandatory.","required":true}},"body":{"type":"none"},"bodyDescription":{}}

@@ -1,0 +1,53 @@
+{
+  "status": "success",
+  "body": {
+    "stock": {
+      "name": "API Doc Widget",
+      "uniqueName": "apidoc-widget"
+    },
+    "manufacturingDetails": [
+      {
+        "byProducts": [],
+        "increaseAssetValue": true,
+        "manufacturingQuantity": 1.0,
+        "manufacturingUnitCode": "pcs",
+        "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "linkedStocks": [
+          {
+            "stockName": "API Doc Gadget",
+            "stockUniqueName": "apidoc-gadget",
+            "quantity": 1.0,
+            "stockUnitCode": "pcs",
+            "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+            "rate": 0,
+            "amount": 0.0,
+            "manufacturingRateCategory": "purchase",
+            "variant": {
+              "name": "API Doc Gadget",
+              "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+            },
+            "stockUnits": [
+              {
+                "name": "Piece",
+                "code": "pcs",
+                "group": {
+                  "name": "Main Group",
+                  "uniqueName": "maingroup"
+                },
+                "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+              }
+            ]
+          }
+        ],
+        "otherExpenses": [],
+        "manufacturingMultipleOf": 1.0,
+        "variant": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+        },
+        "inventoryType": "PRODUCT",
+        "type": "inside"
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "method": "PATCH",
+  "path": "/v2/subscription/payment-method/placeholder",
+  "body": {}
+}

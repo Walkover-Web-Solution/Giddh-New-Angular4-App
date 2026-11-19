@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "G3BF9J-8B4NF", "description": "Customer Portal payment list uses GET .../vouchers?type=receipt. Backend has GET .../voucher/{uniqueName} and POST .../vouchers/get-all, not this exact route. Part of the Vouchers APIs in Giddh. Requires portal session.", "params": {}, "body": {"type": "none"}}

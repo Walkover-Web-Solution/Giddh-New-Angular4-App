@@ -1,0 +1,1276 @@
+{
+  "status": "success",
+  "body": {
+    "message": "Total Data of company without tag filter",
+    "forwardedBalance": {
+      "amount": 800.0,
+      "type": "DEBIT"
+    },
+    "creditTotal": 2825.5,
+    "debitTotal": 2825.5,
+    "closingBalance": {
+      "amount": 800.0,
+      "type": "DEBIT"
+    },
+    "groupDetails": [
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "CREDIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "General Reserves",
+                "uniqueName": "generalreserves",
+                "groupName": "Reserves & Surplus"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "reservessurplus",
+            "groupName": "Reserves & Surplus"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "liabilities",
+        "uniqueName": "shareholdersfunds",
+        "groupName": "Shareholders\u2019 Funds"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [],
+        "accounts": [],
+        "customGroup": false,
+        "category": "liabilities",
+        "uniqueName": "noncurrentliabilities",
+        "groupName": "Non Current Liabilities"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 450.0,
+        "debitTotal": 225.0,
+        "closingBalance": {
+          "amount": 225.0,
+          "type": "CREDIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "loanandoverdraft",
+            "groupName": "Loan and Overdraft"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "gstcess",
+                "groupName": "GST CESS"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "tcspayable",
+                "groupName": "TCS payable"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "tdspayable",
+                "groupName": "TDS payable"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "utgst",
+                "groupName": "UTGST"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "igst",
+                "groupName": "IGST"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "cgst",
+                "groupName": "CGST"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "sgst",
+                "groupName": "SGST"
+              }
+            ],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "dutiestaxes",
+            "groupName": "Duties & Taxes"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 450.0,
+            "debitTotal": 225.0,
+            "closingBalance": {
+              "amount": 225.0,
+              "type": "CREDIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 50.0,
+                "debitTotal": 50.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "CREDIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Vendor One",
+                "uniqueName": "apidoc-vendor-one",
+                "groupName": "Sundry Creditors"
+              },
+              {
+                "creditTotal": 200.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 200.0,
+                  "type": "CREDIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "CREDIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Vendor Three",
+                "uniqueName": "apidoc-vendor-three",
+                "groupName": "Sundry Creditors"
+              },
+              {
+                "creditTotal": 200.0,
+                "debitTotal": 175.0,
+                "closingBalance": {
+                  "amount": 25.0,
+                  "type": "CREDIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "CREDIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Vendor Two",
+                "uniqueName": "apidoc-vendor-two",
+                "groupName": "Sundry Creditors"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "sundrycreditors",
+            "groupName": "Sundry Creditors"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "liabilities",
+        "uniqueName": "currentliabilities",
+        "groupName": "Current Liabilities"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [],
+        "accounts": [],
+        "customGroup": false,
+        "category": "assets",
+        "uniqueName": "fixedassets",
+        "groupName": "Fixed Assets"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [],
+        "accounts": [],
+        "customGroup": false,
+        "category": "assets",
+        "uniqueName": "noncurrentassets",
+        "groupName": "Non Current Assets"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 800.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 845.0,
+        "debitTotal": 2075.5,
+        "closingBalance": {
+          "amount": 2030.5,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "inpututgst",
+                "groupName": "Input UTGST"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "inputigst",
+                "groupName": "Input IGST"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "inputcgst",
+                "groupName": "Input CGST"
+              },
+              {
+                "forwardedBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "childGroups": [],
+                "accounts": [],
+                "customGroup": false,
+                "category": null,
+                "uniqueName": "inputsgst",
+                "groupName": "Input SGST"
+              }
+            ],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "taxreceivable",
+            "groupName": "Tax Receivable"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Tax On Export",
+                "uniqueName": "taxonexport",
+                "groupName": "Tax On Export"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "taxonexport",
+            "groupName": "Tax On Export"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Tax On Advance",
+                "uniqueName": "taxonadvance",
+                "groupName": "Tax On Advance"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "taxonadvance",
+            "groupName": "Tax On Advance"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "tcsreceivable",
+            "groupName": "TCS receivable"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "tdsreceivable",
+            "groupName": "TDS receivable"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Reverse Charge",
+                "uniqueName": "reversecharge",
+                "groupName": "Reverse Charge"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "reversecharge",
+            "groupName": "Reverse Charge"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 500.0,
+            "closingBalance": {
+              "amount": 500.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 500.0,
+                "closingBalance": {
+                  "amount": 500.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Bank HDFC",
+                "uniqueName": "apidoc-bank-hdfc",
+                "groupName": "Bank Accounts"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "bankaccounts",
+            "groupName": "Bank Accounts"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 170.0,
+            "debitTotal": 150.0,
+            "closingBalance": {
+              "amount": 20.0,
+              "type": "CREDIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 170.0,
+                "debitTotal": 150.0,
+                "closingBalance": {
+                  "amount": 20.0,
+                  "type": "CREDIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Cash",
+                "uniqueName": "cash",
+                "groupName": "Cash"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "cash",
+            "groupName": "Cash"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 675.0,
+            "debitTotal": 1425.5,
+            "closingBalance": {
+              "amount": 750.5,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 375.0,
+                "debitTotal": 550.0,
+                "closingBalance": {
+                  "amount": 175.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Customer Two",
+                "uniqueName": "apidoc-customer-two",
+                "groupName": "Sundry Debtors"
+              },
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 175.5,
+                "closingBalance": {
+                  "amount": 175.5,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Customer Three",
+                "uniqueName": "apidoc-customer-three",
+                "groupName": "Sundry Debtors"
+              },
+              {
+                "creditTotal": 300.0,
+                "debitTotal": 700.0,
+                "closingBalance": {
+                  "amount": 400.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Customer One",
+                "uniqueName": "apidoc-customer-one",
+                "groupName": "Sundry Debtors"
+              },
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "API Doc Walk-in Customer",
+                "uniqueName": "apidoc-customer-b2c",
+                "groupName": "Sundry Debtors"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "sundrydebtors",
+            "groupName": "Sundry Debtors"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 800.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 800.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": true,
+            "category": "assets",
+            "uniqueName": "openingstock",
+            "groupName": "Opening stock"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "assets",
+        "uniqueName": "currentassets",
+        "groupName": "Current Assets"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 1475.5,
+        "debitTotal": 75.0,
+        "closingBalance": {
+          "amount": 1400.5,
+          "type": "CREDIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 1475.5,
+            "debitTotal": 75.0,
+            "closingBalance": {
+              "amount": 1400.5,
+              "type": "CREDIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 1475.5,
+                "debitTotal": 75.0,
+                "closingBalance": {
+                  "amount": 1400.5,
+                  "type": "CREDIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Sales",
+                "uniqueName": "sales",
+                "groupName": "Sales"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "sales",
+            "groupName": "Sales"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "income",
+        "uniqueName": "revenuefromoperations",
+        "groupName": "Revenue From Operations"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "dividendincome",
+            "groupName": "Dividend Income"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "interestincome",
+            "groupName": "Interest Income"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Exchange Gain",
+                "uniqueName": "exchangegain",
+                "groupName": "Exchange Gain"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "exchangegain",
+            "groupName": "Exchange Gain"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "income",
+        "uniqueName": "otherincome",
+        "groupName": "Other Income"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 55.0,
+        "debitTotal": 450.0,
+        "closingBalance": {
+          "amount": 395.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 55.0,
+            "debitTotal": 450.0,
+            "closingBalance": {
+              "amount": 395.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 55.0,
+                "debitTotal": 450.0,
+                "closingBalance": {
+                  "amount": 395.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Purchases",
+                "uniqueName": "purchases",
+                "groupName": "Purchases"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "purchases",
+            "groupName": "Purchases"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Discount",
+                "uniqueName": "discount",
+                "groupName": "Discount"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "discount",
+            "groupName": "Discount"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "expenses",
+        "uniqueName": "operatingcost",
+        "groupName": "Operating Cost"
+      },
+      {
+        "forwardedBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "creditTotal": 0.0,
+        "debitTotal": 0.0,
+        "closingBalance": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "checked": false,
+        "childGroups": [
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "dividendexpense",
+            "groupName": "Dividend Expense"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "interestexpense",
+            "groupName": "Interest Expense"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Exchange Loss",
+                "uniqueName": "exchangeloss",
+                "groupName": "Exchange Loss"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "exchangeloss",
+            "groupName": "Exchange Loss"
+          },
+          {
+            "forwardedBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "creditTotal": 0.0,
+            "debitTotal": 0.0,
+            "closingBalance": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "checked": false,
+            "childGroups": [],
+            "accounts": [
+              {
+                "creditTotal": 0.0,
+                "debitTotal": 0.0,
+                "closingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "openingBalance": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "checked": false,
+                "currency": {
+                  "code": "INR",
+                  "symbol": null
+                },
+                "name": "Round Off",
+                "uniqueName": "roundoff",
+                "groupName": "Other Indirect Expenses"
+              }
+            ],
+            "customGroup": false,
+            "category": null,
+            "uniqueName": "otherindirectexpenses",
+            "groupName": "Other Indirect Expenses"
+          }
+        ],
+        "accounts": [],
+        "customGroup": false,
+        "category": "expenses",
+        "uniqueName": "indirectexpenses",
+        "groupName": "Indirect Expenses"
+      }
+    ]
+  }
+}

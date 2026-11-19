@@ -1,0 +1,40 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "voucherType": "purchase",
+        "subVoucher": null,
+        "voucherNumber": "PB-STOCK-001",
+        "unadjustedAmount": {
+          "amountForAccount": 200.0,
+          "amountForCompany": 200.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 200.0,
+          "amountForCompany": 200.0
+        },
+        "uniqueName": "q39wp1792730978257",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "exchangeRate": 1.0,
+        "amount": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "accountUniqueName": null,
+        "noteVoucherType": null,
+        "voucherBalanceType": null,
+        "voucherDate": "23-10-2026"
+      }
+    ],
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 1,
+    "fromDate": null,
+    "toDate": null
+  }
+}

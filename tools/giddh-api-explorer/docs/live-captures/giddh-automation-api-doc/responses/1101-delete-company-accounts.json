@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "We apologize we cannot honor your request, Please make sure account with uniqueName 'apidoc-disposable-missing-xx' exist and you have appropriate permissions.",
+  "code": "ACCOUNT_NOT_FOUND"
+}

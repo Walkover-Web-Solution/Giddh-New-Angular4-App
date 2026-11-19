@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "body": {
+    "name": "API Doc Sales Person Updated",
+    "uniqueName": "apidocsalesperson",
+    "email": "apidoc.salesperson@example.invalid",
+    "mobileNumber": "919999990907",
+    "archiveStatus": "UNARCHIVED",
+    "linkedEntities": [],
+    "archiveOnly": false
+  }
+}

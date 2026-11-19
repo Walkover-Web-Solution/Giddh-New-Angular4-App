@@ -1,0 +1,50 @@
+{
+  "status": "success",
+  "body": {
+    "voucherSuggestions": [
+      "VOUCHER_NO",
+      "COMPANY_NAME",
+      "VOUCHER_DATE",
+      "VOUCHER_TYPE",
+      "WAREHOUSE_NAME",
+      "CUSTOMER_NAME",
+      "VOUCHER_AMOUNT",
+      "DUE_AMOUNT",
+      "DUE_DATE",
+      "DUE_BY",
+      "ATTENTION_TO",
+      "VOUCHER_ATTENTION_EMAIL",
+      "ACCOUNT_ATTENTION_EMAIL",
+      "ATTENTION_MOBILE",
+      "SHIPPING_ADDRESS",
+      "SHIPPING_STATE",
+      "BILLING_ADDRESS",
+      "BILLING_STATE",
+      "PAYMENT_LINK",
+      "VIEW_INVOICE_LINK",
+      "PORTAL_EMAIL",
+      "PORTAL_MOBILE"
+    ],
+    "voucherNames": [
+      "sales",
+      "credit note",
+      "debit note",
+      "receipt",
+      "payment",
+      "purchase",
+      "proforma",
+      "estimate",
+      "purchase order"
+    ],
+    "emailSuggestions": [
+      "VOUCHER_ATTENTION_EMAIL",
+      "ACCOUNT_ATTENTION_EMAIL",
+      "PORTAL_EMAIL",
+      "COMPANY_SUPER_ADMINS_EMAIL"
+    ],
+    "mobileSuggestions": [
+      "ATTENTION_MOBILE",
+      "PORTAL_MOBILE"
+    ]
+  }
+}

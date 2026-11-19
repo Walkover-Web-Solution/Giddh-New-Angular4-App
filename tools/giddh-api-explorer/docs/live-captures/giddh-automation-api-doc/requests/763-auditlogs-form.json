@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/ui/auditlogs-form",
+  "note": "no body"
+}

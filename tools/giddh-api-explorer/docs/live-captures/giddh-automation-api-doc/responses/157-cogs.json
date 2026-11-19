@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "body": {
+    "openingInventory": 800.0,
+    "purchasesStockAmount": 200.0,
+    "manufacturingExpenses": 0.0,
+    "closingInventory": 800.0,
+    "debitNoteStockAmount": 0.0,
+    "cogs": 200.0
+  }
+}

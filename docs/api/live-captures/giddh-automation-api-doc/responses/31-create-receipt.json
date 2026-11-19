@@ -1,0 +1,240 @@
+{
+  "status": "success",
+  "body": {
+    "number": "RCPT-261022-1",
+    "type": "receipt",
+    "uniqueName": "vwvyr1792674404154",
+    "isCustomInvoiceNo": false,
+    "isTouristSchemeApplicable": false,
+    "mergePB": false,
+    "passportNumber": null,
+    "withPay": false,
+    "forNewSubscription": false,
+    "subVoucher": null,
+    "attachedFiles": [],
+    "attachedFileName": null,
+    "roundOffApplicable": false,
+    "updateAccountDetails": false,
+    "copyBillingAddressToShippingAddress": true,
+    "readDetailsFromAccount": null,
+    "tallyUniqueId": null,
+    "templateDetails": null,
+    "entryUniqueNames": [],
+    "ecommerceDetails": null,
+    "balanceTotal": {
+      "amountForAccount": 0.0,
+      "amountForCompany": 0.0
+    },
+    "gainLoss": 0.0,
+    "status": "ADJUSTED",
+    "subTotal": {
+      "amountForAccount": 100.0,
+      "amountForCompany": 100.0
+    },
+    "discountTotal": null,
+    "taxTotal": null,
+    "roundOffTotal": null,
+    "otherTaxTotal": null,
+    "voucherTotal": {
+      "amountForAccount": 100.0,
+      "amountForCompany": 100.0
+    },
+    "grandTotal": {
+      "amountForAccount": 100.0,
+      "amountForCompany": 100.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "One Hundred Only",
+      "amountForCompany": "One Hundred Only"
+    },
+    "ewayBillDetails": null,
+    "roundOffAccount": null,
+    "items": [],
+    "referenceVoucher": null,
+    "deposits": null,
+    "deposit": null,
+    "adjustments": [
+      {
+        "voucherType": "sales",
+        "subVoucher": null,
+        "voucherNumber": "261022-1",
+        "unadjustedAmount": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "uniqueName": "5zkmf1792674363694",
+        "currency": {
+          "code": "INR",
+          "symbol": "\u20b9"
+        },
+        "exchangeRate": 1.0,
+        "amount": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "accountUniqueName": null,
+        "noteVoucherType": null,
+        "voucherBalanceType": "dr",
+        "voucherDate": "22-10-2026"
+      }
+    ],
+    "valuesInAccountCurrency": true,
+    "exchangeRate": 1.0,
+    "purchaseOrders": null,
+    "purchaseOrderDetails": null,
+    "isEInvoiceGenerated": false,
+    "paymentLink": null,
+    "viewInvoiceLink": null,
+    "generateEInvoice": null,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "documentItems": [],
+    "invoiceStatus": null,
+    "multiCurrency": false,
+    "encodedData": null,
+    "token": null,
+    "salesPerson": {},
+    "fileExtention": null,
+    "fileName": null,
+    "recurrencePreviewRequest": null,
+    "recurringVoucherUniqueName": null,
+    "gstUnitMap": null,
+    "date": "22-10-2026",
+    "einvoiceGenerated": false,
+    "dueDate": null,
+    "touristSchemeApplicable": false,
+    "cashVoucher": false,
+    "company": {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhain1792673422178091xos",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "Default Address",
+        "gstNumber": "23AAACC1206D2ZN",
+        "pincode": "484224",
+        "address": [
+          "My new address"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      }
+    },
+    "account": {
+      "name": "API Doc Customer One",
+      "uniqueName": "apidoc-customer-one",
+      "customerName": "API Doc Customer One",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Customer One",
+        "gstNumber": "23AAACC1206D1ZM",
+        "address": [
+          "Customer address line 1"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "name": "API Doc Customer One",
+        "gstNumber": "23AAACC1206D1ZM",
+        "address": [
+          "Customer address line 1"
+        ],
+        "stateCode": "MP",
+        "countryCode": "IN"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "lxzvb1792674404074",
+        "description": "Receipt against invoice",
+        "date": "22-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Cash",
+              "uniqueName": "cash"
+            },
+            "amount": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            },
+            "taxableValue": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "entryTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "salesPerson": {},
+        "usedQuantity": 0
+      }
+    ],
+    "warehouse": null
+  }
+}

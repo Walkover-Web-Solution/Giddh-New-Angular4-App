@@ -1,0 +1,2060 @@
+[
+  {
+    "endpointId": "y3i0wS5zobQF",
+    "name": "Inventory Masters",
+    "catalogKey": "GET /company/{companyUniqueName}/inventory/{stockGroupUniqueName}/masters",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "y3i0wS5zobQF",
+      "description": "Inventory Masters. Part of the Masters APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "100",
+          "description": "Page size (number of items returned). Default: 100. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "0WM7WNXI7jjc",
+    "name": "Inventory Report",
+    "catalogKey": "GET /company/{companyUniqueName}/stock/{stockUniqueName}/inventory-report",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "0WM7WNXI7jjc",
+      "description": "Inventory Report. Part of the Inventory Report APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "entry_date",
+          "description": "Field name to sort by. Default: entry_date. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"includeInventory\": false,\n  \"inventories\": [],\n  \"quantity\": 0,\n  \"includeQuantity\": false,\n  \"quantityGreaterThan\": false,\n  \"quantityLessThan\": false,\n  \"quantityNotEquals\": false,\n  \"quantityEqualTo\": false,\n  \"itemValue\": 0,\n  \"includeItemValue\": false,\n  \"itemValueGreaterThan\": false,\n  \"itemValueLessThan\": false,\n  \"itemValueEqualTo\": false,\n  \"includeSenders\": false,\n  \"senders\": [],\n  \"includeReceivers\": false,\n  \"receivers\": [],\n  \"senderName\": \"string\",\n  \"receiverName\": \"string\",\n  \"stockName\": \"string\",\n  \"jobWorkTransactionType\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "includeInventory": {
+          "type": "boolean",
+          "description": "When true, applies the include inventory filter or flag. Optional.",
+          "value": false
+        },
+        "inventories": {
+          "type": "array",
+          "description": "Array of inventories values. Optional.",
+          "value": []
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "includeQuantity": {
+          "type": "boolean",
+          "description": "When true, applies the include quantity filter or flag. Optional.",
+          "value": false
+        },
+        "quantityGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the quantity greater than filter or flag. Optional.",
+          "value": false
+        },
+        "quantityLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the quantity less than filter or flag. Optional.",
+          "value": false
+        },
+        "quantityNotEquals": {
+          "type": "boolean",
+          "description": "When true, applies the quantity not equals filter or flag. Optional.",
+          "value": false
+        },
+        "quantityEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the quantity equal to filter or flag. Optional.",
+          "value": false
+        },
+        "itemValue": {
+          "type": "number",
+          "description": "Item value. Optional.",
+          "value": 0
+        },
+        "includeItemValue": {
+          "type": "boolean",
+          "description": "When true, applies the include item value filter or flag. Optional.",
+          "value": false
+        },
+        "itemValueGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the item value greater than filter or flag. Optional.",
+          "value": false
+        },
+        "itemValueLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the item value less than filter or flag. Optional.",
+          "value": false
+        },
+        "itemValueEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the item value equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeSenders": {
+          "type": "boolean",
+          "description": "When true, applies the include senders filter or flag. Optional.",
+          "value": false
+        },
+        "senders": {
+          "type": "array",
+          "description": "Array of senders values. Optional.",
+          "value": []
+        },
+        "includeReceivers": {
+          "type": "boolean",
+          "description": "When true, applies the include receivers filter or flag. Optional.",
+          "value": false
+        },
+        "receivers": {
+          "type": "array",
+          "description": "Array of receivers values. Optional.",
+          "value": []
+        },
+        "senderName": {
+          "type": "string",
+          "description": "Sender name. Optional.",
+          "value": "string"
+        },
+        "receiverName": {
+          "type": "string",
+          "description": "Receiver name. Optional.",
+          "value": "string"
+        },
+        "stockName": {
+          "type": "string",
+          "description": "Stock name. Optional.",
+          "value": "string"
+        },
+        "jobWorkTransactionType": {
+          "type": "array",
+          "description": "Array of job work transaction type values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "qnkdqCrfV4Hw",
+    "name": "Inventory Report",
+    "catalogKey": "POST /company/{companyUniqueName}/inventory-report",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "qnkdqCrfV4Hw",
+      "description": "Inventory Report. Part of the Inventory Report APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "entry_date",
+          "description": "Field name to sort by. Default: entry_date. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"includeInventory\": false,\n  \"inventories\": [],\n  \"quantity\": 0,\n  \"includeQuantity\": false,\n  \"quantityGreaterThan\": false,\n  \"quantityLessThan\": false,\n  \"quantityNotEquals\": false,\n  \"quantityEqualTo\": false,\n  \"itemValue\": 0,\n  \"includeItemValue\": false,\n  \"itemValueGreaterThan\": false,\n  \"itemValueLessThan\": false,\n  \"itemValueEqualTo\": false,\n  \"includeSenders\": false,\n  \"senders\": [],\n  \"includeReceivers\": false,\n  \"receivers\": [],\n  \"senderName\": \"string\",\n  \"receiverName\": \"string\",\n  \"stockName\": \"string\",\n  \"jobWorkTransactionType\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "includeInventory": {
+          "type": "boolean",
+          "description": "When true, applies the include inventory filter or flag. Optional.",
+          "value": false
+        },
+        "inventories": {
+          "type": "array",
+          "description": "Array of inventories values. Optional.",
+          "value": []
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "includeQuantity": {
+          "type": "boolean",
+          "description": "When true, applies the include quantity filter or flag. Optional.",
+          "value": false
+        },
+        "quantityGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the quantity greater than filter or flag. Optional.",
+          "value": false
+        },
+        "quantityLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the quantity less than filter or flag. Optional.",
+          "value": false
+        },
+        "quantityNotEquals": {
+          "type": "boolean",
+          "description": "When true, applies the quantity not equals filter or flag. Optional.",
+          "value": false
+        },
+        "quantityEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the quantity equal to filter or flag. Optional.",
+          "value": false
+        },
+        "itemValue": {
+          "type": "number",
+          "description": "Item value. Optional.",
+          "value": 0
+        },
+        "includeItemValue": {
+          "type": "boolean",
+          "description": "When true, applies the include item value filter or flag. Optional.",
+          "value": false
+        },
+        "itemValueGreaterThan": {
+          "type": "boolean",
+          "description": "When true, applies the item value greater than filter or flag. Optional.",
+          "value": false
+        },
+        "itemValueLessThan": {
+          "type": "boolean",
+          "description": "When true, applies the item value less than filter or flag. Optional.",
+          "value": false
+        },
+        "itemValueEqualTo": {
+          "type": "boolean",
+          "description": "When true, applies the item value equal to filter or flag. Optional.",
+          "value": false
+        },
+        "includeSenders": {
+          "type": "boolean",
+          "description": "When true, applies the include senders filter or flag. Optional.",
+          "value": false
+        },
+        "senders": {
+          "type": "array",
+          "description": "Array of senders values. Optional.",
+          "value": []
+        },
+        "includeReceivers": {
+          "type": "boolean",
+          "description": "When true, applies the include receivers filter or flag. Optional.",
+          "value": false
+        },
+        "receivers": {
+          "type": "array",
+          "description": "Array of receivers values. Optional.",
+          "value": []
+        },
+        "senderName": {
+          "type": "string",
+          "description": "Sender name. Optional.",
+          "value": "string"
+        },
+        "receiverName": {
+          "type": "string",
+          "description": "Receiver name. Optional.",
+          "value": "string"
+        },
+        "stockName": {
+          "type": "string",
+          "description": "Stock name. Optional.",
+          "value": "string"
+        },
+        "jobWorkTransactionType": {
+          "type": "array",
+          "description": "Array of job work transaction type values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "khdGiz7sA2XJ",
+    "name": "Inventory Search",
+    "catalogKey": "POST /company/{companyUniqueName}/inventory-search",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "khdGiz7sA2XJ",
+      "description": "Inventory Search. Part of the Inventory Search APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"stockGroupUniqueNames\": [],\n  \"stockUniqueNames\": [],\n  \"variantUniqueNames\": [],\n  \"q\": \"string\",\n  \"page\": 0,\n  \"count\": 0,\n  \"companyId\": 0,\n  \"searchPage\": \"string\",\n  \"inventoryType\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "stockGroupUniqueNames": {
+          "type": "array",
+          "description": "Array of stock group unique names values. Optional.",
+          "value": []
+        },
+        "stockUniqueNames": {
+          "type": "array",
+          "description": "Array of stock unique names values. Optional.",
+          "value": []
+        },
+        "variantUniqueNames": {
+          "type": "array",
+          "description": "Array of variant unique names values. Optional.",
+          "value": []
+        },
+        "q": {
+          "type": "string",
+          "description": "Q. Optional.",
+          "value": "string"
+        },
+        "page": {
+          "type": "number",
+          "description": "Page. Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "number",
+          "description": "Count. Optional.",
+          "value": 0
+        },
+        "companyId": {
+          "type": "number",
+          "description": "Company id. Optional.",
+          "value": 0
+        },
+        "searchPage": {
+          "type": "string",
+          "description": "Search page. Optional.",
+          "value": "string"
+        },
+        "inventoryType": {
+          "type": "string",
+          "description": "Inventory type. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "HQuycT6WTp9u",
+    "name": "List Business Documents",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/list",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "HQuycT6WTp9u",
+      "description": "List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "",
+          "description": "Sort direction. Allowed values: asc, desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "",
+          "description": "Field name to sort by. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"documentType\": \"DC\",\n  \"reportType\": \"NOT_INVOICED\",\n  \"statusCategories\": [\n    \"OPEN\"\n  ],\n  \"statuses\": [],\n  \"invoiceStatuses\": [\n    \"NOT_INVOICED\"\n  ],\n  \"accountUniqueNames\": [],\n  \"warehouseUniqueNames\": [],\n  \"warehouseUniqueName\": \"string\",\n  \"selectAllFields\": [],\n  \"search\": \"string\",\n  \"amountMin\": 0,\n  \"amountMax\": 0,\n  \"amount\": 0,\n  \"amountOperator\": \"string\",\n  \"hasLinkedInvoice\": false,\n  \"linkableOnly\": false,\n  \"linkedVoucherNumber\": \"string\",\n  \"overdueOnly\": false,\n  \"challanTypes\": [\n    \"STOCK_TRANSFER\"\n  ],\n  \"sortBy\": \"string\",\n  \"sort\": \"string\",\n  \"page\": 0,\n  \"count\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "reportType": {
+          "type": "string",
+          "description": "Report type. Allowed values: NOT_INVOICED, PARTIALLY_INVOICED, FULLY_INVOICED, WITHOUT_CHALLAN, PARTIALLY_WITHOUT_CHALLAN. Optional.",
+          "value": "NOT_INVOICED",
+          "allowedValues": [
+            "NOT_INVOICED",
+            "PARTIALLY_INVOICED",
+            "FULLY_INVOICED",
+            "WITHOUT_CHALLAN",
+            "PARTIALLY_WITHOUT_CHALLAN"
+          ]
+        },
+        "statusCategories": {
+          "type": "array",
+          "description": "Array of status categories values. Allowed values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED. Optional.",
+          "value": [
+            "OPEN"
+          ],
+          "allowedValues": [
+            "OPEN",
+            "IN_PROGRESS",
+            "COMPLETED",
+            "CANCELLED"
+          ]
+        },
+        "statuses": {
+          "type": "array",
+          "description": "Array of statuses values. Optional.",
+          "value": []
+        },
+        "invoiceStatuses": {
+          "type": "array",
+          "description": "Array of invoice statuses values. Allowed values: NOT_INVOICED, PARTIALLY_INVOICED, FULLY_INVOICED, NOT_APPLICABLE, NOT_BILLED, PARTIALLY_BILLED, FULLY_BILLED. Optional.",
+          "value": [
+            "NOT_INVOICED"
+          ],
+          "allowedValues": [
+            "NOT_INVOICED",
+            "PARTIALLY_INVOICED",
+            "FULLY_INVOICED",
+            "NOT_APPLICABLE",
+            "NOT_BILLED",
+            "PARTIALLY_BILLED",
+            "FULLY_BILLED"
+          ]
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueNames": {
+          "type": "array",
+          "description": "Array of warehouse unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        },
+        "search": {
+          "type": "string",
+          "description": "Search. Optional.",
+          "value": "string"
+        },
+        "amountMin": {
+          "type": "number",
+          "description": "Amount min. Optional.",
+          "value": 0
+        },
+        "amountMax": {
+          "type": "number",
+          "description": "Amount max. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountOperator": {
+          "type": "string",
+          "description": "Amount operator. Optional.",
+          "value": "string"
+        },
+        "hasLinkedInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the has linked invoice filter or flag. Optional.",
+          "value": false
+        },
+        "linkableOnly": {
+          "type": "boolean",
+          "description": "When true, applies the linkable only filter or flag. Optional.",
+          "value": false
+        },
+        "linkedVoucherNumber": {
+          "type": "string",
+          "description": "Linked voucher number. Optional.",
+          "value": "string"
+        },
+        "overdueOnly": {
+          "type": "boolean",
+          "description": "When true, applies the overdue only filter or flag. Optional.",
+          "value": false
+        },
+        "challanTypes": {
+          "type": "array",
+          "description": "Array of challan types values. Allowed values: STOCK_TRANSFER, JOBWORK. Optional.",
+          "value": [
+            "STOCK_TRANSFER"
+          ],
+          "allowedValues": [
+            "STOCK_TRANSFER",
+            "JOBWORK"
+          ]
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Sort by. Optional.",
+          "value": "string"
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort. Optional.",
+          "value": "string"
+        },
+        "page": {
+          "type": "number",
+          "description": "Page. Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "number",
+          "description": "Count. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "fQ9PY67VMSjN",
+    "name": "List Delivery Challans",
+    "catalogKey": "POST /company/{companyUniqueName}/delivery-challan/list",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "fQ9PY67VMSjN",
+      "description": "List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "",
+          "description": "Sort direction. Allowed values: asc, desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "",
+          "description": "Field name to sort by. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"documentType\": \"DC\",\n  \"reportType\": \"NOT_INVOICED\",\n  \"statusCategories\": [\n    \"OPEN\"\n  ],\n  \"statuses\": [],\n  \"invoiceStatuses\": [\n    \"NOT_INVOICED\"\n  ],\n  \"accountUniqueNames\": [],\n  \"warehouseUniqueNames\": [],\n  \"warehouseUniqueName\": \"string\",\n  \"selectAllFields\": [],\n  \"search\": \"string\",\n  \"amountMin\": 0,\n  \"amountMax\": 0,\n  \"amount\": 0,\n  \"amountOperator\": \"string\",\n  \"hasLinkedInvoice\": false,\n  \"linkableOnly\": false,\n  \"linkedVoucherNumber\": \"string\",\n  \"overdueOnly\": false,\n  \"challanTypes\": [\n    \"STOCK_TRANSFER\"\n  ],\n  \"sortBy\": \"string\",\n  \"sort\": \"string\",\n  \"page\": 0,\n  \"count\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "reportType": {
+          "type": "string",
+          "description": "Report type. Allowed values: NOT_INVOICED, PARTIALLY_INVOICED, FULLY_INVOICED, WITHOUT_CHALLAN, PARTIALLY_WITHOUT_CHALLAN. Optional.",
+          "value": "NOT_INVOICED",
+          "allowedValues": [
+            "NOT_INVOICED",
+            "PARTIALLY_INVOICED",
+            "FULLY_INVOICED",
+            "WITHOUT_CHALLAN",
+            "PARTIALLY_WITHOUT_CHALLAN"
+          ]
+        },
+        "statusCategories": {
+          "type": "array",
+          "description": "Array of status categories values. Allowed values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED. Optional.",
+          "value": [
+            "OPEN"
+          ],
+          "allowedValues": [
+            "OPEN",
+            "IN_PROGRESS",
+            "COMPLETED",
+            "CANCELLED"
+          ]
+        },
+        "statuses": {
+          "type": "array",
+          "description": "Array of statuses values. Optional.",
+          "value": []
+        },
+        "invoiceStatuses": {
+          "type": "array",
+          "description": "Array of invoice statuses values. Allowed values: NOT_INVOICED, PARTIALLY_INVOICED, FULLY_INVOICED, NOT_APPLICABLE, NOT_BILLED, PARTIALLY_BILLED, FULLY_BILLED. Optional.",
+          "value": [
+            "NOT_INVOICED"
+          ],
+          "allowedValues": [
+            "NOT_INVOICED",
+            "PARTIALLY_INVOICED",
+            "FULLY_INVOICED",
+            "NOT_APPLICABLE",
+            "NOT_BILLED",
+            "PARTIALLY_BILLED",
+            "FULLY_BILLED"
+          ]
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueNames": {
+          "type": "array",
+          "description": "Array of warehouse unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        },
+        "search": {
+          "type": "string",
+          "description": "Search. Optional.",
+          "value": "string"
+        },
+        "amountMin": {
+          "type": "number",
+          "description": "Amount min. Optional.",
+          "value": 0
+        },
+        "amountMax": {
+          "type": "number",
+          "description": "Amount max. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountOperator": {
+          "type": "string",
+          "description": "Amount operator. Optional.",
+          "value": "string"
+        },
+        "hasLinkedInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the has linked invoice filter or flag. Optional.",
+          "value": false
+        },
+        "linkableOnly": {
+          "type": "boolean",
+          "description": "When true, applies the linkable only filter or flag. Optional.",
+          "value": false
+        },
+        "linkedVoucherNumber": {
+          "type": "string",
+          "description": "Linked voucher number. Optional.",
+          "value": "string"
+        },
+        "overdueOnly": {
+          "type": "boolean",
+          "description": "When true, applies the overdue only filter or flag. Optional.",
+          "value": false
+        },
+        "challanTypes": {
+          "type": "array",
+          "description": "Array of challan types values. Allowed values: STOCK_TRANSFER, JOBWORK. Optional.",
+          "value": [
+            "STOCK_TRANSFER"
+          ],
+          "allowedValues": [
+            "STOCK_TRANSFER",
+            "JOBWORK"
+          ]
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Sort by. Optional.",
+          "value": "string"
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort. Optional.",
+          "value": "string"
+        },
+        "page": {
+          "type": "number",
+          "description": "Page. Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "number",
+          "description": "Count. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "jLK_uu0JtVrL",
+    "name": "List Receipt Notes",
+    "catalogKey": "POST /company/{companyUniqueName}/receipt-note/list",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "jLK_uu0JtVrL",
+      "description": "List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "",
+          "description": "Page number (1-based). Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "",
+          "description": "Page size (number of items returned). Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "",
+          "description": "Sort direction. Allowed values: asc, desc. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "",
+          "description": "Field name to sort by. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"documentType\": \"DC\",\n  \"reportType\": \"NOT_INVOICED\",\n  \"statusCategories\": [\n    \"OPEN\"\n  ],\n  \"statuses\": [],\n  \"invoiceStatuses\": [\n    \"NOT_INVOICED\"\n  ],\n  \"accountUniqueNames\": [],\n  \"warehouseUniqueNames\": [],\n  \"warehouseUniqueName\": \"string\",\n  \"selectAllFields\": [],\n  \"search\": \"string\",\n  \"amountMin\": 0,\n  \"amountMax\": 0,\n  \"amount\": 0,\n  \"amountOperator\": \"string\",\n  \"hasLinkedInvoice\": false,\n  \"linkableOnly\": false,\n  \"linkedVoucherNumber\": \"string\",\n  \"overdueOnly\": false,\n  \"challanTypes\": [\n    \"STOCK_TRANSFER\"\n  ],\n  \"sortBy\": \"string\",\n  \"sort\": \"string\",\n  \"page\": 0,\n  \"count\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "reportType": {
+          "type": "string",
+          "description": "Report type. Allowed values: NOT_INVOICED, PARTIALLY_INVOICED, FULLY_INVOICED, WITHOUT_CHALLAN, PARTIALLY_WITHOUT_CHALLAN. Optional.",
+          "value": "NOT_INVOICED",
+          "allowedValues": [
+            "NOT_INVOICED",
+            "PARTIALLY_INVOICED",
+            "FULLY_INVOICED",
+            "WITHOUT_CHALLAN",
+            "PARTIALLY_WITHOUT_CHALLAN"
+          ]
+        },
+        "statusCategories": {
+          "type": "array",
+          "description": "Array of status categories values. Allowed values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED. Optional.",
+          "value": [
+            "OPEN"
+          ],
+          "allowedValues": [
+            "OPEN",
+            "IN_PROGRESS",
+            "COMPLETED",
+            "CANCELLED"
+          ]
+        },
+        "statuses": {
+          "type": "array",
+          "description": "Array of statuses values. Optional.",
+          "value": []
+        },
+        "invoiceStatuses": {
+          "type": "array",
+          "description": "Array of invoice statuses values. Allowed values: NOT_INVOICED, PARTIALLY_INVOICED, FULLY_INVOICED, NOT_APPLICABLE, NOT_BILLED, PARTIALLY_BILLED, FULLY_BILLED. Optional.",
+          "value": [
+            "NOT_INVOICED"
+          ],
+          "allowedValues": [
+            "NOT_INVOICED",
+            "PARTIALLY_INVOICED",
+            "FULLY_INVOICED",
+            "NOT_APPLICABLE",
+            "NOT_BILLED",
+            "PARTIALLY_BILLED",
+            "FULLY_BILLED"
+          ]
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueNames": {
+          "type": "array",
+          "description": "Array of warehouse unique names values. Optional.",
+          "value": []
+        },
+        "warehouseUniqueName": {
+          "type": "string",
+          "description": "Warehouse unique name. Optional.",
+          "value": "string"
+        },
+        "selectAllFields": {
+          "type": "array",
+          "description": "Array of select all fields values. Optional.",
+          "value": []
+        },
+        "search": {
+          "type": "string",
+          "description": "Search. Optional.",
+          "value": "string"
+        },
+        "amountMin": {
+          "type": "number",
+          "description": "Amount min. Optional.",
+          "value": 0
+        },
+        "amountMax": {
+          "type": "number",
+          "description": "Amount max. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "amountOperator": {
+          "type": "string",
+          "description": "Amount operator. Optional.",
+          "value": "string"
+        },
+        "hasLinkedInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the has linked invoice filter or flag. Optional.",
+          "value": false
+        },
+        "linkableOnly": {
+          "type": "boolean",
+          "description": "When true, applies the linkable only filter or flag. Optional.",
+          "value": false
+        },
+        "linkedVoucherNumber": {
+          "type": "string",
+          "description": "Linked voucher number. Optional.",
+          "value": "string"
+        },
+        "overdueOnly": {
+          "type": "boolean",
+          "description": "When true, applies the overdue only filter or flag. Optional.",
+          "value": false
+        },
+        "challanTypes": {
+          "type": "array",
+          "description": "Array of challan types values. Allowed values: STOCK_TRANSFER, JOBWORK. Optional.",
+          "value": [
+            "STOCK_TRANSFER"
+          ],
+          "allowedValues": [
+            "STOCK_TRANSFER",
+            "JOBWORK"
+          ]
+        },
+        "sortBy": {
+          "type": "string",
+          "description": "Sort by. Optional.",
+          "value": "string"
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort. Optional.",
+          "value": "string"
+        },
+        "page": {
+          "type": "number",
+          "description": "Page. Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "number",
+          "description": "Count. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "vo_mp-AbsSnE",
+    "name": "Lock Financial Year",
+    "catalogKey": "PATCH /company/{companyUniqueName}/financial-year-lock",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "vo_mp-AbsSnE",
+      "description": "Lock Financial Year. Part of the Financial Year Lock APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "wv_0GyrGAwl4",
+    "name": "Login With Number",
+    "catalogKey": "GET /login-with-number",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "wv_0GyrGAwl4",
+      "description": "Login With Number. Part of the Login With Number APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "countryCode": {
+          "checked": "true",
+          "value": "",
+          "description": "Country code query parameter. Mandatory.",
+          "required": true
+        },
+        "mobileNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Mobile number query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "T5BIdF5C6Z0k",
+    "name": "Login With Password",
+    "catalogKey": "POST /v2/login-with-password",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "T5BIdF5C6Z0k",
+      "description": "Login With Password. Part of the Login With Password APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"uniqueKey\": \"string\",\n  \"password\": \"string\",\n  \"currentPassword\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "uniqueKey": {
+          "type": "string",
+          "description": "Unique key. Optional.",
+          "value": "string"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password. Optional.",
+          "value": "string"
+        },
+        "currentPassword": {
+          "type": "string",
+          "description": "Current password. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "KrQakvYsQnEA",
+    "name": "MTD: Making Tax Digital",
+    "catalogKey": "GET /company/{companyUniqueName}/authorize",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "KrQakvYsQnEA",
+      "description": "MTD: Making Tax Digital. Part of the Authorize APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "O7xhUCQ89jGB",
+    "name": "Mail",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers/mail",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "O7xhUCQ89jGB",
+      "description": "Mail Invoice. Part of the Mail APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherNumber\": [],\n  \"emailId\": [],\n  \"template\": \"string\",\n  \"cancel\": false,\n  \"voucherType\": \"string\",\n  \"typeOfInvoice\": [],\n  \"debugMode\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherNumber": {
+          "type": "array",
+          "description": "Array of voucher number values. Optional.",
+          "value": []
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        },
+        "template": {
+          "type": "string",
+          "description": "Template. Optional.",
+          "value": "string"
+        },
+        "cancel": {
+          "type": "boolean",
+          "description": "When true, applies the cancel filter or flag. Optional.",
+          "value": false
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "typeOfInvoice": {
+          "type": "array",
+          "description": "Array of type of invoice values. Optional.",
+          "value": []
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "GjuZO1kkSD9T",
+    "name": "Mail Ledger All",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/mail-ledger",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "GjuZO1kkSD9T",
+      "description": "Mail Ledger All. Part of the Mail Ledger APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "withInvoice": {
+          "checked": "true",
+          "value": "false",
+          "description": "With invoice query parameter. Default: false. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "view-detailed",
+          "description": "Voucher or entity type discriminator for the list. Default: view-detailed. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "excel",
+          "description": "Response or export format. Default: excel. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "gAYqq32GJwiO",
+    "name": "Mail Ledger All",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/mail-ledger",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "gAYqq32GJwiO",
+      "description": "Mail Ledger All. Part of the Mail Ledger APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "withInvoice": {
+          "checked": "true",
+          "value": "false",
+          "description": "With invoice query parameter. Default: false. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "type": {
+          "checked": "true",
+          "value": "view-detailed",
+          "description": "Voucher or entity type discriminator for the list. Default: view-detailed. Optional.",
+          "required": false
+        },
+        "format": {
+          "checked": "true",
+          "value": "excel",
+          "description": "Response or export format. Default: excel. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "RL9ScwF7t0dD",
+    "name": "Mail Purchase Order",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/{uniqueName}/mail",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "RL9ScwF7t0dD",
+      "description": "Mail Purchase Order. Part of the Mail APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"proformaNumber\": \"string\",\n  \"estimateNumber\": \"string\",\n  \"invoiceNumber\": \"string\",\n  \"voucherType\": \"string\",\n  \"estimateVersionNumber\": \"string\",\n  \"debugMode\": false,\n  \"generateEInvoice\": false,\n  \"emailId\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "proformaNumber": {
+          "type": "string",
+          "description": "Proforma number. Optional.",
+          "value": "string"
+        },
+        "estimateNumber": {
+          "type": "string",
+          "description": "Estimate number. Optional.",
+          "value": "string"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "estimateVersionNumber": {
+          "type": "string",
+          "description": "Estimate version number. Optional.",
+          "value": "string"
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        },
+        "generateEInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the generate einvoice filter or flag. Optional.",
+          "value": false
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Umt_UelN_GX2",
+    "name": "Mail Purchase Order",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/{uniqueName}/mail",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Umt_UelN_GX2",
+      "description": "Mail Purchase Order. Part of the Mail APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"proformaNumber\": \"string\",\n  \"estimateNumber\": \"string\",\n  \"invoiceNumber\": \"string\",\n  \"voucherType\": \"string\",\n  \"estimateVersionNumber\": \"string\",\n  \"debugMode\": false,\n  \"generateEInvoice\": false,\n  \"emailId\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "proformaNumber": {
+          "type": "string",
+          "description": "Proforma number. Optional.",
+          "value": "string"
+        },
+        "estimateNumber": {
+          "type": "string",
+          "description": "Estimate number. Optional.",
+          "value": "string"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "estimateVersionNumber": {
+          "type": "string",
+          "description": "Estimate version number. Optional.",
+          "value": "string"
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        },
+        "generateEInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the generate einvoice filter or flag. Optional.",
+          "value": false
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "v3T4hen3lTO3",
+    "name": "Make Recurring Voucher V4",
+    "catalogKey": "POST /v4/company/{companyUniqueName}/vouchers/{voucherUniqueName}/make-recurring",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "v3T4hen3lTO3",
+      "description": "Turn an existing voucher into a recurring rule. Path voucherUniqueName is the source voucher. JSON body is RecurrencePreviewRequest (nested frequency, repeatOn, end). branchUniqueName is an optional query param (@RequestParam required=false). Part of the Make Recurring APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Active branch uniqueName. Omit only when the company has a single default branch. Optional.",
+          "required": false
+        },
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"startDate\": \"01-04-2025\",\n  \"repeatOption\": \"MONTHLY_DATE\",\n  \"frequency\": {\n    \"unit\": \"MONTH\",\n    \"interval\": 1\n  },\n  \"repeatOn\": {\n    \"type\": \"DAY_OF_MONTH\",\n    \"dayOfMonth\": 15\n  },\n  \"end\": {\n    \"type\": \"NEVER\"\n  }\n}"
+        }
+      },
+      "bodyDescription": {
+        "startDate": {
+          "type": "string",
+          "description": "First occurrence date (dd-MM-yyyy). Only field validated as @NotNull on the server. Mandatory.",
+          "value": "01-04-2025"
+        },
+        "repeatOption": {
+          "type": "string",
+          "description": "UI preset that maps to frequency/repeatOn. Use CUSTOM when the user edits the schedule manually. Allowed values: DAY, WEEKLY, MONTHLY_DATE, MONTHLY_WEEKDAY, CUSTOM. Optional.",
+          "value": "MONTHLY_DATE",
+          "allowedValues": [
+            "DAY",
+            "WEEKLY",
+            "MONTHLY_DATE",
+            "MONTHLY_WEEKDAY",
+            "CUSTOM"
+          ]
+        },
+        "frequency": {
+          "type": "string",
+          "description": "How often the voucher repeats. Object with unit (DAY, WEEK, MONTH, YEAR) and interval (every N units). Omit repeatOn when unit is DAY. Optional.",
+          "value": {
+            "unit": "MONTH",
+            "interval": 1
+          }
+        },
+        "repeatOn": {
+          "type": "string",
+          "description": "Calendar rule when frequency.unit is WEEK or MONTH. type: DAY_OF_MONTH | WEEK_DAYS | NTH_WEEKDAY | NTH_BUSINESS_DAY | EVERY_DAY. For DAY_OF_MONTH send dayOfMonth (1–31). For WEEK_DAYS send weekdays (MONDAY…SUNDAY). For NTH_WEEKDAY send nth (1–5) and weekday. Optional.",
+          "value": {
+            "type": "DAY_OF_MONTH",
+            "dayOfMonth": 15
+          }
+        },
+        "end": {
+          "type": "string",
+          "description": "When recurrence stops. type: NEVER | AFTER_COUNT | ON_DATE. For AFTER_COUNT send count. For ON_DATE send endDate (dd-MM-yyyy). NEVER omits endDate. Optional.",
+          "value": {
+            "type": "NEVER"
+          }
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "53ewVdAUcQ0M",
+    "name": "Manufacture Stock",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/stock/{stockUniqueName}/manufacture",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "53ewVdAUcQ0M",
+      "description": "Manufacture Stock. Part of the Manufacture APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"date\": \"string\",\n  \"stock\": \"string\",\n  \"manufacturingDetails\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "date": {
+          "type": "string",
+          "description": "Date (dd-MM-yyyy unless documented otherwise). Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "manufacturingDetails": {
+          "type": "array",
+          "description": "Array of manufacturing details values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "Zb7Olfv51WZK",
+    "name": "Map Gst Units",
+    "catalogKey": "PATCH /v2/company/{companyUniqueName}/gst/unit-mapping",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "Zb7Olfv51WZK",
+      "description": "Map Gst Units. Part of the Unit Mapping APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"giddhUnit\": \"string\",\n  \"mappedGstUnit\": \"string\",\n  \"code\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "giddhUnit": {
+          "type": "string",
+          "description": "Giddh unit. Optional.",
+          "value": "string"
+        },
+        "mappedGstUnit": {
+          "type": "string",
+          "description": "Mapped gst unit. Optional.",
+          "value": "string"
+        },
+        "code": {
+          "type": "string",
+          "description": "Code. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "I940ovgQslbF",
+    "name": "Merge Account",
+    "catalogKey": "PUT /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/merge",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "I940ovgQslbF",
+      "description": "Merge Account. Part of the Merge APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"openingBalanceType\": \"string\",\n  \"uniqueName\": \"string\",\n  \"name\": \"string\",\n  \"closingBalanceTriggerAmount\": 0,\n  \"closingBalanceTriggerAmountType\": \"string\",\n  \"archiveStatus\": \"SYSTEM_ARCHIVED\",\n  \"vendorContacts\": [],\n  \"discounts\": [],\n  \"applicableDiscounts\": [],\n  \"isFixed\": false,\n  \"ledgerView\": \"T_VIEW\",\n  \"salesPerson\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "openingBalanceType": {
+          "type": "string",
+          "description": "Opening balance type. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Mandatory.",
+          "value": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "closingBalanceTriggerAmount": {
+          "type": "number",
+          "description": "Closing balance trigger amount. Optional.",
+          "value": 0
+        },
+        "closingBalanceTriggerAmountType": {
+          "type": "string",
+          "description": "Closing balance trigger amount type. Optional.",
+          "value": "string"
+        },
+        "archiveStatus": {
+          "type": "string",
+          "description": "Archive status. Allowed values: SYSTEM_ARCHIVED, ARCHIVED. Optional.",
+          "value": "SYSTEM_ARCHIVED",
+          "allowedValues": [
+            "SYSTEM_ARCHIVED",
+            "ARCHIVED"
+          ]
+        },
+        "vendorContacts": {
+          "type": "array",
+          "description": "Array of vendor contacts values. Optional.",
+          "value": []
+        },
+        "discounts": {
+          "type": "array",
+          "description": "Array of discounts values. Optional.",
+          "value": []
+        },
+        "applicableDiscounts": {
+          "type": "array",
+          "description": "Array of applicable discounts values. Optional.",
+          "value": []
+        },
+        "isFixed": {
+          "type": "boolean",
+          "description": "When true, applies the is fixed filter or flag. Optional.",
+          "value": false
+        },
+        "ledgerView": {
+          "type": "string",
+          "description": "Ledger view. Allowed values: T_VIEW, STATEMENT_VIEW. Optional.",
+          "value": "T_VIEW",
+          "allowedValues": [
+            "T_VIEW",
+            "STATEMENT_VIEW"
+          ]
+        },
+        "salesPerson": {
+          "type": "string",
+          "description": "Sales person. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "h_uc_vFF7m2I",
+    "name": "Move Account",
+    "catalogKey": "PUT /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/move",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "h_uc_vFF7m2I",
+      "description": "Move Account. Part of the Move APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"uniqueName\": \"string\",\n  \"synonyms\": \"string\",\n  \"isFixed\": false,\n  \"ssnNumber\": \"string\",\n  \"hsnNumber\": \"string\",\n  \"closingBalanceTriggerAmount\": 0,\n  \"closingBalanceTriggerAmountType\": \"string\",\n  \"applicableDiscounts\": [],\n  \"emails\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Mandatory.",
+          "value": "string"
+        },
+        "synonyms": {
+          "type": "string",
+          "description": "Synonyms. Optional.",
+          "value": "string"
+        },
+        "isFixed": {
+          "type": "boolean",
+          "description": "When true, applies the is fixed filter or flag. Optional.",
+          "value": false
+        },
+        "ssnNumber": {
+          "type": "string",
+          "description": "Ssn number. Optional.",
+          "value": "string"
+        },
+        "hsnNumber": {
+          "type": "string",
+          "description": "Hsn number. Optional.",
+          "value": "string"
+        },
+        "closingBalanceTriggerAmount": {
+          "type": "number",
+          "description": "Closing balance trigger amount. Optional.",
+          "value": 0
+        },
+        "closingBalanceTriggerAmountType": {
+          "type": "string",
+          "description": "Closing balance trigger amount type. Optional.",
+          "value": "string"
+        },
+        "applicableDiscounts": {
+          "type": "array",
+          "description": "Array of applicable discounts values. Optional.",
+          "value": []
+        },
+        "emails": {
+          "type": "array",
+          "description": "Array of emails values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "v02GFocBh5kA",
+    "name": "Move Groups",
+    "catalogKey": "PUT /company/{companyUniqueName}/groups/{groupUniqueName}/move",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "v02GFocBh5kA",
+      "description": "Move Groups. Part of the Move APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"uniqueName\": \"string\",\n  \"synonyms\": \"string\",\n  \"isFixed\": false,\n  \"ssnNumber\": \"string\",\n  \"hsnNumber\": \"string\",\n  \"closingBalanceTriggerAmount\": 0,\n  \"closingBalanceTriggerAmountType\": \"string\",\n  \"applicableDiscounts\": [],\n  \"emails\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Mandatory.",
+          "value": "string"
+        },
+        "synonyms": {
+          "type": "string",
+          "description": "Synonyms. Optional.",
+          "value": "string"
+        },
+        "isFixed": {
+          "type": "boolean",
+          "description": "When true, applies the is fixed filter or flag. Optional.",
+          "value": false
+        },
+        "ssnNumber": {
+          "type": "string",
+          "description": "Ssn number. Optional.",
+          "value": "string"
+        },
+        "hsnNumber": {
+          "type": "string",
+          "description": "Hsn number. Optional.",
+          "value": "string"
+        },
+        "closingBalanceTriggerAmount": {
+          "type": "number",
+          "description": "Closing balance trigger amount. Optional.",
+          "value": 0
+        },
+        "closingBalanceTriggerAmountType": {
+          "type": "string",
+          "description": "Closing balance trigger amount type. Optional.",
+          "value": "string"
+        },
+        "applicableDiscounts": {
+          "type": "array",
+          "description": "Array of applicable discounts values. Optional.",
+          "value": []
+        },
+        "emails": {
+          "type": "array",
+          "description": "Array of emails values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "eBnMGunRI7M2",
+    "name": "Move Stock",
+    "catalogKey": "PUT /company/{companyUniqueName}/stock/{stockUniqueName:.+}/move",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "eBnMGunRI7M2",
+      "description": "Move Stock. Part of the Move APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"uniqueName\": \"string\",\n  \"hsnNumber\": \"string\",\n  \"sacNumber\": \"string\",\n  \"taxes\": [],\n  \"discounts\": [],\n  \"type\": \"string\",\n  \"runtimeManufacturing\": false,\n  \"outOfStockSelling\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Mandatory.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Mandatory.",
+          "value": "string"
+        },
+        "hsnNumber": {
+          "type": "string",
+          "description": "Hsn number. Optional.",
+          "value": "string"
+        },
+        "sacNumber": {
+          "type": "string",
+          "description": "Sac number. Optional.",
+          "value": "string"
+        },
+        "taxes": {
+          "type": "array",
+          "description": "Tax rows (array). Optional.",
+          "value": []
+        },
+        "discounts": {
+          "type": "array",
+          "description": "Array of discounts values. Optional.",
+          "value": []
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        },
+        "runtimeManufacturing": {
+          "type": "boolean",
+          "description": "When true, applies the runtime manufacturing filter or flag. Optional.",
+          "value": false
+        },
+        "outOfStockSelling": {
+          "type": "boolean",
+          "description": "When true, applies the out of stock selling filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "I12P2ci-geuA",
+    "name": "Only super Admin can perform the operation on this .",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/bank",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "I12P2ci-geuA",
+      "description": "Only super Admin can perform the operation on this. Part of the Bank APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "bankName": {
+          "checked": "true",
+          "value": "",
+          "description": "Bank name query parameter. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "DAgf3xl1FwPf",
+    "name": "Owner Ship Transfer",
+    "catalogKey": "POST /v2/subscription/transfer/ownership",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "DAgf3xl1FwPf",
+      "description": "Owner Ship Transfer. Part of the Ownership APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "subscriptionId": {
+          "checked": "true",
+          "value": "",
+          "description": "Subscription id query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name. Optional.",
+          "value": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  }
+]

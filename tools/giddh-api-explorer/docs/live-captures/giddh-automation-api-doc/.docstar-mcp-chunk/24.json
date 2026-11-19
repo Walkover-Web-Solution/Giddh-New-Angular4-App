@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "flR22HEZNRfR", "description": "Add Domain. Part of the Add Domain APIs in Giddh. Requires Auth-Key or Session-Id.", "body": {"type": "JSON", "raw": {"rawType": "JSON", "value": "{\n  \"items\": []\n}"}}, "bodyDescription": {"items": {"type": "array", "description": "Line items (array). Required.", "value": []}}}

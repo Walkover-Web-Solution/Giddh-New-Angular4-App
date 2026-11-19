@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No Payment Gateway for RazorPay found for the company.",
+  "code": "NOT_FOUND"
+}

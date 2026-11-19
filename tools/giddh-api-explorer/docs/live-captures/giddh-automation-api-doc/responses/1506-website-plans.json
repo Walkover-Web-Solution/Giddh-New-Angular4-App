@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "message": "Region not found with code IN.",
+  "code": "INVALID_REQUEST",
+  "httpStatus": 406
+}

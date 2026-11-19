@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "body": {
+    "importedAccountOpeningBalance": [],
+    "ledgerView": "T_VIEW",
+    "name": "API Doc Shrinkage Expense",
+    "archive": false,
+    "currencySymbol": "\u20b9",
+    "currency": "INR",
+    "country": {
+      "countryName": "India",
+      "countryCode": "IN",
+      "alpha3CountryCode": null
+    },
+    "cashFreeVirtualAccountData": {
+      "virtualAccountNumber": null,
+      "ifscCode": null,
+      "name": null
+    },
+    "applicableTaxes": [],
+    "inheritedTaxes": [],
+    "yodleeAdded": false,
+    "addresses": [],
+    "category": "expenses",
+    "emails": [],
+    "accountOpeningBalance": [],
+    "createdAt": "23-10-2026 05:39:38",
+    "accountBankDetails": [],
+    "mergedAccounts": "",
+    "openingBalance": 0.0,
+    "updatedBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "openingBalanceType": "DEBIT",
+    "inheritedDiscounts": [],
+    "openingBalanceDate": "01-04-2026",
+    "updatedAt": "23-10-2026 05:39:38",
+    "createdBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "foreignOpeningBalance": 0.0,
+    "isFixed": false,
+    "discounts": [],
+    "applicableDiscounts": [],
+    "otherApplicableTaxes": [],
+    "uniqueName": "apidoc-shrinkage-expense",
+    "countryName": "India",
+    "accountType": "Expense",
+    "parentGroups": [
+      {
+        "name": "Indirect Expenses",
+        "uniqueName": "indirectexpenses"
+      },
+      {
+        "name": "Other Indirect Expenses",
+        "uniqueName": "otherindirectexpenses"
+      }
+    ]
+  }
+}

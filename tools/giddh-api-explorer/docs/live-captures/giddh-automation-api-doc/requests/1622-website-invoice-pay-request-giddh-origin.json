@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/invoice-pay-request/apidoc-fake-key?voucherVersion=2"
+}

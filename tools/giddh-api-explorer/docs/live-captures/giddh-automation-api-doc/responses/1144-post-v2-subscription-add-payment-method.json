@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide subscription id.",
+  "code": "INVALID_REQUEST"
+}

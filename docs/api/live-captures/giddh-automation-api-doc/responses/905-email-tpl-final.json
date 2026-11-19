@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "body": {
+    "html": "<p>Dear customer, invoice attached.</p>",
+    "emailSubject": "API Doc Invoice",
+    "to": [
+      "@ACCOUNT_ATTENTION_EMAIL",
+      "@VOUCHER_ATTENTION_EMAIL"
+    ],
+    "cc": [],
+    "bcc": [],
+    "replyTo": []
+  }
+}

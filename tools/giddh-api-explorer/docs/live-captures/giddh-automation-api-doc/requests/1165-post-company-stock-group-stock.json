@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock?branchUniqueName=giddhautomationapidoc",
+  "body": {
+    "name": "API Doc Temp SG",
+    "uniqueName": "apidoc-temp-sg-342"
+  }
+}

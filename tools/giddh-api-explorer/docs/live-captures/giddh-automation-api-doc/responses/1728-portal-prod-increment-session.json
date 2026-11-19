@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "body": {
+    "session": {
+      "id": "in3f3af1ecebbd1410ab41T0-Z4K6PwJ3WSFn7FsiBvMxAXO-RJ6cZ2l2xph_RKKc=",
+      "expiresAt": "25-10-2026 12:53:29",
+      "createdAt": "23-10-2026 12:53:29"
+    }
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

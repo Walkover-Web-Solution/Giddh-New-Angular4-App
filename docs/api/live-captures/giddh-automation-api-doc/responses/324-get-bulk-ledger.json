@@ -1,0 +1,119 @@
+{
+  "status": "success",
+  "body": {
+    "itcAvailable": null,
+    "isItcEligible": false,
+    "transactions": [
+      {
+        "particular": {
+          "name": "Sales",
+          "uniqueName": "sales",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "parentGroups": [
+            {
+              "name": "Revenue From Operations",
+              "uniqueName": "revenuefromoperations"
+            },
+            {
+              "name": "Sales",
+              "uniqueName": "sales"
+            }
+          ],
+          "category": "income"
+        },
+        "amount": 10.0,
+        "amountSymbol": "\u20b9",
+        "amountCurrency": "INR",
+        "amountForCompany": null,
+        "convertedAmount": 10.0,
+        "convertedAmountSymbol": "\u20b9",
+        "convertedAmountCurrency": "INR",
+        "type": "DEBIT",
+        "inventory": null,
+        "isTax": false,
+        "isBaseAccount": false
+      }
+    ],
+    "total": {
+      "amount": 10.0,
+      "type": "DEBIT",
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "convertedTotal": {
+      "amount": 10.0,
+      "type": "DEBIT",
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "particular": {
+      "name": "Cash",
+      "uniqueName": "cash",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "parentGroups": [
+        {
+          "name": "Current Assets",
+          "uniqueName": "currentassets"
+        },
+        {
+          "name": "Cash",
+          "uniqueName": "cash"
+        }
+      ],
+      "category": "assets"
+    },
+    "particularType": "Asset",
+    "actualAmount": 10.0,
+    "actualRate": 0.0,
+    "exchangeRate": 1.0,
+    "otherEntriesUniqueNames": [],
+    "reverseChargeTaxableAmount": null,
+    "touristSchemeApplicable": false,
+    "passportNumber": null,
+    "unitRates": [],
+    "entryVoucherTotals": null,
+    "isPartOfMultiEntryVoucher": false,
+    "isEInvoiceGenerated": false,
+    "entryClass": null,
+    "tag": null,
+    "attachedFileName": "",
+    "description": "API bulk ledger 1",
+    "invoiceNumberAgainstVoucher": null,
+    "warning": null,
+    "voucherNumber": null,
+    "uniqueName": "vpcpb1792733811111",
+    "tcsCalculationMethod": null,
+    "voucher": {
+      "name": "sales",
+      "shortCode": "sal",
+      "prefixAccordingToVoucher": ""
+    },
+    "adjustments": [],
+    "referenceVoucher": null,
+    "taxes": [],
+    "discounts": [],
+    "voucherUniqueName": null,
+    "attachedFile": "",
+    "tagNames": [],
+    "entryDate": "23-10-2026",
+    "einvoiceGenerated": false,
+    "chequeNumber": "",
+    "chequeClearanceDate": "",
+    "subVoucher": "",
+    "gainLoss": 0.0,
+    "voucherNo": 14,
+    "sendToGstr2": true,
+    "tdsTaxes": [],
+    "tcsTaxes": [],
+    "unconfirmedEntry": false,
+    "voucherGeneratedType": null,
+    "voucherGenerated": false,
+    "taxOnlyTransactions": false
+  }
+}

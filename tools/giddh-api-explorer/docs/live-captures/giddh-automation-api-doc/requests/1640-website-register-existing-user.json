@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "path": "/v2/register",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website-signup",
+  "body": {
+    "emailId": "divyanshu@whozzat.com",
+    "emailIdAccessToken": "<JWT_REDACTED>",
+    "emailIdAuthType": "giddh",
+    "mobileNo": "919111525164",
+    "mobileNoAccessToken": "<JWT_REDACTED>"
+  },
+  "note": "Existing user signup \u2192 same as login 2FA path. MSG91 JWTs for email+mobile."
+}

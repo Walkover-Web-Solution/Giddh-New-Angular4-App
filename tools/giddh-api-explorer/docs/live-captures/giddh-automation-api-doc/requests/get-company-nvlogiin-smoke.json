@@ -1,0 +1,8 @@
+{
+  "method": "GET",
+  "url": "https://api.giddh.com/company/nvlogiin165868912755901st49",
+  "headers": {
+    "Auth-Key": "REDACTED",
+    "Accept": "application/json"
+  }
+}

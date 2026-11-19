@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide authorization code in the request",
+  "code": "INVALID_PARAMETER_PROVIDED"
+}

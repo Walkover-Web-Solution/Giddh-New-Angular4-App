@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Please provide email subject.",
+  "code": "INVALID_REQUEST"
+}

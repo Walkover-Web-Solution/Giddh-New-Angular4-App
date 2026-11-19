@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "path": "/users/shristi@viasocket.com",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup"
+}

@@ -1,0 +1,5 @@
+{
+  "method": "POST",
+  "path": "/subscription/paypal/order/ORDER-PLACEHOLDER/capture?subscriptionId=SUB-20261022-5",
+  "body": {}
+}

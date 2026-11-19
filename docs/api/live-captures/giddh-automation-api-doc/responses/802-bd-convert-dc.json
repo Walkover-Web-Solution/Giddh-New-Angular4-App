@@ -1,0 +1,517 @@
+{
+  "status": "success",
+  "body": {
+    "relationType": "INVOICING",
+    "documents": [
+      {
+        "number": "DC-261023-1",
+        "type": "DC",
+        "date": "23-10-2026",
+        "uniqueName": "zyu1792738825009",
+        "company": {
+          "uniqueName": "giddhain1792673422178091xos",
+          "billingDetails": {
+            "gstNumber": "23AAACC1206D2ZN",
+            "name": "Default Address",
+            "address": [
+              "My new address"
+            ],
+            "stateCode": "MP",
+            "countryName": "India",
+            "countryCode": "IN",
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "country": {
+              "name": "India",
+              "code": "IN"
+            }
+          },
+          "shippingDetails": {
+            "gstNumber": "23AAACC1206D2ZN",
+            "name": "Default Address",
+            "address": [
+              "My new address"
+            ],
+            "stateCode": "MP",
+            "countryName": "India",
+            "countryCode": "IN",
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "country": {
+              "name": "India",
+              "code": "IN"
+            }
+          }
+        },
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one",
+          "customerName": "API Doc Customer One",
+          "billingDetails": {
+            "name": "API Doc Customer One",
+            "address": [
+              "addr"
+            ],
+            "stateCode": "MP",
+            "stateGstCode": "23",
+            "countryName": "India",
+            "countryCode": "IN",
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "country": {
+              "name": "India",
+              "code": "IN"
+            }
+          },
+          "shippingDetails": {
+            "name": "API Doc Customer One",
+            "address": [
+              "addr"
+            ],
+            "stateCode": "MP",
+            "stateGstCode": "23",
+            "countryName": "India",
+            "countryCode": "IN",
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "country": {
+              "name": "India",
+              "code": "IN"
+            }
+          },
+          "placeOfSupply": {
+            "name": "Madhya Pradesh",
+            "code": "MP"
+          }
+        },
+        "entries": [
+          {
+            "description": "DC line",
+            "date": "23-10-2026",
+            "transactions": [
+              {
+                "account": {
+                  "name": "Sales",
+                  "uniqueName": "sales"
+                },
+                "amount": {
+                  "amountForAccount": 100.0,
+                  "amountForCompany": 100.0
+                },
+                "stock": {
+                  "name": "API Doc Widget",
+                  "uniqueName": "apidoc-widget",
+                  "stockUnit": {
+                    "name": "Piece",
+                    "code": "pcs",
+                    "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                  },
+                  "unitRates": [],
+                  "skuCodeHeading": "SKU Code",
+                  "quantity": 1,
+                  "rate": {
+                    "amountForAccount": 100.0,
+                    "amountForCompany": 100.0
+                  },
+                  "variant": {
+                    "name": "API Doc Widget",
+                    "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+                  },
+                  "taxInclusive": false,
+                  "showVariant": false,
+                  "hasVariants": false
+                },
+                "taxableValue": {
+                  "amountForAccount": 100.0,
+                  "amountForCompany": 100.0
+                }
+              }
+            ],
+            "discounts": [],
+            "taxes": [],
+            "subTotal": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            },
+            "taxTotal": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "otherTaxTotal": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "entryTotal": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "grandTotal": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            },
+            "entryTotalWithoutTcsTds": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "usedQuantity": 0
+          }
+        ],
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "voucherTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "subTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "taxTotal": {},
+        "otherTaxTotal": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "totalAsWords": {
+          "amountForAccount": "One Hundred Only",
+          "amountForCompany": "One Hundred Only"
+        },
+        "updateAccountDetails": false,
+        "warehouse": {
+          "name": "Gidd warehouse",
+          "uniqueName": "xbq1792673424418",
+          "address": "My new address"
+        },
+        "attachedFiles": [],
+        "entryUniqueNames": [],
+        "exchangeRate": 1,
+        "valuesInAccountCurrency": true,
+        "isEcommerceInvoice": false,
+        "applyApplicableTaxes": false,
+        "multiCurrency": false,
+        "businessDocumentUniqueNames": [],
+        "linkedBusinessDocuments": [],
+        "touristSchemeApplicable": false,
+        "roundOffApplicable": true,
+        "forNewSubscription": false,
+        "id": 1106,
+        "documentNo": "DC-261023-1",
+        "documentType": "DC",
+        "challanType": "STOCK_TRANSFER",
+        "caseId": "CASE-20261023-1106",
+        "documentDate": "23-10-2026",
+        "status": {
+          "documentType": "DC",
+          "statusCode": "DELIVERED",
+          "statusName": "Delivered",
+          "statusCategory": "COMPLETED",
+          "defaultStatusCategory": "COMPLETED",
+          "stage": "END"
+        },
+        "statusCode": "DELIVERED",
+        "statusCategory": "COMPLETED",
+        "invoiceStatus": "FULLY_INVOICED",
+        "adjustmentStatus": "NOT_ADJUSTED",
+        "mongoResourceId": "6adb06097bcd9a0a69aaad0c",
+        "currencyCode": "INR",
+        "stockPosted": true,
+        "isActive": true,
+        "linkedVoucherIds": [
+          1921663
+        ],
+        "linkedVoucherNumbers": [
+          "261023-7"
+        ],
+        "linkedVoucherUniqueNames": [
+          "fbzat1792738840769"
+        ],
+        "linkedVouchers": [
+          {
+            "uniqueName": "fbzat1792738840769",
+            "number": "261023-7",
+            "date": "23-10-2026",
+            "type": "sales",
+            "relationType": "INVOICING",
+            "grandTotal": {
+              "amountForAccount": 100.0,
+              "amountForCompany": 100.0
+            }
+          }
+        ],
+        "documentItems": [
+          {
+            "variant": {
+              "name": "API Doc Widget",
+              "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+            },
+            "stock": {
+              "name": "API Doc Widget",
+              "uniqueName": "apidoc-widget"
+            },
+            "warehouse": {
+              "name": "Gidd warehouse",
+              "uniqueName": "xbq1792673424418"
+            },
+            "stockUnit": {
+              "name": "Piece",
+              "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+            },
+            "quantity": 1.0,
+            "consumedQuantity": 1.0,
+            "remainingQuantity": 0.0,
+            "invoicedQuantity": 1.0,
+            "adjustedQuantity": 0.0,
+            "adjustmentStatus": "NOT_ADJUSTED",
+            "rate": 100.0,
+            "amount": 100.0,
+            "discount": 0.0,
+            "taxAmount": 0.0,
+            "description": "DC line",
+            "sortOrder": 0
+          }
+        ],
+        "allowedActions": [
+          "PREVIEW",
+          "EDIT",
+          "RETURN",
+          "CANCEL",
+          "DELETE"
+        ],
+        "cashInvoice": false,
+        "defaultCompanyAddress": true,
+        "exportInvoice": false
+      }
+    ],
+    "voucher": {
+      "number": "261023-7",
+      "type": "sales",
+      "date": "23-10-2026",
+      "dueDate": "07-11-2026",
+      "uniqueName": "fbzat1792738840769",
+      "balanceTotal": {
+        "amountForAccount": 100.0,
+        "amountForCompany": 100.0
+      },
+      "company": {
+        "name": "Giddh Automation API DOC",
+        "uniqueName": "giddhain1792673422178091xos",
+        "currency": {
+          "code": "INR"
+        },
+        "billingDetails": {
+          "gstNumber": "23AAACC1206D2ZN",
+          "name": "Default Address",
+          "address": [
+            "My new address"
+          ],
+          "stateCode": "MP",
+          "countryName": "India",
+          "countryCode": "IN",
+          "state": {
+            "name": "Madhya Pradesh",
+            "code": "MP"
+          },
+          "country": {
+            "name": "India",
+            "code": "IN"
+          }
+        },
+        "shippingDetails": {
+          "gstNumber": "23AAACC1206D2ZN",
+          "name": "Default Address",
+          "address": [
+            "My new address"
+          ],
+          "stateCode": "MP",
+          "countryName": "India",
+          "countryCode": "IN",
+          "state": {
+            "name": "Madhya Pradesh",
+            "code": "MP"
+          },
+          "country": {
+            "name": "India",
+            "code": "IN"
+          }
+        }
+      },
+      "account": {
+        "name": "API Doc Customer One",
+        "uniqueName": "apidoc-customer-one",
+        "customerName": "API Doc Customer One",
+        "billingDetails": {
+          "name": "API Doc Customer One",
+          "address": [
+            "addr"
+          ],
+          "stateCode": "MP",
+          "stateGstCode": "23",
+          "countryName": "India",
+          "countryCode": "IN",
+          "state": {
+            "name": "Madhya Pradesh",
+            "code": "MP"
+          },
+          "country": {
+            "name": "India",
+            "code": "IN"
+          }
+        },
+        "shippingDetails": {
+          "name": "API Doc Customer One",
+          "address": [
+            "addr"
+          ],
+          "stateCode": "MP",
+          "stateGstCode": "23",
+          "countryName": "India",
+          "countryCode": "IN",
+          "state": {
+            "name": "Madhya Pradesh",
+            "code": "MP"
+          },
+          "country": {
+            "name": "India",
+            "code": "IN"
+          }
+        },
+        "placeOfSupply": {
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "currency": {
+          "code": "INR"
+        }
+      },
+      "entries": [
+        {
+          "uniqueName": "d1otu1792738840566",
+          "description": "DC line",
+          "date": "23-10-2026",
+          "transactions": [
+            {
+              "account": {
+                "name": "Sales",
+                "uniqueName": "sales"
+              },
+              "amount": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              },
+              "stock": {
+                "name": "API Doc Widget",
+                "uniqueName": "apidoc-widget",
+                "stockUnit": {
+                  "name": "Piece",
+                  "code": "pcs",
+                  "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+                },
+                "unitRates": [],
+                "sku": "WDG-001",
+                "skuCodeHeading": "SKU Code",
+                "customField1": {
+                  "key": "Custom field 1",
+                  "value": null
+                },
+                "customField2": {
+                  "key": "Custom field 2",
+                  "value": null
+                },
+                "quantity": 1.0,
+                "rate": {
+                  "amountForAccount": 100.0,
+                  "amountForCompany": 100.0
+                },
+                "variant": {
+                  "name": "API Doc Widget",
+                  "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+                },
+                "type": "PRODUCT",
+                "taxInclusive": false,
+                "showVariant": false,
+                "hasVariants": false
+              },
+              "taxableValue": {
+                "amountForAccount": 100.0,
+                "amountForCompany": 100.0
+              }
+            }
+          ],
+          "discounts": [],
+          "taxes": [],
+          "exchangeRate": 1.0,
+          "subTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "entryTotal": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "grandTotal": {
+            "amountForAccount": 100.0,
+            "amountForCompany": 100.0
+          },
+          "entryTotalWithoutTcsTds": {
+            "amountForAccount": 0.0,
+            "amountForCompany": 0.0
+          },
+          "usedQuantity": 0
+        }
+      ],
+      "grandTotal": {
+        "amountForAccount": 100.0,
+        "amountForCompany": 100.0
+      },
+      "voucherTotal": {
+        "amountForAccount": 100.0,
+        "amountForCompany": 100.0
+      },
+      "subTotal": {
+        "amountForAccount": 100.0,
+        "amountForCompany": 100.0
+      },
+      "totalAsWords": {
+        "amountForAccount": "One Hundred Only",
+        "amountForCompany": "One Hundred Only"
+      },
+      "updateAccountDetails": false,
+      "salesPerson": {
+        "linkedEntities": [],
+        "archiveOnly": false
+      },
+      "warehouse": {
+        "name": "Gidd warehouse",
+        "uniqueName": "xbq1792673424418",
+        "address": "My new address"
+      },
+      "attachedFiles": [],
+      "entryUniqueNames": [],
+      "exchangeRate": 1.0,
+      "valuesInAccountCurrency": true,
+      "isEcommerceInvoice": false,
+      "applyApplicableTaxes": false,
+      "multiCurrency": false,
+      "businessDocumentUniqueNames": [],
+      "skipInventoryMovement": false,
+      "linkedBusinessDocuments": [],
+      "touristSchemeApplicable": false,
+      "roundOffApplicable": true,
+      "forNewSubscription": false,
+      "cashInvoice": false,
+      "defaultCompanyAddress": true,
+      "exportInvoice": false
+    },
+    "voucherId": 1921663,
+    "voucherUniqueName": "fbzat1792738840769"
+  }
+}

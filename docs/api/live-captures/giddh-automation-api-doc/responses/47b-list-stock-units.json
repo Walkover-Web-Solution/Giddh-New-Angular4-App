@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "name": "Hour",
+      "code": "hr",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "hr"
+    },
+    {
+      "name": "Kilogram",
+      "code": "kg",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "kg"
+    },
+    {
+      "name": "Litre",
+      "code": "l",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "l"
+    },
+    {
+      "name": "Meter",
+      "code": "m",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "m"
+    },
+    {
+      "name": "Number",
+      "code": "nos",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "nos"
+    },
+    {
+      "name": "Others",
+      "code": "oth",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "oth"
+    },
+    {
+      "name": "Piece",
+      "code": "pcs",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "body": {
+    "taxes": [],
+    "name": "API Doc Finished Good",
+    "variants": [
+      {
+        "name": "API Doc Finished Good",
+        "archive": false,
+        "warehouseBalance": [
+          {
+            "warehouse": {
+              "name": "Gidd warehouse",
+              "uniqueName": "xbq1792673424418"
+            },
+            "openingAmount": 0.0,
+            "openingQuantity": 0.0,
+            "stockUnit": {
+              "name": "Piece",
+              "code": "pcs",
+              "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+            }
+          }
+        ],
+        "skuCode": "APIDOC-FG",
+        "uniqueName": "apidoc-finished-good1792758621295nj0xkwr8d6",
+        "isDefault": true
+      }
+    ],
+    "openingAmount": 0.0,
+    "openingQuantity": 0.0,
+    "skuCodeHeading": "SKU Code",
+    "options": [
+      {
+        "name": "Options 1",
+        "values": [
+          "API Doc Finished Good"
+        ],
+        "order": 1
+      }
+    ],
+    "outOfStockSelling": false,
+    "stockUnit": {
+      "name": "Piece",
+      "code": "pcs",
+      "group": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+    },
+    "skuCode": "APIDOC-FG",
+    "hsnNumber": "847130",
+    "discounts": [],
+    "stockGroup": {
+      "name": "API Doc Products",
+      "uniqueName": "apidoc-products"
+    },
+    "uniqueName": "apidoc-finished-good",
+    "taxesToSave": [],
+    "stockUnitGroup": {
+      "name": "Main Group",
+      "uniqueName": "maingroup"
+    },
+    "amazonAsin": "",
+    "lowStockAlertCount": 0,
+    "updateStockUnitsForLinkedCompanies": false,
+    "rowNumber": 0
+  }
+}

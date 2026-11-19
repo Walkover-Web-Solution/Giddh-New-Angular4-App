@@ -1,0 +1,137 @@
+{
+  "status": "success",
+  "body": {
+    "currentClosingBalance": {
+      "amount": 1686.5,
+      "type": "DEBIT"
+    },
+    "currentHighestClosingBalance": {
+      "amount": 1050.5,
+      "type": "DEBIT",
+      "dateLabel": "22 Oct 2026"
+    },
+    "currentLowestClosingBalance": {
+      "amount": 636.0,
+      "type": "DEBIT",
+      "dateLabel": "23 Oct 2026"
+    },
+    "previousClosingBalance": {
+      "amount": 1686.5,
+      "type": "DEBIT"
+    },
+    "previousHighestClosingBalance": {
+      "amount": 1050.5,
+      "type": "DEBIT",
+      "dateLabel": "22 Oct 2026"
+    },
+    "previousLowestClosingBalance": {
+      "amount": 636.0,
+      "type": "DEBIT",
+      "dateLabel": "23 Oct 2026"
+    },
+    "balances": [
+      {
+        "current": {
+          "openingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 0.0,
+          "debitTotal": 0.0,
+          "closingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "taxTotal": 0.0,
+          "tcsTotal": 0.0,
+          "tdsTotal": 0.0,
+          "discountTotal": 0.0,
+          "roundOff": 0.0,
+          "dateLabel": "Sep 2026",
+          "from": "23-09-2026",
+          "to": "30-09-2026",
+          "balance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          }
+        },
+        "previous": {
+          "openingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 0.0,
+          "debitTotal": 0.0,
+          "closingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "taxTotal": 0.0,
+          "tcsTotal": 0.0,
+          "tdsTotal": 0.0,
+          "discountTotal": 0.0,
+          "roundOff": 0.0,
+          "dateLabel": "Sep 2026",
+          "from": "23-09-2026",
+          "to": "30-09-2026",
+          "balance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          }
+        },
+        "percentageChange": "0 %"
+      },
+      {
+        "current": {
+          "openingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 0.0,
+          "debitTotal": 0.0,
+          "closingBalance": {
+            "amount": 1686.5,
+            "type": "DEBIT"
+          },
+          "taxTotal": 0.0,
+          "tcsTotal": 0.0,
+          "tdsTotal": 0.0,
+          "discountTotal": 0.0,
+          "roundOff": 0.0,
+          "dateLabel": "Oct 2026",
+          "from": "01-10-2026",
+          "to": "23-10-2026",
+          "balance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          }
+        },
+        "previous": {
+          "openingBalance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          },
+          "creditTotal": 0.0,
+          "debitTotal": 0.0,
+          "closingBalance": {
+            "amount": 1686.5,
+            "type": "DEBIT"
+          },
+          "taxTotal": 0.0,
+          "tcsTotal": 0.0,
+          "tdsTotal": 0.0,
+          "discountTotal": 0.0,
+          "roundOff": 0.0,
+          "dateLabel": "Oct 2026",
+          "from": "01-10-2026",
+          "to": "23-10-2026",
+          "balance": {
+            "amount": 0.0,
+            "type": "DEBIT"
+          }
+        },
+        "percentageChange": "0E-8 %"
+      }
+    ]
+  }
+}

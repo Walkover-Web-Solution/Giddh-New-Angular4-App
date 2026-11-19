@@ -1,0 +1,305 @@
+{
+  "status": "success",
+  "body": {
+    "number": "BE-1211",
+    "type": "sales",
+    "uniqueName": "yktu41792755921064",
+    "isCustomInvoiceNo": true,
+    "isTouristSchemeApplicable": false,
+    "mergePB": false,
+    "passportNumber": null,
+    "withPay": false,
+    "forNewSubscription": false,
+    "subVoucher": null,
+    "attachedFiles": [],
+    "attachedFileName": null,
+    "roundOffApplicable": false,
+    "updateAccountDetails": false,
+    "copyBillingAddressToShippingAddress": true,
+    "readDetailsFromAccount": null,
+    "tallyUniqueId": null,
+    "templateDetails": null,
+    "entryUniqueNames": [],
+    "ecommerceDetails": null,
+    "balanceTotal": {
+      "amountForAccount": 15283.0,
+      "amountForCompany": 15283.0
+    },
+    "gainLoss": 0.0,
+    "status": "UNPAID",
+    "subTotal": {
+      "amountForAccount": 12325.0,
+      "amountForCompany": 12325.0
+    },
+    "discountTotal": null,
+    "taxTotal": {
+      "amountForAccount": 2958.0,
+      "amountForCompany": 2958.0
+    },
+    "roundOffTotal": null,
+    "otherTaxTotal": null,
+    "voucherTotal": {
+      "amountForAccount": 15283.0,
+      "amountForCompany": 15283.0
+    },
+    "grandTotal": {
+      "amountForAccount": 15283.0,
+      "amountForCompany": 15283.0
+    },
+    "totalAsWords": {
+      "amountForAccount": "Fifteen Thousand Two Hundred Eighty Three Only",
+      "amountForCompany": "Fifteen Thousand Two Hundred Eighty Three Only"
+    },
+    "ewayBillDetails": null,
+    "roundOffAccount": null,
+    "items": [],
+    "referenceVoucher": null,
+    "deposits": null,
+    "deposit": null,
+    "adjustments": [],
+    "valuesInAccountCurrency": true,
+    "exchangeRate": 1.0,
+    "purchaseOrders": null,
+    "purchaseOrderDetails": null,
+    "isEInvoiceGenerated": false,
+    "paymentLink": null,
+    "viewInvoiceLink": null,
+    "generateEInvoice": null,
+    "businessDocumentUniqueNames": [],
+    "linkedBusinessDocuments": [],
+    "documentItems": [
+      {
+        "variant": {
+          "name": "Manufacture",
+          "uniqueName": "manufacture1792760649320ejbf5znlra"
+        },
+        "stock": {
+          "name": "Manufacture",
+          "uniqueName": "manufacture"
+        },
+        "warehouse": {
+          "name": "10k warehouse",
+          "uniqueName": "cb81774246544414"
+        },
+        "stockUnit": {
+          "name": "Meter",
+          "uniqueName": "m"
+        },
+        "quantity": 1.0,
+        "consumedQuantity": 0.0,
+        "remainingQuantity": 1.0,
+        "rate": 12325.0,
+        "amount": 12325.0,
+        "discount": 0.0,
+        "taxAmount": 2958.0,
+        "sortOrder": 0
+      }
+    ],
+    "invoiceStatus": "NOT_INVOICED",
+    "multiCurrency": false,
+    "encodedData": null,
+    "token": null,
+    "salesPerson": {},
+    "fileExtention": null,
+    "fileName": null,
+    "recurrencePreviewRequest": null,
+    "recurringVoucherUniqueName": null,
+    "gstUnitMap": null,
+    "date": "31-10-2026",
+    "dueDate": "06-11-2026",
+    "einvoiceGenerated": false,
+    "touristSchemeApplicable": false,
+    "cashVoucher": false,
+    "company": {
+      "name": "10k",
+      "uniqueName": "10kin177424654546509z75a",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Gujarat",
+          "code": "GJ"
+        },
+        "taxNumber": "24AAACH7409R2Z6",
+        "gstNumber": "24AAACH7409R2Z6",
+        "pincode": "393110",
+        "address": [
+          "747 GIDC INDUSTRIAL ESTATE JHAGADIA  JHAGADIA"
+        ]
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Gujarat",
+          "code": "GJ"
+        },
+        "taxNumber": "24AAACH7409R2Z6",
+        "gstNumber": "24AAACH7409R2Z6",
+        "pincode": "393110",
+        "address": [
+          "747 GIDC INDUSTRIAL ESTATE JHAGADIA  JHAGADIA"
+        ]
+      }
+    },
+    "account": {
+      "name": "Raji",
+      "uniqueName": "raji1",
+      "customerName": "Raji",
+      "currency": {
+        "code": "INR",
+        "symbol": "\u20b9"
+      },
+      "billingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Delhi",
+          "code": "DL"
+        },
+        "address": [
+          "delhi ka address"
+        ]
+      },
+      "shippingDetails": {
+        "country": {
+          "name": "India",
+          "code": "IN"
+        },
+        "state": {
+          "name": "Delhi",
+          "code": "DL"
+        },
+        "address": [
+          "delhi ka address"
+        ]
+      },
+      "customFields": [
+        {
+          "uniqueName": "1784722646140btzresq4g6ig0wa",
+          "value": ""
+        }
+      ],
+      "placeOfSupply": {
+        "name": "Delhi",
+        "code": "DL"
+      }
+    },
+    "entries": [
+      {
+        "uniqueName": "cq9ia1792755920902",
+        "date": "31-10-2026",
+        "transactions": [
+          {
+            "account": {
+              "name": "Sales",
+              "uniqueName": "sales"
+            },
+            "amount": {
+              "amountForAccount": 12325.0,
+              "amountForCompany": 12325.0
+            },
+            "stock": {
+              "name": "Manufacture",
+              "uniqueName": "manufacture",
+              "stockUnit": {
+                "name": "Meter",
+                "code": "m",
+                "uniqueName": "m"
+              },
+              "variant": {
+                "name": "Manufacture",
+                "uniqueName": "manufacture1792760649320ejbf5znlra"
+              },
+              "skuCodeHeading": "SKU Code",
+              "customField1": {
+                "key": "Custom Field 1",
+                "value": null
+              },
+              "customField2": {
+                "key": "Custom Field 2",
+                "value": null
+              },
+              "quantity": 1,
+              "rate": {
+                "rateForAccount": 12325,
+                "rateForCompany": 12325
+              },
+              "type": "PRODUCT",
+              "taxInclusive": false,
+              "showVariant": false,
+              "hasVariants": false,
+              "unitRates": [
+                {
+                  "rate": 1,
+                  "stockUnitCode": "m",
+                  "stockUnitName": "Meter",
+                  "stockUnitUniqueName": "m"
+                }
+              ]
+            },
+            "taxableValue": {
+              "amountForAccount": 12325.0,
+              "amountForCompany": 12325.0
+            }
+          }
+        ],
+        "discounts": [],
+        "taxes": [
+          {
+            "taxType": "commongst",
+            "calculationMethod": "OnTaxableAmount",
+            "accountName": "IGST",
+            "accountUniqueName": "igst",
+            "taxAccountUniqueName": "igst3",
+            "uniqueName": "comm24",
+            "amount": {
+              "amountForAccount": 2958.0,
+              "amountForCompany": 2958.0
+            },
+            "taxPercent": 24.0,
+            "considerInItemTotal": true,
+            "considerInVoucherTotal": true,
+            "showOnVoucher": true
+          }
+        ],
+        "exchangeRate": 1.0,
+        "subTotal": {
+          "amountForAccount": 12325.0,
+          "amountForCompany": 12325.0
+        },
+        "taxTotal": {
+          "amountForAccount": 2958.0,
+          "amountForCompany": 2958.0
+        },
+        "entryTotal": {
+          "amountForAccount": 15283.0,
+          "amountForCompany": 15283.0
+        },
+        "grandTotal": {
+          "amountForAccount": 15283.0,
+          "amountForCompany": 15283.0
+        },
+        "salesPerson": {},
+        "usedQuantity": 0
+      }
+    ],
+    "warehouse": {
+      "name": "10k warehouse",
+      "uniqueName": "cb81774246544414",
+      "address": "747 GIDC INDUSTRIAL ESTATE JHAGADIA  JHAGADIA"
+    }
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

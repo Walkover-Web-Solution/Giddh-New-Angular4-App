@@ -1,0 +1,61 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 5,
+    "totalPages": 23,
+    "totalItems": 114,
+    "results": [
+      {
+        "id": "ABNAMRO_ABNAGB2LXXX",
+        "name": "ABN AMRO Bank Commercial",
+        "bic": "ABNAGB2LXXX",
+        "transaction_total_days": "540",
+        "logo": "https://storage.googleapis.com/gc-prd-institution_icons-production/UK/PNG/abnamrobank.png",
+        "countries": [
+          "GB"
+        ]
+      },
+      {
+        "id": "AIRWALLEX_AIPTAU32",
+        "name": "Airwallex",
+        "bic": "AIPTAU32",
+        "transaction_total_days": "730",
+        "logo": "https://cdn-logos.gocardless.com/ais/AIRWALLEX_AIPTAU32_1.png",
+        "countries": [
+          "GB"
+        ]
+      },
+      {
+        "id": "ALLICA_CIIVGB2AXXX",
+        "name": "Allica Bank",
+        "bic": "CIIVGB2AXXX",
+        "transaction_total_days": "730",
+        "logo": "https://storage.googleapis.com/gc-prd-institution_icons-production/UK/PNG/allica.png",
+        "countries": [
+          "GB"
+        ]
+      },
+      {
+        "id": "AIB_AIBKGB2LXXX",
+        "name": "Allied Irish Banks",
+        "bic": "AIBKGB2LXXX",
+        "transaction_total_days": "730",
+        "logo": "https://storage.googleapis.com/gc-prd-institution_icons-production/IE/PNG/aib.png",
+        "countries": [
+          "GB"
+        ]
+      },
+      {
+        "id": "AIB_FTBKGB2BXXX",
+        "name": "Allied Irish Banks (NI)",
+        "bic": "FTBKGB2BXXX",
+        "transaction_total_days": "730",
+        "logo": "https://storage.googleapis.com/gc-prd-institution_icons-production/IE/PNG/aib.png",
+        "countries": [
+          "GB"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "updatedAt": "2026-10-29T07:45:00Z",
+  "orchestratorNextIndex": 590,
+  "currentBatchStart": 590,
+  "currentBatchAppliedCount": 0,
+  "currentBatchTotal": 50,
+  "currentBatchPendingArgFiles": ".q/_mcp-args/00.json through 49.json (batch 590-640 prepared)",
+  "failed": [],
+  "completedBatches": ["490-540", "540-590"],
+  "rollbackNote": "Progress was briefly advanced to 720 without MCP for 590-720; reverted to nextIndex 590.",
+  "nextSteps": [
+    "MCP update_endpoint for ALL .q/_mcp-args/00.json .. 49.json (25/turn) — do NOT finish_batch until all 50 succeed",
+    "node _docstar_param_mcp_reapply_finish_batch.mjs",
+    "Repeat loop-prepare 50 → slim → prepare_mcp_arg_files → MCP all → finish until nextIndex>=720",
+    "node _docstar_param_sync_reapply_summary.mjs",
+    "publish_pages using .docstar-publish-chunks.json (4 chunks, root u9XDYe5Zc_ds + extras)"
+  ],
+  "publishChunksFile": ".docstar-publish-chunks.json",
+  "publishChunkCount": 4,
+  "fastPathOptional": "DOCSTAR_MCP_AUTHORIZATION or .docstar-mcp-bearer.local then node _docstar_param_mcp_reapply_apply_q_mcp_args.mjs 0 49"
+}

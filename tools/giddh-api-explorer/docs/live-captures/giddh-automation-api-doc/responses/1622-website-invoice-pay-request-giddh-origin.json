@@ -1,0 +1,6 @@
+{
+  "status": "error",
+  "code": "NOT_FOUND",
+  "message": "No white label found for this origin.",
+  "httpStatus": 401
+}

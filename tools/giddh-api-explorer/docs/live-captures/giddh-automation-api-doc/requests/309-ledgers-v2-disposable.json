@@ -1,0 +1,12 @@
+{
+  "transactions": [
+    {
+      "amount": 5,
+      "particular": "sales",
+      "type": "DEBIT"
+    }
+  ],
+  "voucherType": "sales",
+  "entryDate": "23-10-2026",
+  "description": "API disposable for delete"
+}

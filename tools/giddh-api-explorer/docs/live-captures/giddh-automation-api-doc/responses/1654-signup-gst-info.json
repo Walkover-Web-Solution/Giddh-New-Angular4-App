@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "body": {
+    "gstin": "23AAACC1206D2ZN",
+    "lgnm": "CENTRAL WAREHOUSING CORPORATION",
+    "tradeNam": "CENTRAL WAREHOUSING CORPORATION",
+    "sts": "Active",
+    "dty": "Regular",
+    "stjCd": "MP008",
+    "stj": "Bhopal -1",
+    "einvoiceStatus": "Yes",
+    "pradr": {
+      "addr": {
+        "bno": "75,",
+        "st": "Arera Hills,",
+        "loc": "Near Central School No 1",
+        "dst": "Bhopal",
+        "pncd": "462011",
+        "stcd": "Madhya Pradesh"
+      },
+      "ntr": "Office / Sale Office"
+    },
+    "nba": [
+      "Office / Sale Office",
+      "Warehouse / Depot"
+    ],
+    "adadr": [],
+    "_note": "Additional addresses omitted; full GST portal payload is large."
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

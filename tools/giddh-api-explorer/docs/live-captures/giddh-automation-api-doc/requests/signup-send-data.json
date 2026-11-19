@@ -1,0 +1,23 @@
+{
+  "method": "POST",
+  "path": "/send-data",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "companyName": "string",
+    "timestamp": 0,
+    "loggedInEmailId": "string",
+    "mobileNo": "string",
+    "name": "string",
+    "utmSource": "string",
+    "utmMedium": "string",
+    "utmCampaign": "string",
+    "utmTerm": "string",
+    "utmContent": "string",
+    "businessNature": "string",
+    "ref": "string",
+    "source": {}
+  }
+}

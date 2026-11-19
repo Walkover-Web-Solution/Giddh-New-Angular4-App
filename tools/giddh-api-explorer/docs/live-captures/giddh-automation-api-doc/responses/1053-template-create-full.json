@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "CopyFrom can not be null or empty",
+  "code": "NOT_PERMITTED"
+}

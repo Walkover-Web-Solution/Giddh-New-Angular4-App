@@ -1,0 +1,9 @@
+[
+  {
+    "uniqueName": "apidoc-customer-one",
+    "taxes": [
+      "apidocgst18"
+    ],
+    "isAccount": true
+  }
+]

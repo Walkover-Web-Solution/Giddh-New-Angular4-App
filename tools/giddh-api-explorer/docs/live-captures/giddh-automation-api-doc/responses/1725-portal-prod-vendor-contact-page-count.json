@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "message": "Must provide page for this Api.",
+  "code": "INSUFFICIENT_PARAMETERS",
+  "httpStatus": 406,
+  "env": "prod"
+}

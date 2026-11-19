@@ -1,0 +1,24 @@
+{
+  "status": "success",
+  "body": {
+    "user": {
+      "name": "shristi@viasocket.com",
+      "email": "shristi@viasocket.com",
+      "uniqueName": "shristi@viasocket.com",
+      "mobileNo": "918319337938",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "session": {
+      "id": "in3f3af1********w80=",
+      "expiresAt": "25-10-2026 12:12:21",
+      "createdAt": "23-10-2026 12:12:21"
+    },
+    "isNewUser": true,
+    "isSystemUser": false,
+    "loggedInRegion": "IN",
+    "intercomHash": "01ba66a50c394be93cdf77465016de151a22a56b1041d570da429d54f6f58bea"
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

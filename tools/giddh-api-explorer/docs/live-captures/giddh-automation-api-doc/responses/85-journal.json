@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "NOT_PERMITTED",
+  "message": "Particular can not be same as the account."
+}

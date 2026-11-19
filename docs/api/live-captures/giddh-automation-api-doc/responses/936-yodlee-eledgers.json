@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 20,
+    "totalPages": 0,
+    "totalItems": 0,
+    "debitTransactionsCount": 0,
+    "creditTransactionsCount": 0,
+    "transactionsList": []
+  }
+}

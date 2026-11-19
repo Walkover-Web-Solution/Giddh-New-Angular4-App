@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "MEDIA_TYPE_NOT_SUPPORTED",
+  "message": "Content-Type null not supported."
+}

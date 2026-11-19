@@ -1,0 +1,27 @@
+{
+  "manufacturingDetails": [
+    {
+      "manufacturingQuantity": 1,
+      "manufacturingUnitCode": "pcs",
+      "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+      "variant": {
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl",
+        "name": "API Doc Widget"
+      },
+      "linkedStocks": [
+        {
+          "stockUniqueName": "apidoc-gadget",
+          "stockName": "API Doc Gadget",
+          "quantity": 1,
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "stockUnitCode": "pcs",
+          "variant": {
+            "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2",
+            "name": "API Doc Gadget"
+          },
+          "rate": 0
+        }
+      ]
+    }
+  ]
+}

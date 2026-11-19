@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "httpStatus": 200,
+  "body": {
+    "id": "<GOOGLE_USER_ID>",
+    "email": "divyanshu@whozzat.com",
+    "verified_email": true,
+    "name": "Divyanshu Shirvastav",
+    "given_name": "Divyanshu",
+    "family_name": "Shirvastav",
+    "picture": "<URL_REDACTED>",
+    "hd": "whozzat.com"
+  },
+  "note": "External Google API \u2014 not in Spring catalog."
+}

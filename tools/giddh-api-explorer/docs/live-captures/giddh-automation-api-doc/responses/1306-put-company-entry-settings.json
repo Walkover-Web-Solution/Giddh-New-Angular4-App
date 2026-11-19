@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "error.no.of.transaction.less.than.zero",
+  "code": "INVALID_REQUEST"
+}

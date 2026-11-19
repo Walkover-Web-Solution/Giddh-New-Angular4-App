@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "This invitation has expired and cannot be used anymore.",
+  "code": "INVALID_REQUEST"
+}

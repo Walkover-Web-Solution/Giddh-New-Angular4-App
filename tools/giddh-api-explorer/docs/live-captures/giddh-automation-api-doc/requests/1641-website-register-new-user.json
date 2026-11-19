@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "path": "/v2/register",
+  "host": "https://api.giddh.com",
+  "origin": "https://giddh.com",
+  "surface": "giddh-website-signup",
+  "body": {
+    "emailId": "shristi@viasocket.com",
+    "emailIdAccessToken": "<JWT_REDACTED>",
+    "emailIdAuthType": "giddh",
+    "mobileNo": "918319337938",
+    "mobileNoAccessToken": "<JWT_REDACTED>"
+  },
+  "note": "New user \u2192 session returned; redirect books.giddh.com/token-verify?request={session.id}&region=IN"
+}

@@ -1,0 +1,135 @@
+{
+  "itemCode": "apidoc-widget",
+  "itemName": "API Doc Widget",
+  "totalStockQty": 8.0,
+  "totalStockValue": 600.0,
+  "bucketSummary": [
+    {
+      "range": "0-30 days",
+      "quantity": 2.0,
+      "value": 120.0
+    },
+    {
+      "range": "31-60 days",
+      "quantity": 0.0,
+      "value": 0.0
+    },
+    {
+      "range": "61-90 days",
+      "quantity": 0.0,
+      "value": 0.0
+    },
+    {
+      "range": "91+ days",
+      "quantity": 6.0,
+      "value": 480.0
+    }
+  ],
+  "transactions": {
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 7,
+    "results": [
+      {
+        "purchaseDate": null,
+        "purchaseInvoice": "OPENING_BALANCE",
+        "purchaseInvoiceUniqueName": null,
+        "voucherNumber": null,
+        "isVoucher": false,
+        "warehouse": "Gidd warehouse",
+        "qty": 10.0,
+        "balanceQty": 10.0,
+        "rate": 80.0,
+        "stockValue": 800.0,
+        "ageDays": null,
+        "ageBucket": "91+ days"
+      },
+      {
+        "purchaseDate": "23-10-2026",
+        "purchaseInvoice": "JOURNAL",
+        "purchaseInvoiceUniqueName": "w31fb1792733994149",
+        "voucherNumber": "JV-261023-2",
+        "isVoucher": true,
+        "warehouse": "Gidd warehouse",
+        "qty": -1.0,
+        "balanceQty": 9.0,
+        "rate": 80.0,
+        "stockValue": -80.0,
+        "ageDays": 0,
+        "ageBucket": "0-30 days"
+      },
+      {
+        "purchaseDate": "23-10-2026",
+        "purchaseInvoice": "SALES",
+        "purchaseInvoiceUniqueName": "fbzat1792738840769",
+        "voucherNumber": "261023-7",
+        "isVoucher": true,
+        "warehouse": "Gidd warehouse",
+        "qty": -1.0,
+        "balanceQty": 8.0,
+        "rate": 100.0,
+        "stockValue": -100.0,
+        "ageDays": 0,
+        "ageBucket": "0-30 days"
+      },
+      {
+        "purchaseDate": "23-10-2026",
+        "purchaseInvoice": "PURCHASE",
+        "purchaseInvoiceUniqueName": "uj1my1792738843214",
+        "voucherNumber": null,
+        "isVoucher": true,
+        "warehouse": "Gidd warehouse",
+        "qty": 1.0,
+        "balanceQty": 9.0,
+        "rate": 100.0,
+        "stockValue": 100.0,
+        "ageDays": 0,
+        "ageBucket": "0-30 days"
+      },
+      {
+        "purchaseDate": "23-10-2026",
+        "purchaseInvoice": "MANUFACTURED",
+        "purchaseInvoiceUniqueName": null,
+        "voucherNumber": null,
+        "isVoucher": false,
+        "warehouse": "Gidd warehouse",
+        "qty": 1.0,
+        "balanceQty": 10.0,
+        "rate": 20.0,
+        "stockValue": 20.0,
+        "ageDays": 0,
+        "ageBucket": "0-30 days"
+      },
+      {
+        "purchaseDate": "23-10-2026",
+        "purchaseInvoice": "DELIVERY_NOTE",
+        "purchaseInvoiceUniqueName": "hsk1792734672951",
+        "voucherNumber": "DC-20261023-1",
+        "isVoucher": true,
+        "warehouse": "Gidd warehouse",
+        "qty": -1.0,
+        "balanceQty": 9.0,
+        "rate": 100.0,
+        "stockValue": -100.0,
+        "ageDays": 0,
+        "ageBucket": "0-30 days"
+      },
+      {
+        "purchaseDate": "23-10-2026",
+        "purchaseInvoice": "DELIVERY_NOTE",
+        "purchaseInvoiceUniqueName": "cn11792738855808",
+        "voucherNumber": "DC-20261023-3",
+        "isVoucher": true,
+        "warehouse": "Gidd warehouse",
+        "qty": -1.0,
+        "balanceQty": 8.0,
+        "rate": 100.0,
+        "stockValue": -100.0,
+        "ageDays": 0,
+        "ageBucket": "0-30 days"
+      }
+    ],
+    "size": 7
+  }
+}

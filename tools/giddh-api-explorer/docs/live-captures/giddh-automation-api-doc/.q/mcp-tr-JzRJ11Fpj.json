@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"tr-JzRJ11Fpj","description":"Update a stock unit record. Part of the Stock Unit APIs in Giddh. Requires Auth-Key or Session-Id.","params":{},"body":{"type":"none"}}}

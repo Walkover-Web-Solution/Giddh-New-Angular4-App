@@ -1,0 +1,1 @@
+{"status":"success","body":[{"fieldType":{"name":"Text Field","type":"STRING"},"fieldName":"API Doc CF Note","status":true,"modules":[{"name":"Account","uniqueName":"ACCOUNT"}],"dataRange":{"min":"1","max":"150"},"isMandatory":false,"regex":"^.{1,150}$","fieldOptions":null,"fieldInfo":"note","isActive":true,"uniqueName":"1792758799819yswzbgh521k1smj"}]}

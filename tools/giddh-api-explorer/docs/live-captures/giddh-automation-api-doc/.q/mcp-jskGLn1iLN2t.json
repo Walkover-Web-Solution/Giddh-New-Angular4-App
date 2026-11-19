@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"jskGLn1iLN2t","description":"Get Payment Methods. Part of the Payment Methods APIs in Giddh. Requires portal session.","params":{},"body":{"type":"none"}}}

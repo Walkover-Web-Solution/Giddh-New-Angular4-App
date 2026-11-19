@@ -1,0 +1,114 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "voucherNumber": "PAY-261022-1",
+        "account": {
+          "name": "API Doc Vendor One",
+          "uniqueName": "apidoc-vendor-one",
+          "customerName": "API Doc Vendor One",
+          "email": "vendor.one@example.com",
+          "mobileNumber": "919876543211",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D2ZN",
+            "gstNumber": "23AAACC1206D2ZN",
+            "address": [
+              "Vendor address line 1"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Madhya Pradesh",
+              "code": "MP"
+            },
+            "taxNumber": "23AAACC1206D2ZN",
+            "gstNumber": "23AAACC1206D2ZN",
+            "address": [
+              "Vendor address line 1"
+            ]
+          }
+        },
+        "uniqueName": "9naju1792674418754",
+        "balanceStatus": "ADJUSTED",
+        "voucherDate": "22-10-2026",
+        "grandTotal": {
+          "amountForAccount": 50.0,
+          "amountForCompany": 50.0
+        },
+        "balanceDue": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 0.0,
+          "amountForCompany": 0.0
+        },
+        "adjustments": [
+          {
+            "voucherType": "purchase",
+            "subVoucher": null,
+            "voucherNumber": null,
+            "unadjustedAmount": {
+              "amountForAccount": 0.0,
+              "amountForCompany": 0.0
+            },
+            "voucherTotal": {
+              "amountForAccount": 50.0,
+              "amountForCompany": 50.0
+            },
+            "uniqueName": "mgswt1792674404601",
+            "currency": {
+              "code": "INR",
+              "symbol": "\u20b9"
+            },
+            "exchangeRate": 1.0,
+            "amount": {
+              "amountForAccount": 50.0,
+              "amountForCompany": 50.0
+            },
+            "accountUniqueName": null,
+            "noteVoucherType": null,
+            "voucherBalanceType": "cr",
+            "voucherDate": "22-10-2026"
+          }
+        ],
+        "paymentMode": {
+          "name": "Cash",
+          "uniqueName": "cash"
+        },
+        "purchaseOrderNumbers": "",
+        "canPay": false,
+        "cashInvoice": false
+      }
+    ],
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "fromDate": "01-04-2026",
+    "toDate": "31-03-2027"
+  }
+}

@@ -1,0 +1,913 @@
+{
+  "status": "success",
+  "body": {
+    "incomeStatement": {
+      "costOfGoodsSold": {
+        "01 Apr 2026-31 Mar 2027": {
+          "openingInventory": 800.0,
+          "purchasesStockAmount": 200.0,
+          "manufacturingExpenses": 0.0,
+          "closingInventory": 800.0,
+          "debitNoteStockAmount": 0.0,
+          "cogs": 200.0
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "openingInventory": 800.0,
+          "purchasesStockAmount": 0.0,
+          "manufacturingExpenses": 0.0,
+          "closingInventory": 800.0,
+          "debitNoteStockAmount": 0.0,
+          "cogs": 0.0
+        }
+      },
+      "revenue": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 1420.5,
+          "type": "CREDIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "CREDIT"
+        }
+      },
+      "operatingExpenses": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 195.0,
+          "type": "DEBIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "otherExpenses": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "grossProfit": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 1220.5,
+          "type": "CREDIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "CREDIT"
+        }
+      },
+      "operatingProfit": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 1025.5,
+          "type": "CREDIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "incomeBeforeTaxes": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 1025.5,
+          "type": "CREDIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "expenses": {
+        "01 Apr 2026-31 Mar 2027": null,
+        "01 Apr 2025-31 Mar 2026": null
+      },
+      "appliedTax": {
+        "01 Apr 2026-31 Mar 2027": 307.65,
+        "01 Apr 2025-31 Mar 2026": null
+      },
+      "netIncome": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 717.85,
+          "type": "CREDIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "message": {
+        "01 Apr 2026-31 Mar 2027": "Total Data of company without Tag filter",
+        "01 Apr 2025-31 Mar 2026": "Total Data of company without Tag filter"
+      },
+      "totalExpenses": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 395.0,
+          "type": "DEBIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      }
+    },
+    "groupInfo": {
+      "message": {
+        "01 Apr 2026-31 Mar 2027": "Total Data of company without Tag filter",
+        "01 Apr 2025-31 Mar 2026": "Total Data of company without Tag filter"
+      },
+      "forwardedBalance": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "creditTotal": {
+        "01 Apr 2026-31 Mar 2027": 1645.5,
+        "01 Apr 2025-31 Mar 2026": 0.0
+      },
+      "debitTotal": {
+        "01 Apr 2026-31 Mar 2027": 420.0,
+        "01 Apr 2025-31 Mar 2026": 0.0
+      },
+      "closingBalance": {
+        "01 Apr 2026-31 Mar 2027": {
+          "amount": 1225.5,
+          "type": "CREDIT"
+        },
+        "01 Apr 2025-31 Mar 2026": {
+          "amount": 0.0,
+          "type": "DEBIT"
+        }
+      },
+      "groupDetails": [
+        {
+          "uniqueName": "revenuefromoperations",
+          "groupName": "Revenue From Operations",
+          "category": "income",
+          "checked": false,
+          "forwardedBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "creditTotal": {
+            "01 Apr 2026-31 Mar 2027": 1590.5,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "debitTotal": {
+            "01 Apr 2026-31 Mar 2027": 170.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "closingBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 1420.5,
+              "type": "CREDIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "parentGroup": null,
+          "childGroups": [
+            {
+              "uniqueName": "sales",
+              "groupName": "Sales",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 1590.5,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 170.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 1420.5,
+                  "type": "CREDIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "uniqueName": "sales",
+                  "groupName": null,
+                  "name": "Sales",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "checked": false,
+                  "creditTotal": {
+                    "01 Apr 2026-31 Mar 2027": 1590.5,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "debitTotal": {
+                    "01 Apr 2026-31 Mar 2027": 170.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "closingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 1420.5,
+                      "type": "CREDIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  },
+                  "openingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "accounts": []
+        },
+        {
+          "uniqueName": "otherincome",
+          "groupName": "Other Income",
+          "category": "income",
+          "checked": false,
+          "forwardedBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "creditTotal": {
+            "01 Apr 2026-31 Mar 2027": 0.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "debitTotal": {
+            "01 Apr 2026-31 Mar 2027": 0.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "closingBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "parentGroup": null,
+          "childGroups": [
+            {
+              "uniqueName": "dividendincome",
+              "groupName": "Dividend Income",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": []
+            },
+            {
+              "uniqueName": "interestincome",
+              "groupName": "Interest Income",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": []
+            },
+            {
+              "uniqueName": "exchangegain",
+              "groupName": "Exchange Gain",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "uniqueName": "exchangegain",
+                  "groupName": null,
+                  "name": "Exchange Gain",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "checked": false,
+                  "creditTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "debitTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "closingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  },
+                  "openingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "accounts": []
+        },
+        {
+          "uniqueName": "operatingcost",
+          "groupName": "Operating Cost",
+          "category": "expenses",
+          "checked": false,
+          "forwardedBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "creditTotal": {
+            "01 Apr 2026-31 Mar 2027": 55.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "debitTotal": {
+            "01 Apr 2026-31 Mar 2027": 250.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "closingBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 195.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "parentGroup": null,
+          "childGroups": [
+            {
+              "uniqueName": "purchases",
+              "groupName": "Purchases",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 55.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 250.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 195.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "uniqueName": "purchases",
+                  "groupName": null,
+                  "name": "Purchases",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "checked": false,
+                  "creditTotal": {
+                    "01 Apr 2026-31 Mar 2027": 55.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "debitTotal": {
+                    "01 Apr 2026-31 Mar 2027": 250.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "closingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 195.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  },
+                  "openingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "uniqueName": "discount",
+              "groupName": "Discount",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "uniqueName": "discount",
+                  "groupName": null,
+                  "name": "Discount",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "checked": false,
+                  "creditTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "debitTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "closingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  },
+                  "openingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "accounts": []
+        },
+        {
+          "uniqueName": "indirectexpenses",
+          "groupName": "Indirect Expenses",
+          "category": "expenses",
+          "checked": false,
+          "forwardedBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "creditTotal": {
+            "01 Apr 2026-31 Mar 2027": 0.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "debitTotal": {
+            "01 Apr 2026-31 Mar 2027": 0.0,
+            "01 Apr 2025-31 Mar 2026": 0.0
+          },
+          "closingBalance": {
+            "01 Apr 2026-31 Mar 2027": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            },
+            "01 Apr 2025-31 Mar 2026": {
+              "amount": 0.0,
+              "type": "DEBIT"
+            }
+          },
+          "parentGroup": null,
+          "childGroups": [
+            {
+              "uniqueName": "dividendexpense",
+              "groupName": "Dividend Expense",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": []
+            },
+            {
+              "uniqueName": "interestexpense",
+              "groupName": "Interest Expense",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": []
+            },
+            {
+              "uniqueName": "exchangeloss",
+              "groupName": "Exchange Loss",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "uniqueName": "exchangeloss",
+                  "groupName": null,
+                  "name": "Exchange Loss",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "checked": false,
+                  "creditTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "debitTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "closingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  },
+                  "openingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "uniqueName": "otherindirectexpenses",
+              "groupName": "Other Indirect Expenses",
+              "category": null,
+              "checked": false,
+              "forwardedBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "creditTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "debitTotal": {
+                "01 Apr 2026-31 Mar 2027": 0.0,
+                "01 Apr 2025-31 Mar 2026": 0.0
+              },
+              "closingBalance": {
+                "01 Apr 2026-31 Mar 2027": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                },
+                "01 Apr 2025-31 Mar 2026": {
+                  "amount": 0.0,
+                  "type": "DEBIT"
+                }
+              },
+              "parentGroup": null,
+              "childGroups": [],
+              "accounts": [
+                {
+                  "uniqueName": "roundoff",
+                  "groupName": null,
+                  "name": "Round Off",
+                  "currency": {
+                    "code": "INR",
+                    "symbol": null
+                  },
+                  "checked": false,
+                  "creditTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "debitTotal": {
+                    "01 Apr 2026-31 Mar 2027": 0.0,
+                    "01 Apr 2025-31 Mar 2026": 0.0
+                  },
+                  "closingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  },
+                  "openingBalance": {
+                    "01 Apr 2026-31 Mar 2027": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    },
+                    "01 Apr 2025-31 Mar 2026": {
+                      "amount": 0.0,
+                      "type": "DEBIT"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "accounts": []
+        }
+      ]
+    },
+    "headers": [
+      "01 Apr 2026-31 Mar 2027",
+      "01 Apr 2025-31 Mar 2026"
+    ]
+  }
+}

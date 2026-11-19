@@ -1,0 +1,6 @@
+{
+  "status": "success",
+  "body": "Session destroyed successfully.",
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

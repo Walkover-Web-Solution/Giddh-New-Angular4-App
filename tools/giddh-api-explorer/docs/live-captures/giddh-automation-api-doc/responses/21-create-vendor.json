@@ -1,0 +1,92 @@
+{
+  "status": "success",
+  "body": {
+    "importedAccountOpeningBalance": [],
+    "ledgerView": "T_VIEW",
+    "name": "API Doc Vendor One",
+    "archive": false,
+    "currencySymbol": "\u20b9",
+    "currency": "INR",
+    "country": {
+      "countryName": "India",
+      "countryCode": "IN",
+      "alpha3CountryCode": null
+    },
+    "applicableTaxes": [],
+    "category": "liabilities",
+    "createdAt": "22-10-2026 13:01:01",
+    "accountOpeningBalance": [],
+    "uniqueName": "apidoc-vendor-one",
+    "openingBalanceType": "CREDIT",
+    "mobileNo": "919876543211",
+    "addresses": [
+      {
+        "gstNumber": "23AAACC1206D2ZN",
+        "address": "Vendor address line 1",
+        "stateCode": "MP",
+        "isDefault": true,
+        "partyType": "not applicable",
+        "isComposite": false,
+        "gstinStatus": "VERIFIED",
+        "state": {
+          "stateGstCode": "23",
+          "name": "Madhya Pradesh",
+          "code": "MP"
+        },
+        "stateName": "Madhya Pradesh",
+        "stateGstCode": "23",
+        "stateCodeString": "MP"
+      }
+    ],
+    "openingBalance": 0.0,
+    "foreignOpeningBalance": 0.0,
+    "countryName": "India",
+    "isFixed": false,
+    "inheritedDiscounts": [],
+    "email": "vendor.one@example.com",
+    "discounts": [],
+    "applicableDiscounts": [],
+    "otherApplicableTaxes": [],
+    "updatedBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "mergedAccounts": "",
+    "cashFreeVirtualAccountData": {
+      "virtualAccountNumber": null,
+      "ifscCode": null,
+      "name": null
+    },
+    "emails": [
+      "vendor.one@example.com"
+    ],
+    "accountBankDetails": [],
+    "accountType": "Creditors",
+    "openingBalanceDate": "01-04-2026",
+    "inheritedTaxes": [],
+    "createdBy": {
+      "name": "Divyanshu Shirvastav",
+      "email": "divyanshu@whozzat.com",
+      "uniqueName": "divyanshu@whozzat.com",
+      "mobileNo": "919111525164",
+      "isVerified": true,
+      "hasSubscriptionPermission": false
+    },
+    "updatedAt": "22-10-2026 13:01:01",
+    "yodleeAdded": false,
+    "parentGroups": [
+      {
+        "name": "Current Liabilities",
+        "uniqueName": "currentliabilities"
+      },
+      {
+        "name": "Sundry Creditors",
+        "uniqueName": "sundrycreditors"
+      }
+    ]
+  }
+}

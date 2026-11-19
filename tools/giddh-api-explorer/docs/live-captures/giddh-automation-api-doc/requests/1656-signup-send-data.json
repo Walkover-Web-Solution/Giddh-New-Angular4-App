@@ -1,0 +1,18 @@
+{
+  "method": "POST",
+  "path": "/send-data",
+  "host": "https://api.giddh.com",
+  "origin": "https://books.giddh.com",
+  "surface": "giddh-website-signup",
+  "body": {
+    "CompanyName": "CENTRAL WAREHOUSING CORPORATION",
+    "Timestamp": 1792758333172,
+    "LoggedInEmailID": "shristi@viasocket.com",
+    "MobileNo": "918319337938",
+    "Name": "shristi@viasocket.com",
+    "utm_source": "divyanshu",
+    "utm_campaign": "partnership",
+    "ref": "hRRxjs8",
+    "BusinessNature": "NA"
+  }
+}

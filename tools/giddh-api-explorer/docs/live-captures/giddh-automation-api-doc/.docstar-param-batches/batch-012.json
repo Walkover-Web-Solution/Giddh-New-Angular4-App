@@ -1,0 +1,1361 @@
+[
+  {
+    "endpointId": "X7cuC0aCeDez",
+    "name": "Generate Magic Link",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/magic-link",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "X7cuC0aCeDez",
+      "description": "Generate Magic Link. Part of the Magic Link APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "expiry": {
+          "checked": "true",
+          "value": "1",
+          "description": "Expiry query parameter. Default: 1. Optional.",
+          "required": false
+        },
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "nFZs6hb2qLlF",
+    "name": "Generate Mail Token",
+    "catalogKey": "POST /company/{companyUniqueName}/generate-mail-token",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "nFZs6hb2qLlF",
+      "description": "Generate Mail Token. Part of the Generate Mail Token APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"code\": \"string\",\n  \"client_id\": \"string\",\n  \"client_secret\": \"string\",\n  \"redirect_uri\": \"string\",\n  \"grant_type\": \"string\",\n  \"scope\": \"string\",\n  \"subject\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "code": {
+          "type": "string",
+          "description": "Code. Optional.",
+          "value": "string"
+        },
+        "client_id": {
+          "type": "string",
+          "description": "Client id. Optional.",
+          "value": "string"
+        },
+        "client_secret": {
+          "type": "string",
+          "description": "Client secret. Optional.",
+          "value": "string"
+        },
+        "redirect_uri": {
+          "type": "string",
+          "description": "Redirect uri. Optional.",
+          "value": "string"
+        },
+        "grant_type": {
+          "type": "string",
+          "description": "Grant type. Optional.",
+          "value": "string"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope. Optional.",
+          "value": "string"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "jOjeqo7MXb-U",
+    "name": "Generate Order For Subscription Payment",
+    "catalogKey": "GET /subscription/generateOrder",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "jOjeqo7MXb-U",
+      "description": "Generate Order For Subscription Payment. Part of the Generateorder APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "amount": {
+          "checked": "true",
+          "value": "",
+          "description": "Amount query parameter. Mandatory.",
+          "required": true
+        },
+        "currency": {
+          "checked": "true",
+          "value": "",
+          "description": "Currency query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "1lTnTS2Y44pq",
+    "name": "Generate Otp",
+    "catalogKey": "POST /generate-otp",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "1lTnTS2Y44pq",
+      "description": "Generate Otp. Part of the Generate Otp APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"countryCode\": \"string\",\n  \"mobileNumber\": \"string\",\n  \"oneTimePassword\": \"string\",\n  \"getGeneratedOTP\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "countryCode": {
+          "type": "string",
+          "description": "Country code. Mandatory.",
+          "value": "string"
+        },
+        "mobileNumber": {
+          "type": "string",
+          "description": "Mobile number with country code when applicable. Mandatory.",
+          "value": "string"
+        },
+        "oneTimePassword": {
+          "type": "string",
+          "description": "One time password. Mandatory.",
+          "value": "string"
+        },
+        "getGeneratedOTP": {
+          "type": "boolean",
+          "description": "When true, applies the get generated otp filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "lUTrmn1fgJkh",
+    "name": "Generate Otp",
+    "catalogKey": "GET /company/{companyUniqueName}/bank/generateotp",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "lUTrmn1fgJkh",
+      "description": "Generate OTP. Part of the Generateotp APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "urn": {
+          "checked": "true",
+          "value": "",
+          "description": "Urn query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "jhErH7zIepcm",
+    "name": "Generate Razorpay Order",
+    "catalogKey": "GET /v2/subscription/{subscriptionId}/generate-order",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "jhErH7zIepcm",
+      "description": "Generate Razorpay Order. Part of the Generate Order APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "promocode": {
+          "checked": "true",
+          "value": "",
+          "description": "Promocode query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "LuPzaQKbc7x-",
+    "name": "Generate Razorpay Order",
+    "catalogKey": "GET /v2/subscription/{subscriptionId}/generate-order",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "LuPzaQKbc7x-",
+      "description": "Generate Razorpay Order. Part of the Generate Order APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "promocode": {
+          "checked": "true",
+          "value": "",
+          "description": "Promocode query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "h3EzjcmGQeKx",
+    "name": "Generate Receipt Note",
+    "catalogKey": "POST /company/{companyUniqueName}/receipt-note/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "h3EzjcmGQeKx",
+      "description": "Generate. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"documentType\": \"DC\",\n  \"challanType\": \"string\",\n  \"destinationWarehouse\": \"string\",\n  \"remarks\": \"string\",\n  \"referenceNo\": \"string\",\n  \"dateOfSupply\": \"string\",\n  \"challanNo\": \"string\",\n  \"note\": \"string\",\n  \"sources\": [],\n  \"destinations\": [],\n  \"products\": [],\n  \"entity\": \"string\",\n  \"transferType\": \"string\",\n  \"autoGenerateNote\": false,\n  \"transporterDetails\": \"string\",\n  \"warehouseDetails\": \"string\",\n  \"account\": \"string\",\n  \"variant\": \"string\",\n  \"stock\": \"string\",\n  \"warehouse\": \"string\",\n  \"stockUnit\": \"string\",\n  \"batch\": \"string\",\n  \"batches\": [],\n  \"quantity\": 0,\n  \"rate\": 0,\n  \"amount\": 0,\n  \"discount\": 0,\n  \"taxAmount\": 0,\n  \"description\": \"string\",\n  \"hsnSac\": \"string\",\n  \"sortOrder\": 0\n}"
+        }
+      },
+      "bodyDescription": {
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "challanType": {
+          "type": "string",
+          "description": "Challan type. Optional.",
+          "value": "string"
+        },
+        "destinationWarehouse": {
+          "type": "string",
+          "description": "Destination warehouse. Optional.",
+          "value": "string"
+        },
+        "remarks": {
+          "type": "string",
+          "description": "Remarks. Optional.",
+          "value": "string"
+        },
+        "referenceNo": {
+          "type": "string",
+          "description": "Reference no. Optional.",
+          "value": "string"
+        },
+        "dateOfSupply": {
+          "type": "string",
+          "description": "Date of supply. Optional.",
+          "value": "string"
+        },
+        "challanNo": {
+          "type": "string",
+          "description": "Challan no. Optional.",
+          "value": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "Note. Optional.",
+          "value": "string"
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources values. Optional.",
+          "value": []
+        },
+        "destinations": {
+          "type": "array",
+          "description": "Array of destinations values. Optional.",
+          "value": []
+        },
+        "products": {
+          "type": "array",
+          "description": "Array of products values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "transferType": {
+          "type": "string",
+          "description": "Transfer type. Optional.",
+          "value": "string"
+        },
+        "autoGenerateNote": {
+          "type": "boolean",
+          "description": "When true, applies the auto generate note filter or flag. Optional.",
+          "value": false
+        },
+        "transporterDetails": {
+          "type": "string",
+          "description": "Transporter details. Optional.",
+          "value": "string"
+        },
+        "warehouseDetails": {
+          "type": "string",
+          "description": "Warehouse details. Optional.",
+          "value": "string"
+        },
+        "account": {
+          "type": "string",
+          "description": "Account. Optional.",
+          "value": "string"
+        },
+        "variant": {
+          "type": "string",
+          "description": "Variant. Optional.",
+          "value": "string"
+        },
+        "stock": {
+          "type": "string",
+          "description": "Stock. Optional.",
+          "value": "string"
+        },
+        "warehouse": {
+          "type": "string",
+          "description": "Warehouse. Optional.",
+          "value": "string"
+        },
+        "stockUnit": {
+          "type": "string",
+          "description": "Stock unit. Optional.",
+          "value": "string"
+        },
+        "batch": {
+          "type": "string",
+          "description": "Batch. Optional.",
+          "value": "string"
+        },
+        "batches": {
+          "type": "array",
+          "description": "Array of batches values. Optional.",
+          "value": []
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity. Optional.",
+          "value": 0
+        },
+        "rate": {
+          "type": "number",
+          "description": "Rate. Optional.",
+          "value": 0
+        },
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount in company currency unless noted. Optional.",
+          "value": 0
+        },
+        "discount": {
+          "type": "number",
+          "description": "Discount. Optional.",
+          "value": 0
+        },
+        "taxAmount": {
+          "type": "number",
+          "description": "Tax amount. Optional.",
+          "value": 0
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-text description. Optional.",
+          "value": "string"
+        },
+        "hsnSac": {
+          "type": "string",
+          "description": "Hsn sac. Optional.",
+          "value": "string"
+        },
+        "sortOrder": {
+          "type": "number",
+          "description": "Sort order. Optional.",
+          "value": 0
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "NeJ4ws3UhhTe",
+    "name": "Generate Receipt Note From Voucher",
+    "catalogKey": "POST /company/{companyUniqueName}/receipt-note/generate-from-voucher",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "NeJ4ws3UhhTe",
+      "description": "Generate From Voucher. Part of the Generate From Voucher APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"voucherUniqueNames\": [],\n  \"vouchers\": [],\n  \"voucher\": \"string\",\n  \"documentType\": \"DC\",\n  \"uniqueName\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "voucherUniqueNames": {
+          "type": "array",
+          "description": "Array of voucher unique names values. Optional.",
+          "value": []
+        },
+        "vouchers": {
+          "type": "array",
+          "description": "Array of vouchers values. Optional.",
+          "value": []
+        },
+        "voucher": {
+          "type": "string",
+          "description": "Voucher. Optional.",
+          "value": "string"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "Document type. Allowed values: DC, RC, TRANSFER_DC, TRANSFER_RC, JOBWORK_DC, JOBWORK_RC, MANUFACTURING_ISSUE, MANUFACTURING_RECEIPT, ADJUSTMENT. Optional.",
+          "value": "DC",
+          "allowedValues": [
+            "DC",
+            "RC",
+            "TRANSFER_DC",
+            "TRANSFER_RC",
+            "JOBWORK_DC",
+            "JOBWORK_RC",
+            "MANUFACTURING_ISSUE",
+            "MANUFACTURING_RECEIPT",
+            "ADJUSTMENT"
+          ]
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "wS3y86iU5q2X",
+    "name": "Generate Transfer Note",
+    "catalogKey": "POST /company/{companyUniqueName}/branch-transfer/generate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "wS3y86iU5q2X",
+      "description": "Generate Transfer Note. Part of the Generate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"dateOfSupply\": \"string\",\n  \"challanNo\": \"string\",\n  \"note\": \"string\",\n  \"uniqueName\": \"string\",\n  \"sources\": [],\n  \"destinations\": [],\n  \"products\": [],\n  \"entity\": \"string\",\n  \"transporterDetails\": \"string\",\n  \"totalAmount\": 0,\n  \"transferType\": \"string\",\n  \"autoGenerateNote\": false\n}"
+        }
+      },
+      "bodyDescription": {
+        "dateOfSupply": {
+          "type": "string",
+          "description": "Date of supply. Optional.",
+          "value": "string"
+        },
+        "challanNo": {
+          "type": "string",
+          "description": "Challan no. Optional.",
+          "value": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "Note. Optional.",
+          "value": "string"
+        },
+        "uniqueName": {
+          "type": "string",
+          "description": "Unique identifier for the record. Optional.",
+          "value": "string"
+        },
+        "sources": {
+          "type": "array",
+          "description": "Array of sources values. Optional.",
+          "value": []
+        },
+        "destinations": {
+          "type": "array",
+          "description": "Array of destinations values. Optional.",
+          "value": []
+        },
+        "products": {
+          "type": "array",
+          "description": "Array of products values. Optional.",
+          "value": []
+        },
+        "entity": {
+          "type": "string",
+          "description": "Entity. Optional.",
+          "value": "string"
+        },
+        "transporterDetails": {
+          "type": "string",
+          "description": "Transporter details. Optional.",
+          "value": "string"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount. Optional.",
+          "value": 0
+        },
+        "transferType": {
+          "type": "string",
+          "description": "Transfer type. Optional.",
+          "value": "string"
+        },
+        "autoGenerateNote": {
+          "type": "boolean",
+          "description": "When true, applies the auto generate note filter or flag. Optional.",
+          "value": false
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "vaDRdK9iTWEl",
+    "name": "Generate Via Estimate",
+    "catalogKey": "POST /company/{companyUniqueName}/business-documents/generate-via-estimate",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "vaDRdK9iTWEl",
+      "description": "Generate Via Estimate. Part of the Generate Via Estimate APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "8UEvMSPMK7l4",
+    "name": "Generated Invoice Preview",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/invoice/preview",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "8UEvMSPMK7l4",
+      "description": "Generated Invoice Preview. Part of the Preview APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"proformaNumber\": \"string\",\n  \"estimateNumber\": \"string\",\n  \"invoiceNumber\": \"string\",\n  \"voucherType\": \"string\",\n  \"estimateVersionNumber\": \"string\",\n  \"debugMode\": false,\n  \"generateEInvoice\": false,\n  \"emailId\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "proformaNumber": {
+          "type": "string",
+          "description": "Proforma number. Optional.",
+          "value": "string"
+        },
+        "estimateNumber": {
+          "type": "string",
+          "description": "Estimate number. Optional.",
+          "value": "string"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "estimateVersionNumber": {
+          "type": "string",
+          "description": "Estimate version number. Optional.",
+          "value": "string"
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        },
+        "generateEInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the generate einvoice filter or flag. Optional.",
+          "value": false
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "IMUfUf5vG7o3",
+    "name": "Get Account",
+    "catalogKey": "POST /v4/company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "IMUfUf5vG7o3",
+      "description": "This function is use to get the voucher by provide voucher number and voucher type. Part of the Vouchers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "voucherVersion": {
+          "checked": "true",
+          "value": "2",
+          "description": "Use 2 for accounting-microservice voucher APIs (same as Giddh panel). Default: 2. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"proformaNumber\": \"string\",\n  \"estimateNumber\": \"string\",\n  \"invoiceNumber\": \"string\",\n  \"voucherType\": \"string\",\n  \"estimateVersionNumber\": \"string\",\n  \"debugMode\": false,\n  \"generateEInvoice\": false,\n  \"emailId\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "proformaNumber": {
+          "type": "string",
+          "description": "Proforma number. Optional.",
+          "value": "string"
+        },
+        "estimateNumber": {
+          "type": "string",
+          "description": "Estimate number. Optional.",
+          "value": "string"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "estimateVersionNumber": {
+          "type": "string",
+          "description": "Estimate version number. Optional.",
+          "value": "string"
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        },
+        "generateEInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the generate einvoice filter or flag. Optional.",
+          "value": false
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "QSNaemMuCTs0",
+    "name": "Get Account",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/ledgers/{ledgerUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "QSNaemMuCTs0",
+      "description": "Get Ledger. Part of the Ledgers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "baseRef": {
+          "checked": "true",
+          "value": "false",
+          "description": "Base ref query parameter. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "a-t2p98JN4TT",
+    "name": "Get Account",
+    "catalogKey": "POST /company/{companyUniqueName}/accounts/{accountUniqueName}/vouchers",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "a-t2p98JN4TT",
+      "description": "Get. Part of the Vouchers APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "refresh": {
+          "checked": "true",
+          "value": "false",
+          "description": "When true, bypass cache and recompute. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"proformaNumber\": \"string\",\n  \"estimateNumber\": \"string\",\n  \"invoiceNumber\": \"string\",\n  \"voucherType\": \"string\",\n  \"estimateVersionNumber\": \"string\",\n  \"debugMode\": false,\n  \"generateEInvoice\": false,\n  \"emailId\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "proformaNumber": {
+          "type": "string",
+          "description": "Proforma number. Optional.",
+          "value": "string"
+        },
+        "estimateNumber": {
+          "type": "string",
+          "description": "Estimate number. Optional.",
+          "value": "string"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Invoice number. Optional.",
+          "value": "string"
+        },
+        "voucherType": {
+          "type": "string",
+          "description": "Voucher type. Optional.",
+          "value": "string"
+        },
+        "estimateVersionNumber": {
+          "type": "string",
+          "description": "Estimate version number. Optional.",
+          "value": "string"
+        },
+        "debugMode": {
+          "type": "boolean",
+          "description": "When true, applies the debug mode filter or flag. Optional.",
+          "value": false
+        },
+        "generateEInvoice": {
+          "type": "boolean",
+          "description": "When true, applies the generate einvoice filter or flag. Optional.",
+          "value": false
+        },
+        "emailId": {
+          "type": "array",
+          "description": "Array of email id values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "w0ynW_3mOE4L",
+    "name": "Get Account Countries By Company",
+    "catalogKey": "GET /country/company/{companyUniqueName}/account-countries",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "w0ynW_3mOE4L",
+      "description": "Get Account Countries By Company. Part of the Account Countries APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "31eP24vmSPjA",
+    "name": "Get Account Details",
+    "catalogKey": "GET /portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/details",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "31eP24vmSPjA",
+      "description": "Get Account Details. Part of the Details APIs in Giddh. Requires portal session.",
+      "params": {
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "c5OxrZyxXo5J",
+    "name": "Get Active Account",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "c5OxrZyxXo5J",
+      "description": "Get Active Account. Part of the Giddh APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "source": {
+          "checked": "true",
+          "value": "",
+          "description": "Origin of the request (APP, API, IMPORT, etc.). Allowed values: APP, API, ELECTRON, WEBSITE, SERVICE, TALLY, IMPORT, ZENCOMMERCE, ECOMMERCE, ICICI_BANK, SHOPIFY, MASTER, PLAID, GOCARDLESS. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "er1WQ4R8DmOJ",
+    "name": "Get Active Account V2",
+    "catalogKey": "GET /v2/company/{companyUniqueName}/accounts/{accountUniqueName:.+}",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "er1WQ4R8DmOJ",
+      "description": "Get Active Account V2. Part of the Giddh APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "invoiceType": {
+          "checked": "true",
+          "value": "",
+          "description": "Invoice type query parameter. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        },
+        "source": {
+          "checked": "true",
+          "value": "",
+          "description": "Origin of the request (APP, API, IMPORT, etc.). Allowed values: APP, API, ELECTRON, WEBSITE, SERVICE, TALLY, IMPORT, ZENCOMMERCE, ECOMMERCE, ICICI_BANK, SHOPIFY, MASTER, PLAID, GOCARDLESS. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "F6bkfbRlN5bP",
+    "name": "Get Active Particular Account V3",
+    "catalogKey": "GET /v4/company/{companyUniqueName}/particular",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "F6bkfbRlN5bP",
+      "description": "Get Active Particular Account V3. Part of the Particular APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "invoiceType": {
+          "checked": "true",
+          "value": "sales",
+          "description": "Invoice type query parameter. Default: sales. Optional.",
+          "required": false
+        },
+        "accountUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Account uniqueName. Optional.",
+          "required": false
+        },
+        "stockUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Stock/inventory item uniqueName. Optional.",
+          "required": false
+        },
+        "variantUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Variant unique name query parameter. Optional.",
+          "required": false
+        },
+        "barcode": {
+          "checked": "true",
+          "value": "",
+          "description": "Barcode query parameter. Optional.",
+          "required": false
+        },
+        "customerUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Customer unique name query parameter. Optional.",
+          "required": false
+        },
+        "oppositeAccountUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Opposite account unique name query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "J7mjhpFNUH9E",
+    "name": "Get Activity Logs",
+    "catalogKey": "POST /v2/company/{companyUniqueName}/activity-logs",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "J7mjhpFNUH9E",
+      "description": "Get Activity Logs. Part of the Activity Logs APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"entity\": \"USER\",\n  \"operation\": \"string\",\n  \"fromDate\": \"01-04-2025\",\n  \"toDate\": \"01-04-2025\",\n  \"entryFromDate\": \"01-04-2025\",\n  \"entryToDate\": \"01-04-2025\",\n  \"voucherFromDate\": \"01-04-2025\",\n  \"voucherToDate\": \"01-04-2025\",\n  \"page\": 0,\n  \"count\": 0,\n  \"sort\": \"ASC\",\n  \"version\": 0,\n  \"entityId\": \"string\",\n  \"accountUniqueNames\": [],\n  \"groupUniqueNames\": [],\n  \"userUniqueNames\": [],\n  \"filterData\": \"string\",\n  \"operations\": [],\n  \"userUniqueName\": []\n}"
+        }
+      },
+      "bodyDescription": {
+        "entity": {
+          "type": "string",
+          "description": "Entity. Allowed values: USER, GROUP, COMPANY, ACCOUNT, LEDGER, VOUCHER, PURCHASE_ORDER, LOGS, INVOICE, VOUCHER_DOC, PROFORMA, ESTIMATE, COMPANY_SETTINGS, STOCK, MANUFACTURING, STOCK_GROUP, INVENTORY_USER, INVENTORY_ENTRY, COMPANY_LEDGERS, SUBSCRIPTION, PLAN, BANK_INTEGRATION, BANK_PAYMENT, PURCHASE, PURCHASE_BILL, ENTRY, FLAT_TRIALBALANCE, MASTER_EXPORT, MASTER_IMPORT, SALES_OVERVIEW_REPORT_EXPORT, PURCHASE_OVERVIEW_REPORT_EXPORT, SALES_DETAILED_REPORT_EXPORT, PURCHASE_DETAILED_REPORT_EXPORT, INVENTORY_IMPORT, INVENTORY_EXPORT, AGING_REPORT_EXPORT. Optional.",
+          "value": "USER",
+          "allowedValues": [
+            "USER",
+            "GROUP",
+            "COMPANY",
+            "ACCOUNT",
+            "LEDGER",
+            "VOUCHER",
+            "PURCHASE_ORDER",
+            "LOGS",
+            "INVOICE",
+            "VOUCHER_DOC",
+            "PROFORMA",
+            "ESTIMATE",
+            "COMPANY_SETTINGS",
+            "STOCK",
+            "MANUFACTURING",
+            "STOCK_GROUP",
+            "INVENTORY_USER",
+            "INVENTORY_ENTRY",
+            "COMPANY_LEDGERS",
+            "SUBSCRIPTION",
+            "PLAN",
+            "BANK_INTEGRATION",
+            "BANK_PAYMENT",
+            "PURCHASE",
+            "PURCHASE_BILL",
+            "ENTRY",
+            "FLAT_TRIALBALANCE",
+            "MASTER_EXPORT",
+            "MASTER_IMPORT",
+            "SALES_OVERVIEW_REPORT_EXPORT",
+            "PURCHASE_OVERVIEW_REPORT_EXPORT",
+            "SALES_DETAILED_REPORT_EXPORT",
+            "PURCHASE_DETAILED_REPORT_EXPORT",
+            "INVENTORY_IMPORT",
+            "INVENTORY_EXPORT",
+            "AGING_REPORT_EXPORT"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "description": "Operation. Optional.",
+          "value": "string"
+        },
+        "fromDate": {
+          "type": "string",
+          "description": "From date. Optional.",
+          "value": "01-04-2025"
+        },
+        "toDate": {
+          "type": "string",
+          "description": "To date. Optional.",
+          "value": "01-04-2025"
+        },
+        "entryFromDate": {
+          "type": "string",
+          "description": "Entry from date. Optional.",
+          "value": "01-04-2025"
+        },
+        "entryToDate": {
+          "type": "string",
+          "description": "Entry to date. Optional.",
+          "value": "01-04-2025"
+        },
+        "voucherFromDate": {
+          "type": "string",
+          "description": "Voucher from date. Optional.",
+          "value": "01-04-2025"
+        },
+        "voucherToDate": {
+          "type": "string",
+          "description": "Voucher to date. Optional.",
+          "value": "01-04-2025"
+        },
+        "page": {
+          "type": "number",
+          "description": "Page. Optional.",
+          "value": 0
+        },
+        "count": {
+          "type": "number",
+          "description": "Count. Optional.",
+          "value": 0
+        },
+        "sort": {
+          "type": "string",
+          "description": "Sort. Allowed values: ASC, DESC. Optional.",
+          "value": "ASC",
+          "allowedValues": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "version": {
+          "type": "number",
+          "description": "Version. Optional.",
+          "value": 0
+        },
+        "entityId": {
+          "type": "string",
+          "description": "Entity id. Optional.",
+          "value": "string"
+        },
+        "accountUniqueNames": {
+          "type": "array",
+          "description": "Array of account unique names values. Optional.",
+          "value": []
+        },
+        "groupUniqueNames": {
+          "type": "array",
+          "description": "Array of group unique names values. Optional.",
+          "value": []
+        },
+        "userUniqueNames": {
+          "type": "array",
+          "description": "Array of user unique names values. Optional.",
+          "value": []
+        },
+        "filterData": {
+          "type": "string",
+          "description": "Filter data. Optional.",
+          "value": "string"
+        },
+        "operations": {
+          "type": "array",
+          "description": "Array of operations values. Optional.",
+          "value": []
+        },
+        "userUniqueName": {
+          "type": "array",
+          "description": "Array of user unique name values. Optional.",
+          "value": []
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "73X8-Fpds9k6",
+    "name": "Get Adjustment Report",
+    "catalogKey": "POST /company/{companyUniqueName}/inventory-adjustment/adjustment-report",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "73X8-Fpds9k6",
+      "description": "Get Adjustment Report. Part of the Adjustment Report APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        },
+        "inventoryType": {
+          "checked": "true",
+          "value": "",
+          "description": "Inventory type query parameter. Optional.",
+          "required": false
+        },
+        "sortBy": {
+          "checked": "true",
+          "value": "date",
+          "description": "Field name to sort by. Default: date. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "desc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: desc. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "searchBy": {
+          "checked": "true",
+          "value": "",
+          "description": "Search by query parameter. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "HlMisZlKTs3E",
+    "name": "Get All Address",
+    "catalogKey": "GET /company/{companyUniqueName}/address/all",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "HlMisZlKTs3E",
+      "description": "Get All. Part of the All APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"address\": \"string\",\n  \"state\": \"string\",\n  \"pincode\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address. Optional.",
+          "value": "string"
+        },
+        "state": {
+          "type": "string",
+          "description": "State. Optional.",
+          "value": "string"
+        },
+        "pincode": {
+          "type": "string",
+          "description": "Pincode. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "hkFwUGej8n9l",
+    "name": "Get All Address",
+    "catalogKey": "POST /company/{companyUniqueName}/address/all",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "hkFwUGej8n9l",
+      "description": "Get All. Part of the All APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"name\": \"string\",\n  \"address\": \"string\",\n  \"state\": \"string\",\n  \"pincode\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "name": {
+          "type": "string",
+          "description": "Display name. Optional.",
+          "value": "string"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address. Optional.",
+          "value": "string"
+        },
+        "state": {
+          "type": "string",
+          "description": "State. Optional.",
+          "value": "string"
+        },
+        "pincode": {
+          "type": "string",
+          "description": "Pincode. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "S4L4X05UPpzx",
+    "name": "Get All Assigned Discount List",
+    "catalogKey": "GET /company/{companyUniqueName}/discount/assign/list",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "S4L4X05UPpzx",
+      "description": "Get All Assigned Discount List. Part of the List APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "accountUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Account uniqueName. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

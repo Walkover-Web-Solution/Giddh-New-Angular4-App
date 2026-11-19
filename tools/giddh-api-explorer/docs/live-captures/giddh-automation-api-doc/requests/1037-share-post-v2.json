@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/share",
+  "body": {
+    "emailId": "apidoc-invite-probe@example.invalid",
+    "roleUniqueName": "view_only",
+    "entity": "COMPANY",
+    "entityUniqueName": "giddhain1792673422178091xos"
+  }
+}

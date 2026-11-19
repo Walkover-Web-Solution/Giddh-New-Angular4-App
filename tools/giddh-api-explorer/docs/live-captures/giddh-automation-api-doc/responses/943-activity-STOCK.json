@@ -1,0 +1,123 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 20,
+    "totalPages": 1,
+    "totalItems": 4,
+    "results": [
+      {
+        "entity": "STOCK",
+        "entityId": "633675",
+        "operation": "CREATE",
+        "time": "23-10-2026 07:00:21",
+        "ip": "103.187.160.186",
+        "details": {
+          "name": "API Doc Finished Good",
+          "uniqueName": "apidoc-finished-good",
+          "stockGroup": {
+            "name": "API Doc Products",
+            "uniqueName": "apidoc-products",
+            "id": "61372"
+          },
+          "stockUnit": {
+            "name": "Piece",
+            "code": "pcs"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "STOCK",
+        "entityId": "633673",
+        "operation": "CREATE",
+        "time": "22-10-2026 13:18:45",
+        "ip": "103.187.160.186",
+        "details": {
+          "name": "API Doc Consulting Hour",
+          "uniqueName": "apidoc-service-hour",
+          "stockGroup": {
+            "name": "API Doc Services",
+            "uniqueName": "apidoc-services",
+            "id": "61373"
+          },
+          "stockUnit": {
+            "name": "Piece",
+            "code": "pcs"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "STOCK",
+        "entityId": "633672",
+        "operation": "CREATE",
+        "time": "22-10-2026 13:18:44",
+        "ip": "103.187.160.186",
+        "details": {
+          "name": "API Doc Gadget",
+          "uniqueName": "apidoc-gadget",
+          "stockGroup": {
+            "name": "API Doc Products",
+            "uniqueName": "apidoc-products",
+            "id": "61372"
+          },
+          "stockUnit": {
+            "name": "Piece",
+            "code": "pcs"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      },
+      {
+        "entity": "STOCK",
+        "entityId": "633671",
+        "operation": "CREATE",
+        "time": "22-10-2026 13:02:40",
+        "ip": "103.187.160.186",
+        "details": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidoc-widget",
+          "stockGroup": {
+            "name": "API Doc Products",
+            "uniqueName": "apidoc-products",
+            "id": "61372"
+          },
+          "stockUnit": {
+            "name": "Piece",
+            "code": "pcs"
+          }
+        },
+        "user": {
+          "name": "Divyanshu Shirvastav",
+          "uniqueName": "divyanshu@whozzat.com",
+          "email": "divyanshu@whozzat.com",
+          "mobile": "919111525164",
+          "verified": true
+        },
+        "salesPerson": null
+      }
+    ]
+  }
+}

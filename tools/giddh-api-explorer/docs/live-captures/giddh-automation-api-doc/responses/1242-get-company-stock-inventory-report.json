@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "body": {
+    "page": 0,
+    "count": 0,
+    "totalPages": 0,
+    "totalItems": 0,
+    "stock": {
+      "name": "apidoc-widget",
+      "uniqueName": "API Doc Widget"
+    },
+    "stockUnit": {
+      "name": "temp",
+      "code": "pcs"
+    },
+    "openingQuantity": 10.0,
+    "closingQuantity": 10.0,
+    "transactions": [],
+    "from": "01-04-2026",
+    "to": "31-03-2027"
+  }
+}

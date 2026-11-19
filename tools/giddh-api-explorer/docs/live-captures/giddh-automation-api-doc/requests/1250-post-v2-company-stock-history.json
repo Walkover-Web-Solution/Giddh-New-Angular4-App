@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/v2/company/giddhain1792673422178091xos/stock-history?branchUniqueName=giddhautomationapidoc",
+  "body": {
+    "name": "temp",
+    "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT"
+  }
+}

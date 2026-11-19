@@ -1,0 +1,1378 @@
+[
+  {
+    "tag": "907-session-company",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "908-pending-report-DC-WITHOUT",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/pending-report?from=01-04-2026&to=31-03-2027&page=1&count=20&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "909-pending-report-DC-NOTINV",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/pending-report?from=01-04-2026&to=31-03-2027&page=1&count=20&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "910-pending-report-RC-WITHOUT",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/pending-report?from=01-04-2026&to=31-03-2027&page=1&count=20&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "911-pending-report-RC-NOTINV",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/pending-report?from=01-04-2026&to=31-03-2027&page=1&count=20&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "912-bd-statuses-DC",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/statuses?documentType=DC",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "913-bd-statuses-RN",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/statuses?documentType=RN",
+    "http": "403",
+    "status": "error",
+    "message": "Something went wrong, please try again later"
+  },
+  {
+    "tag": "914-bd-statuses-RC",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/statuses?documentType=RC",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "915-dc-list",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/delivery-challan/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "916-rn-list",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/receipt-note/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "917-bd-get-dc-skip",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/missing",
+    "http": "404",
+    "status": "error",
+    "message": "Document not found: missing"
+  },
+  {
+    "tag": "920-reconcile-bank",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-bank-hdfc/ledgers-v2/reconcile?from=01-08-2026&to=23-10-2026&chequeNumber=",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "921-reconcile-cash",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/cash/ledgers-v2/reconcile?from=01-08-2026&to=23-10-2026&chequeNumber=",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "923-company-users",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/users",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "924-shared-with",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/shared-with",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "925-shared-with-mobile",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/shared-with?sortBy=mobile_verified",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "926-roles",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/role",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "927-scope-v2",
+    "method": "GET",
+    "path": "/scope-v2",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "928-company-uer",
+    "method": "GET",
+    "path": "/users/divyanshu%40whozzat.com/company-uer?companyUniqueName=giddhain1792673422178091xos",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "929-permission-put-same",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/uer/tgig7awso7imt1h",
+    "http": "412",
+    "status": "error",
+    "message": "Cannot update role assigned to self."
+  },
+  {
+    "tag": "930-shared-with-after",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/shared-with",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "931-invite-probe",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/share",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "932-send-new-user-info",
+    "method": "POST",
+    "path": "/users/send-new-user-info",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "933-yodlee-access-token",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/yodlee/access-token",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "934-yodlee-accounts",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/yodlee/yodlee-accounts",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "935-yodlee-search",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/yodlee/search?name=hdfc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "936-yodlee-eledgers",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/yodlee/accounts/apidoc-bank-hdfc/eledgers?refresh=true&from=01-08-2026&page=1&count=20",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "937-import-pdf-stmt-probe",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/import-pdf/bank-statement?entity=pdf&accountUniqueName=apidoc-bank-hdfc",
+    "http": "415",
+    "status": "error",
+    "message": "Content-Type application/json not supported."
+  },
+  {
+    "tag": "938-imports-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/imports?from=01-08-2026&to=23-10-2026&page=1&count=20",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "939-import-status",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/imports/status?page=1&count=20",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "940-plaid-link-token",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/plaid/create/link-token?itemId=",
+    "http": "422",
+    "status": "error",
+    "message": "invalid client_id or secret provided"
+  },
+  {
+    "tag": "941-gocardless-institutions",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/gocardless/institutions?countryCode=IN&page=1&count=10&refresh=true",
+    "http": "406",
+    "status": "error",
+    "message": "Invalid country choice.'IN' is not a valid choice."
+  },
+  {
+    "tag": "942-activity-logs",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/activity-logs",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "943-activity-STOCK",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/activity-logs",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "944-activity-VOUCHER",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/activity-logs",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "945-auditlogs-form",
+    "method": "GET",
+    "path": "/ui/auditlogs-form",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "946-audit-logs-v1",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/logs?page=1",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "947-audit-logs-v2",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/logs?page=1",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "948-webhooks-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/settings/webhooks",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "949-webhooks-post",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/settings/webhooks",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "950-razorpay-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/razorpay",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "951-paypal-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/paypal",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "952-cashfree-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/cashfree",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "953-sms-key",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/sms-key",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "954-email-key",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/email-key",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "955-gmail-token",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/gmail-token",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "956-payment-banks",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/payment/banks/accounts",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "957-comm-platforms",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "958-currency-list",
+    "method": "GET",
+    "path": "/currency",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "959-currency-rate-USD",
+    "method": "GET",
+    "path": "/currency/rate?from=USD&to=INR&date=23-10-2026",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "960-currency-rate-EUR",
+    "method": "GET",
+    "path": "/currency/rate?from=EUR&to=INR&date=23-10-2026",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "961-currency-rate-GBP",
+    "method": "GET",
+    "path": "/currency/rate?from=GBP&to=INR&date=23-10-2026",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "962-currency-converter",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/currency-converter/USD/INR",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "963-multicompany-tb",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/multicompany/trial-balance?from=01-08-2026&to=23-10-2026&currencyCode=INR&refresh=true",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "964-multicompany-pl",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/multicompany/profit-loss?from=01-08-2026&to=23-10-2026&currencyCode=INR&refresh=true",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "965-templates-invoice",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/templates?type=invoice",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "966-templates-voucher",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/templates?type=voucher",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "967-sample-templates",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/sample-templates?type=invoice",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "968-templates-all",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/templates/all",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "969-template-preview",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/templates/gst_template_a?type=invoice&voucherVersion=2",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "970-template-details",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/templates/gst_template_a",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "971-template-create",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/templates",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "972-template-preview-post",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/template-preview?voucherVersion=2",
+    "http": "500",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "974-salesperson-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/salesperson?page=1&count=50&archive=false",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "975-salesperson-create",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/salesperson",
+    "http": "201",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "976-salesperson-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "977-salesperson-update",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "978-salesperson-archive",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson/archive",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "979-salesperson-list-arch",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/salesperson?page=1&count=50&archive=true",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "980-tags-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/tags",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "981-tag-create",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/tags",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "982-tag-update",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/tags/apidoc-project-tag",
+    "http": "404",
+    "status": "error",
+    "message": "No tag found with this uniqueName."
+  },
+  {
+    "tag": "983-tally-inprogress",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/tally_logs/current_day",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "984-tally-completed",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/tally_logs/completed",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "985-tally-errors",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/tally_logs/error_report",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "986-company-export",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/export",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "987-export-ledgers",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/export-ledgers-v2?from=01-08-2026&to=23-10-2026",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "988-company-import",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/import",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "989-sub-by-id",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "990-sub-companies",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5/company-list?page=1&count=20&q=",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "991-sub-payment-methods",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5/payment-methods",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "992-sub-plans",
+    "method": "GET",
+    "path": "/v2/subscription/plans/all?regionCode=IND",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "993-sub-list",
+    "method": "GET",
+    "path": "/v2/subscription/list?page=1&count=20&fromMoveCompany=false",
+    "http": "404",
+    "status": "error",
+    "message": "Subscription not found by provided subscription Id."
+  },
+  {
+    "tag": "994-sub-transactions",
+    "method": "GET",
+    "path": "/subscriptions/SUB-20261022-5/all-transactions?from=01-08-2026&to=23-10-2026&interval=monthly",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "995-users-subscriptions",
+    "method": "GET",
+    "path": "/users/subscriptions",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "996-billing-get",
+    "method": "GET",
+    "path": "/v2/subscription/billing-account/get?billingAccountUnqiueName=k2b1712141952375",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "997-sub-charge",
+    "method": "GET",
+    "path": "/v2/subscription/charge/SUB-20261022-5",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported"
+  },
+  {
+    "tag": "998-sub-country-list",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5/country-list",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "999-account-search-v3",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/v3/account-search?q=apidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1000-account-search-2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/account-search-2?q=apidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1001-cmdk",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/cmdk?page=1&q=apidoc&group=&refresh=false&isMobile=false",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1002-imports-all-doc",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/imports/all-document?branchUniqueName=giddhautomationapidoc&page=1&count=20&from=01-08-2026&to=23-10-2026&sort=desc&sortBy=date&ocrType=",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported."
+  },
+  {
+    "tag": "1003-ocr-completed-count",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: "
+  },
+  {
+    "tag": "1004-reverse-charge",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/reverse-charge-report?from=01-08-2026&to=23-10-2026&sort=asc&sortBy=&page=1&count=20",
+    "http": "400",
+    "status": "error",
+    "message": "Please check, Provided Json is not a valid Json."
+  },
+  {
+    "tag": "1005-due-days-range",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/due-days-range?vendorCustomerType=customer",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1006-due-amount-report",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/due-amount-report?q=&page=1&count=20&sort=asc&sortBy=&rangeCol=1&vendorCustomerType=customer",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1007-pettycash-report",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/pettycash-manager/report",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1008-triggers-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/triggers",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1009-comm-triggers",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/trigger",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1010-fy-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/financial-year",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1011-fy-limits",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/financial-year-limits",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1012-address-all",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/address/all",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1013-branch-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/branch?hierarchyType=",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1014-warehouse-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/warehouse",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1015-transporters",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/transporters?page=1",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1016-ewb-validate",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/ewb/validate-invoice",
+    "http": "406",
+    "status": "error",
+    "message": "Invoice number cannot be left null/blank"
+  },
+  {
+    "tag": "1017-entry-settings",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/entry-settings",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1018-ui-sidebar",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/ui_side_bar_items",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1019-party-types",
+    "method": "GET",
+    "path": "/ui/party-types",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1020-report-filters",
+    "method": "GET",
+    "path": "/report-filters?module=sales&companyUniqueName=giddhain1792673422178091xos&customColumns=true",
+    "http": "406",
+    "status": "error",
+    "message": "Invalid report filter module. Allowed values are (PAYMENT, VARIANT_WISE_REPORT, ADMIN_SUBSCRIPTION_HISTORY, PURCHASE_REGISTER, FIXED_ASSET_INVENTORY_TABLE_REPOR"
+  },
+  {
+    "tag": "1021-cf-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/customfield/module/ACCOUNT?page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1022-email-suggestions",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/email-content-suggestion",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1023-email-conditions",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/condition-suggestion?triggerModule=invoice",
+    "http": "406",
+    "status": "error",
+    "message": "'invoice' is not a valid trigger module, Allowed values are (LEDGER_WITH_CLOSING_BALANCE,LEDGER_BALANCE,VOUCHER_DUE)."
+  },
+  {
+    "tag": "1024-v2-triggers-all",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/trigger/all?page=1&count=20",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1025-inventory-settings",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/inventory-settings",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1026-stocks-manufactured",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stocks?isManufactured=true&page=1&count=20",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1027-bank-accounts-int",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/bank",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1028-dc-all-v2",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/delivery-challan/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1029-rn-all-v2",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/receipt-note/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1030-dc-get-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/vouchers/delivery-challan/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1031-bd-all-DC",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/all?documentType=DC&from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1032-dc-all-novv",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/delivery-challan/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1033-rn-all-novv",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/receipt-note/all?from=01-04-2026&to=31-03-2027&page=1&count=5&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1036-share-company",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/share",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1037-share-post-v2",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/share",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1038-rc-get-retry",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/reverse-charge-report?from=01-08-2026&to=23-10-2026&sort=asc&sortBy=date&page=1&count=20",
+    "http": "400",
+    "status": "error",
+    "message": "Please check, Provided Json is not a valid Json."
+  },
+  {
+    "tag": "1039-rc-post",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/reverse-charge-report?from=01-08-2026&to=23-10-2026&sort=asc&sortBy=date&page=1&count=20",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1040-ocr-count-INVOICE",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=INVOICE",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: INVOICE"
+  },
+  {
+    "tag": "1041-imports-all-doc-post",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/all-document?branchUniqueName=giddhautomationapidoc&page=1&count=20&from=01-08-2026&to=23-10-2026&sort=desc&sortBy=date&ocrType=INVOICE",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: INVOICE"
+  },
+  {
+    "tag": "1042-report-filters-PAYMENT",
+    "method": "GET",
+    "path": "/report-filters?module=PAYMENT&companyUniqueName=giddhain1792673422178091xos&customColumns=true",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1043-email-cond-LEDGER",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/condition-suggestion?triggerModule=LEDGER_WITH_CLOSING",
+    "http": "406",
+    "status": "error",
+    "message": "'LEDGER_WITH_CLOSING' is not a valid trigger module, Allowed values are (LEDGER_WITH_CLOSING_BALANCE,LEDGER_BALANCE,VOUCHER_DUE)."
+  },
+  {
+    "tag": "1044-gocardless-GB",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/gocardless/institutions?countryCode=GB&page=1&count=5&refresh=true",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1045-gocardless-US",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/gocardless/institutions?countryCode=US&page=1&count=5&refresh=true",
+    "http": "406",
+    "status": "error",
+    "message": "Invalid country choice.'US' is not a valid choice."
+  },
+  {
+    "tag": "1046-import-pdf-multipart",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/import-pdf/bank-statement?entity=pdf&accountUniqueName=apidoc-bank-hdfc",
+    "http": "406",
+    "status": "error",
+    "message": "Must provide pdfpassword for this API."
+  },
+  {
+    "tag": "1047-sub-list-plain",
+    "method": "GET",
+    "path": "/v2/subscription/list?page=1&count=20",
+    "http": "404",
+    "status": "error",
+    "message": "Subscription not found by provided subscription Id."
+  },
+  {
+    "tag": "1048-sub-charge-post",
+    "method": "POST",
+    "path": "/v2/subscription/charge/SUB-20261022-5",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1049-settings-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/settings",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1050-invoice-setting",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/invoice-setting",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported"
+  },
+  {
+    "tag": "1051-salesperson-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/salesperson?page=1&count=50&archive=false",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1052-salesperson-unarchive",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson/archive",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1053-template-create-full",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/templates",
+    "http": "412",
+    "status": "error",
+    "message": "CopyFrom can not be null or empty"
+  },
+  {
+    "tag": "1054-autopaid",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/autopaid",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1055-rate-01apr",
+    "method": "GET",
+    "path": "/currency/rate?from=USD&to=INR&date=01-04-2026",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1056-rate-01jul",
+    "method": "GET",
+    "path": "/currency/rate?from=USD&to=INR&date=01-07-2026",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1057-rate-01oct",
+    "method": "GET",
+    "path": "/currency/rate?from=USD&to=INR&date=01-10-2026",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1058-sources",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/sources",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1059-export-settings",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/export-settings",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1060-domain-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/get-domain-list",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1061-bd-statuses-DN",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/statuses?documentType=DeliveryNote",
+    "http": "403",
+    "status": "error",
+    "message": "Something went wrong, please try again later"
+  },
+  {
+    "tag": "1062-bd-statuses-deliverynote",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/statuses?documentType=deliverynote",
+    "http": "403",
+    "status": "error",
+    "message": "Something went wrong, please try again later"
+  },
+  {
+    "tag": "1063-tags-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/tags",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1065-bd-get-dc",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/zyu1792738825009",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1066-bd-versions",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/zyu1792738825009/versions",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1067-bd-history",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/zyu1792738825009/history",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1068-bd-get-rn",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/business-documents/edk1792738826154",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1069-template-create-copy",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/templates",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1072-import-pdf-pwd",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/import-pdf/bank-statement?entity=pdf&accountUniqueName=apidoc-bank-hdfc&pdfpassword=",
+    "http": "410",
+    "status": "error",
+    "message": "Something went wrong while submitting request. Please try again later."
+  },
+  {
+    "tag": "1073-ocr-SALES",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=SALES",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: SALES"
+  },
+  {
+    "tag": "1073-ocr-PURCHASE",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=PURCHASE",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: PURCHASE"
+  },
+  {
+    "tag": "1073-ocr-VOUCHER",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=VOUCHER",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: VOUCHER"
+  },
+  {
+    "tag": "1073-ocr-DOCUMENT",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=DOCUMENT",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: DOCUMENT"
+  },
+  {
+    "tag": "1073-ocr-BANK",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=BANK",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: BANK"
+  },
+  {
+    "tag": "1073-ocr-bank",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=bank",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: bank"
+  },
+  {
+    "tag": "1073-ocr-sales",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=sales",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: sales"
+  },
+  {
+    "tag": "1073-ocr-purchase",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/completed-document-count?voucherVersion=2&branchUniqueName=giddhautomationapidoc&ocrType=purchase",
+    "http": "406",
+    "status": "error",
+    "message": "Unsupported OCR type: purchase"
+  },
+  {
+    "tag": "1074-email-cond-ok",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/condition-suggestion?triggerModule=LEDGER_WITH_CLOSING_BALANCE",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1075-users-share",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/users",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported"
+  },
+  {
+    "tag": "1076-multicompany-tb-USD",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/multicompany/trial-balance?from=01-08-2026&to=23-10-2026&currencyCode=USD&refresh=true",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1077-pending-by-acct",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/pending-report?from=01-04-2026&to=31-03-2027&page=1&count=20&branchUniqueName=giddhautomationapidoc&accountUniqueName=apidoc-customer-one",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1078-salesperson-get",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1079-salesperson-active",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/salesperson?page=1&count=50&archive=false",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1080-sub-generate-order",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5/generate-order?promocode=",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  }
+]

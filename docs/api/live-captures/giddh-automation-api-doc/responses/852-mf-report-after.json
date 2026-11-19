@@ -1,0 +1,102 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "type": "inside",
+        "variant": {
+          "name": "API Doc Widget",
+          "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+        },
+        "date": "23-10-2026",
+        "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "batches": null,
+        "stockUniqueName": "apidoc-widget",
+        "batch": null,
+        "byProducts": [],
+        "stockName": "API Doc Widget",
+        "voucherNumber": 2,
+        "voucher": "manufacture",
+        "manufacturingMultipleOf": 1.0,
+        "inventoryType": "PRODUCT",
+        "uniqueName": "43ojbrv74dekqq8zqfoi",
+        "warehouse": {
+          "name": "Gidd warehouse",
+          "uniqueName": "xbq1792673424418"
+        },
+        "linkedStocks": [
+          {
+            "variant": {
+              "name": "API Doc Gadget",
+              "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+            },
+            "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+            "batches": null,
+            "stockUniqueName": "apidoc-gadget",
+            "stockUnits": [],
+            "batch": null,
+            "stockName": "API Doc Gadget",
+            "amount": 20.0,
+            "rate": 10.0,
+            "manufacturingQuantity": 2.0,
+            "manufacturingUnitCode": "pcs"
+          }
+        ],
+        "manufacturingQuantity": 1.0,
+        "otherExpenses": [],
+        "manufacturingUnitCode": "pcs",
+        "increaseAssetValue": true
+      },
+      {
+        "type": "inside",
+        "variant": {
+          "name": "API Doc Finished Good",
+          "uniqueName": "apidoc-finished-good1792758621295nj0xkwr8d6"
+        },
+        "date": "23-10-2026",
+        "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "batches": null,
+        "stockUniqueName": "apidoc-finished-good",
+        "batch": null,
+        "byProducts": [],
+        "stockName": "API Doc Finished Good",
+        "voucherNumber": 1,
+        "voucher": "manufacture",
+        "manufacturingMultipleOf": 1.0,
+        "inventoryType": "PRODUCT",
+        "uniqueName": "u076wqodj05ihjcozc2f",
+        "warehouse": {
+          "name": "Gidd warehouse",
+          "uniqueName": "xbq1792673424418"
+        },
+        "linkedStocks": [
+          {
+            "variant": {
+              "name": "API Doc Gadget",
+              "uniqueName": "apidoc-gadget1792694923893w7fw4lbjd2"
+            },
+            "manufacturingUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+            "batches": null,
+            "stockUniqueName": "apidoc-gadget",
+            "stockUnits": [],
+            "batch": null,
+            "stockName": "API Doc Gadget",
+            "amount": 10.0,
+            "rate": 10.0,
+            "manufacturingQuantity": 1.0,
+            "manufacturingUnitCode": "pcs"
+          }
+        ],
+        "manufacturingQuantity": 1.0,
+        "otherExpenses": [],
+        "manufacturingUnitCode": "pcs",
+        "increaseAssetValue": true
+      }
+    ],
+    "size": 2
+  }
+}

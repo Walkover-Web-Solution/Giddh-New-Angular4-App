@@ -1,0 +1,48 @@
+{
+  "status": "success",
+  "body": {
+    "name": "CENTRAL WAREHOUSING CORPORATION",
+    "uniqueName": "centrain17927583331800zu6km",
+    "portalDomain": "CENTRALWAREHOUSINGCORPORATION3",
+    "voucherVersion": 2,
+    "planVersion": 2,
+    "baseCurrency": "INR",
+    "businessType": "Registered",
+    "businessNature": "Food",
+    "subscription": {
+      "subscriptionId": "SUB-20261023-8",
+      "status": "trial",
+      "planDetails": {
+        "name": "Oak",
+        "uniqueName": "dmg1715623569079"
+      }
+    },
+    "addresses": [
+      {
+        "name": "Default Address",
+        "taxNumber": "23AAACC1206D2ZN",
+        "uniqueName": "xcd1792758333888",
+        "stateCode": "MP",
+        "pincode": "462011",
+        "isDefault": true
+      }
+    ],
+    "activeFinancialYear": {
+      "financialYearStarts": "01-04-2026",
+      "financialYearEnds": "31-03-2027",
+      "uniqueName": "FY-APR2026-MAR2027"
+    },
+    "userEntityRoles": [
+      {
+        "role": {
+          "name": "Super Admin",
+          "uniqueName": "super_admin",
+          "scopesCount": 0
+        }
+      }
+    ],
+    "_note": "userEntityRoles scopes truncated for docs"
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

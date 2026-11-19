@@ -1,0 +1,645 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "code": "ZWG",
+      "symbol": "ZiG"
+    },
+    {
+      "code": "AMD",
+      "symbol": "\u058f"
+    },
+    {
+      "code": "AZN",
+      "symbol": "\u20bc"
+    },
+    {
+      "code": "BAM",
+      "symbol": "KM"
+    },
+    {
+      "code": "KZT",
+      "symbol": "\u20b8"
+    },
+    {
+      "code": "LTL",
+      "symbol": "Lt"
+    },
+    {
+      "code": "LVL",
+      "symbol": "Ls"
+    },
+    {
+      "code": "EEK",
+      "symbol": "kr"
+    },
+    {
+      "code": "STD",
+      "symbol": "Db"
+    },
+    {
+      "code": "SCR",
+      "symbol": "SRe"
+    },
+    {
+      "code": "SLL",
+      "symbol": "Le"
+    },
+    {
+      "code": "SBD",
+      "symbol": "$"
+    },
+    {
+      "code": "SZL",
+      "symbol": "L"
+    },
+    {
+      "code": "TJS",
+      "symbol": "\u0405\u041c"
+    },
+    {
+      "code": "FKP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "LAK",
+      "symbol": "\u20ad"
+    },
+    {
+      "code": "KPW",
+      "symbol": "\u20a9"
+    },
+    {
+      "code": "SHP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "SRD",
+      "symbol": "$"
+    },
+    {
+      "code": "FJD",
+      "symbol": "$"
+    },
+    {
+      "code": "XPF",
+      "symbol": "\u20a3"
+    },
+    {
+      "code": "GMD",
+      "symbol": "D"
+    },
+    {
+      "code": "GIP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "GYD",
+      "symbol": "$"
+    },
+    {
+      "code": "HTG",
+      "symbol": "G"
+    },
+    {
+      "code": "KGS",
+      "symbol": "\u041b\u0432"
+    },
+    {
+      "code": "LSL",
+      "symbol": "M"
+    },
+    {
+      "code": "LRD",
+      "symbol": "$"
+    },
+    {
+      "code": "MWK",
+      "symbol": "MK"
+    },
+    {
+      "code": "MVR",
+      "symbol": ".\u0783"
+    },
+    {
+      "code": "MRO",
+      "symbol": "UM"
+    },
+    {
+      "code": "MNT",
+      "symbol": "\u20ae"
+    },
+    {
+      "code": "PGK",
+      "symbol": "K"
+    },
+    {
+      "code": "WST",
+      "symbol": "T"
+    },
+    {
+      "code": "AOA",
+      "symbol": "Kz"
+    },
+    {
+      "code": "AWG",
+      "symbol": "\u0192"
+    },
+    {
+      "code": "BSD",
+      "symbol": "$"
+    },
+    {
+      "code": "BBD",
+      "symbol": "$"
+    },
+    {
+      "code": "BYN",
+      "symbol": "Br"
+    },
+    {
+      "code": "BMD",
+      "symbol": "$"
+    },
+    {
+      "code": "BTN",
+      "symbol": "Nu."
+    },
+    {
+      "code": "KYD",
+      "symbol": "$"
+    },
+    {
+      "code": "TMT",
+      "symbol": "m"
+    },
+    {
+      "code": "VUV",
+      "symbol": "Vt"
+    },
+    {
+      "code": "USD",
+      "symbol": "$"
+    },
+    {
+      "code": "BDT",
+      "symbol": "\u09f3"
+    },
+    {
+      "code": "CUP",
+      "symbol": "$"
+    },
+    {
+      "code": "KES",
+      "symbol": "Sh"
+    },
+    {
+      "code": "CUC",
+      "symbol": "$"
+    },
+    {
+      "code": "SSP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "YUD",
+      "symbol": "din."
+    },
+    {
+      "code": "CAD",
+      "symbol": "$"
+    },
+    {
+      "code": "EUR",
+      "symbol": "\u20ac"
+    },
+    {
+      "code": "AED",
+      "symbol": "\u062f.\u0625"
+    },
+    {
+      "code": "AFN",
+      "symbol": "\u060b"
+    },
+    {
+      "code": "ALL",
+      "symbol": "L"
+    },
+    {
+      "code": "ARS",
+      "symbol": "$"
+    },
+    {
+      "code": "AUD",
+      "symbol": "$"
+    },
+    {
+      "code": "BGN",
+      "symbol": "\u043b\u0432"
+    },
+    {
+      "code": "BHD",
+      "symbol": ".\u062f.\u0628"
+    },
+    {
+      "code": "BIF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "BND",
+      "symbol": "$"
+    },
+    {
+      "code": "BOB",
+      "symbol": "Bs."
+    },
+    {
+      "code": "BRL",
+      "symbol": "R$"
+    },
+    {
+      "code": "BWP",
+      "symbol": "P"
+    },
+    {
+      "code": "BYR",
+      "symbol": "Br"
+    },
+    {
+      "code": "BZD",
+      "symbol": "$"
+    },
+    {
+      "code": "CDF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "CHF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "CLP",
+      "symbol": "$"
+    },
+    {
+      "code": "CNY",
+      "symbol": "\u00a5"
+    },
+    {
+      "code": "COP",
+      "symbol": "$"
+    },
+    {
+      "code": "CRC",
+      "symbol": "\u20a1"
+    },
+    {
+      "code": "CVE",
+      "symbol": "Esc"
+    },
+    {
+      "code": "CZK",
+      "symbol": "K\u010d"
+    },
+    {
+      "code": "DJF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "DKK",
+      "symbol": "kr"
+    },
+    {
+      "code": "DOP",
+      "symbol": "$"
+    },
+    {
+      "code": "DZD",
+      "symbol": "\u062f.\u062c"
+    },
+    {
+      "code": "EGP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "ERN",
+      "symbol": "Nfk"
+    },
+    {
+      "code": "ETB",
+      "symbol": "Br"
+    },
+    {
+      "code": "GBP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "GEL",
+      "symbol": "\u10da"
+    },
+    {
+      "code": "GHS",
+      "symbol": "\u20b5"
+    },
+    {
+      "code": "GNF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "GTQ",
+      "symbol": "Q"
+    },
+    {
+      "code": "HKD",
+      "symbol": "$"
+    },
+    {
+      "code": "HNL",
+      "symbol": "L"
+    },
+    {
+      "code": "HRK",
+      "symbol": "kn"
+    },
+    {
+      "code": "HUF",
+      "symbol": "Ft"
+    },
+    {
+      "code": "IDR",
+      "symbol": "Rp"
+    },
+    {
+      "code": "ILS",
+      "symbol": "\u20aa"
+    },
+    {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    {
+      "code": "IQD",
+      "symbol": "\u0639.\u062f"
+    },
+    {
+      "code": "IRR",
+      "symbol": "\ufdfc"
+    },
+    {
+      "code": "ISK",
+      "symbol": "kr"
+    },
+    {
+      "code": "JMD",
+      "symbol": "$"
+    },
+    {
+      "code": "JOD",
+      "symbol": "\u062f.\u0627"
+    },
+    {
+      "code": "JPY",
+      "symbol": "\u00a5"
+    },
+    {
+      "code": "KHR",
+      "symbol": "\u17db"
+    },
+    {
+      "code": "KMF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "KRW",
+      "symbol": "\u20a9"
+    },
+    {
+      "code": "KWD",
+      "symbol": "\u062f.\u0643"
+    },
+    {
+      "code": "LBP",
+      "symbol": "\u0644.\u0644"
+    },
+    {
+      "code": "LKR",
+      "symbol": "Rs"
+    },
+    {
+      "code": "LYD",
+      "symbol": "\u0644.\u062f"
+    },
+    {
+      "code": "MAD",
+      "symbol": "\u062f.\u0645."
+    },
+    {
+      "code": "MDL",
+      "symbol": "L"
+    },
+    {
+      "code": "MGA",
+      "symbol": "Ar"
+    },
+    {
+      "code": "MKD",
+      "symbol": "\u0434\u0435\u043d"
+    },
+    {
+      "code": "MMK",
+      "symbol": "Ks"
+    },
+    {
+      "code": "MOP",
+      "symbol": "P"
+    },
+    {
+      "code": "MUR",
+      "symbol": "\u20a8"
+    },
+    {
+      "code": "MXN",
+      "symbol": "$"
+    },
+    {
+      "code": "MYR",
+      "symbol": "RM"
+    },
+    {
+      "code": "MZN",
+      "symbol": "MT"
+    },
+    {
+      "code": "NAD",
+      "symbol": "$"
+    },
+    {
+      "code": "NGN",
+      "symbol": "\u20a6"
+    },
+    {
+      "code": "NIO",
+      "symbol": "C$"
+    },
+    {
+      "code": "NOK",
+      "symbol": "kr"
+    },
+    {
+      "code": "NPR",
+      "symbol": "\u20a8"
+    },
+    {
+      "code": "NZD",
+      "symbol": "$"
+    },
+    {
+      "code": "OMR",
+      "symbol": "\u0631.\u0639."
+    },
+    {
+      "code": "PAB",
+      "symbol": "B/."
+    },
+    {
+      "code": "PEN",
+      "symbol": "S/."
+    },
+    {
+      "code": "PHP",
+      "symbol": "\u20b1"
+    },
+    {
+      "code": "PKR",
+      "symbol": "\u20a8"
+    },
+    {
+      "code": "PLN",
+      "symbol": "z\u0142"
+    },
+    {
+      "code": "PYG",
+      "symbol": "\u20b2"
+    },
+    {
+      "code": "QAR",
+      "symbol": "\u0631.\u0642"
+    },
+    {
+      "code": "RON",
+      "symbol": "lei"
+    },
+    {
+      "code": "RSD",
+      "symbol": "\u0434\u0438\u043d."
+    },
+    {
+      "code": "RUB",
+      "symbol": "\u20bd"
+    },
+    {
+      "code": "RWF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "SAR",
+      "symbol": "\u0631.\u0633"
+    },
+    {
+      "code": "SDG",
+      "symbol": "\u062c.\u0633."
+    },
+    {
+      "code": "SEK",
+      "symbol": "kr"
+    },
+    {
+      "code": "SGD",
+      "symbol": "$"
+    },
+    {
+      "code": "SOS",
+      "symbol": "Sh"
+    },
+    {
+      "code": "SYP",
+      "symbol": "\u00a3"
+    },
+    {
+      "code": "THB",
+      "symbol": "\u0e3f"
+    },
+    {
+      "code": "TND",
+      "symbol": "\u062f.\u062a"
+    },
+    {
+      "code": "TOP",
+      "symbol": "T$"
+    },
+    {
+      "code": "TTD",
+      "symbol": "$"
+    },
+    {
+      "code": "TWD",
+      "symbol": "$"
+    },
+    {
+      "code": "TZS",
+      "symbol": "Sh"
+    },
+    {
+      "code": "UAH",
+      "symbol": "\u20b4"
+    },
+    {
+      "code": "UGX",
+      "symbol": "Sh"
+    },
+    {
+      "code": "UYU",
+      "symbol": "$"
+    },
+    {
+      "code": "VEF",
+      "symbol": "Bs F"
+    },
+    {
+      "code": "VND",
+      "symbol": "\u20ab"
+    },
+    {
+      "code": "XAF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "XOF",
+      "symbol": "Fr"
+    },
+    {
+      "code": "YER",
+      "symbol": "\ufdfc"
+    },
+    {
+      "code": "ZAR",
+      "symbol": "Rs"
+    },
+    {
+      "code": "XCD",
+      "symbol": "$"
+    },
+    {
+      "code": "TRY",
+      "symbol": "\u20ba"
+    },
+    {
+      "code": "UZS",
+      "symbol": "so'm"
+    },
+    {
+      "code": "ZMW",
+      "symbol": "ZK"
+    }
+  ]
+}

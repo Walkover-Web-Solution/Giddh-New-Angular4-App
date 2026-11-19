@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No Eway Bill User Found for this company.",
+  "code": "NOT_FOUND"
+}

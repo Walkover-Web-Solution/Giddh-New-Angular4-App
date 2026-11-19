@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "code": "INVALID_JSON",
+  "message": "Please check provided JSON request is not a valid JSON."
+}

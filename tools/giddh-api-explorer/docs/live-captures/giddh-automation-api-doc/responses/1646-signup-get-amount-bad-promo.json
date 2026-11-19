@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "message": "Promo code not found.",
+  "code": "NOT_FOUND",
+  "httpStatus": 404,
+  "liveHost": "https://api.giddh.com"
+}

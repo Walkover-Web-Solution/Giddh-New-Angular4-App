@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 3,
+    "totalPages": 1,
+    "totalItems": 3,
+    "results": [
+      {
+        "name": "API Doc Gadget",
+        "inventoryType": "PRODUCT",
+        "uniqueName": "apidoc-gadget",
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "stockUnits": [
+          {
+            "name": "Piece",
+            "code": "pcs",
+            "group": {
+              "name": "Main Group",
+              "uniqueName": "maingroup"
+            },
+            "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Consulting Hour",
+        "inventoryType": "PRODUCT",
+        "uniqueName": "apidoc-service-hour",
+        "stockGroup": {
+          "name": "API Doc Services",
+          "uniqueName": "apidoc-services"
+        },
+        "stockUnits": [
+          {
+            "name": "Piece",
+            "code": "pcs",
+            "group": {
+              "name": "Main Group",
+              "uniqueName": "maingroup"
+            },
+            "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Widget",
+        "inventoryType": "PRODUCT",
+        "uniqueName": "apidoc-widget",
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "stockUnits": [
+          {
+            "name": "Piece",
+            "code": "pcs",
+            "group": {
+              "name": "Main Group",
+              "uniqueName": "maingroup"
+            },
+            "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+          }
+        ]
+      }
+    ]
+  }
+}

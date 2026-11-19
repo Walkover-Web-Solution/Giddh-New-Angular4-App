@@ -1,0 +1,18 @@
+{
+  "status": "success",
+  "body": [
+    "LEDGER",
+    "INVOICE",
+    "MANAGE",
+    "DASHBOARD",
+    "REPORT",
+    "SETTINGS",
+    "INVENTORY",
+    "RECURRING_ENTRY",
+    "AUDIT_LOGS",
+    "SEARCH",
+    "SHARE",
+    "PETTY_CASH_MANAGER",
+    "INTEGRATION"
+  ]
+}

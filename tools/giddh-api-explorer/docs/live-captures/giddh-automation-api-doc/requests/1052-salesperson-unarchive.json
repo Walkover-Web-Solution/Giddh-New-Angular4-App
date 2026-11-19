@@ -1,0 +1,7 @@
+{
+  "method": "POST",
+  "path": "/company/giddhain1792673422178091xos/salesperson/apidocsalesperson/archive",
+  "body": {
+    "action": "UNARCHIVED"
+  }
+}

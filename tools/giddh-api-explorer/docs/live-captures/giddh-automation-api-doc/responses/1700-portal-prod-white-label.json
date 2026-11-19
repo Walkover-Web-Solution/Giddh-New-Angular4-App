@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "body": {
+    "proxyReferenceId": "117230e170290843965805217bfd25",
+    "proxyUrl": "https://routes.msg91.com",
+    "proxyApiUrl": "https://routes.msg91.com/api/proxy/117230/24yrfox2",
+    "websiteDomain": "https://giddh.com",
+    "brandName": "Giddh",
+    "giddhWhiteLabel": {
+      "uniqueName": "054eb5a07bda666ce964d441914b87fa",
+      "baseDomain": "https://books.giddh.com",
+      "domainName": "https://portal.giddh.com",
+      "apiDomain": "https://api.giddh.com",
+      "portalDomain": "https://portal.giddh.com"
+    },
+    "paymentProviderList": []
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com",
+  "env": "prod"
+}

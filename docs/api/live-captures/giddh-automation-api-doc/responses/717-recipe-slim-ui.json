@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "body": {
+    "stock": {
+      "name": "API Doc Widget",
+      "uniqueName": "apidoc-widget"
+    },
+    "manufacturingDetails": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "body": {
+    "platforms": [
+      {
+        "name": "MSG91",
+        "uniqueName": "",
+        "fields": [
+          {
+            "field": "auth_key",
+            "label": "Auth Key",
+            "placeHolder": "Enter Auth Key",
+            "regex": "",
+            "value": "",
+            "mandatory": true
+          },
+          {
+            "field": "whitelist_ips",
+            "label": "Whitelist Our Ips",
+            "placeHolder": null,
+            "regex": "",
+            "value": "127.0.0.1",
+            "mandatory": false
+          }
+        ]
+      }
+    ]
+  }
+}

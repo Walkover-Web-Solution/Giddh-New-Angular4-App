@@ -1,0 +1,10 @@
+[
+  {
+    "endpointId": "xPdYugvoPz-k",
+    "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/download-file:PortalController:download"
+  },
+  {
+    "endpointId": "xjZ3WpIt1dI_",
+    "catalogId": "accounting-microservice:POST:/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoice-pay-request:PortalController:getInvoicePaymentRequest"
+  }
+]

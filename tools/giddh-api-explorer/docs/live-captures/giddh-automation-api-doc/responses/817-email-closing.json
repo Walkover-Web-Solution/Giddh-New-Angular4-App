@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No accounts provided in request.",
+  "code": "INVALID_REQUEST"
+}

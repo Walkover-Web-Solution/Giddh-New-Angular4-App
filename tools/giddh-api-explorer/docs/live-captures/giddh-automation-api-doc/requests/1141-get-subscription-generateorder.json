@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/subscription/generateOrder?amount=placeholder&currency=INR"
+}

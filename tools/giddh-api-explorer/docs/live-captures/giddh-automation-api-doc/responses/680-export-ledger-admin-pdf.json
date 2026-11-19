@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Failed to generate ledger view detailed PDF: Cannot invoke \"com.giddh.api.services.CompanyExportSettingService.getFileName(com.giddh.api.dao.jpa.Company, com.giddh.api.dao.jpa.Branch, com.giddh.api.dao.jpa.Account, String, String, String)\" because \"com.giddh.api.services.v2.ExportLedgerViewV2Service.companyExportSettingService\" is null",
+  "code": "INTERNAL_SERVER_ERROR"
+}

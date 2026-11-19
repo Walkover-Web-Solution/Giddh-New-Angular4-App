@@ -1,0 +1,629 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261022-3",
+        "creditTotal": 250.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "d9ti41792675101804",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.two@example.com",
+        "mobileNo": "919876543220",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "API Doc Customer Two address",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 250.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261022-4",
+        "creditTotal": 175.5,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "zu7vt1792675102297",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.three@example.com",
+        "mobileNo": "919876543221",
+        "gstin": "",
+        "pincode": "",
+        "address": "API Doc Customer Three address",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 175.5
+      },
+      {
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261022-5",
+        "creditTotal": 500.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "xbprr1792675102655",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.one@example.com",
+        "mobileNo": "919876543210",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "Customer address line 1",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 500.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261022-2",
+        "creditTotal": 100.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "kbdzh1792674364704",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.one@example.com",
+        "mobileNo": "919876543210",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "Customer address line 1",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 100.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261022-1",
+        "creditTotal": 100.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "7xdx51792674363621",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.one@example.com",
+        "mobileNo": "919876543210",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "Customer address line 1",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 100.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "credit note",
+        "voucherNumber": "CR-261022-1",
+        "creditTotal": 0.0,
+        "debitTotal": 50.0,
+        "type": "ENTRY",
+        "uniqueName": "qpnug1792675103731",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.two@example.com",
+        "mobileNo": "919876543220",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "API Doc Customer Two address",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 50.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "credit note",
+        "voucherNumber": "CR-261022-2",
+        "creditTotal": 0.0,
+        "debitTotal": 25.0,
+        "type": "ENTRY",
+        "uniqueName": "dhg9c1792675104051",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.two@example.com",
+        "mobileNo": "919876543220",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "API Doc Customer Two address",
+        "categoryTotals": [],
+        "date": "22-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 25.0
+      },
+      {
+        "account": {
+          "name": "Cash",
+          "uniqueName": "cash"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Cash",
+          "uniqueName": "cash"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "",
+        "creditTotal": 25.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "tpfal1792733167512",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "",
+        "mobileNo": "",
+        "gstin": "",
+        "pincode": "",
+        "address": null,
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 25.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261023-4",
+        "creditTotal": 80.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "hkuyk1792733290200",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.three@example.com",
+        "mobileNo": "919876543221",
+        "gstin": "",
+        "pincode": "",
+        "address": "API Doc Customer Three address",
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 80.0
+      },
+      {
+        "account": {
+          "name": "Cash",
+          "uniqueName": "cash"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Cash",
+          "uniqueName": "cash"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261023-2",
+        "creditTotal": 50.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "n3y931792730979987",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "",
+        "mobileNo": "",
+        "gstin": "",
+        "pincode": "",
+        "address": null,
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 50.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Two",
+          "uniqueName": "apidoc-customer-two"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261023-1",
+        "creditTotal": 300.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "e2q3r1792730977051",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [
+          {
+            "stock": {
+              "name": "API Doc Gadget",
+              "uniqueName": "apidoc-gadget"
+            },
+            "stockGroup": null,
+            "quantity": 2.0,
+            "amount": 300.0,
+            "rate": 150.0,
+            "unit": {
+              "name": "temp",
+              "code": "pcs"
+            },
+            "warehouse": null,
+            "variant": null,
+            "taxInclusive": false,
+            "stockLocation": null,
+            "hsnNumber": null,
+            "sacNumber": null,
+            "skuCode": null,
+            "batches": null,
+            "defaultCompanyAddress": true
+          }
+        ],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.two@example.com",
+        "mobileNo": "919876543220",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "API Doc Customer Two address",
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 300.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261023-6",
+        "creditTotal": 77.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "uuttr1792733957144",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.three@example.com",
+        "mobileNo": "919876543221",
+        "gstin": "",
+        "pincode": "",
+        "address": "API Doc Customer Three address",
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 77.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer One",
+          "uniqueName": "apidoc-customer-one"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261023-7",
+        "creditTotal": 100.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "d1otu1792738840566",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [
+          {
+            "stock": {
+              "name": "API Doc Widget",
+              "uniqueName": "apidoc-widget"
+            },
+            "stockGroup": null,
+            "quantity": 1.0,
+            "amount": 100.0,
+            "rate": 100.0,
+            "unit": {
+              "name": "temp",
+              "code": "pcs"
+            },
+            "warehouse": null,
+            "variant": null,
+            "taxInclusive": false,
+            "stockLocation": null,
+            "hsnNumber": null,
+            "sacNumber": null,
+            "skuCode": null,
+            "batches": null,
+            "defaultCompanyAddress": true
+          }
+        ],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.one@example.com",
+        "mobileNo": "919876543210",
+        "gstin": "23AAACC1206D1ZM",
+        "pincode": "",
+        "address": "Customer address line 1",
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 100.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "credit note",
+        "voucherNumber": "CR-261023-1",
+        "creditTotal": 0.0,
+        "debitTotal": 80.0,
+        "type": "ENTRY",
+        "uniqueName": "hokgd1792733290607",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.three@example.com",
+        "mobileNo": "919876543221",
+        "gstin": "",
+        "pincode": "",
+        "address": "API Doc Customer Three address",
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 80.0
+      },
+      {
+        "account": {
+          "name": "API Doc Customer Three",
+          "uniqueName": "apidoc-customer-three"
+        },
+        "salesPurchaseAccount": {
+          "name": "Sales",
+          "uniqueName": "sales"
+        },
+        "group": {
+          "name": "Sundry Debtors",
+          "uniqueName": "sundrydebtors"
+        },
+        "voucherType": "sales",
+        "voucherNumber": "261023-5",
+        "creditTotal": 99.0,
+        "debitTotal": 0.0,
+        "type": "ENTRY",
+        "uniqueName": "rqer91792733952717",
+        "discountTotal": 0.0,
+        "taxTotal": 0.0,
+        "tdsTotal": 0.0,
+        "tcsTotal": 0.0,
+        "stocks": [],
+        "quantityTotal": 0.0,
+        "rateTotal": 0,
+        "roundOff": 0.0,
+        "email": "customer.three@example.com",
+        "mobileNo": "919876543221",
+        "gstin": "",
+        "pincode": "",
+        "address": "API Doc Customer Three address",
+        "categoryTotals": [],
+        "date": "23-10-2026",
+        "autoGenVoucherNum": true,
+        "netTotal": 99.0
+      }
+    ],
+    "creditTotal": 1856.5,
+    "debitTotal": 155.0,
+    "discountTotal": 0.0,
+    "taxTotal": 0.0,
+    "tdsTotal": 0.0,
+    "tcsTotal": 0.0,
+    "quantityTotal": 3.0,
+    "rateTotal": 250.0,
+    "roundOff": 0.0,
+    "netTotal": {
+      "amount": 1701.5,
+      "type": "CREDIT"
+    },
+    "page": 1,
+    "count": 50,
+    "totalPages": 1,
+    "totalItems": 15,
+    "from": "01-04-2026",
+    "to": "31-03-2027"
+  }
+}

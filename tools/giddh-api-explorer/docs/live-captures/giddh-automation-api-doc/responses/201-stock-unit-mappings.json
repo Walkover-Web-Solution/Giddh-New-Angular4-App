@@ -1,0 +1,124 @@
+{
+  "status": "success",
+  "body": [
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Kilogram",
+        "code": "kg",
+        "uniqueName": "kg"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    },
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Litre",
+        "code": "l",
+        "uniqueName": "l"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    },
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Hour",
+        "code": "hr",
+        "uniqueName": "hr"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    },
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Meter",
+        "code": "m",
+        "uniqueName": "m"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    },
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Number",
+        "code": "nos",
+        "uniqueName": "nos"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    },
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Others",
+        "code": "oth",
+        "uniqueName": "oth"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    },
+    {
+      "quantity": null,
+      "stockUnitX": {
+        "name": "Piece",
+        "code": "pcs",
+        "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+      },
+      "stockUnitY": {},
+      "stockUnitXGroup": {
+        "name": "Main Group",
+        "uniqueName": "maingroup"
+      },
+      "stockUnitYGroup": {
+        "name": null,
+        "uniqueName": null
+      }
+    }
+  ]
+}

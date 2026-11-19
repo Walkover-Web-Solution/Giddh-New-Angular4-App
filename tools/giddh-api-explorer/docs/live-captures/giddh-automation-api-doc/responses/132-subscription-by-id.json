@@ -1,0 +1,54 @@
+{
+  "status": "success",
+  "body": {
+    "billingAccountUniqueName": "k2b1712141952375",
+    "taxTotal": 720.0,
+    "period": "YEARLY",
+    "billingDetails": {
+      "state": {
+        "name": "Madhya Pradesh",
+        "code": "MP"
+      },
+      "address": "abcdhdddd",
+      "country": {
+        "name": "India",
+        "code": "IN"
+      },
+      "billingName": "Divyanshu",
+      "pincode": "484223",
+      "email": "g@gmail.com",
+      "companyName": "Arabic Template",
+      "mobileNumber": "917781123456",
+      "uniqueName": "k2b1712141952375",
+      "taxNumber": ""
+    },
+    "isPrepaidExist": false,
+    "region": {
+      "name": "India",
+      "code": "IND"
+    },
+    "planCurrency": {
+      "code": "INR",
+      "symbol": "\u20b9"
+    },
+    "usageCompanyCount": 1,
+    "usageInvoiceCount": 9,
+    "usageBillCount": 6,
+    "planName": "WhiteLabelPlan",
+    "autoPay": false,
+    "status": "active",
+    "expiry": "21-10-2027",
+    "planUniqueName": "ltv1768484147685",
+    "amount": 4000.0,
+    "totalInvoices": 1200,
+    "totalBills": 1200,
+    "totalCompaniesAllowed": 12,
+    "companiesList": [
+      {
+        "name": "Giddh Automation API DOC",
+        "uniqueName": "giddhain1792673422178091xos"
+      }
+    ],
+    "isOwner": true
+  }
+}

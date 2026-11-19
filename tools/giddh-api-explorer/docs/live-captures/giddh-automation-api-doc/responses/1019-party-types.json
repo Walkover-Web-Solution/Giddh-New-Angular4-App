@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "body": {
+    "partyTypes": [
+      {
+        "label": "NOT APPLICABLE",
+        "value": "not applicable"
+      },
+      {
+        "label": "DEEMED EXPORT",
+        "value": "deemed export"
+      },
+      {
+        "label": "GOVERNMENT ENTITY",
+        "value": "government entity"
+      },
+      {
+        "label": "SEZ",
+        "value": "sez"
+      }
+    ]
+  }
+}

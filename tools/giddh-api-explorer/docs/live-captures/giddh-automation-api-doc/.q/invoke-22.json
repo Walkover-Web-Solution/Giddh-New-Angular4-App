@@ -1,0 +1,1 @@
+{"orgId":"83427","endpointId":"_xXZmuQxHs_b","description":"Get Stock Variants With Variant Unit Based On User Type. Part of the Details APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"userType":{"checked":"true","value":"all","description":"User type query parameter. Default: all."}},"body":{"type":"none"}}

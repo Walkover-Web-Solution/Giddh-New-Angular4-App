@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "AOIwqOVvO0Ph", "description": "Get Company Logs. Part of the Logs APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"page": {"checked": "true", "value": "0", "description": "Page number (1-based). Default: 0."}}, "body": {"type": "none"}}

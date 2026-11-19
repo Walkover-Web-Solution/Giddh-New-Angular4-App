@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "'LEDGER_WITH_CLOSING' is not a valid trigger module, Allowed values are (LEDGER_WITH_CLOSING_BALANCE,LEDGER_BALANCE,VOUCHER_DUE).",
+  "code": "INVALID_REQUEST"
+}

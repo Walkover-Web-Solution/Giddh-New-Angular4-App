@@ -1,0 +1,71 @@
+{
+  "created": [
+    {
+      "i": 0,
+      "id": "P5dBWc4HicTf",
+      "key": "GET /company/{companyUniqueName}/batch/all"
+    },
+    {
+      "i": 1,
+      "id": "NacniTNLlhYd",
+      "key": "GET /company/{companyUniqueName}/batch/expiry-report"
+    },
+    {
+      "i": 2,
+      "id": "jAaEo6puyZlk",
+      "key": "GET /company/{companyUniqueName}/batch/stock/{stockUniqueName}/availability"
+    },
+    {
+      "i": 3,
+      "id": "bwshO3_93LYc",
+      "key": "GET /company/{companyUniqueName}/batch/variant/{variantUniqueName}/availability"
+    },
+    {
+      "i": 4,
+      "id": "Z3N1gUozF0n_",
+      "key": "GET /company/{companyUniqueName}/batch/variant/{variantUniqueName}/fifo-allocation"
+    }
+  ],
+  "failed": [],
+  "remaining": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43
+  ]
+}

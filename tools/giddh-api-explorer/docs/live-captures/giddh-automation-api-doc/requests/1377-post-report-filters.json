@@ -1,0 +1,7 @@
+{
+  "method": "POST",
+  "path": "/report-filters?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+  "body": {
+    "module": "placeholder"
+  }
+}

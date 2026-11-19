@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Missing Session-Id header in request",
+  "code": "MISSING_HEADER"
+}

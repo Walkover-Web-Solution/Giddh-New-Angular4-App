@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Difference of months of from and to date must be equal to or below 3 months.",
+  "code": "INVALID_DATE"
+}

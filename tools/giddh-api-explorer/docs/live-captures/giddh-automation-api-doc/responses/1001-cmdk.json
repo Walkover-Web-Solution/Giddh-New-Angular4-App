@@ -1,0 +1,276 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 20,
+    "totalPages": 1,
+    "totalItems": 10,
+    "results": [
+      {
+        "countries": [],
+        "type": "GROUP",
+        "name": "API Doc Custom Assets",
+        "uniqueName": "apidoc-custom-assets",
+        "route": "",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 2,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Bank HDFC",
+        "uniqueName": "apidoc-bank-hdfc",
+        "route": "/pages/ledger/apidoc-bank-hdfc",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          },
+          {
+            "name": "Bank Accounts",
+            "uniqueName": "bankaccounts",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Vendor One",
+        "uniqueName": "apidoc-vendor-one",
+        "route": "/pages/ledger/apidoc-vendor-one",
+        "parentGroups": [
+          {
+            "name": "Current Liabilities",
+            "uniqueName": "currentliabilities",
+            "category": {
+              "name": "liabilities"
+            }
+          },
+          {
+            "name": "Sundry Creditors",
+            "uniqueName": "sundrycreditors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Vendor Two",
+        "uniqueName": "apidoc-vendor-two",
+        "route": "/pages/ledger/apidoc-vendor-two",
+        "parentGroups": [
+          {
+            "name": "Current Liabilities",
+            "uniqueName": "currentliabilities",
+            "category": {
+              "name": "liabilities"
+            }
+          },
+          {
+            "name": "Sundry Creditors",
+            "uniqueName": "sundrycreditors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Customer One",
+        "uniqueName": "apidoc-customer-one",
+        "route": "/pages/ledger/apidoc-customer-one",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Customer Two",
+        "uniqueName": "apidoc-customer-two",
+        "route": "/pages/ledger/apidoc-customer-two",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Vendor Three",
+        "uniqueName": "apidoc-vendor-three",
+        "route": "/pages/ledger/apidoc-vendor-three",
+        "parentGroups": [
+          {
+            "name": "Current Liabilities",
+            "uniqueName": "currentliabilities",
+            "category": {
+              "name": "liabilities"
+            }
+          },
+          {
+            "name": "Sundry Creditors",
+            "uniqueName": "sundrycreditors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Customer Three",
+        "uniqueName": "apidoc-customer-three",
+        "route": "/pages/ledger/apidoc-customer-three",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Walk-in Customer",
+        "uniqueName": "apidoc-customer-b2c",
+        "route": "/pages/ledger/apidoc-customer-b2c",
+        "parentGroups": [
+          {
+            "name": "Current Assets",
+            "uniqueName": "currentassets",
+            "category": {
+              "name": "assets"
+            }
+          },
+          {
+            "name": "Sundry Debtors",
+            "uniqueName": "sundrydebtors",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      },
+      {
+        "countries": [],
+        "type": "ACCOUNT",
+        "name": "API Doc Shrinkage Expense",
+        "uniqueName": "apidoc-shrinkage-expense",
+        "route": "/pages/ledger/apidoc-shrinkage-expense",
+        "parentGroups": [
+          {
+            "name": "Indirect Expenses",
+            "uniqueName": "indirectexpenses",
+            "category": {
+              "name": "expenses"
+            }
+          },
+          {
+            "name": "Other Indirect Expenses",
+            "uniqueName": "otherindirectexpenses",
+            "category": {}
+          }
+        ],
+        "mergedAccounts": "",
+        "order": 3,
+        "isMobile": false,
+        "isMobileDefault": false,
+        "notCompanyViewable": true,
+        "notBranchViewable": true
+      }
+    ]
+  }
+}

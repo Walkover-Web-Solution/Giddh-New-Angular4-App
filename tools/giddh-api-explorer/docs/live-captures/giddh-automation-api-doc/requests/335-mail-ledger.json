@@ -1,0 +1,8 @@
+{
+  "email": {
+    "to": [
+      "apidoc-test@example.com"
+    ]
+  },
+  "message": "API capture statement"
+}

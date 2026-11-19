@@ -1,0 +1,4 @@
+{
+  "method": "GET",
+  "path": "/v2/subscription/billing-account/get?billingAccountUnqiueName=k2b1712141952375"
+}

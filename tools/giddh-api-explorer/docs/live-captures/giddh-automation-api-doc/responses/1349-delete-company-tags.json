@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "No tag found with this uniqueName.",
+  "code": "TAG_NOT_FOUND"
+}

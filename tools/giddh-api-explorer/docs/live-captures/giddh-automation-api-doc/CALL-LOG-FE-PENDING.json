@@ -1,0 +1,2594 @@
+[
+  {
+    "tag": "1100-session-check",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1101-delete-company-accounts",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-disposable-missing-xx",
+    "http": "404",
+    "status": "error",
+    "message": "We apologize we cannot honor your request, Please make sure account with uniqueName 'apidoc-disposable-missing-xx' exist and you have appropriate permissions."
+  },
+  {
+    "tag": "1102-get-company-accounts",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1103-put-company-accounts",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one?branchUniqueName=giddhautomationapidoc",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1104-get-company-accounts-autopaid",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/autopaid?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1105-get-company-accounts-contacts",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/contacts",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1106-put-company-accounts-contacts",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/contacts",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1107-delete-company-accounts-entries",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/entries?branchUniqueName=giddhautomationapidoc",
+    "http": "400",
+    "status": "error",
+    "message": "Please check, Provided Json is not a valid Json."
+  },
+  {
+    "tag": "1108-post-company-accounts-invoices-generate",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/invoices/generate?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1109-put-company-accounts-merge",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/merge",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1110-put-company-accounts-move",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/move",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1111-get-company-accounts-project-entries",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/project-entries?from=01-04-2026&page=1&q=api&branchUniqueName=giddhautomationapidoc",
+    "http": "406",
+    "status": "error",
+    "message": "Account must belong to 'income' or 'expense' category."
+  },
+  {
+    "tag": "1112-post-company-accounts-purchase-order-mail",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-order/apidoc-widget/mail?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1113-patch-company-accounts-purchase-record",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1114-get-company-accounts-purchase-record-download-file",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/download-file?voucherVersion=2&uniqueName=apidoc-widget&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1115-post-company-accounts-purchase-record-generate",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/generate?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1116-get-company-accounts-purchase-record-validate",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/validate?voucherVersion=2&taxNumber=apidocgst18&purchaseDate=pze1792734608469",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1117-post-company-accounts-purchase-record-versions-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/versions/all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1118-get-company-accounts-purchase-record",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/apidoc-widget?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1119-get-company-accounts-purchase-record-download",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/apidoc-widget/download?voucherVersion=2&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1120-post-company-accounts-purchase-record-mail",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-vendor-one/purchase-record/apidoc-widget/mail?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1121-get-company-accounts-shared-with",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/shared-with",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1122-post-company-accounts-un-merge",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/un-merge",
+    "http": "412",
+    "status": "error",
+    "message": "Account with no merged account can not be un-merged."
+  },
+  {
+    "tag": "1123-post-company-accounts-v2-export-ledger-with-invoice-file",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/v2/export-ledger-with-invoice/file?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherVersion=2&type=sales&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1124-post-company-accounts-v3-export-ledger-file",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/v3/export-ledger/file?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherVersion=2&type=sales&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1125-delete-company-accounts-vouchers",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "400",
+    "status": "error",
+    "message": "Please check provided JSON request is not a valid JSON."
+  },
+  {
+    "tag": "1126-post-company-accounts-vouchers",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers?branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported."
+  },
+  {
+    "tag": "1127-put-company-accounts-vouchers",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers?voucherVersion=2",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported."
+  },
+  {
+    "tag": "1128-post-company-accounts-vouchers-generate",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers/generate?branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1129-delete-company-bank-accounts-transactions",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/bank/accounts/apidoc-bank-hdfc/transactions?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "400",
+    "status": "error",
+    "message": "Please check, Provided Json is not a valid Json."
+  },
+  {
+    "tag": "1130-post-v2-company-accounts-send-mail",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/send-mail?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1131-patch-v2-company-accounts",
+    "method": "PATCH",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1132-post-v2-company-accounts-balance",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/balance?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1133-post-v2-company-accounts-invoice-preview",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/invoice/preview?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1134-put-v2-company-accounts-invoices",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/invoices?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1135-post-v2-company-accounts-invoices-generate",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/invoices/generate?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1136-delete-v2-company-accounts-report-comment",
+    "method": "DELETE",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/report-comment?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "404",
+    "status": "error",
+    "message": "Comment not found for given account"
+  },
+  {
+    "tag": "1137-post-v2-company-accounts-report-comment",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/report-comment?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "400",
+    "status": "error",
+    "message": "Description cannot be blank."
+  },
+  {
+    "tag": "1138-post-v2-company-download-inventory-arrangedby-accounts",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/download-inventory-arrangedby-accounts?branchUniqueName=giddhautomationapidoc&from=01-04-2026",
+    "http": "409",
+    "status": "error",
+    "message": "Please provide to date along with from date"
+  },
+  {
+    "tag": "1139-post-v2-company-groups-flatten-groups-with-accounts",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/groups/flatten-groups-with-accounts?page=1&query=api",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1140-post-v4-company-accounts-vouchers-bulk-generate",
+    "method": "POST",
+    "path": "/v4/company/giddhain1792673422178091xos/accounts/apidoc-customer-one/vouchers/bulk-generate?branchUniqueName=giddhautomationapidoc&voucherVersion=2&combined=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1141-get-subscription-generateorder",
+    "method": "GET",
+    "path": "/subscription/generateOrder?amount=placeholder&currency=INR",
+    "http": "403",
+    "status": "error",
+    "message": "Something went wrong, please try again later"
+  },
+  {
+    "tag": "1142-post-subscription-paypal-order-capture",
+    "method": "POST",
+    "path": "/subscription/paypal/order/ORDER-PLACEHOLDER/capture?subscriptionId=SUB-20261022-5",
+    "http": "406",
+    "status": "error",
+    "message": "INVALID_RESOURCE_ID"
+  },
+  {
+    "tag": "1143-post-v2-subscription",
+    "method": "POST",
+    "path": "/v2/subscription",
+    "http": "400",
+    "status": "error",
+    "message": "Duration type must be specified."
+  },
+  {
+    "tag": "1144-post-v2-subscription-add-payment-method",
+    "method": "POST",
+    "path": "/v2/subscription/add-payment-method",
+    "http": "406",
+    "status": "error",
+    "message": "Please provide subscription id."
+  },
+  {
+    "tag": "1145-post-v2-subscription-add-wallet-amount",
+    "method": "POST",
+    "path": "/v2/subscription/add-wallet-amount?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "400",
+    "status": "error",
+    "message": "Duration type must be specified."
+  },
+  {
+    "tag": "1146-patch-v2-subscription-billing-account",
+    "method": "PATCH",
+    "path": "/v2/subscription/billing-account/k2b1712141952375",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1147-post-v2-subscription-buy-plan",
+    "method": "POST",
+    "path": "/v2/subscription/buy-plan",
+    "http": "400",
+    "status": "error",
+    "message": "Duration type must be specified."
+  },
+  {
+    "tag": "1148-post-v2-subscription-change-plan",
+    "method": "POST",
+    "path": "/v2/subscription/change-plan",
+    "http": "400",
+    "status": "error",
+    "message": "Duration type must be specified."
+  },
+  {
+    "tag": "1149-post-v2-subscription-get-amount",
+    "method": "POST",
+    "path": "/v2/subscription/get-amount",
+    "http": "400",
+    "status": "error",
+    "message": "Duration type must be specified."
+  },
+  {
+    "tag": "1150-post-v2-subscription-list",
+    "method": "POST",
+    "path": "/v2/subscription/list?page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1151-delete-v2-subscription-payment-method",
+    "method": "DELETE",
+    "path": "/v2/subscription/payment-method/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Payment method not found by unique name placeholder."
+  },
+  {
+    "tag": "1152-patch-v2-subscription-payment-method",
+    "method": "PATCH",
+    "path": "/v2/subscription/payment-method/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Payment method not found by unique name placeholder."
+  },
+  {
+    "tag": "1153-post-v2-subscription-transfer-ownership",
+    "method": "POST",
+    "path": "/v2/subscription/transfer/ownership?subscriptionId=SUB-20261022-5",
+    "http": "400",
+    "status": "error",
+    "message": "The email: null is invalid."
+  },
+  {
+    "tag": "1154-post-v2-subscription-update",
+    "method": "POST",
+    "path": "/v2/subscription/update",
+    "http": "400",
+    "status": "error",
+    "message": "Duration type must be specified."
+  },
+  {
+    "tag": "1155-post-v2-subscription-verify-ownership",
+    "method": "POST",
+    "path": "/v2/subscription/verify/ownership?requestId=placeholder",
+    "http": "406",
+    "status": "error",
+    "message": "This invitation has expired and cannot be used anymore."
+  },
+  {
+    "tag": "1156-get-v2-subscription-payment-save-razorpay-token",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5/payment/placeholder/save-razorpay-token?orderId=ORDER-PLACEHOLDER",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1157-get-v2-subscription-payment-save-stripe-payment",
+    "method": "GET",
+    "path": "/v2/subscription/SUB-20261022-5/payment/placeholder/save-stripe-payment",
+    "http": "406",
+    "status": "error",
+    "message": "Failed to process automatic payment. Please try again or update your payment method."
+  },
+  {
+    "tag": "1158-delete-company-stock-group",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products",
+    "http": "412",
+    "status": "error",
+    "message": "Stock group cannot be deleted as one or more stock has manufacturing transactions. Please delete the manufacturing transactions before deleting stock group."
+  },
+  {
+    "tag": "1159-get-company-stock-group",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1160-put-company-stock-group",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1161-get-company-stock-group-download-inventory-report-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/download-inventory-report-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1162-post-company-stock-group-download-inventory-report-v2",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/download-inventory-report-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1163-post-company-stock-group-inventory-report-v3",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/inventory-report-v3?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "404",
+    "status": "error",
+    "message": "No stock group found with apidoc-products in selected `Giddh Automation API DOC` (uniquename: giddhain1792673422178091xos)"
+  },
+  {
+    "tag": "1164-get-company-stock-group-report",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/report?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "404",
+    "status": "error",
+    "message": "No stock group found with apidoc-products in selected `Giddh Automation API DOC` (uniquename: giddhain1792673422178091xos)"
+  },
+  {
+    "tag": "1165-post-company-stock-group-stock",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "No stock group found with apidoc-products in selected `Giddh Automation API DOC` (uniquename: giddhain1792673422178091xos)"
+  },
+  {
+    "tag": "1166-delete-company-stock-group-stock",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget",
+    "http": "400",
+    "status": "error",
+    "message": "Stock apidoc-widget doesnot belong to stockGroup apidoc-products"
+  },
+  {
+    "tag": "1167-get-company-stock-group-stock",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget?branchUniqueName=giddhautomationapidoc",
+    "http": "400",
+    "status": "error",
+    "message": "Stock apidoc-widget doesnot belong to stockGroup apidoc-products"
+  },
+  {
+    "tag": "1168-put-company-stock-group-stock",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget",
+    "http": "400",
+    "status": "error",
+    "message": "Stock apidoc-widget doesnot belong to stockGroup apidoc-products"
+  },
+  {
+    "tag": "1169-get-company-stock-group-stock-download-stock-inventory-report-v3",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget/download-stock-inventory-report-v3?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1170-post-company-stock-group-stock-download-stock-inventory-report-v3",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget/download-stock-inventory-report-v3?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1171-delete-v2-company-stock-group-stock",
+    "method": "DELETE",
+    "path": "/v2/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget",
+    "http": "400",
+    "status": "error",
+    "message": "Stock 'apidoc-widget' doesnot belong to stock group 'apidoc-products'."
+  },
+  {
+    "tag": "1172-put-v2-company-stock-group-stock",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/stock-group/apidoc-products/stock/apidoc-widget",
+    "http": "400",
+    "status": "error",
+    "message": "Stock apidoc-widget doesnot belong to stockGroup apidoc-products"
+  },
+  {
+    "tag": "1173-post-v5-company-stock-group",
+    "method": "POST",
+    "path": "/v5/company/giddhain1792673422178091xos/stock-group?branchUniqueName=giddhautomationapidoc",
+    "http": "201",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1174-get-v5-company-stock-group",
+    "method": "GET",
+    "path": "/v5/company/giddhain1792673422178091xos/stock-group/apidoc-products?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "No stock group found with apidoc-products in selected `Giddh Automation API DOC` (uniquename: giddhain1792673422178091xos)"
+  },
+  {
+    "tag": "1175-put-v5-company-stock-group",
+    "method": "PUT",
+    "path": "/v5/company/giddhain1792673422178091xos/stock-group/apidoc-products",
+    "http": "404",
+    "status": "error",
+    "message": "No stock group found with apidoc-products in selected `Giddh Automation API DOC` (uniquename: giddhain1792673422178091xos)"
+  },
+  {
+    "tag": "1176-delete-company-bank-deregistration",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/bank/deregistration?urn=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Bank Details Not Found."
+  },
+  {
+    "tag": "1177-get-company-bank-generateotp",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/bank/generateotp?urn=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Bank Details Not Found."
+  },
+  {
+    "tag": "1178-post-company-bank-payments",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/bank/payments",
+    "http": "400",
+    "status": "error",
+    "message": "Following Constraints failed : Transactions cannot be empty. URN cannot be empty. Bank name cannot be empty. UniqueName cannot be empty. "
+  },
+  {
+    "tag": "1179-post-company-bank-payments-confirm",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/bank/payments/confirm?urn=placeholder&uniqueName=apidoc-widget",
+    "http": "400",
+    "status": "error",
+    "message": "Following Constraints failed : OTP cannot be empty. Request Id cannot be empty. "
+  },
+  {
+    "tag": "1180-post-company-bank-registration",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/bank/registration",
+    "http": "412",
+    "status": "error",
+    "message": "Account no is Empty"
+  },
+  {
+    "tag": "1181-get-company-bank-resend-otp",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/bank/resend-otp?urn=placeholder&uniqueName=apidoc-widget&requestId=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "RequestId placeholder is invalid."
+  },
+  {
+    "tag": "1182-put-company-bank-updatedetails",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/bank/updateDetails",
+    "http": "412",
+    "status": "error",
+    "message": "Urn cannot be blank."
+  },
+  {
+    "tag": "1183-get-ui-bank-integration-form",
+    "method": "GET",
+    "path": "/ui/bank/integration/form?bankName=placeholder",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1184-post-v2-company-bank",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/bank",
+    "http": "412",
+    "status": "error",
+    "message": "Account number cannot be blank."
+  },
+  {
+    "tag": "1185-post-v2-company-bank-multi-registration",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/bank/multi-registration",
+    "http": "412",
+    "status": "error",
+    "message": "Account number cannot be blank."
+  },
+  {
+    "tag": "1186-put-v2-company-bank",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/bank/placeholder",
+    "http": "412",
+    "status": "error",
+    "message": "Account unique name cannot be blank."
+  },
+  {
+    "tag": "1187-get-v2-company-bank-payor",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/bank/placeholder/payor?amount=placeholder",
+    "http": "406",
+    "status": "error",
+    "message": "Invalid 'amount' provided."
+  },
+  {
+    "tag": "1188-put-v2-company-bank-payor",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/bank/placeholder/payor/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Bank Details Not Found."
+  },
+  {
+    "tag": "1189-get-v2-company-bank-payor-status",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/bank/placeholder/payor/placeholder/status",
+    "http": "404",
+    "status": "error",
+    "message": "Bank Details Not Found."
+  },
+  {
+    "tag": "1190-get-company-communication-campaign-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/campaign/list?branchUniqueName=giddhautomationapidoc",
+    "http": "406",
+    "status": "error",
+    "message": "error.code.invalidRequest"
+  },
+  {
+    "tag": "1191-get-company-communication-campaign-fields",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/campaign/placeholder/fields",
+    "http": "406",
+    "status": "error",
+    "message": "Please integrate MSG91 platform in the company."
+  },
+  {
+    "tag": "1192-get-company-communication-generate-email",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/generate-email",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1193-post-company-communication-platform-verify",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/communication/platform/verify",
+    "http": "406",
+    "status": "error",
+    "message": "Please add valid communication platform."
+  },
+  {
+    "tag": "1194-delete-company-communication-platform",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/communication/platform/apidoc-widget",
+    "http": "404",
+    "status": "error",
+    "message": "No platform found with unique name 'apidoc-widget'."
+  },
+  {
+    "tag": "1195-get-company-communication-platform-trigger-form",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/platform/placeholder/trigger/form",
+    "http": "406",
+    "status": "error",
+    "message": "Please add valid communication channel."
+  },
+  {
+    "tag": "1196-get-company-communication-suggestions",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/suggestions/placeholder/deliverynote",
+    "http": "406",
+    "status": "error",
+    "message": "Please add valid communication platform."
+  },
+  {
+    "tag": "1197-post-company-communication-trigger",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/communication/trigger",
+    "http": "406",
+    "status": "error",
+    "message": "Please add valid communication platform."
+  },
+  {
+    "tag": "1198-delete-company-communication-trigger",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/communication/trigger/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Trigger not found."
+  },
+  {
+    "tag": "1199-get-company-communication-trigger",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/communication/trigger/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Trigger not found."
+  },
+  {
+    "tag": "1200-patch-company-communication-trigger",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/communication/trigger/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Trigger not found."
+  },
+  {
+    "tag": "1201-put-company-communication-trigger",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/communication/trigger/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Trigger not found."
+  },
+  {
+    "tag": "1202-get-company-project-all",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/project/all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1203-delete-company-project",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1204-get-company-project",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1205-patch-company-project",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1206-get-company-project-category-total",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder/category-total",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1207-get-company-project-entries",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder/entries?page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1208-post-company-project-entry",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder/entry?branchUniqueName=giddhautomationapidoc",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1209-put-company-project-entry",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder/entry/tpfal1792733167512?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1210-get-company-project-net-profit",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder/net-profit?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1211-get-company-project-profit-loss",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/project/placeholder/profit-loss?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "404",
+    "status": "error",
+    "message": "Project with unique name 'placeholder' not found."
+  },
+  {
+    "tag": "1212-post-company-inventory-users-inventory-entries",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/inventory-users/divyanshu%40whozzat.com/inventory-entries",
+    "http": "404",
+    "status": "error",
+    "message": "No inventory user found with unique name divyanshu@whozzat.com."
+  },
+  {
+    "tag": "1213-patch-company-inventory-users-inventory-entries-description",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/inventory-users/divyanshu%40whozzat.com/inventory-entries/tpfal1792733167512/description",
+    "http": "404",
+    "status": "error",
+    "message": "No inventory entry found with inventory entry group unique name tpfal1792733167512."
+  },
+  {
+    "tag": "1214-delete-users-destroy-session",
+    "method": "DELETE",
+    "path": "/users/divyanshu%40whozzat.com/destroy-session",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1215-post-users-destroy-session",
+    "method": "POST",
+    "path": "/users/divyanshu%40whozzat.com/destroy-session",
+    "http": "406",
+    "status": "error",
+    "message": "Session Id cannot be null"
+  },
+  {
+    "tag": "1216-put-users-forgot-password",
+    "method": "PUT",
+    "path": "/users/placeholder/forgot-password",
+    "http": "406",
+    "status": "error",
+    "message": "Your max limit for using this API has exceeded."
+  },
+  {
+    "tag": "1217-put-users-generate-auth-key",
+    "method": "PUT",
+    "path": "/users/apidoc-widget/generate-auth-key",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1218-get-users-get-auth-key",
+    "method": "GET",
+    "path": "/users/divyanshu%40whozzat.com/get-auth-key",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1219-put-users-increment-session",
+    "method": "PUT",
+    "path": "/users/divyanshu%40whozzat.com/increment-session",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1220-delete-users-sessions",
+    "method": "DELETE",
+    "path": "/users/divyanshu%40whozzat.com/sessions",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1221-get-users-sessions",
+    "method": "GET",
+    "path": "/users/divyanshu%40whozzat.com/sessions",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1222-put-users-settings",
+    "method": "PUT",
+    "path": "/users/divyanshu%40whozzat.com/settings",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1223-get-users-v2-companies",
+    "method": "GET",
+    "path": "/users/divyanshu%40whozzat.com/v2/companies",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1224-post-company-batch-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/batch/all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1225-get-company-batch-availability",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/batch/availability?q=api&page=1&count=50",
+    "http": "401",
+    "status": "error",
+    "message": "No session found with session id 'in3f3af1ecebbd1410ab41df7Lbx6nDZJzuVk-U5CBjPCiBR90kS-kaP_hpiG2GrQ='."
+  },
+  {
+    "tag": "1226-session-check",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos",
+    "http": "0",
+    "status": "error",
+    "message": ""
+  },
+  {
+    "tag": "1226-session-check",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1226-post-company-batch-transfer",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/batch/transfer",
+    "http": "400",
+    "status": "error",
+    "message": "fromBatchUniqueName and toBatchUniqueName are mandatory."
+  },
+  {
+    "tag": "1227-delete-company-batch",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/batch/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Batch placeholder not found for the item."
+  },
+  {
+    "tag": "1228-put-company-batch",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/batch/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Batch placeholder not found for the item."
+  },
+  {
+    "tag": "1229-post-company-batch-archive",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/batch/placeholder/archive",
+    "http": "400",
+    "status": "error",
+    "message": "Archive action is required (TRANSFER or UNARCHIVED)."
+  },
+  {
+    "tag": "1230-delete-company-groups",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/groups/apidoc-custom-assets",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1231-put-company-groups",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/groups/apidoc-custom-assets",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1232-get-company-groups-masters",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/groups/apidoc-custom-assets/masters?page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1233-put-company-groups-move",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/groups/apidoc-custom-assets/move",
+    "http": "404",
+    "status": "error",
+    "message": "We apologize we cannot honor your request, Please make sure group exist and you have appropriate permissions."
+  },
+  {
+    "tag": "1234-get-company-groups-shared-with",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/groups/apidoc-custom-assets/shared-with",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1235-post-v2-company-groups-download-account-closing-balance",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/groups/apidoc-custom-assets/download-account-closing-balance?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1236-post-v2-company-groups-sms-account-closing-balance",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/groups/apidoc-custom-assets/sms-account-closing-balance?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "406",
+    "status": "error",
+    "message": "No accounts provided in request."
+  },
+  {
+    "tag": "1237-patch-company-customer-vendor-discount-stock-variant-update-discount",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/customer-vendor-discount/stock/apidoc-widget/variant/apidocwidget1792693959876fk8uyv0enl/update-discount",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1238-delete-company-stock-unit-group",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/stock-unit-group/WfqOHXSFugRFzJ8HDrLT",
+    "http": "404",
+    "status": "error",
+    "message": "Stock Unit Group not found with uniqueName WfqOHXSFugRFzJ8HDrLT."
+  },
+  {
+    "tag": "1239-put-company-stock-unit-group",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/stock-unit-group/WfqOHXSFugRFzJ8HDrLT",
+    "http": "404",
+    "status": "error",
+    "message": "Stock Unit Group not found with uniqueName WfqOHXSFugRFzJ8HDrLT."
+  },
+  {
+    "tag": "1240-delete-company-stock-unit",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/stock-unit/WfqOHXSFugRFzJ8HDrLT",
+    "http": "412",
+    "status": "error",
+    "message": "Stocks exist which use this stock unit. Delete them before performing this action."
+  },
+  {
+    "tag": "1241-put-company-stock-unit",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/stock-unit/WfqOHXSFugRFzJ8HDrLT",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1242-get-company-stock-inventory-report",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/stock/apidoc-widget/inventory-report?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1243-delete-company-stock-manufacture",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/stock/apidoc-widget/manufacture/u076wqodj05ihjcozc2f?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1244-put-company-stock-manufacture",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/stock/apidoc-widget/manufacture/u076wqodj05ihjcozc2f?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1245-put-company-stock-move",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/stock/apidoc-widget/move",
+    "http": "404",
+    "status": "error",
+    "message": "Stock Group not found with uniqueName apidoc-custom-assets"
+  },
+  {
+    "tag": "1246-get-stock-units",
+    "method": "GET",
+    "path": "/stock-units",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1247-post-v2-company-stock-aging-report-totals",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/stock-aging-report/totals?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": ""
+  },
+  {
+    "tag": "1248-post-v2-company-stock-aging-report-details",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/stock-aging-report/apidoc-widget/details?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": ""
+  },
+  {
+    "tag": "1249-post-v2-company-stock-aging-report-variants",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/stock-aging-report/apidoc-widget/variants?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": ""
+  },
+  {
+    "tag": "1250-post-v2-company-stock-history",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/stock-history?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1251-get-v2-company-stock-details",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/stock/apidoc-widget/details?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1252-patch-v2-company-stock-variant",
+    "method": "PATCH",
+    "path": "/v2/company/giddhain1792673422178091xos/stock/apidoc-widget/variant/apidocwidget1792693959876fk8uyv0enl",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1253-put-company-ewb-cancel",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/ewb/cancel",
+    "http": "406",
+    "status": "error",
+    "message": "Cancel reason cannot be left blank."
+  },
+  {
+    "tag": "1254-get-company-ewb-user",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/ewb/user",
+    "http": "404",
+    "status": "error",
+    "message": "No Eway Bill User Found for this company."
+  },
+  {
+    "tag": "1255-post-company-ewb-user",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/ewb/user",
+    "http": "406",
+    "status": "error",
+    "message": "UserName cannot be null/blank."
+  },
+  {
+    "tag": "1256-put-company-ewb-vehicle",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/ewb/vehicle",
+    "http": "406",
+    "status": "error",
+    "message": "EWB no. cannot blank/null"
+  },
+  {
+    "tag": "1257-get-company-ewb-download-detailed-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/ewb/placeholder/download-detailed-v2?branchUniqueName=giddhautomationapidoc&type=sales",
+    "http": "404",
+    "status": "error",
+    "message": "No E-way bill user found for the company, please integrate the user first."
+  },
+  {
+    "tag": "1258-get-company-ewb-download-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/ewb/placeholder/download-v2?type=sales&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "No E-way bill user found for the company, please integrate the user first."
+  },
+  {
+    "tag": "1259-post-company-imports-document-upload",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/document/upload?branchUniqueName=giddhautomationapidoc&type=sales&ocrType=invoice",
+    "http": "400",
+    "status": "error",
+    "message": "One or more parameters provided are incorrect: type."
+  },
+  {
+    "tag": "1260-post-company-imports-process",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/process",
+    "http": "406",
+    "status": "error",
+    "message": "No request found with given requestId: null."
+  },
+  {
+    "tag": "1261-get-company-imports-reconciliation",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/imports/reconciliation?branchUniqueName=giddhautomationapidoc&from=01-04-2026&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1262-post-company-imports-reconciliation-process",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/reconciliation/process",
+    "http": "406",
+    "status": "error",
+    "message": "No request found with given requestId: null."
+  },
+  {
+    "tag": "1263-post-company-imports-reconciliation-upload",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/reconciliation/upload?branchUniqueName=giddhautomationapidoc&from=01-04-2026",
+    "http": "415",
+    "status": "error",
+    "message": "Content-Type application/json not supported."
+  },
+  {
+    "tag": "1264-get-company-imports-signed-url",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/imports/signed-url?fileName=placeholder",
+    "http": "201",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1265-post-company-imports-upload",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/upload?branchUniqueName=giddhautomationapidoc&type=sales",
+    "http": "415",
+    "status": "error",
+    "message": "Content-Type application/json not supported."
+  },
+  {
+    "tag": "1266-post-company-imports-v2-upload",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/imports/v2/upload?branchUniqueName=giddhautomationapidoc&type=sales&voucherType=sales",
+    "http": "400",
+    "status": "error",
+    "message": "One or more parameters provided are incorrect: type."
+  },
+  {
+    "tag": "1267-post-company-uk-payment-initiate",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/uk/payment/initiate",
+    "http": "406",
+    "status": "error",
+    "message": "Reference is required."
+  },
+  {
+    "tag": "1268-post-company-uk-retrieve-vat-liabilities",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/uk/retrieve-vat-liabilities?taxNumber=apidocgst18&from=01-04-2026&to=31-03-2027",
+    "http": "406",
+    "status": "error",
+    "message": "Please connect giddh with hmrc."
+  },
+  {
+    "tag": "1269-post-company-uk-retrieve-vat-payments",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/uk/retrieve-vat-payments?taxNumber=apidocgst18&from=01-04-2026&to=31-03-2027",
+    "http": "406",
+    "status": "error",
+    "message": "Please connect giddh with hmrc."
+  },
+  {
+    "tag": "1270-post-company-uk-submit-vat-return",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/uk/submit-vat-return?taxNumber=apidocgst18&periodKey=placeholder&from=01-04-2026&to=31-03-2027&branchUniqueName=giddhautomationapidoc",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1271-post-company-uk-vat-obligations",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/uk/vat-obligations?branchUniqueName=giddhautomationapidoc&taxNumber=apidocgst18&from=01-04-2026",
+    "http": "400",
+    "status": "error",
+    "message": "Provided tax number 'APIDOCGST18' not found."
+  },
+  {
+    "tag": "1272-get-company-uk-vat-report",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/uk/vat-report?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1273-get-company-uk-vat-report-detailed",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/uk/vat-report-detailed?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18&section=placeholder",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1274-post-company-uk-view-vat-return",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/uk/view-vat-return?taxNumber=apidocgst18&from=01-04-2026&to=31-03-2027&periodKey=placeholder",
+    "http": "406",
+    "status": "error",
+    "message": "Please connect giddh with hmrc."
+  },
+  {
+    "tag": "1275-post-company",
+    "method": "POST",
+    "path": "/company",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1276-patch-company",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1277-put-company",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos",
+    "http": "400",
+    "status": "error",
+    "message": "Country cannot be null or empty"
+  },
+  {
+    "tag": "1278-post-company-address-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/address/all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1279-delete-company-address",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/address/8rz1792673422372",
+    "http": "400",
+    "status": "error",
+    "message": "Cannot delete default address."
+  },
+  {
+    "tag": "1280-put-company-address",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/address/8rz1792673422372?branchUniqueName=giddhautomationapidoc",
+    "http": "406",
+    "status": "error",
+    "message": "At least one default address is required."
+  },
+  {
+    "tag": "1281-post-company-advance-receipt-adjust",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/advance-receipt/adjust?voucherVersion=2&invoiceUniqueName=5zkmf1792674363694",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1282-post-company-advance-receipt-get-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/advance-receipt/get-all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1283-get-company-advance-receipt-summary",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/advance-receipt/summary?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1284-post-company-auth-generate",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/auth/generate",
+    "http": "406",
+    "status": "error",
+    "message": "Please provide role unique name to generate auth key."
+  },
+  {
+    "tag": "1285-delete-company-auth-remove",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/auth/placeholder/remove",
+    "http": "406",
+    "status": "error",
+    "message": "Provided auth key is not valid."
+  },
+  {
+    "tag": "1286-put-company-auth-update",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/auth/placeholder/update",
+    "http": "406",
+    "status": "error",
+    "message": "Provided auth key is not valid."
+  },
+  {
+    "tag": "1287-post-company-branch-transfer-download",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/branch-transfer/download?voucherVersion=2&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1288-delete-company-branch-transfer",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/branch-transfer/placeholder?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1289-put-company-branch-transfer",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/branch-transfer/placeholder?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1290-patch-company-branch",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/branch/giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1291-put-company-branch",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/branch/giddhautomationapidoc",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1292-delete-company-business-documents",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/business-documents/apidoc-widget?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1293-post-company-business-documents-action",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/business-documents/apidoc-widget/action?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1294-delete-company-customer-vendor-discount",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/customer-vendor-discount?userUniqueName=divyanshu@whozzat.com",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1295-delete-company-customfield",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/customfield/1792758792191n1ficygh8s7bfds?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1296-patch-company-customfield",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/customfield/1792758792191n1ficygh8s7bfds?branchUniqueName=giddhautomationapidoc",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1297-delete-company-delete-image",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/delete-image?imgUniqueName=placeholder",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1298-post-company-discount-assign",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/discount/assign",
+    "http": "406",
+    "status": "error",
+    "message": "accountUniqueName cannot be null/blank."
+  },
+  {
+    "tag": "1299-post-company-discount-assign-v2",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/discount/assign-v2",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1300-get-company-discount-assign-list",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/discount/assign/list?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1301-put-company-discount",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/discount/73m1792675076662",
+    "http": "410",
+    "status": "error",
+    "message": "There was an error. Please contact support."
+  },
+  {
+    "tag": "1302-patch-company-domain",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/domain/placeholder?operation=placeholder",
+    "http": "406",
+    "status": "error",
+    "message": "Domain not found with uniqueName placeholder."
+  },
+  {
+    "tag": "1303-post-company-domain-share",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/domain/placeholder/share",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1304-post-company-dsc-finish",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/dsc/finish",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1305-post-company-dsc-prepare",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/dsc/prepare?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1306-put-company-entry-settings",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/entry-settings",
+    "http": "412",
+    "status": "error",
+    "message": "error.no.of.transaction.less.than.zero"
+  },
+  {
+    "tag": "1307-patch-company-export-settings",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/export-settings?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "406",
+    "status": "error",
+    "message": "Please provide file format for export setting."
+  },
+  {
+    "tag": "1308-get-company-export-settings-daybook-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/export-settings/daybook-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherVersion=2&type=sales&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1309-post-company-export-settings-daybook-v2",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/export-settings/daybook-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherVersion=2&type=sales&fileType=base64",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1310-put-company-financial-year",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/financial-year",
+    "http": "400",
+    "status": "error",
+    "message": "No financial year period passed."
+  },
+  {
+    "tag": "1311-patch-company-financial-year-lock",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/financial-year-lock",
+    "http": "400",
+    "status": "error",
+    "message": "No financial year passed."
+  },
+  {
+    "tag": "1312-patch-company-financial-year-unlock",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/financial-year-unlock",
+    "http": "400",
+    "status": "error",
+    "message": "No financial year passed."
+  },
+  {
+    "tag": "1313-delete-company-gmail-token",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/gmail-token",
+    "http": "404",
+    "status": "error",
+    "message": "Token not found"
+  },
+  {
+    "tag": "1314-post-company-gocardless-agreement-requisitions",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/gocardless/agreement-requisitions?institutionId=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Institution not found."
+  },
+  {
+    "tag": "1315-get-company-gocardless-refresh",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/gocardless/refresh",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1316-post-company-gocardless-requisitions",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/gocardless/requisitions/placeholder",
+    "http": "406",
+    "status": "error",
+    "message": "Client reference:'placeholder' doesn't exists."
+  },
+  {
+    "tag": "1317-delete-company-gocardless",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/gocardless/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Bank Details Not Found."
+  },
+  {
+    "tag": "1318-delete-company-gst-setting",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/gst-setting/apidoc-widget",
+    "http": "404",
+    "status": "error",
+    "message": "No data found for the uniqueName 'apidoc-widget'."
+  },
+  {
+    "tag": "1319-put-company-gst-setting",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/gst-setting/apidoc-widget",
+    "http": "410",
+    "status": "error",
+    "message": "Invalid Data Access Exception.Entity must not be null java.lang.IllegalArgumentException: Entity must not be null"
+  },
+  {
+    "tag": "1320-delete-company-inventory-adjustment",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/inventory-adjustment/placeholder?voucherVersion=2",
+    "http": "406",
+    "status": "error",
+    "message": "Inventory adjustment with reference no 'placeholder' not found."
+  },
+  {
+    "tag": "1321-put-company-inventory-adjustment",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/inventory-adjustment/placeholder?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "No active Inventory Adjustment not found with refNo : placeholder"
+  },
+  {
+    "tag": "1322-post-company-inventory-balance",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/inventory/balance?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1323-get-company-invoice-setting-verify-email",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/invoice-setting/verify-email?voucherVersion=2&branchUniqueName=giddhautomationapidoc&emailAddress=8rz1792673422372&scope=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1324-delete-company-invoices",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/invoices?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1325-get-company-kenya-v2-vat-report-download",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/kenya/v2/vat-report-download?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1326-get-company-kenya-vat-report",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/kenya/vat-report?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1327-post-company-ledger-upload",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/ledger/upload?branchUniqueName=giddhautomationapidoc&voucherVersion=2&type=sales",
+    "http": "415",
+    "status": "error",
+    "message": "Content-Type application/json not supported."
+  },
+  {
+    "tag": "1328-get-company-ledger-upload",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/ledger/upload/placeholder?branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "405",
+    "status": "error",
+    "message": "Request method not supported."
+  },
+  {
+    "tag": "1329-get-company-new-old-sales-details",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/new-old-sales/details?type=sales&value=placeholder&dataType=placeholder&fromDate=placeholder&toDate=placeholder&page=1&count=50&q=api&branchUniqueName=giddhautomationapidoc",
+    "http": "400",
+    "status": "error",
+    "message": "Given date is not valid. Provide date in 'dd-MM-yyyy' format Or Entered date is not valid."
+  },
+  {
+    "tag": "1330-delete-company-paypal",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/paypal",
+    "http": "404",
+    "status": "error",
+    "message": "No Payment Gateway for Paypal found for the company."
+  },
+  {
+    "tag": "1331-put-company-paypal",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/paypal",
+    "http": "401",
+    "status": "error",
+    "message": "Please enter Paypal email."
+  },
+  {
+    "tag": "1332-delete-company-payu",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/payu",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1333-get-company-pettycash-manager-ledger",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/pettycash-manager/ledger/tpfal1792733167512?branchUniqueName=giddhautomationapidoc&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1334-post-company-plaid-create-access-token",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/plaid/create/access-token",
+    "http": "422",
+    "status": "error",
+    "message": "invalid client_id or secret provided"
+  },
+  {
+    "tag": "1335-patch-company-plan",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/plan",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1336-put-company-purchase-bill-setting",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/purchase-bill-setting?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1337-get-company-purchase-bill-setting-verify-email",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/purchase-bill-setting/verify-email?branchUniqueName=giddhautomationapidoc&emailAddress=8rz1792673422372&scope=placeholder",
+    "http": "400",
+    "status": "error",
+    "message": "The email: 8rz1792673422372 is invalid."
+  },
+  {
+    "tag": "1338-delete-company-purchase-order",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/purchase-order?voucherVersion=2&uniqueName=apidoc-widget&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1339-delete-company-purchase-record",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/purchase-record?voucherVersion=2&uniqueName=apidoc-widget&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1340-post-company-purchase-record-get-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/purchase-record/get-all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1341-delete-company-razorpay",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/razorpay",
+    "http": "404",
+    "status": "error",
+    "message": "No Payment Gateway for RazorPay found for the company."
+  },
+  {
+    "tag": "1342-put-company-razorpay",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/razorpay",
+    "http": "401",
+    "status": "error",
+    "message": "No RazprPay account exist for this company."
+  },
+  {
+    "tag": "1343-post-company-recurring-voucher-get-all",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/recurring-voucher/get-all?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&voucherType=sales&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1344-delete-company-recurring-voucher",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/recurring-voucher/LUJYfC8PaG?voucherType=sales&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1345-patch-company-recurring-voucher",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/recurring-voucher/LUJYfC8PaG?voucherType=sales&voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1346-delete-company-role",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/role/aft1792738829523",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1347-post-company-role-assign",
+    "method": "POST",
+    "path": "/company/giddhain1792673422178091xos/role/aft1792738829523/assign",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid or missing email address."
+  },
+  {
+    "tag": "1348-put-company-settings",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/settings?branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1349-delete-company-tags",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/tags/placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "No tag found with this uniqueName."
+  },
+  {
+    "tag": "1350-delete-company-tax-authority",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/tax/authority/apidoctaxauthoritymp",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1351-delete-company-transporters",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/transporters?transporterId=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "No transporter found with the specified transporter Id."
+  },
+  {
+    "tag": "1352-put-company-transporters",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/transporters?transporterId=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "No transporter found with the specified transporter Id."
+  },
+  {
+    "tag": "1353-delete-company-triggers",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/triggers/placeholder",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1354-put-company-triggers",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/triggers/placeholder",
+    "http": "400",
+    "status": "error",
+    "message": "Please provide a name for the trigger"
+  },
+  {
+    "tag": "1355-delete-company-uer",
+    "method": "DELETE",
+    "path": "/company/giddhain1792673422178091xos/uer/aft1792738829523",
+    "http": "404",
+    "status": "error",
+    "message": "No user entity role found with uniqueName aft1792738829523."
+  },
+  {
+    "tag": "1356-get-company-us-export-sales-report-account-wise",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/us/export-sales-report-account-wise?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "404",
+    "status": "error",
+    "message": "Detailed Tax Liability Report Not Found."
+  },
+  {
+    "tag": "1357-get-company-us-export-sales-report-authority-wise",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/us/export-sales-report-authority-wise?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1358-get-company-us-export-sales-report-tax-wise",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/us/export-sales-report-tax-wise?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1359-get-company-us-sales-report-account-wise",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/us/sales-report-account-wise?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1360-get-company-v2-balance-sheet-collapsed-download-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/v2/balance-sheet-collapsed-download-v2?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1361-get-company-v2-profit-loss-collapsed-download-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/v2/profit-loss-collapsed-download-v2?from=01-04-2026&to=31-03-2027&page=1&count=50&fileType=base64&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1362-patch-company-warehouse",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/warehouse/xbq1792673424418",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1363-put-company-warehouse",
+    "method": "PUT",
+    "path": "/company/giddhain1792673422178091xos/warehouse/xbq1792673424418",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1364-patch-company-warehouse-default",
+    "method": "PATCH",
+    "path": "/company/giddhain1792673422178091xos/warehouse/xbq1792673424418/default",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1365-get-company-zw-vat-report",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/zw/vat-report?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1366-get-company-zw-vat-report-detailed",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/zw/vat-report-detailed?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18&section=placeholder",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1367-get-company-zw-vat-report-detailed-download-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/zw/vat-report-detailed-download-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1368-get-company-zw-vat-report-download-v2",
+    "method": "GET",
+    "path": "/company/giddhain1792673422178091xos/zw/vat-report-download-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&taxNumber=apidocgst18",
+    "http": "404",
+    "status": "error",
+    "message": "Vat report Not Found."
+  },
+  {
+    "tag": "1369-get-country",
+    "method": "GET",
+    "path": "/country",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1370-get-country-cities",
+    "method": "GET",
+    "path": "/country/cities?pinCode=placeholder",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1371-get-country-country-list",
+    "method": "GET",
+    "path": "/country/country-list",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1372-post-exception-invalid-json",
+    "method": "POST",
+    "path": "/exception/invalid-json",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1373-post-generate-otp",
+    "method": "POST",
+    "path": "/generate-otp",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid Country code. Please contact support."
+  },
+  {
+    "tag": "1374-get-login-with-number",
+    "method": "GET",
+    "path": "/login-with-number?countryCode=GB&mobileNumber=placeholder",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid Country code. Please contact support."
+  },
+  {
+    "tag": "1375-get-magic-link",
+    "method": "GET",
+    "path": "/magic-link/placeholder?from=01-04-2026&to=31-03-2027",
+    "http": "404",
+    "status": "error",
+    "message": "Magic link not found. please request the owner to share it again."
+  },
+  {
+    "tag": "1376-get-magic-link-download-invoice",
+    "method": "GET",
+    "path": "/magic-link/placeholder/download-invoice/5zkmf1792674363694?voucherVersion=2",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1377-post-report-filters",
+    "method": "POST",
+    "path": "/report-filters?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "406",
+    "status": "error",
+    "message": "Invalid report filter module. Allowed values are (PAYMENT, VARIANT_WISE_REPORT, ADMIN_SUBSCRIPTION_HISTORY, PURCHASE_REGISTER, FIXED_ASSET_INVENTORY_TABLE_REPORT, LIABILITY_REPORT, ADMIN_SUBSCRIPTIONS"
+  },
+  {
+    "tag": "1378-put-reset-password",
+    "method": "PUT",
+    "path": "/reset-password",
+    "http": "400",
+    "status": "error",
+    "message": "No uniqueKey was provided."
+  },
+  {
+    "tag": "1379-post-send-data",
+    "method": "POST",
+    "path": "/send-data",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1380-post-signup-with-email",
+    "method": "POST",
+    "path": "/signup-with-email",
+    "http": "406",
+    "status": "error",
+    "message": "Your max limit for using this API has exceeded."
+  },
+  {
+    "tag": "1381-post-state-details",
+    "method": "POST",
+    "path": "/state-details?branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "We apologize we cannot honor your request, Please make sure company exist and you have appropriate permissions."
+  },
+  {
+    "tag": "1382-get-time",
+    "method": "GET",
+    "path": "/time",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1383-get-ui-calling-code",
+    "method": "GET",
+    "path": "/ui/calling-code?from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1384-get-ui-forms",
+    "method": "GET",
+    "path": "/ui/forms?country=placeholder&formName=placeholder",
+    "http": "404",
+    "status": "error",
+    "message": "Country Code You Entered is not valid."
+  },
+  {
+    "tag": "1385-post-v2-auth-login",
+    "method": "POST",
+    "path": "/v2/auth-login",
+    "http": "400",
+    "status": "error",
+    "message": "No access token was provided."
+  },
+  {
+    "tag": "1386-post-v2-company-authenticate-gsp-session",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/authenticate-gsp-session?gstin=23AAACC1206D2ZN&userName=divyanshu@whozzat.com&otp=000000",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1387-post-v2-company-download-all-inventory-hierarchy",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/download-all-inventory-hierarchy?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1388-post-v2-company-download-all-inventory-report-v2",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/download-all-inventory-report-v2?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1389-post-v2-company-gsp-session",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/gsp-session?gstin=23AAACC1206D2ZN&userName=divyanshu@whozzat.com",
+    "http": "400",
+    "status": "error",
+    "message": "WB_ERR_9001 : Invalid credentials provided or your account is not active"
+  },
+  {
+    "tag": "1390-patch-v2-company-gst-unit-mapping",
+    "method": "PATCH",
+    "path": "/v2/company/giddhain1792673422178091xos/gst/unit-mapping?branchUniqueName=giddhautomationapidoc",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1391-get-v2-company-gstr1-download-v2",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/gstr1/download-v2?from=01-08-2026&to=23-10-2026&page=1&count=50&gstin=23AAACC1206D2ZN&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1392-get-v2-company-gstr3b-excel-export-email",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/gstr3b-excel-export/email?from=01-08-2026&to=23-10-2026&page=1&count=50&gstin=23AAACC1206D2ZN&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1393-delete-v2-company-manufacture",
+    "method": "DELETE",
+    "path": "/v2/company/giddhain1792673422178091xos/manufacture/u076wqodj05ihjcozc2f?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1394-put-v2-company-manufacture",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/manufacture/u076wqodj05ihjcozc2f?voucherVersion=2&branchUniqueName=giddhautomationapidoc",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1395-get-v2-company-multibranch-balance-sheet",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/multibranch/balance-sheet?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1396-get-v2-company-multibranch-profit-loss",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/multibranch/profit-loss?from=01-04-2026&to=31-03-2027&page=1&count=50&branchUniqueName=giddhautomationapidoc",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1397-post-v2-company-purchases-register-detailed",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/purchases-register-detailed?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1398-get-v2-company-reports-all-reports",
+    "method": "GET",
+    "path": "/v2/company/giddhain1792673422178091xos/reports/all-reports?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1399-post-v2-company-reports-entity-selection",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/reports/entity-selection?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&reportType=WITHOUT_CHALLAN",
+    "http": "406",
+    "status": "error",
+    "message": "Invalid report type WITHOUT_CHALLAN."
+  },
+  {
+    "tag": "1400-post-v2-company-reports-entity-status",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/reports/entity-status?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50&reportType=WITHOUT_CHALLAN",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1401-post-v2-company-reports-save-report-data",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/reports/save-report-data?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "400",
+    "status": "error",
+    "message": "Invalid value provided for Key: "
+  },
+  {
+    "tag": "1402-post-v2-company-sales-register-detailed",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/sales-register-detailed?branchUniqueName=giddhautomationapidoc&from=01-04-2026&to=31-03-2027&page=1&count=50",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1403-post-v2-company-save-gstr1",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/save-gstr1?from=01-08-2026&to=23-10-2026&page=1&count=50&gstin=23AAACC1206D2ZN&currentDateTime=placeholder",
+    "http": "400",
+    "status": "error",
+    "message": "Given date is not valid."
+  },
+  {
+    "tag": "1404-post-v2-company-save-gstr3b",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/save-gstr3b?from=01-08-2026&to=23-10-2026&page=1&count=50&gstin=23AAACC1206D2ZN&currentDateTime=placeholder",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1405-any-v2-company-template-preview",
+    "method": "ANY",
+    "path": "/v2/company/giddhain1792673422178091xos/template-preview?type=invoice",
+    "http": "404",
+    "status": "error",
+    "message": "Not Found"
+  },
+  {
+    "tag": "1406-any-v2-company-templates",
+    "method": "ANY",
+    "path": "/v2/company/giddhain1792673422178091xos/templates/gst_template_a?type=invoice",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  },
+  {
+    "tag": "1407-delete-v2-company-templates",
+    "method": "DELETE",
+    "path": "/v2/company/giddhain1792673422178091xos/templates/gst_template_a?type=invoice",
+    "http": "404",
+    "status": "error",
+    "message": "No template found with uniqueName gst_template_a"
+  },
+  {
+    "tag": "1408-put-v2-company-templates",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/templates/gst_template_a?type=invoice",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1409-post-v2-company-trigger",
+    "method": "POST",
+    "path": "/v2/company/giddhain1792673422178091xos/trigger",
+    "http": "406",
+    "status": "error",
+    "message": "Please provide title for trigger."
+  },
+  {
+    "tag": "1410-delete-v2-company-trigger",
+    "method": "DELETE",
+    "path": "/v2/company/giddhain1792673422178091xos/trigger/apidoc-widget",
+    "http": "406",
+    "status": "error",
+    "message": "Email trigger not found with unique name 'apidoc-widget'."
+  },
+  {
+    "tag": "1411-put-v2-company-trigger",
+    "method": "PUT",
+    "path": "/v2/company/giddhain1792673422178091xos/trigger/apidoc-widget",
+    "http": "406",
+    "status": "error",
+    "message": "Email trigger not found with unique name 'apidoc-widget'."
+  },
+  {
+    "tag": "1412-post-v2-login-with-password",
+    "method": "POST",
+    "path": "/v2/login-with-password",
+    "http": "404",
+    "status": "error",
+    "message": "Email or mobile number doesn't exist. Please create your account."
+  },
+  {
+    "tag": "1413-post-v2-signup",
+    "method": "POST",
+    "path": "/v2/signup",
+    "http": "400",
+    "status": "error",
+    "message": "The email: apidoc@example.invalid is invalid."
+  },
+  {
+    "tag": "1414-post-v2-signup-with-apple",
+    "method": "POST",
+    "path": "/v2/signup-with-apple",
+    "http": "400",
+    "status": "error",
+    "message": "Please provide authorization code in the request"
+  },
+  {
+    "tag": "1415-post-v2-signup-with-google",
+    "method": "POST",
+    "path": "/v2/signup-with-google",
+    "http": "400",
+    "status": "error",
+    "message": "Following Constraints failed : must not be null "
+  },
+  {
+    "tag": "1416-get-v2-user",
+    "method": "GET",
+    "path": "/v2/user",
+    "http": "400",
+    "status": "error",
+    "message": "Missing Session-Id header in request"
+  },
+  {
+    "tag": "1417-post-v2-verify-email",
+    "method": "POST",
+    "path": "/v2/verify-email",
+    "http": "500",
+    "status": "error",
+    "message": "Internal Server Error"
+  },
+  {
+    "tag": "1418-post-v2-verify-number",
+    "method": "POST",
+    "path": "/v2/verify-number",
+    "http": "400",
+    "status": "error",
+    "message": "must not be null"
+  },
+  {
+    "tag": "1419-get-v4-company-particular",
+    "method": "GET",
+    "path": "/v4/company/giddhain1792673422178091xos/particular",
+    "http": "404",
+    "status": "error",
+    "message": "We apologize we cannot honor your request, Please make sure account with uniqueName '' exist and you have appropriate permissions."
+  },
+  {
+    "tag": "1420-patch-v4-company-vouchers",
+    "method": "PATCH",
+    "path": "/v4/company/giddhain1792673422178091xos/vouchers?voucherVersion=2",
+    "http": "406",
+    "status": "error",
+    "message": "Cannot search voucher with the given details. Please provide unique name to search."
+  },
+  {
+    "tag": "1421-get-white-label",
+    "method": "GET",
+    "path": "/white-label",
+    "http": "200",
+    "status": "success",
+    "message": "success"
+  }
+]

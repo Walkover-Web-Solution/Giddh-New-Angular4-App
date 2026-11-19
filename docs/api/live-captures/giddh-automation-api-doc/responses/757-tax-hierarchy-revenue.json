@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "body": {
+    "applicableTaxes": [
+      {
+        "name": "API Doc GST 18",
+        "uniqueName": "apidocgst18"
+      }
+    ],
+    "inheritedTaxes": []
+  }
+}

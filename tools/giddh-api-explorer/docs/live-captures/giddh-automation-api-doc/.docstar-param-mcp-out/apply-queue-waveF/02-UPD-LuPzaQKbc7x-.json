@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "LuPzaQKbc7x-", "description": "Generate Razorpay Order. Part of the Generate Order APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"promocode": {"checked": "true", "value": "", "description": "Promocode query parameter. Optional.", "required": false}}, "body": {"type": "none"}}

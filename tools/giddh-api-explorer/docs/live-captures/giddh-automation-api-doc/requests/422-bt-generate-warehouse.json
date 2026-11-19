@@ -1,0 +1,61 @@
+{
+  "dateOfSupply": "23-10-2026",
+  "challanNo": "BT-API-002",
+  "note": "warehouse entity BT",
+  "sources": [
+    {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhautomationapidoc",
+      "warehouse": {
+        "name": "Gidd warehouse",
+        "uniqueName": "xbq1792673424418",
+        "taxNumber": "23AAACC1206D2ZN",
+        "address": "My new address",
+        "stockDetails": {
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "amount": 50,
+          "rate": 50,
+          "quantity": 1
+        }
+      }
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Giddh Automation API DOC",
+      "uniqueName": "giddhautomationapidoc",
+      "warehouse": {
+        "name": "API Doc Warehouse Two",
+        "uniqueName": "4gr1792733898078",
+        "taxNumber": "23AAACC1206D2ZN",
+        "address": "My new address",
+        "stockDetails": {
+          "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+          "amount": 50,
+          "rate": 50,
+          "quantity": 1
+        }
+      }
+    }
+  ],
+  "products": [
+    {
+      "name": "API Doc Widget",
+      "uniqueName": "apidoc-widget",
+      "showCodeType": "hsn",
+      "stockDetails": {
+        "stockUnitUniqueName": "WfqOHXSFugRFzJ8HDrLT",
+        "amount": 50,
+        "rate": 50,
+        "quantity": 1
+      },
+      "description": "WH BT",
+      "variant": {
+        "uniqueName": "apidocwidget1792693959876fk8uyv0enl"
+      }
+    }
+  ],
+  "transporterDetails": {},
+  "entity": "warehouse-transfer",
+  "transferType": "products"
+}

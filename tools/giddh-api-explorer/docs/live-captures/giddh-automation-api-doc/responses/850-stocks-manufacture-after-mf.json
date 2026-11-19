@@ -1,0 +1,52 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 2,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "name": "API Doc Finished Good",
+        "mappedPurchaseAccount": null,
+        "mappedSalesAccount": null,
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs",
+          "group": {
+            "name": "Main Group",
+            "uniqueName": "maingroup"
+          },
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "hsnNumber": "847130",
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "uniqueName": "apidoc-finished-good"
+      },
+      {
+        "name": "API Doc Widget",
+        "mappedPurchaseAccount": null,
+        "mappedSalesAccount": null,
+        "stockUnit": {
+          "name": "Piece",
+          "code": "pcs",
+          "group": {
+            "name": "Main Group",
+            "uniqueName": "maingroup"
+          },
+          "uniqueName": "WfqOHXSFugRFzJ8HDrLT"
+        },
+        "hsnNumber": null,
+        "stockGroup": {
+          "name": "API Doc Products",
+          "uniqueName": "apidoc-products"
+        },
+        "uniqueName": "apidoc-widget"
+      }
+    ],
+    "size": 2
+  }
+}

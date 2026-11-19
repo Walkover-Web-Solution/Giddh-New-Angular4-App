@@ -1,0 +1,36 @@
+[
+  {
+    "endpointId": "dVsKwEExfZBV",
+    "issue": "DocStar URL POST /company/.../vouchers/bulk-generate does not match Spring. Implemented as POST /v4/company/{companyUniqueName}/vouchers/bulk-generate (accounting-microservice VoucherController.bulkCreate) and POST /v4/company/.../accounts/.../vouchers/bulk-generate (api-v2).",
+    "suggestedURL": "https://api.giddh.com/v4/company/:companyUniqueName/vouchers/bulk-generate",
+    "suggestedMethod": "POST"
+  },
+  {
+    "endpointId": "RoiAENnABQ2U",
+    "issue": "Catalog method is ANY for /v2/company/{}/template-preview (accounting VoucherController.getTemplatePreview). DocStar GET is plausible; catalog matcher rejected ANY.",
+    "suggestedURL": "https://api.giddh.com/v2/company/:companyUniqueName/template-preview",
+    "suggestedMethod": "GET"
+  },
+  {
+    "endpointId": "S2fQ0lJbWWvR",
+    "issue": "GET /company/.../vouchers/:voucherUniqueName/versions not found as exact route in catalog; verify against accounting/api-v2 voucher version handlers.",
+    "suggestedURL": null
+  },
+  {
+    "endpointId": "6DlKV44KYgAd",
+    "issue": "POST /company/.../vouchers/.../action unmatched. Closest: POST /company/.../invoices/{voucherUniqueName}/action (accounting-microservice).",
+    "suggestedURL": "https://api.giddh.com/company/:companyUniqueName/invoices/:voucherUniqueName/action",
+    "suggestedMethod": "POST"
+  },
+  {
+    "endpointId": "0tmPAgiTWhVW",
+    "issue": "PATCH /v4/company/.../vouchers/:voucherUniqueName unmatched in catalog route index; requires controller re-scan.",
+    "suggestedURL": null
+  },
+  {
+    "endpointId": "mIevdhqen3Zw",
+    "issue": "DocStar PUT /company/.../recurring-voucher/:id but api-v2 exposes PATCH (updateRecurringVoucherPatch), not PUT.",
+    "suggestedURL": "https://api.giddh.com/company/:companyUniqueName/recurring-voucher/:recurringVoucherUniqueName",
+    "suggestedMethod": "PATCH"
+  }
+]

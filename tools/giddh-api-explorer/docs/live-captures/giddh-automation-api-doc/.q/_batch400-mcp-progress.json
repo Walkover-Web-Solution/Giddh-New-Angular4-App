@@ -1,0 +1,8 @@
+{
+  "start": 400,
+  "totalInBatch": 50,
+  "complete": true,
+  "finishBatchNextIndex": 450,
+  "remainingEndpointIds": [],
+  "note": "All 50 MCP succeeded; finish_batch advanced nextIndex to 450."
+}

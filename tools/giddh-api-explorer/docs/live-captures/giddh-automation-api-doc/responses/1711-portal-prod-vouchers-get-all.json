@@ -1,0 +1,81 @@
+{
+  "status": "success",
+  "body": {
+    "items": [
+      {
+        "voucherNumber": "BE-1211",
+        "account": {
+          "name": "Raji",
+          "uniqueName": "raji1",
+          "customerName": "Raji",
+          "attentionTo": "",
+          "currency": {
+            "code": "INR",
+            "symbol": "\u20b9"
+          },
+          "billingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Delhi",
+              "code": "DL"
+            },
+            "address": [
+              "delhi ka address"
+            ]
+          },
+          "shippingDetails": {
+            "country": {
+              "name": "India",
+              "code": "IN"
+            },
+            "state": {
+              "name": "Delhi",
+              "code": "DL"
+            },
+            "address": [
+              "delhi ka address"
+            ]
+          }
+        },
+        "uniqueName": "yktu41792755921064",
+        "balanceStatus": "UNPAID",
+        "voucherDate": "31-10-2026",
+        "grandTotal": {
+          "amountForAccount": 15283.0,
+          "amountForCompany": 15283.0
+        },
+        "balanceDue": {
+          "amountForAccount": 15283.0,
+          "amountForCompany": 15283.0
+        },
+        "exchangeRate": 1.0,
+        "companyCurrencySymbol": "\u20b9",
+        "accountCurrencySymbol": "\u20b9",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "dueDate": "06-11-2026",
+        "isCashInvoice": false,
+        "totalBalance": {
+          "amountForAccount": 15283.0,
+          "amountForCompany": 15283.0
+        },
+        "status": "Yet-to-be Pushed",
+        "adjustments": [],
+        "purchaseOrderNumbers": "",
+        "canPay": true,
+        "cashInvoice": false
+      }
+    ],
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "fromDate": "31-10-2026",
+    "toDate": "31-10-2026"
+  },
+  "httpStatus": 200,
+  "env": "prod"
+}

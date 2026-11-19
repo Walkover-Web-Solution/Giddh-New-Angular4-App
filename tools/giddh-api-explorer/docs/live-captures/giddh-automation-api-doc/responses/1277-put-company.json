@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Country cannot be null or empty",
+  "code": "INVALID PARAMETERS"
+}

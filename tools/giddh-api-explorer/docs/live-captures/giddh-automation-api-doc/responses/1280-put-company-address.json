@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "At least one default address is required.",
+  "code": "INVALID_REQUEST"
+}

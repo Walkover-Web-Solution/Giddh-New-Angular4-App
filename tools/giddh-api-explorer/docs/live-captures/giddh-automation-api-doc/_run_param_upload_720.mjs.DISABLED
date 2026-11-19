@@ -1,0 +1,101 @@
+#!/usr/bin/env node
+/** Apply all .docstar-param-batches via DocStar PUT (same payload as MCP update_endpoint). */
+import fs from 'node:fs';
+import path from 'node:path';
+import { buildUpdateArgs } from './_docstar_param_mcp_driver.mjs';
+
+const ROOT = path.dirname(new URL(import.meta.url).pathname);
+const BATCH_DIR = path.join(ROOT, '.docstar-param-batches');
+const PROGRESS = path.join(ROOT, '.docstar-param-run-progress.json');
+const API = 'https://api.docstar.io';
+const ORG = '83427';
+const PACE_MS = Number(process.env.PACE_MS || 100);
+
+const token =
+  process.env.DOCSTAR_HM_TOKEN?.trim() ||
+  (fs.existsSync('/tmp/docstar-hm-token') ? fs.readFileSync('/tmp/docstar-hm-token', 'utf8').trim() : '');
+
+if (!token) {
+  console.error('Missing DOCSTAR_HM_TOKEN or /tmp/docstar-hm-token');
+  process.exit(2);
+}
+
+function loadItems() {
+  return fs
+    .readdirSync(BATCH_DIR)
+    .filter((f) => f.startsWith('batch-') && f.endsWith('.json'))
+    .sort()
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(BATCH_DIR, f), 'utf8')));
+}
+
+function putBody(args) {
+  const body = { description: args.description, params: args.params, body: args.body };
+  if (args.bodyDescription != null && Object.keys(args.bodyDescription).length > 0) {
+    body.bodyDescription = args.bodyDescription;
+  }
+  return body;
+}
+
+function saveProgress(p) {
+  fs.writeFileSync(PROGRESS, JSON.stringify(p, null, 2));
+}
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+const items = loadItems();
+let progress = JSON.parse(fs.readFileSync(PROGRESS, 'utf8'));
+progress.total = items.length;
+const start = progress.nextIndex ?? 0;
+
+for (let i = start; i < items.length; i++) {
+  const item = items[i];
+  const args = buildUpdateArgs(item);
+  const endpointId = args.endpointId;
+  try {
+    const res = await fetch(`${API}/orgs/${ORG}/endpoints/${endpointId}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'User-Agent': 'Mozilla/5.0 GiddhDocParamUpload',
+      },
+      body: JSON.stringify(putBody(args)),
+    });
+    const text = await res.text();
+    let data;
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch {
+      data = { raw: text.slice(0, 400) };
+    }
+    if (res.ok) {
+      progress.ok += 1;
+      if (!progress.updatedIds.includes(endpointId)) {
+        progress.updatedIds.push(endpointId);
+      }
+    } else {
+      progress.failed.push({
+        endpointId,
+        catalogKey: item.catalogKey,
+        status: res.status,
+        error: data,
+      });
+    }
+  } catch (e) {
+    progress.failed.push({ endpointId, catalogKey: item.catalogKey, error: String(e) });
+  }
+
+  progress.nextIndex = i + 1;
+  if (progress.nextIndex % 25 === 0 || progress.nextIndex === items.length) {
+    progress.lastCheckpointAt = new Date().toISOString();
+    saveProgress(progress);
+    console.log(`checkpoint nextIndex=${progress.nextIndex} ok=${progress.ok} failed=${progress.failed.length}`);
+  }
+  await sleep(PACE_MS);
+}
+
+saveProgress(progress);
+console.log(JSON.stringify({ done: true, ok: progress.ok, failed: progress.failed.length, nextIndex: progress.nextIndex }));

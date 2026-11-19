@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Currency with currency code %s does not exist",
+  "code": "CURRENCY_NOT_FOUND"
+}

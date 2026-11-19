@@ -1,0 +1,1 @@
+{"tool":"update_endpoint","arguments":{"orgId":"83427","endpointId":"GoWfV5d6CTlq","description":"Capture Order. Part of the Capture APIs in Giddh. Requires Auth-Key or Session-Id.","params":{"subscriptionId":{"checked":"true","value":"","description":"Subscription id query parameter. Required."}},"body":{"type":"none"}}}

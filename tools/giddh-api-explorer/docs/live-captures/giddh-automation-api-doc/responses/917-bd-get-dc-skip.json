@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "Document not found: missing",
+  "code": "DOCUMENT_NOT_FOUND"
+}

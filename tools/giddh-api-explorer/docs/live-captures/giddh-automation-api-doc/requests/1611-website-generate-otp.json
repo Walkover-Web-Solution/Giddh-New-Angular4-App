@@ -1,0 +1,8 @@
+{
+  "method": "POST",
+  "path": "/generate-otp",
+  "body": {
+    "countryCode": "91",
+    "mobileNumber": "9000000000"
+  }
+}

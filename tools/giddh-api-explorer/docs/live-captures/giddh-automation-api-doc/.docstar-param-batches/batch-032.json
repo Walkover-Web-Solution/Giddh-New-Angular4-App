@@ -1,0 +1,418 @@
+[
+  {
+    "endpointId": "l-N4G9BbVBaV",
+    "name": "Verify Owner Ship",
+    "catalogKey": "POST /v2/subscription/verify/ownership",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "l-N4G9BbVBaV",
+      "description": "Verify Owner Ship. Part of the Ownership APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "requestId": {
+          "checked": "true",
+          "value": "",
+          "description": "Request id query parameter. Mandatory.",
+          "required": true
+        },
+        "reject": {
+          "checked": "true",
+          "value": "false",
+          "description": "Reject query parameter. Default: false. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "DC8riPxsvNHc",
+    "name": "Verify Portal User",
+    "catalogKey": "POST /v2/verify-portal-user",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "DC8riPxsvNHc",
+      "description": "Verify Portal User. Part of the Verify Portal User APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "isEmailLogin": {
+          "checked": "true",
+          "value": "true",
+          "description": "Is email login query parameter. Default: true. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "JSON",
+        "raw": {
+          "rawType": "JSON",
+          "value": "{\n  \"emailId\": \"string\",\n  \"mobileNo\": \"string\",\n  \"accessToken\": \"string\",\n  \"emailIdAccessToken\": \"string\",\n  \"mobileNoAccessToken\": \"string\",\n  \"emailIdAuthType\": \"string\",\n  \"subDomain\": \"string\",\n  \"proxyAuthToken\": \"string\",\n  \"type\": \"string\"\n}"
+        }
+      },
+      "bodyDescription": {
+        "emailId": {
+          "type": "string",
+          "description": "Email id. Optional.",
+          "value": "string"
+        },
+        "mobileNo": {
+          "type": "string",
+          "description": "Mobile no. Optional.",
+          "value": "string"
+        },
+        "accessToken": {
+          "type": "string",
+          "description": "Access token. Optional.",
+          "value": "string"
+        },
+        "emailIdAccessToken": {
+          "type": "string",
+          "description": "Email id access token. Optional.",
+          "value": "string"
+        },
+        "mobileNoAccessToken": {
+          "type": "string",
+          "description": "Mobile no access token. Optional.",
+          "value": "string"
+        },
+        "emailIdAuthType": {
+          "type": "string",
+          "description": "Email id auth type. Optional.",
+          "value": "string"
+        },
+        "subDomain": {
+          "type": "string",
+          "description": "Sub domain. Optional.",
+          "value": "string"
+        },
+        "proxyAuthToken": {
+          "type": "string",
+          "description": "Proxy auth token. Optional.",
+          "value": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type. Optional.",
+          "value": "string"
+        }
+      }
+    }
+  },
+  {
+    "endpointId": "_FiGMQIHpMuG",
+    "name": "View Import Requests",
+    "catalogKey": "GET /company/{companyUniqueName}/imports",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "_FiGMQIHpMuG",
+      "description": "View Import Requests. Part of the Imports APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "20",
+          "description": "Page size (number of items returned). Default: 20. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "EN5O3Y9W5HDk",
+    "name": "View Statement",
+    "catalogKey": "GET /company/{companyUniqueName}/accounts/{accountUniqueName:.+}/ledgers-v2/view-statement",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "EN5O3Y9W5HDk",
+      "description": "View Statement. Part of the View Statement APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "VHbpHbpM_C7S",
+    "name": "View Statement",
+    "catalogKey": "GET /portal/company/{companyUniqueName}/accounts/{accountUniqueName:.+}/view-statement",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "VHbpHbpM_C7S",
+      "description": "View Statement. Part of the View Statement APIs in Giddh. Requires portal session.",
+      "params": {
+        "branchUniqueName": {
+          "checked": "true",
+          "value": "",
+          "description": "Branch uniqueName; omit for default company branch behaviour. Optional.",
+          "required": false
+        },
+        "page": {
+          "checked": "true",
+          "value": "1",
+          "description": "Page number (1-based). Default: 1. Optional.",
+          "required": false
+        },
+        "count": {
+          "checked": "true",
+          "value": "50",
+          "description": "Page size (number of items returned). Default: 50. Optional.",
+          "required": false
+        },
+        "sort": {
+          "checked": "true",
+          "value": "asc",
+          "description": "Sort direction. Allowed values: asc, desc. Default: asc. Optional.",
+          "required": false
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Optional.",
+          "required": false
+        },
+        "q": {
+          "checked": "true",
+          "value": "",
+          "description": "Search text (case sensitivity depends on the endpoint). Optional.",
+          "required": false
+        },
+        "accountCurrency": {
+          "checked": "true",
+          "value": "true",
+          "description": "Account currency query parameter. Default: true. Optional.",
+          "required": false
+        },
+        "lang": {
+          "checked": "true",
+          "value": "StaticMessageSource.DEFAULT_LANG",
+          "description": "Locale/language code for translated labels. Default: StaticMessageSource.DEFAULT_LANG. Optional.",
+          "required": false
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "_cKZBrP1ykGR",
+    "name": "View Vat Return",
+    "catalogKey": "POST /company/{companyUniqueName}/uk/view-vat-return",
+    "args": {
+      "orgId": "83427",
+      "endpointId": "_cKZBrP1ykGR",
+      "description": "View Vat Return. Part of the View Vat Return APIs in Giddh. Requires Auth-Key or Session-Id.",
+      "params": {
+        "taxNumber": {
+          "checked": "true",
+          "value": "",
+          "description": "Tax number query parameter. Mandatory.",
+          "required": true
+        },
+        "from": {
+          "checked": "true",
+          "value": "",
+          "description": "Range start date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "to": {
+          "checked": "true",
+          "value": "",
+          "description": "Range end date (dd-MM-yyyy). Mandatory.",
+          "required": true
+        },
+        "periodKey": {
+          "checked": "true",
+          "value": "",
+          "description": "Period key query parameter. Mandatory.",
+          "required": true
+        }
+      },
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "dVsKwEExfZBV",
+    "name": "Bulk Generate Vouchers",
+    "catalogKey": null,
+    "args": {
+      "orgId": "83427",
+      "endpointId": "dVsKwEExfZBV",
+      "description": "Customer portal API: https://api.giddh.com/company/:companyUniqueName/vouchers/bulk generate. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "RoiAENnABQ2U",
+    "name": "Get Template Preview",
+    "catalogKey": null,
+    "args": {
+      "orgId": "83427",
+      "endpointId": "RoiAENnABQ2U",
+      "description": "Customer portal API: https://api.giddh.com/v2/company/:companyUniqueName/template preview. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "S2fQ0lJbWWvR",
+    "name": "Get Voucher Versions",
+    "catalogKey": null,
+    "args": {
+      "orgId": "83427",
+      "endpointId": "S2fQ0lJbWWvR",
+      "description": "Customer portal API: https://api.giddh.com/company/:companyUniqueName/vouchers/:voucherUniqueName/versions. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "6DlKV44KYgAd",
+    "name": "Invoice Action On Voucher",
+    "catalogKey": null,
+    "args": {
+      "orgId": "83427",
+      "endpointId": "6DlKV44KYgAd",
+      "description": "Customer portal API: https://api.giddh.com/company/:companyUniqueName/vouchers/:voucherUniqueName/action. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "0tmPAgiTWhVW",
+    "name": "Patch Voucher V4",
+    "catalogKey": null,
+    "args": {
+      "orgId": "83427",
+      "endpointId": "0tmPAgiTWhVW",
+      "description": "Customer portal API: https://api.giddh.com/v4/company/:companyUniqueName/vouchers/:voucherUniqueName. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  },
+  {
+    "endpointId": "mIevdhqen3Zw",
+    "name": "Update Recurring Voucher",
+    "catalogKey": null,
+    "args": {
+      "orgId": "83427",
+      "endpointId": "mIevdhqen3Zw",
+      "description": "Customer portal API: https://api.giddh.com/company/:companyUniqueName/recurring voucher/:recurringVoucherUniqueName. Requires portal session.",
+      "params": {},
+      "body": {
+        "type": "none"
+      },
+      "bodyDescription": {}
+    }
+  }
+]

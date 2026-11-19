@@ -1,0 +1,15 @@
+{
+  "method": "GET",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/get-company-details",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy",
+  "proxyBase": "https://routes.msg91.com/api/proxy/117230/24yrfox2",
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "origin": "https://portal.giddh.com",
+    "referer": "https://portal.giddh.com/",
+    "Session-Id": "in3f3af1********RKKc="
+  },
+  "note": "Browser curl after portal session destroy/switch. Same path succeeded as 1705 with a valid portal Session-Id."
+}

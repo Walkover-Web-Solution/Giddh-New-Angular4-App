@@ -1,0 +1,19 @@
+{
+  "status": "success",
+  "body": {
+    "planAmount": 4000.0,
+    "planAmountBeforeDiscount": 4000.0,
+    "planAmountBeforeTax": 4000.0,
+    "newInvoiceCount": 3000,
+    "newBillCount": 3000,
+    "newCompanyCount": 1,
+    "daysOfSubscription": 365,
+    "startDate": "23-10-2026",
+    "endDate": "22-10-2027",
+    "upgrade": false,
+    "taxTotal": 720.0,
+    "planAmountAfterTax": 4720.0
+  },
+  "httpStatus": 200,
+  "liveHost": "https://api.giddh.com"
+}

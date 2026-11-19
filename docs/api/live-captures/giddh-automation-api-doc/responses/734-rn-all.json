@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 1,
+    "totalPages": 1,
+    "totalItems": 1,
+    "results": [
+      {
+        "uniqueName": "edk1792738826154",
+        "number": "RN-261023-1",
+        "date": "23-10-2026",
+        "source": "BUSINESS_DOCUMENT",
+        "documentType": "RC",
+        "challanType": "STOCK_TRANSFER",
+        "account": {
+          "name": "API Doc Vendor One",
+          "uniqueName": "apidoc-vendor-one"
+        },
+        "grandTotal": {
+          "amountForAccount": 100.0,
+          "amountForCompany": 100.0
+        },
+        "exchangeRate": 1,
+        "companyCurrencySymbol": "₹",
+        "accountCurrencySymbol": "₹",
+        "companyCurrencyCode": "INR",
+        "accountCurrencyCode": "INR",
+        "status": {
+          "documentType": "RC",
+          "statusCode": "RECEIVED",
+          "statusName": "Received",
+          "statusCategory": "OPEN",
+          "defaultStatusCategory": "OPEN",
+          "stage": "START"
+        },
+        "statusCode": "RECEIVED",
+        "statusName": "Received",
+        "invoiceStatus": "NOT_BILLED",
+        "adjustmentStatus": "NOT_ADJUSTED",
+        "remainingQuantity": 1.0,
+        "linkedInvoiceCount": 0,
+        "isReturn": false,
+        "allowedActions": [
+          "PREVIEW",
+          "EDIT",
+          "CONVERT_TO_CREDIT_NOTE",
+          "LINK_VOUCHER",
+          "RETURN",
+          "LOSS",
+          "MAKE_ADJUSTMENT",
+          "CHANGE_STATUS",
+          "CANCEL",
+          "DELETE"
+        ]
+      }
+    ],
+    "balances": {
+      "totalCount": 1,
+      "totalAmount": 100.0,
+      "notInvoicedCount": 1,
+      "notInvoicedAmount": 100.0,
+      "partiallyInvoicedCount": 0,
+      "partiallyInvoicedAmount": 0.0,
+      "fullyInvoicedCount": 0,
+      "fullyInvoicedAmount": 0.0,
+      "openCount": 1,
+      "closedCount": 0,
+      "expiredCount": 0,
+      "cancelledCount": 0
+    }
+  }
+}

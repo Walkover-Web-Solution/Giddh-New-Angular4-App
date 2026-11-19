@@ -1,0 +1,5 @@
+{
+  "method": "GET",
+  "path": "/v2/company/giddhain1792673422178091xos/gstr-reconcile/invoices?page=1&count=50&action=&refresh=false&from=01-08-2026&to=23-10-2026&gstReturnType=gstr1&gstin=23AAACC1206D2ZN",
+  "note": "no body"
+}

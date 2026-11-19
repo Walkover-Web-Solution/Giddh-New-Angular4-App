@@ -1,0 +1,13 @@
+{
+  "method": "POST",
+  "path": "/portal/company/10kin177424654546509z75a/accounts/raji1/vouchers/get-all?voucherVersion=2&type=sales&page=1&count=20&sort=desc&sortBy=voucherDate",
+  "env": "prod",
+  "surface": "customer-portal",
+  "via": "proxy",
+  "body": {
+    "companyUniqueName": "10kin177424654546509z75a",
+    "accountUniqueName": "raji1",
+    "balanceStatus": [],
+    "uniqueNames": []
+  }
+}

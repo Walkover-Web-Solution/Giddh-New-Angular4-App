@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "-2FROPVi42Uq", "description": "Get a stock record. Part of the Stock APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"branchUniqueName": {"checked": "true", "value": "", "description": "Branch uniqueName; omit for default company branch behaviour.", "required": "false"}}}

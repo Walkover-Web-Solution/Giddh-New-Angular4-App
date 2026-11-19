@@ -1,0 +1,97 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 3,
+    "totalPages": 1,
+    "totalItems": 3,
+    "results": [
+      {
+        "name": "API Doc Customer One",
+        "uniqueName": "apidoc-customer-one",
+        "groupName": "Sundry Debtors",
+        "totalDueAmount": 200.0,
+        "futureDueAmount": 200.0,
+        "totalDueAmountCompanyCurrency": 200.0,
+        "futureDueAmountCompanyCurrency": 200.0,
+        "currentAndPastDueAmount": [
+          {
+            "dueAmount": 0.0,
+            "range": "0-30 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "31-60 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "61-90 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "91+ days"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Customer Three",
+        "uniqueName": "apidoc-customer-three",
+        "groupName": "Sundry Debtors",
+        "totalDueAmount": 351.5,
+        "futureDueAmount": 351.5,
+        "totalDueAmountCompanyCurrency": 351.5,
+        "futureDueAmountCompanyCurrency": 351.5,
+        "currentAndPastDueAmount": [
+          {
+            "dueAmount": 0.0,
+            "range": "0-30 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "31-60 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "61-90 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "91+ days"
+          }
+        ]
+      },
+      {
+        "name": "API Doc Customer Two",
+        "uniqueName": "apidoc-customer-two",
+        "groupName": "Sundry Debtors",
+        "totalDueAmount": 175.0,
+        "futureDueAmount": 175.0,
+        "totalDueAmountCompanyCurrency": 175.0,
+        "futureDueAmountCompanyCurrency": 175.0,
+        "currentAndPastDueAmount": [
+          {
+            "dueAmount": 0.0,
+            "range": "0-30 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "31-60 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "61-90 days"
+          },
+          {
+            "dueAmount": 0.0,
+            "range": "91+ days"
+          }
+        ]
+      }
+    ],
+    "size": 3,
+    "debitTotal": 0.0,
+    "creditTotal": 0.0,
+    "overAllDueAmount": 726.5,
+    "overAllFutureDueAmount": 726.5
+  }
+}

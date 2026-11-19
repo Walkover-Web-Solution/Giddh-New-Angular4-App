@@ -1,0 +1,64 @@
+{
+  "status": "success",
+  "body": {
+    "page": 1,
+    "count": 20,
+    "totalPages": 1,
+    "totalItems": 2,
+    "results": [
+      {
+        "branches": [
+          {
+            "isDefault": false,
+            "isHeadQuarter": false,
+            "name": "Giddh Automation API DOC",
+            "alias": "Gidd",
+            "uniqueName": "giddhautomationapidoc"
+          }
+        ],
+        "name": "API Doc Addr Two",
+        "address": "API Doc Street 2",
+        "pincode": "560001",
+        "stateCode": "KA",
+        "uniqueName": "rs61792733820379",
+        "isDefault": false,
+        "taxNumber": "",
+        "stateName": "Karnataka",
+        "taxType": "GSTIN"
+      },
+      {
+        "branches": [
+          {
+            "isDefault": true,
+            "isHeadQuarter": false,
+            "name": "Giddh Automation API DOC",
+            "alias": "Gidd",
+            "uniqueName": "giddhautomationapidoc"
+          }
+        ],
+        "warehouses": [
+          {
+            "countryCode": "IN",
+            "currencyCode": "INR",
+            "isDefault": true,
+            "callingCode": null,
+            "name": "Gidd warehouse",
+            "alias": "Gidd warehouse",
+            "mobileNumber": "91-919111525164",
+            "uniqueName": "xbq1792673424418"
+          }
+        ],
+        "name": "Default Address",
+        "address": "My new address",
+        "pincode": "484224",
+        "stateCode": "MP",
+        "uniqueName": "8rz1792673422372",
+        "isDefault": true,
+        "taxNumber": "23AAACC1206D2ZN",
+        "stateName": "Madhya Pradesh",
+        "taxType": "GSTIN"
+      }
+    ],
+    "size": 2
+  }
+}

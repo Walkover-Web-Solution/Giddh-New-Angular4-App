@@ -1,0 +1,1 @@
+{"orgId": "83427", "endpointId": "DC8riPxsvNHc", "description": "Verify Portal User. Part of the Verify Portal User APIs in Giddh. Requires Auth-Key or Session-Id.", "params": {"isEmailLogin": {"checked": "true", "value": "true", "description": "Is email login query parameter. Default: true. Optional.", "required": "false"}}}
