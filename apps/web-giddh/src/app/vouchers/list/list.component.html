@@ -4864,18 +4864,7 @@
                                     <!-- delivery-challan-content-start -->
                                     <mat-tab *ngIf="activeTabGroup === 0 && settingResponse?.deliveryChallanSettings">
                                         <ng-template mat-tab-label>
-                                            <div class="voucher-svg">
-                                                <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M16.2426 4.00113L16.2497 2.00002H21.8924L21.8995 7.6498L19.8984 7.65687L19.8913 5.41534L15.5285 9.77819L14.1142 8.36398L18.4771 4.00113H16.2426Z"
-                                                    />
-                                                    <path
-                                                        d="M19 19.1787V9.17865H21V19.1787C21 20.2787 20.1 21.1787 19 21.1787H5C3.9 21.1787 3 20.2787 3 19.1787V5.17865C3 4.07865 3.9 3.17865 5 3.17865H15V5.17865H5V19.1787H19Z"
-                                                    />
-                                                    <path d="M7 17.1787H14V15.1787H7V17.1787Z" />
-                                                    <path d="M7 13.1787H17V11.1787H7V13.1787Z" />
-                                                </svg>
-                                            </div>
+                                            <i class="icon-share"></i>
                                             {{ commonLocaleData?.app_delivery_challan }}
                                         </ng-template>
                                         <ng-container formGroupName="deliveryChallanSettings">

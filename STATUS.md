@@ -112,6 +112,7 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-19 · Claude · Delivery Challan settings tab icon uses thin icon-font glyph `icon-share` (tray with outgoing arrow), like General / Email / Estimate / Proforma · Delivery Challan settings tab 🟡
 - 2026-11-19 · Claude · Receipt Note settings tab icon uses thin icon-font glyph `icon-download1` (tray with down arrow), like Integration / Pur. Order · Receipt Note settings tab 🟡
 - 2026-11-19 · Claude · Receipt Note settings tab (auto mail, WhatsApp, custom number) via `receiptNoteSettings` · Receipt Note settings tab 🟡
 - 2026-11-19 · Claude · Delivery Challan settings tab (auto mail, WhatsApp, custom number) via `deliveryChallanSettings` · Delivery Challan settings tab 🟡
