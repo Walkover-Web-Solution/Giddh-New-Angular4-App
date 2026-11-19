@@ -3,6 +3,12 @@
         .total-sale {
             border-radius: var(--mat-border-radius-4);
 
+            > p {
+                font-size: var(--font-size-14);
+                font-weight: var(--font-weight-medium);
+                line-height: var(--line-height-20);
+            }
+
             &.opening-box {
                 span {
                     color: var(--color-green);
