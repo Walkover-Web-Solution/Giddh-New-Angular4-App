@@ -51,9 +51,6 @@ export class FeedbackService {
     /** True if Steward feedback key is configured */
     public readonly isConfigured = signal<boolean>(Boolean(environment.stewardFeedbackKey));
 
-    /** Tracks whether primary sidebar is present in current layout */
-    public readonly sidebarPresent = signal<boolean>(false);
-
     /** Active dialog reference */
     private dialogRef: MatDialogRef<FeedbackDialogComponent> | null = null;
 
@@ -67,33 +64,6 @@ export class FeedbackService {
                 Boolean(this.generalService.user?.email);
             this.isLoggedIn.set(loggedIn);
         });
-    }
-
-    /**
-     * Updates sidebar presence state
-     */
-    public setSidebarPresent(present: boolean): void {
-        this.sidebarPresent.set(present);
-    }
-
-    /**
-     * Determines whether sidebar is visible in DOM
-     */
-    public isSidebarVisible(): boolean {
-        if (!this.sidebarPresent()) {
-            return false;
-        }
-        if (typeof document === 'undefined') {
-            return false;
-        }
-        const navLeftBar = document.querySelector('.nav-left-bar');
-        if (!navLeftBar) {
-            return false;
-        }
-        if (navLeftBar.classList.contains('hide-sidebar') || navLeftBar.classList.contains('visibility-hidden')) {
-            return false;
-        }
-        return true;
     }
 
     /**

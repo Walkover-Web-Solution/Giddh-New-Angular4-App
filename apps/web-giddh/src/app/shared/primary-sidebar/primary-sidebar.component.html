@@ -274,9 +274,7 @@
                                             <span
                                                 class="ml-auto create-new"
                                                 *ngIf="canShowCreateNew(node)"
-                                                (click)="
-                                                    $event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)
-                                                "
+                                                (click)="$event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)"
                                             >
                                                 {{ node?.additional?.createNew?.label }}
                                             </span>
@@ -287,23 +285,6 @@
                         </cdk-tree>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="sidebar-feedback-item" *ngIf="feedbackService.isConfigured() && feedbackService.isLoggedIn()">
-            <div class="main-item-wrapper">
-                <a
-                    href="javascript:void(0);"
-                    class="main-item"
-                    (click)="openFeedbackDialog()"
-                    [matTooltip]="!isOpen ? 'Feedback' : ''"
-                    matTooltipPosition="right"
-                    aria-label="Feedback"
-                >
-                    <span class="item-label">
-                        <i class="icon-chat2"></i>
-                        <span class="item-name">Feedback</span>
-                    </span>
-                </a>
             </div>
         </div>
     </div>

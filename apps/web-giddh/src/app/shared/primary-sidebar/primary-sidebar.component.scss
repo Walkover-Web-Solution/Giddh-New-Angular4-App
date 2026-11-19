@@ -467,62 +467,6 @@ cdk-tree {
             }
         }
     }
-    .sidebar-feedback-item {
-        .main-item-wrapper {
-            .main-item {
-                .item-label {
-                    .item-name {
-                        display: none;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.sidebar-feedback-item {
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    margin-top: auto;
-    background-color: var(--theme-primary-light);
-    border-top: 1px solid var(--color-border-light);
-    z-index: 2;
-
-    .main-item-wrapper {
-        padding: 0 20px;
-        width: 100%;
-        cursor: pointer;
-
-        .main-item {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            color: var(--color-black);
-            text-decoration: none;
-
-            .item-label {
-                color: inherit;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                display: flex;
-                align-items: center;
-
-                i {
-                    font-size: 22px;
-                    width: 22px;
-                    height: 22px;
-                    text-align: center;
-                    margin-right: 10px;
-                }
-            }
-
-            &:hover {
-                background-color: var(--bg-primary-color);
-                color: var(--color-white);
-            }
-        }
-    }
 }
 
 @media (min-height: 800px) and (max-height: 1024px) {

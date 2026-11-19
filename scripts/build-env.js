@@ -51,6 +51,11 @@ if (isElectronBuild) {
     } else {
         console.log(`Loaded ${envFile} for web build`);
     }
+    // Fall back to the shared .env for anything the environment file did not set (dotenv never overrides)
+    const sharedEnvResult = dotenv.config({ path: path.resolve(__dirname, '../', '.env') });
+    if (!sharedEnvResult.error) {
+        console.log(`Loaded .env for web build (fallback)`);
+    }
 }
 // Get environment variables with fallbacks
 const env = process.env;

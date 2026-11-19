@@ -4,6 +4,20 @@
     right: 24px;
     z-index: 1040;
     pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+
+    // Once dragged, left/top come from the component instead of the default corner
+    &.positioned {
+        bottom: auto;
+        right: auto;
+    }
+
+    &.dragging .feedback-floating-btn {
+        cursor: grabbing;
+        transform: none;
+        transition: none;
+    }
 
     .feedback-floating-btn {
         background-color: var(--bg-primary-color);
@@ -12,8 +26,11 @@
         border-radius: 24px;
         padding: 8px 16px;
         box-shadow: 0 4px 12px var(--color-shadow-light, rgba(0, 0, 0, 0.25));
-        cursor: pointer;
-        transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+        cursor: grab;
+        transition:
+            transform 0.15s ease,
+            box-shadow 0.15s ease,
+            background-color 0.15s ease;
 
         &:hover {
             transform: translateY(-2px);
