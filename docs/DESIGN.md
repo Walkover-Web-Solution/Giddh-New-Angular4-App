@@ -28,3 +28,5 @@ The existing coding rules require WCAG 2.2 AA and AXE checks for UI changes, inc
 ## Existing SEO behavior
 
 This repository is the accounting app, with environment-specific HTML entries configured by [angular.json](../angular.json). [Test](../apps/web-giddh/src/index.test.html) and [stage](../apps/web-giddh/src/index.stage.html) entries contain `noindex, nofollow`; [robots.txt](../apps/web-giddh/src/meta/robots.txt) disallows crawling. Preserve these and the existing titles/descriptions during refactors. Do not infer the marketing website's SEO policy from this app.
+
+The public marketing site (`giddh.com`), including the contact-sales Embarko form, lives in [Giddh-Website](https://github.com/Walkover-Web-Solution/Giddh-Website) (`docs/CONTACT_SALES_FORM.md` there).
