@@ -139,7 +139,7 @@ Feature work merged after the brief, not scored against it:
 - 2026-11-17 · Cursor agent · Job Work create APIs use local date range; universal date only seeds initial values · Job Work 🟡
 - 2026-11-17 · Cursor agent · Job Work Type dropdown offers Send and Receive on create · Job Work 🟡
 - 2026-11-20 · Cursor agent · Replace giddh.com Typeform contact with Embarko embed (Sales/Support) in `Giddh-Website`; map in [DESIGN](docs/DESIGN.md#marketing-website-giddhcom) · Marketing contact 🟡
-- 2026-11-17 · Cursor agent · Job Work create uses date-range picker for date/challan/expected return · Job Work  
+- 2026-11-17 · Cursor agent · Job Work create uses date-range picker for date/challan/expected return · Job Work 
 - 2026-11-17 · Cursor agent · Resolved STATUS.md after pull from `giddh-2.0`; kept email-template editor row with Job Work and Estimate/Proforma · tracker 🟡
 - 2026-11-16 · Job Work create account/stock search · Match Manufacturing from/to account groups; jobworker `sundrycreditors,sundrydebtors`; one default stocks/v2 shared across finished/raw/scrap · Job Work 🟡
 - 2026-11-16 · Job Work list actions keep order GET · Return / Scrap / Adjust reload order GET; list API cannot carry all action keys · Job Work 🟡
