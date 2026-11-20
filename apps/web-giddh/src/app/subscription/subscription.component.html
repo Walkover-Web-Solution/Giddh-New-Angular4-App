@@ -208,8 +208,7 @@
                                 <!-- Span both columns so the hint fits on one line; stay in column 1 while the OTP hint occupies column 2 -->
                                 <p
                                     class="grid-row-2 font-size-12 text-light line-height-20 mb-0"
-                                    [class.grid-col-1]="showMobileOtp && !isMobileVerified"
-                                    [class.grid-child-column-full]="!(showMobileOtp && !isMobileVerified)"
+                                    [class]="showMobileOtp && !isMobileVerified ? 'grid-col-1' : 'grid-child-column-full'"
                                 >
                                     {{ localeData?.mobile_number?.mobile_number_format }}
                                 </p>
