@@ -28,3 +28,7 @@ The existing coding rules require WCAG 2.2 AA and AXE checks for UI changes, inc
 ## Existing SEO behavior
 
 This repository is the accounting app, with environment-specific HTML entries configured by [angular.json](../angular.json). [Test](../apps/web-giddh/src/index.test.html) and [stage](../apps/web-giddh/src/index.stage.html) entries contain `noindex, nofollow`; [robots.txt](../apps/web-giddh/src/meta/robots.txt) disallows crawling. Preserve these and the existing titles/descriptions during refactors. Do not infer the marketing website's SEO policy from this app.
+
+## Marketing website (`giddh.com`)
+
+Public marketing pages, including Contact Us and homepage demo requests, live in the [`Giddh-Website`](https://github.com/Walkover-Web-Solution/Giddh-Website) Next.js repo (optional git submodule at `website/`). Visitor contact flows use the Embarko embed (`https://giddh-contact.embarko.app/embed.js`) with `data-giddh-contact` triggers for Sales and Support; Calendly remains separate for scheduling. Changes to those flows belong in `Giddh-Website`, not in `apps/web-giddh`.
