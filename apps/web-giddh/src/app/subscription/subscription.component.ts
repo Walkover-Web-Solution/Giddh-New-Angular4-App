@@ -639,9 +639,27 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.loginAction.FetchUserDetails());
             } else {
                 this.toasty.errorToast(response?.message);
+                this.resetSubmittedContactVerification(payload);
             }
             this.changeDetectionRef.detectChanges();
         });
+    }
+
+    /**
+     * Clears OTP verification of the fields sent in a failed save so the user can
+     * correct the value and verify again (e.g. "email already exists")
+     *
+     * @private
+     * @param {UpdateUserContactRequest} payload Payload that failed to save
+     * @memberof SubscriptionComponent
+     */
+    private resetSubmittedContactVerification(payload: UpdateUserContactRequest): void {
+        if (payload.email) {
+            this.resetEmailOtpState();
+        }
+        if (payload.mobile) {
+            this.resetMobileOtpState();
+        }
     }
 
     /**

@@ -37,7 +37,7 @@
 		"email_placeholder": "user@mail.com",
 		"mobile_placeholder": "9876543210",
 		"email_validation_error": "कृपया मान्य ईमेल पता दर्ज करें",
-		"email_auth_key_note": "ईमेल बदलने पर नया Auth-Key बनेगा और यूज़र यूनिक नेम नए ईमेल में बदल जाएगा। पुरानी कुंजी या यूनिक नेम वाले API इंटीग्रेशन अपडेट करें।",
+		"email_auth_key_note": "ईमेल पता बदलने पर आपका यूज़र यूनिक नेम अपडेट हो जाएगा और मौजूदा Auth-Key अमान्य हो जाएगी। नई Auth-Key बनाएँ और अपने API इंटीग्रेशन को नए क्रेडेंशियल्स से अपडेट करें।",
 		"send_otp": "OTP भेजें",
 		"resend_otp": "OTP पुनः भेजें",
 		"resend_on": "पुनः भेजें",
