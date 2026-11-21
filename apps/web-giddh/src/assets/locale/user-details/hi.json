@@ -33,6 +33,8 @@
 		"mobile_number_validation_error": "कृपया देश कोड के साथ मान्य मोबाइल नंबर दर्ज करें",
 		"registered_email_address": "पंजीकृत ईमेल पता",
 		"registered_mobile_number": "पंजीकृत मोबाइल नंबर (देश कोड सहित)",
+		"registered_mobile_number_label": "पंजीकृत मोबाइल नंबर",
+		"with_country_code": "(देश कोड सहित)",
 		"email_format": "फॉर्मेट user@mail.com जैसा होना चाहिए",
 		"email_placeholder": "user@mail.com",
 		"mobile_placeholder": "9876543210",
@@ -56,7 +58,10 @@
 		"no_changes_to_save": "सहेजने के लिए कोई सत्यापित परिवर्तन नहीं। पहले फ़ील्ड अपडेट करें और OTP सत्यापित करें।",
 		"verify_before_save": "सहेजने से पहले बदले गए फ़ील्ड के लिए OTP सत्यापित करें",
 		"contact_update_success": "संपर्क विवरण सफलतापूर्वक अपडेट हुए",
-		"new_auth_key_message": "आपका Auth-Key अपडेट हो गया है। पुरानी कुंजी का उपयोग करने वाले API इंटीग्रेशन अपडेट करें।"
+		"new_auth_key_message": "आपका Auth-Key अपडेट हो गया है। पुरानी कुंजी का उपयोग करने वाले API इंटीग्रेशन अपडेट करें।",
+		"no_mobile_added": "कोई मोबाइल नंबर नहीं जोड़ा गया",
+		"no_mobile_added_description": "महत्वपूर्ण अपडेट पाने और अपना खाता सुरक्षित रखने के लिए अपना मोबाइल नंबर जोड़ें।",
+		"add_mobile_number": "मोबाइल नंबर जोड़ें"
 	},
 	"session": {
 		"tab_heading": "अधिवेशन",

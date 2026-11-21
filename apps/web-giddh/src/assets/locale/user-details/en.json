@@ -33,6 +33,8 @@
         "mobile_number_validation_error": "Please enter a valid mobile number with country code",
         "registered_email_address": "Registered Email Address",
         "registered_mobile_number": "Registered Mobile Number (with country code)",
+        "registered_mobile_number_label": "Registered Mobile Number",
+        "with_country_code": "(with country code)",
         "email_format": "Format should be like user@mail.com",
         "email_placeholder": "user@mail.com",
         "mobile_placeholder": "9876543210",
@@ -56,7 +58,10 @@
         "no_changes_to_save": "No verified changes to save. Update a field and verify OTP first.",
         "verify_before_save": "Please verify OTP for changed fields before saving",
         "contact_update_success": "Contact details updated successfully",
-        "new_auth_key_message": "Your Auth-Key has been updated. Please update any API integrations using the old key."
+        "new_auth_key_message": "Your Auth-Key has been updated. Please update any API integrations using the old key.",
+        "no_mobile_added": "No mobile number added",
+        "no_mobile_added_description": "Add your mobile number to receive important updates and secure your account.",
+        "add_mobile_number": "Add Mobile Number"
     },
     "session": {
         "tab_heading": "Session",

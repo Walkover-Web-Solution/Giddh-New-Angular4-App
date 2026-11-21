@@ -33,6 +33,8 @@
 		"mobile_number_validation_error": "कृपया देश कोडासह वैध मोबाइल नंबर प्रविष्ट करा",
 		"registered_email_address": "नोंदणीकृत ईमेल पत्ता",
 		"registered_mobile_number": "नोंदणीकृत मोबाइल नंबर (देश कोडासह)",
+		"registered_mobile_number_label": "नोंदणीकृत मोबाइल नंबर",
+		"with_country_code": "(देश कोडासह)",
 		"email_format": "स्वरूप user@mail.com सारखे असावे",
 		"email_placeholder": "user@mail.com",
 		"mobile_placeholder": "9876543210",
@@ -56,7 +58,10 @@
 		"no_changes_to_save": "जतन करण्यासाठी सत्यापित बदल नाहीत. आधी फील्ड अपडेट करा आणि OTP सत्यापित करा.",
 		"verify_before_save": "जतन करण्यापूर्वी बदललेल्या फील्डसाठी OTP सत्यापित करा",
 		"contact_update_success": "संपर्क तपशील यशस्वीरित्या अपडेट झाले",
-		"new_auth_key_message": "तुमची Auth-Key अपडेट झाली आहे. जुनी की वापरणारे API इंटिग्रेशन अपडेट करा."
+		"new_auth_key_message": "तुमची Auth-Key अपडेट झाली आहे. जुनी की वापरणारे API इंटिग्रेशन अपडेट करा.",
+		"no_mobile_added": "मोबाइल नंबर जोडलेला नाही",
+		"no_mobile_added_description": "महत्त्वाचे अपडेट मिळवण्यासाठी आणि तुमचे खाते सुरक्षित ठेवण्यासाठी तुमचा मोबाइल नंबर जोडा.",
+		"add_mobile_number": "मोबाइल नंबर जोडा"
 	},
 	"session": {
 		"tab_heading": "सत्र",
