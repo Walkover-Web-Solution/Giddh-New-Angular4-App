@@ -1,0 +1,590 @@
+[
+ {
+  "page": "voucher/update-invoice-email",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/invoice-setting",
+  "verdict": "json",
+  "ids": [
+   "FnWQF1Xbnjh2",
+   "_e3kk83oFVu9"
+  ]
+ },
+ {
+  "page": "voucher/update-recurring-voucher",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/recurring-voucher/{recurringVoucherUniqueName}",
+  "verdict": "json",
+  "ids": [
+   "mIevdhqen3Zw"
+  ]
+ },
+ {
+  "page": "voucher/patch-voucher-v4",
+  "method": "PATCH",
+  "path": "/v4/company/{companyUniqueName}/vouchers/{voucherUniqueName}",
+  "verdict": "json",
+  "ids": [],
+  "skipped": "Documented URL has /{voucherUniqueName}; backend route is PATCH /v4/company/{c}/vouchers. Needs a URL decision."
+ },
+ {
+  "page": "voucher/bulk-generate-vouchers",
+  "method": "POST",
+  "path": "/v4/company/{companyUniqueName}/vouchers/bulk-generate",
+  "verdict": "json",
+  "ids": [
+   "dVsKwEExfZBV"
+  ]
+ },
+ {
+  "page": "voucher/invoice-action-on-voucher",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/invoices/{voucherUniqueName}/action",
+  "verdict": "json",
+  "ids": [
+   "6DlKV44KYgAd"
+  ],
+  "alreadyHasBody": [
+   "Tg2pxNdSmled",
+   "azLY9hh3OJV_"
+  ]
+ },
+ {
+  "page": "inventory/create-inventory-entry",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-users/{inventoryUserUniqueName}/inventory-entries",
+  "verdict": "json",
+  "ids": [
+   "CqJ-rkfNVahz"
+  ]
+ },
+ {
+  "page": "inventory/api-for-updates-job-work-inventory-entry-description",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/inventory-users/{inventoryUserUniqueName}/inventory-entries/{inventoryEntryUniqueName}:.+/description",
+  "verdict": "json",
+  "ids": [
+   "J46j-LhakoGg"
+  ]
+ },
+ {
+  "page": "inventory/create-inventory-user",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-users",
+  "verdict": "json",
+  "ids": [
+   "RTSfU9NHkBPk"
+  ]
+ },
+ {
+  "page": "inventory/create-inventory",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-adjustment/reason",
+  "verdict": "json",
+  "ids": [
+   "kHo5Ez6MdWzM"
+  ]
+ },
+ {
+  "page": "reports/add-comment",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/report-comment",
+  "verdict": "json",
+  "ids": [
+   "91Qs-985R7My"
+  ]
+ },
+ {
+  "page": "customer-portal/get-invoice-payment-request",
+  "method": "POST",
+  "path": "/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoice-pay-request",
+  "verdict": "json",
+  "ids": [
+   "xjZ3WpIt1dI_"
+  ]
+ },
+ {
+  "page": "customer-portal/process-voucher-payment",
+  "method": "POST",
+  "path": "/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{paymentId}/pay",
+  "verdict": "json",
+  "ids": [
+   "4Fn52OAvoUsJ"
+  ]
+ },
+ {
+  "page": "entry/mail-ledger-all",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/mail-ledger",
+  "verdict": "json",
+  "ids": [
+   "GjuZO1kkSD9T",
+   "gAYqq32GJwiO"
+  ]
+ },
+ {
+  "page": "entry/upload-file-for-ledger",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ledger/upload",
+  "verdict": "multipart",
+  "ids": [
+   "fjXfm4ELuAJn",
+   "gUSfzGsewJRV"
+  ]
+ },
+ {
+  "page": "purchase-order/change-purchase-order-status-api",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/status/change",
+  "verdict": "json",
+  "ids": [
+   "7HZ-jn67BwPi",
+   "GnGnluYl8mlN"
+  ]
+ },
+ {
+  "page": "account/mail-ledger-all",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/mail-ledger",
+  "verdict": "json",
+  "ids": [],
+  "coveredByEarlierRow": true
+ },
+ {
+  "page": "account/retrieve-all-pending-transactions",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/ledgers-v2/reconcile",
+  "verdict": "json",
+  "ids": [
+   "6XPllHEy4EeH"
+  ]
+ },
+ {
+  "page": "account/change-purchase-order-status-api",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/status/change",
+  "verdict": "json",
+  "ids": [],
+  "coveredByEarlierRow": true
+ },
+ {
+  "page": "account/get-all-versions-of-a-particular-purchase-order-with-provided-purchase-number",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/versions/all",
+  "verdict": "json",
+  "ids": [
+   "FBH4Jkct2gAX"
+  ]
+ },
+ {
+  "page": "subscription/verify-owner-ship",
+  "method": "POST",
+  "path": "/v2/subscription/verify/ownership",
+  "verdict": "text",
+  "ids": [
+   "l-N4G9BbVBaV"
+  ]
+ },
+ {
+  "page": "subscription/update-subscription-billing-account",
+  "method": "PATCH",
+  "path": "/v2/subscription/billing-account/{billingAccountUniqueName}",
+  "verdict": "json",
+  "ids": [
+   "Js5pEhr3V531"
+  ]
+ },
+ {
+  "page": "subscription/get-subscriptions",
+  "method": "POST",
+  "path": "/v2/subscription/list",
+  "verdict": "json",
+  "ids": [
+   "U9boeNZp8qq6"
+  ]
+ },
+ {
+  "page": "banking/importpdf",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/imports/import-pdf/bank-statement",
+  "verdict": "multipart",
+  "ids": [
+   "HTDDuJYIuSeC"
+  ]
+ },
+ {
+  "page": "payment/add-payu-user",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/payu",
+  "verdict": "json",
+  "ids": [
+   "VW7AWYqi-UOe"
+  ]
+ },
+ {
+  "page": "payment/add-paypal-account",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/paypal",
+  "verdict": "json",
+  "ids": [
+   "uj7nf3_GLGIZ"
+  ]
+ },
+ {
+  "page": "payment/update-paypal-account",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/paypal",
+  "verdict": "json",
+  "ids": [
+   "MMf3DGORPJAS"
+  ]
+ },
+ {
+  "page": "payment/add-razor-pay-account",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/razorpay",
+  "verdict": "json",
+  "ids": [
+   "XmclOvPAHE1v"
+  ]
+ },
+ {
+  "page": "payment/update-or-map-razor-pay-account",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/razorpay",
+  "verdict": "json",
+  "ids": [
+   "uPfT7jNRbbaS"
+  ]
+ },
+ {
+  "page": "purchase-register/get-all-versions-of-a-particular-purchase-record-with-provided-purchase-recor-",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/versions/all",
+  "verdict": "json",
+  "ids": [
+   "vYeuSflLI5Ey"
+  ]
+ },
+ {
+  "page": "stock-unit/create-stock-unit",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/stock-unit",
+  "verdict": "json",
+  "ids": [
+   "cK36nWLTAOcm"
+  ]
+ },
+ {
+  "page": "stock-unit/update-stock-unit",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/stock-unit/{stockUnitUniqueName}",
+  "verdict": "json",
+  "ids": [
+   "tr-JzRJ11Fpj"
+  ]
+ },
+ {
+  "page": "stock-unit/create-stock-unit-group",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/stock-unit-group",
+  "verdict": "json",
+  "ids": [
+   "45lIGMs5Lzrt"
+  ]
+ },
+ {
+  "page": "stock-unit/update-stock-unit-group",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/stock-unit-group/{stockUnitGroupUniqueName}",
+  "verdict": "json",
+  "ids": [
+   "xNc2ASBFlg8T"
+  ]
+ },
+ {
+  "page": "import/create-import-request",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/imports/upload",
+  "verdict": "multipart",
+  "ids": [
+   "U9Yq_-1HRUO9"
+  ]
+ },
+ {
+  "page": "import/upload-a-bank-statement-file-pdf-or-excel-csv-to-initiate-reconciliation-",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/imports/reconciliation/upload",
+  "verdict": "multipart",
+  "ids": [
+   "Q-kQzqiMBAy2"
+  ]
+ },
+ {
+  "page": "discount/assigned-discounts",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/discount/assign",
+  "verdict": "json",
+  "ids": [
+   "dDl543kSWppI"
+  ]
+ },
+ {
+  "page": "e-way-bill/generate-eway-bill",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ewb",
+  "verdict": "json",
+  "ids": [
+   "ibS32-OCcrPJ"
+  ]
+ },
+ {
+  "page": "e-way-bill/authenticate-user",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ewb/user",
+  "verdict": "json",
+  "ids": [
+   "_jzoKRnv-5Ll"
+  ]
+ },
+ {
+  "page": "e-way-bill/cancel-eway-bill",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/ewb/cancel",
+  "verdict": "json",
+  "ids": [
+   "bptyOTWM-zC7"
+  ]
+ },
+ {
+  "page": "e-way-bill/update-vehicle-number",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/ewb/vehicle",
+  "verdict": "json",
+  "ids": [
+   "V4NfSHObFs4U"
+  ]
+ },
+ {
+  "page": "e-way-bill/validate-invoice",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ewb/validate-invoice",
+  "verdict": "json",
+  "ids": [
+   "uWDPLV03e5g9"
+  ]
+ },
+ {
+  "page": "business-documents/generate-via-estimate",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/business-documents/generate-via-estimate",
+  "verdict": "json",
+  "ids": [
+   "epmbUZnS4Cis",
+   "vaDRdK9iTWEl"
+  ]
+ },
+ {
+  "page": "business-documents/generate-business-document-via-estimate",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/business-documents/generate-via-estimate",
+  "verdict": "json",
+  "ids": [],
+  "coveredByEarlierRow": true
+ },
+ {
+  "page": "custom-field/create-custom-field",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/customfield",
+  "verdict": "json",
+  "ids": [
+   "NsMoHi1YmBCZ"
+  ]
+ },
+ {
+  "page": "custom-field/update-custom-field",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/customfield/{customFieldUniqueName}:.+",
+  "verdict": "json",
+  "ids": [
+   "M9XCq3yRU1ou"
+  ]
+ },
+ {
+  "page": "financial-year/create-financial-year",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/financial-year",
+  "verdict": "json",
+  "ids": [
+   "Kr5SCFebe1mP"
+  ]
+ },
+ {
+  "page": "financial-year/update-financial-year",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/financial-year",
+  "verdict": "json",
+  "ids": [
+   "fI2FEEDxHrSU"
+  ]
+ },
+ {
+  "page": "financial-year/lock-financial-year",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/financial-year-lock",
+  "verdict": "json",
+  "ids": [
+   "vo_mp-AbsSnE"
+  ]
+ },
+ {
+  "page": "financial-year/unlock-financial-year",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/financial-year-unlock",
+  "verdict": "json",
+  "ids": [
+   "0fP-Rkw_eWr7",
+   "gDnVUwWJM1rL"
+  ]
+ },
+ {
+  "page": "financial-year/unlock-financial-year-1",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/financial-year-unlock",
+  "verdict": "json",
+  "ids": [],
+  "coveredByEarlierRow": true
+ },
+ {
+  "page": "permission/create-role",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/role",
+  "verdict": "json",
+  "ids": [
+   "ZsaBQPVQm3Om"
+  ]
+ },
+ {
+  "page": "permission/update-role",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/role/{roleUniqueName}",
+  "verdict": "json",
+  "ids": [
+   "0xnvKWCWqFTJ"
+  ]
+ },
+ {
+  "page": "invoice/update-invoice-email",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/invoice-setting",
+  "verdict": "json",
+  "ids": [],
+  "coveredByEarlierRow": true
+ },
+ {
+  "page": "ledger/upload-file-for-ledger",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ledger/upload",
+  "verdict": "multipart",
+  "ids": [],
+  "coveredByEarlierRow": true
+ },
+ {
+  "page": "tags/create-tag",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/tags",
+  "verdict": "json",
+  "ids": [
+   "IKqWuu9To2sn"
+  ]
+ },
+ {
+  "page": "tags/update-tag",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/tags/{tagUniqueName}",
+  "verdict": "json",
+  "ids": [
+   "U_u2dfNI2Ygj"
+  ]
+ },
+ {
+  "page": "transporters/add-transporter",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/transporters",
+  "verdict": "json",
+  "ids": [
+   "fTXBLZz_WT6B"
+  ]
+ },
+ {
+  "page": "transporters/update-transporter",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/transporters",
+  "verdict": "json",
+  "ids": [
+   "JzcC3bfsWBeU"
+  ]
+ },
+ {
+  "page": "due-days-range/add-due-amount-range",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/due-days-range",
+  "verdict": "json",
+  "ids": [
+   "gp88iao75REK"
+  ]
+ },
+ {
+  "page": "state-details/update-last-state",
+  "method": "POST",
+  "path": "/state-details",
+  "verdict": "json",
+  "ids": [
+   "PzOAbFmY5sVR"
+  ]
+ },
+ {
+  "page": "exception/generate-invoice-invalid-json",
+  "method": "POST",
+  "path": "/exception/invalid-json",
+  "verdict": "json",
+  "ids": [
+   "pG9vfCSLuHlB"
+  ]
+ },
+ {
+  "page": "forecast/fore-cast-data",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/forecast",
+  "verdict": "json",
+  "ids": [
+   "ggd-QCh-cK6V"
+  ]
+ },
+ {
+  "page": "logs/get-company-logs",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/logs",
+  "verdict": "json",
+  "ids": [
+   "AOIwqOVvO0Ph"
+  ]
+ },
+ {
+  "page": "purchase-bill/update-invoice-email",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/purchase-bill-setting",
+  "verdict": "json",
+  "ids": [
+   "Oprl-QL-9mZH"
+  ]
+ },
+ {
+  "page": "save-authorization-code/save-authorization-code",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/save-authorization-code",
+  "verdict": "json",
+  "ids": [
+   "FcvzjE3XRUTV"
+  ]
+ }
+]

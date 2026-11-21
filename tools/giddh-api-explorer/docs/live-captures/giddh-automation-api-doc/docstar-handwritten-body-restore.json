@@ -1,0 +1,44 @@
+[
+ {
+  "id": "zPXGO2aLVvVP",
+  "name": "Get All Vouchers",
+  "restored": [
+   "page",
+   "count",
+   "status",
+   "balanceDue",
+   "balanceEqual",
+   "balanceStatus",
+   "balanceLessThan",
+   "balanceMoreThan",
+   "selectAllFields",
+   "voucherDateAfter",
+   "voucherDateEqual",
+   "accountUniqueName",
+   "voucherDateBefore"
+  ],
+  "notFoundInCurrentBody": [
+   "total",
+   "dueDate",
+   "copyTypes",
+   "totalEqual",
+   "description",
+   "invoiceDate",
+   "voucherDate",
+   "dueDateAfter",
+   "dueDateEqual",
+   "dueDateBefore",
+   "totalLessThan",
+   "totalMoreThan",
+   "voucherNumber",
+   "eInvoiceStatus",
+   "proformaNumber",
+   "groupUniqueName",
+   "invoiceDateAfter",
+   "invoiceDateEqual",
+   "invoiceDateBefore",
+   "voucherUniqueNames",
+   "salesPersonUniqueNames"
+  ]
+ }
+]

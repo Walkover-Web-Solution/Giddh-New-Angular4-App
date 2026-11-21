@@ -1,0 +1,308 @@
+# DocStar write endpoints without a request body (2026-11-20)
+
+Fresh public snapshot of Giddh API Draft_1: 399 POST/PUT/PATCH pages, 96 with no request body (92 also without a Content-Type header). Each was checked against the backend handler, live captures and frontend calls.
+
+| Verdict | Count | Fix |
+| --- | --- | --- |
+| json | 59 | Add JSON example, field descriptions with Required/Optional, and a `Content-Type: application/json` header |
+| multipart | 5 | Add a `multipart/form-data` body with the file (and text) parts |
+| text | 1 | Add a plain-text body |
+| none | 31 | Backend reads no body: leave as is, add a note that no body is sent |
+
+## Bodies to add
+
+- **PUT voucher/update-invoice-email** (json) · required: none · source: frontend services/invoice.service.ts:281 ({ emailAddress: emailId }); capture 827-invoice-setting-put used {} (delete path, 200)
+  - example: `{"emailAddress": "billing@example.com"}`
+- **PATCH voucher/update-recurring-voucher** (json) · required: none · source: frontend services/recurring-voucher.service.ts:61 ({duration,nextCronDate,cronEndDate}); values from backend types
+  - example: `{"duration": "MONTHLY", "nextCronDate": "01-12-2026", "cronEndDate": "31-03-2027"}`
+  - note: Every field is optional: only the fields you send are updated. This legacy api-v2 route (/recurring-voucher/, singular) returned 404 Not Found live (capture 1345), so it may not be routed in production. The live recurring API is PATCH /company/{c}/recurring-vouchers/{id}?status=STOP|RESUME|EXPIRE, w
+- **PATCH voucher/patch-voucher-v4** (json) · required: uniqueName · source: frontend vouchers/preview/preview.component.ts:643 ({uniqueName, attachedFiles:[upload uniqueName]}) via services/voucher.service.ts:1190
+  - example: `{"uniqueName": "rrftm1792675101875", "attachedFiles": ["img1792738825001"]}`
+  - note: Path mismatch: no backend route has /{voucherUniqueName} in the path. The real route is PATCH /v4/company/{companyUniqueName}/vouchers, and the voucher is identified by body.uniqueName. VoucherResource binds many more fields, but updatePatch only applies attachments (and voucher-number recalculation
+- **POST voucher/bulk-generate-vouchers** (json) · required: entryUniqueNames · source: frontend vouchers/list/list.component.ts:3757 ({ entryUniqueNames: model, generateEInvoice }) via services/invoice.service.ts:90
+  - example: `{"entryUniqueNames": ["entry-unique-name-1", "entry-unique-name-2"], "generateEInvoice": false}`
+  - note: The body is an object. A JSON array fails: capture 248 sent [] and got 400 'Invalid value provided for key'. The array form [{accountUniqueName, entries}] belongs to the older api-v2 route /v4/company/{c}/accounts/{a}/vouchers/bulk-generate. The ?combined= query param is required. No successful live
+- **POST voucher/invoice-action-on-voucher** (json) · required: action · source: capture 145-cancel-sales (200 'Voucher updated.'); paid shape from frontend vouchers/payment-dialog/payment-dialog.component.ts:323
+  - example: `{"action": "cancel"}`
+  - note: Two handlers match this path. The accounting-microservice one is live: capture 145 returned 'Voucher updated.'. The api-v2 InvoiceController.payInvoice (PaymentAction) returns a different message. Paid example: {"action":"paid","date":"23-10-2026","deposits":[{"accountUniqueName":"cash","amountForAc
+- **POST inventory/create-inventory-entry** (json) · required: transactions, transactions[].type, transactions[].quantity, transactions[].inventoryUser.uniqueName, transactions[].stock.uniqueName · source: backend types (capture 1212 sent {} and failed on a bad inventory user)
+  - example: `{"inventoryEntryDate": "23-10-2026", "description": "Sent for job work", "transactions": [{"type": "SENDER", "quantity": 5, "inventoryUser": {"uniqueName": "job-worker-unique-name"}, "stock": {"uniqueName": "stock-unique-name"}, "stockUnit": {"code": "nos"}}]}`
+  - note: The example's uniqueName values are placeholders. The path inventoryUserUniqueName must be an existing inventory user (create one first with POST /inventory-users). The manufacturingDetails sub-fields were not expanded.
+- **PATCH inventory/api-for-updates-job-work-inventory-entry-description** (json) · required: none · source: frontend services/inventory.service.ts:802 ({ description })
+  - example: `{"description": "Updated job work note"}`
+  - note: The DTO binds other InventoryEntryResource fields, but updateInventoryEntryV3Desc only copies description. The path in the page carries the literal regex ':.+' (inventoryEntryUniqueName:.+), so the documented path should be cleaned. Capture 1213 sent {} and got 404 for a wrong entry name, so there i
+- **POST inventory/create-inventory-user** (json) · required: name · source: backend types
+  - example: `{"name": "Job Worker One"}`
+- **POST inventory/create-inventory** (json) · required: reason · source: capture 259-inv-adjust-create-reason (200)
+  - example: `{"reason": "Damaged in transit"}`
+  - note: The page slug says create-inventory, but the endpoint creates an adjustment reason.
+- **POST reports/add-comment** (json) · required: description · source: frontend services/contact.service.ts:100 ({ description })
+  - example: `{"description": "Follow up on overdue balance"}`
+  - note: Upsert: one comment per account, and a later call overwrites description. Capture 1137 sent {comment:...} and got 400 'Description cannot be blank.', which confirms the property name. The path contains the regex ':.+', which should be cleaned.
+- **POST customer-portal/get-invoice-payment-request** (json) · required: none · source: capture 1714-portal-prod-invoice-pay-request (array body, 200)
+  - example: `["yktu41792755921064"]`
+  - note: The body may be an array or an object. Both are valid, and the example uses the captured array form. Object example: {"voucherUniqueNames":["..."],"paymentGatewayType":"RAZORPAY"}. The object form binds other VoucherPaymentRequest fields, but this step uses only the ones listed. Required-ness is not
+- **POST customer-portal/process-voucher-payment** (json) · required: paymentGatewayType · source: backend types (capture 1727 sent {paymentId,amount,date} and got 406, so there is no successful capture)
+  - example: `{"paymentGatewayType": "RAZORPAY", "razorPayPaymentId": "pay_XXXXXXXXXXXXXX"}`
+  - note: The handler declares @RequestBody String, but the payload is parsed as a JSON VoucherPaymentRequest, so send application/json. The path paymentId must be the id returned by invoice-pay-request with a gateway. The same handler serves /paypal/ipn, where the raw PayPal IPN form string is the body inste
+- **POST entry/mail-ledger-all** (json) · required: none · source: frontend models/api-models/Ledger.ts:164 (MailLedgerRequest.recipients), services/ledger.service.ts:395
+  - example: `{"recipients": ["accounts@example.com"]}`
+  - note: Only property bound is `recipients`. The capture 335 body {email:{to:[]},message} used the wrong shape and got 404 (with voucherVersion=2), so there is no successful live capture. Send at least one recipient; an empty list is not rejected by validation, but nothing gets mailed.
+- **PATCH purchase-order/change-purchase-order-status-api** (json) · required: action, purchaseNumber · source: capture 681-po-status-cancel / 682-po-status-open (PATCH, 200)
+  - example: `{"action": "cancelled", "purchaseNumber": "PO-20261023-1"}`
+  - note: Must be PATCH. POST returned 405 (capture 552). {uniqueNames,status} returned 406 'status cannot be blank' (capture 629). The frontend sends a pass-through payload (voucher.service.ts:1148, purchase-order.service.ts:82).
+- **POST account/mail-ledger-all** (json) · required: none · source: frontend models/api-models/Ledger.ts:164 (MailLedgerRequest.recipients), services/ledger.service.ts:395
+  - example: `{"recipients": ["accounts@example.com"]}`
+  - note: Only property bound is `recipients`. The capture 335 body {email:{to:[]},message} used the wrong shape and got 404 (with voucherVersion=2), so there is no successful live capture. Send at least one recipient; an empty list is not rejected by validation, but nothing gets mailed.
+- **POST account/retrieve-all-pending-transactions** (json) · required: none · source: capture 920-reconcile-bank / 921-reconcile-cash (body {}, 200); frontend services/ledger.service.ts:232 posts {}
+  - example: `{}`
+  - note: A body is required (required=true), but every property is optional, so {} works. A fuller example: {"reconcileDate":"23-10-2026","closingBalance":15000,"closingBalanceType":"DEBIT"}. Java field `ClosingBalanceType` is exposed as `closingBalanceType` through its Lombok getter/setter. The account must
+- **PATCH account/change-purchase-order-status-api** (json) · required: action, purchaseNumber · source: capture 681-po-status-cancel / 682-po-status-open (PATCH, 200)
+  - example: `{"action": "cancelled", "purchaseNumber": "PO-20261023-1"}`
+  - note: Must be PATCH. POST returned 405 (capture 552). {uniqueNames,status} returned 406 'status cannot be blank' (capture 629). The frontend sends a pass-through payload (voucher.service.ts:1148, purchase-order.service.ts:82).
+- **POST account/get-all-versions-of-a-particular-purchase-order-with-provided-purchase-number** (json) · required: purchaseNumber · source: capture 550-po-versions (200)
+  - example: `{"purchaseNumber": "PO-20261023-1"}`
+  - note: page and count are query params.
+- **PATCH subscription/update-subscription-billing-account** (json) · required: none · source: frontend apps/web-giddh/src/app/subscription/change-billing/change-billing.component.ts:514
+  - example: `{"billingName": "Acme Traders", "companyName": "Acme Traders Pvt Ltd", "email": "billing@example.com", "pincode": "452001", "mobileNumber": "919876543210", "country": {"name": "India", "code": "IN"}, "state": {"name": "Madhya Pradesh", "code": "MP"}, "address": "12 MG Road, Indore"}`
+  - note: Partial update: only keys present are changed. The service parses the raw body (cached request stream) with Gson, so unknown keys are ignored. State code format (e.g. 'MP' vs GST numeric code) not verified against the states table; taxNumber left out of the example because it is format-validated.
+- **POST subscription/get-subscriptions** (json) · required: none · source: frontend apps/web-giddh/src/app/subscription/subscription-list/subscription-list.component.ts:309 (form keys)
+  - example: `{"companyName": "Acme", "status": "active"}`
+  - note: Body may be omitted or {}; empty/null values are ignored. Values must be strings. Status values are not enumerated in code (substring match). Earlier captures used GET and got 404; the handler is POST.
+- **POST payment/add-payu-user** (json) · required: merchantKey, merchantSalt · source: frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:798 (payuForm keys)
+  - example: `{"merchantKey": "YOUR_PAYU_MERCHANT_KEY", "merchantSalt": "YOUR_PAYU_MERCHANT_SALT", "accountUniqueName": "payu-receipts"}`
+  - note: Backend checks the key/salt with PayU before saving, so placeholder credentials will fail. POST also updates (upserts the active PayU user).
+- **POST payment/add-paypal-account** (json) · required: none · source: frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:628
+  - example: `{"email": "payments@example.com", "account": {"uniqueName": "paypal-receipts"}}`
+  - note: Fails with ALREADY_EXIST if the company already has a PayPal account. The backend does not check email on create (the panel does). The panel also sends 'message', which is ignored.
+- **PUT payment/update-paypal-account** (json) · required: email · source: frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:644
+  - example: `{"email": "payments@example.com", "account": {"uniqueName": "paypal-receipts"}}`
+  - note: Needs an existing PayPal account. Send account.uniqueName null to unlink. The real message is the 'success.message.paypal' text, not necessarily 'Operation completed successfully.'.
+- **POST payment/add-razor-pay-account** (json) · required: userName, password · source: frontend apps/web-giddh/src/app/models/api-models/SettingsIntegraion.ts:44 (RazorPayClass) via settings/customer-portal/customer.portal.component.ts:581
+  - example: `{"userName": "rzp_test_XXXXXXXXXXXX", "password": "YOUR_RAZORPAY_KEY_SECRET", "account": {"uniqueName": "razorpay-receipts"}, "autoCapturePayment": true}`
+  - note: userName/password marked required because RazorPayClient.verifyUser calls Razorpay with them and rejects invalid credentials. Fails if the company already has a Razorpay account.
+- **PUT payment/update-or-map-razor-pay-account** (json) · required: none · source: frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:586
+  - example: `{"account": {"uniqueName": "razorpay-receipts"}, "autoCapturePayment": true}`
+  - note: Needs an existing Razorpay account. Send account.uniqueName null to unlink. The panel resends the full object, including autoCapturePayment.
+- **POST purchase-register/get-all-versions-of-a-particular-purchase-record-with-provided-purchase-recor-** (json) · required: uniqueName · source: backend types; frontend services/purchase-record.service.ts:125 posts this body shape
+  - example: `{"uniqueName": "<purchase-record-uniqueName>"}`
+  - note: Capture 1117 (body {}) got a Spring 404 'Not Found' on this path, so the deployed route may differ; no successful capture.
+- **POST stock-unit/create-stock-unit** (json) · required: name, code · source: backend types; frontend models/api-models/Inventory.ts:429 StockUnitRequest (name, code, uniqueName, mappings)
+  - example: `{"name": "Pieces", "code": "pcs2", "group": {"uniqueName": "maingroup"}}`
+  - note: On update, mappings replace the unit's existing conversion mappings. The catalog's empty field list came from the getter/setter-only DTO.
+- **PUT stock-unit/update-stock-unit** (json) · required: none · source: capture 1241-put-company-stock-unit (sent name plus stockUnitUniqueName; the latter is not a bound field and is ignored)
+  - example: `{"name": "temp"}`
+  - note: On update, mappings replace the unit's existing conversion mappings. The catalog's empty field list came from the getter/setter-only DTO.
+- **POST stock-unit/create-stock-unit-group** (json) · required: name, uniqueName · source: backend types; frontend new-inventory/component/create-unit-group/create-unit-group.component.ts:92 (form {name, uniqueName})
+  - example: `{"name": "Weight", "uniqueName": "weight"}`
+- **PUT stock-unit/update-stock-unit-group** (json) · required: none · source: backend types; frontend services/inventory.service.ts:1475 updateStockUnitGroup (form {name, uniqueName})
+  - example: `{"name": "Weight Units"}`
+  - note: A new uniqueName renames the group (must be unused). Capture 1239 used a stock-unit uniqueName and got NOT_FOUND; no successful capture.
+- **POST discount/assigned-discounts** (json) · required: accountUniqueName · source: backend types; frontend models/api-models/ApplyDiscount.ts:6; values are the seeded apidoc discount and customer from captures
+  - example: `{"accountUniqueName": "apidoc-customer-three", "discountUniqueNames": ["apidoc-discount-10"]}`
+  - note: Capture 1298 (body {}) failed with accountUniqueName required, confirming the JSON body is read.
+- **POST e-way-bill/generate-eway-bill** (json) · required: uniqueName · source: frontend invoice/eWayBill/create/eWayBill.create.component.ts:163 onSubmitEwaybill (fields of models/api-models/Invoice.ts:521 GenerateEwayBill)
+  - example: `{"uniqueName": "<sales-voucher-uniqueName>", "invoiceNumber": "<invoice-number>", "supplyType": "O", "subSupplyType": "1", "docType": "INV", "transactionType": "1", "toGstIn": "URP", "toPinCode": "452001", "transDistance": "10", "transMode": "1", "vehicleNo": "MP09AB1234", "vehicleType": "R"}`
+  - note: For voucher-version-2 companies uniqueName is mandatory; version-1 uses invoiceNumber. Most address/tax/item fields are overwritten from the voucher, so clients normally send only transport fields. Needs saved e-way bill credentials. No successful capture.
+- **POST e-way-bill/authenticate-user** (json) · required: userName, password, gstIn · source: frontend models/api-models/Invoice.ts:515 EwayBillLogin (userName, password, gstIn); GSTIN from capture 1389
+  - example: `{"userName": "<ewb-portal-username>", "password": "<ewb-portal-password>", "gstIn": "23AAACC1206D2ZN"}`
+  - note: Credentials are verified against the portal (VERIFICATION_FAILED) and only one user per company is allowed (ALREADY_EXISTS). company is read-only.
+- **PUT e-way-bill/cancel-eway-bill** (json) · required: ewbNo, cancelRsnCode · source: frontend models/api-models/Invoice.ts:671 IEwayBillCancel
+  - example: `{"ewbNo": "<12-digit-ewb-number>", "cancelRsnCode": "2", "cancelRmrk": "Order cancelled"}`
+  - note: Capture 1253 (body {}) failed with 'Cancel reason cannot be left blank', confirming the JSON body is read.
+- **PUT e-way-bill/update-vehicle-number** (json) · required: ewbNo, fromPlace, fromState, reasonCode, reasonRem, transDocNo, transDocDate, transMode, vehicleType · source: backend types; field set matches frontend models/api-models/Invoice.ts:540 UpdateEwayVehicle
+  - example: `{"ewbNo": "<12-digit-ewb-number>", "vehicleNo": "MP09AB1234", "fromPlace": "Indore", "fromState": "23", "reasonCode": "1", "reasonRem": "Vehicle breakdown", "transDocNo": "LR123", "transDocDate": "20/11/2026", "transMode": "1", "vehicleType": "R"}`
+  - note: Capture 1256 (body {}) failed with 'EWB no. cannot blank/null'. Backend parses transDocDate as dd/MM/yyyy.
+- **POST e-way-bill/validate-invoice** (json) · required: invoiceNumber · source: frontend models/api-models/Company.ts:208 ValidateInvoice; services/invoice.service.ts:640
+  - example: `{"invoiceNumber": "<invoice-number>"}`
+  - note: Looks up the legacy (voucher v1) Invoice by number, so voucher-version-2 companies may get NOT_FOUND. Capture 1016 (body {}) failed with invoice number required.
+- **POST business-documents/generate-via-estimate** (json) · required: estimateNumber · source: backend types (estimate number taken from capture 137 request on the voucher estimate-conversion endpoint)
+  - example: `{"estimateNumber": "EST-20261023-1"}`
+  - note: Only the estimateNumber key is read; other keys are ignored. No capture of this endpoint and the frontend does not call it.
+- **POST business-documents/generate-business-document-via-estimate** (json) · required: estimateNumber · source: backend types (estimate number taken from capture 137 request on the voucher estimate-conversion endpoint)
+  - example: `{"estimateNumber": "EST-20261023-1"}`
+  - note: Only the estimateNumber key is read; other keys are ignored. No capture of this endpoint and the frontend does not call it.
+- **POST custom-field/create-custom-field** (json) · required: [].fieldName, [].fieldType.type, [].modules[].uniqueName, [].dataRange.min, [].dataRange.max · source: current success example (capture-created 'API Doc CF Note') and frontend custom-fields/create-edit/create-edit.component.ts:24 and :202 (sends [customFieldRequest])
+  - example: `[{"fieldName": "API Doc CF Note", "fieldType": {"name": "Text Field", "type": "STRING"}, "fieldInfo": "note", "isMandatory": false, "dataRange": {"min": "1", "max": "150"}, "modules": [{"name": "Account", "uniqueName": "account"}], "status": true}]`
+  - note: Body is a JSON array; an empty array fails (error.customField.empty). regex, isActive and uniqueName are read-only. The success example's modules [{}] looks lossy but is not a contract contradiction.
+- **PATCH custom-field/update-custom-field** (json) · required: fieldName, fieldType.type, modules[].uniqueName · source: create-custom-field success example values and frontend custom-fields/create-edit/create-edit.component.ts:220
+  - example: `{"fieldName": "API Doc CF Note", "fieldType": {"name": "Text Field", "type": "STRING"}, "fieldInfo": "note", "isMandatory": false, "dataRange": {"min": "1", "max": "150"}, "modules": [{"name": "Account", "uniqueName": "account"}], "status": true}`
+  - note: Capture 1296 (body {}) returned HTTP 500, consistent with Optional.of(null) in mergeCustomFieldData. Type cannot change while the field is used. The ':.+' in the path is a Spring regex.
+- **POST financial-year/create-financial-year** (json) · required: fromYear · source: frontend services/settings.financial-year.service.ts:88 (posts {fromYear}); 2025 assumes the test company's oldest FY starts in 2026
+  - example: `{"fromYear": 2025}`
+  - note: Fails if the oldest financial year is locked. Creates every year from fromYear up to the existing oldest one.
+- **PUT financial-year/update-financial-year** (json) · required: financialYearPeriod · source: frontend apps/web-giddh/src/app/services/settings.financial-year.service.ts:100
+  - example: `{"financialYearPeriod": "Apr-Mar"}`
+  - note: FinancialYearService.validateFinancialYearPeriod throws 'No financial year period passed.' when missing (seen in capture 1310); update is rejected if any financial year is locked.
+- **PATCH financial-year/lock-financial-year** (json) · required: uniqueName · source: frontend apps/web-giddh/src/app/settings/financial-year/financial-year.component.ts:146
+  - example: `{"uniqueName": "FY-APR2025-MAR2026", "lockAll": true}`
+  - note: CompanyService.validateFYLockRequest throws 'No financial year passed.' when uniqueName is missing (capture 1311); NotFound if it matches no company financial year. carryForwardCB is bound but never read.
+- **PATCH financial-year/unlock-financial-year** (json) · required: uniqueName · source: backend types
+  - example: `{"uniqueName": "FY-APR2026-MAR2027", "unlockAll": true}`
+  - note: FinancialYearService.validateFYUnlockRequest throws 'No financial year passed.' when uniqueName is missing (capture 1312). The Giddh panel sends {lockAll, uniqueName} here (financial-year.component.ts:146); lockAll is ignored and unlockAll defaults to true.
+- **PATCH financial-year/unlock-financial-year-1** (json) · required: uniqueName · source: backend types
+  - example: `{"uniqueName": "FY-APR2026-MAR2027", "unlockAll": true}`
+  - note: FinancialYearService.validateFYUnlockRequest throws 'No financial year passed.' when uniqueName is missing (capture 1312). The Giddh panel sends {lockAll, uniqueName} here (financial-year.component.ts:146); lockAll is ignored and unlockAll defaults to true.
+- **POST permission/create-role** (json) · required: name, scopes, scopes[].name, scopes[].permissions[].code · source: frontend apps/web-giddh/src/app/permissions/components/details/permission.details.component.ts:168
+  - example: `{"name": "API Doc Viewer Role", "scopes": [{"name": "INVOICE", "permissions": [{"code": "VW"}, {"code": "ADD"}]}, {"name": "REPORT", "permissions": [], "selectAllFields": ["permissions"]}]}`
+  - note: uniqueName and isFixed are read-only (no setters); the server generates uniqueName. Capture 748-role-create succeeded but its body script was not found.
+- **PUT permission/update-role** (json) · required: scopes, scopes[].name, scopes[].permissions[].code · source: frontend apps/web-giddh/src/app/services/permission.service.ts:54
+  - example: `{"scopes": [{"name": "INVOICE", "permissions": [{"code": "VW"}, {"code": "ADD"}]}]}`
+  - note: Fixed roles cannot be updated. The Giddh panel sends the whole role object (name, uniqueName, scopes); extra keys are ignored.
+- **PUT invoice/update-invoice-email** (json) · required: none · source: frontend apps/web-giddh/src/app/services/invoice.service.ts:281
+  - example: `{"emailAddress": "accounts@example.com"}`
+  - note: A JSON body is required (even {} to delete). emailAddress is format-checked when non-null.
+- **POST tags/create-tag** (json) · required: name · source: capture 981-tag-create
+  - example: `{"name": "api doc project tag", "description": "capture batch 9"}`
+  - note: Capture also sent uniqueName, which TagResource ignores (no such property). setCompany is technically bindable but is an entity overwritten by the server; not documented.
+- **PUT tags/update-tag** (json) · required: name · source: capture 982-tag-update (body shape only; that call 404'd on the path)
+  - example: `{"name": "api doc project tag", "description": "updated"}`
+  - note: Path tagUniqueName is the existing tag's lowercased name; capture 982 used a non-existent uniqueName and got 404.
+- **POST transporters/add-transporter** (json) · required: transporterId, transporterName · source: backend types
+  - example: `{"transporterId": "29ABCDE1234F1Z5", "transporterName": "Speedy Logistics"}`
+- **PUT transporters/update-transporter** (json) · required: transporterId, transporterName · source: backend types
+  - example: `{"transporterId": "29ABCDE1234F1Z5", "transporterName": "Speedy Logistics Pvt Ltd"}`
+  - note: The existing transporter is selected by the transporterId query param; the body transporterId is the new value.
+- **POST due-days-range/add-due-amount-range** (json) · required: range · source: frontend apps/web-giddh/src/app/services/agingreporting.service.ts:30 (shape {range}); values backend types
+  - example: `{"range": ["15", "30", "45", "60"]}`
+  - note: Body is declared optional, but the service throws 'Please provide valid range' if range is missing/empty. vendorCustomerType query must be CUSTOMER, VENDOR or INVENTORY.
+- **POST state-details/update-last-state** (json) · required: companyUniqueName, lastState · source: frontend apps/web-giddh/src/app/models/api-models/Company.ts:37
+  - example: `{"companyUniqueName": "giddhain1792673422178091xos", "lastState": "pages/home"}`
+  - note: The Giddh panel also sends currentBranchUniqueName, which is ignored. Capture 1381 failed on company lookup; the example company is the capture account's and lastState value is illustrative.
+- **POST exception/generate-invoice-invalid-json** (json) · required: none · source: backend types
+  - example: `{"url": "/company/{companyUniqueName}/ledger", "method": "POST", "queryString": "page=1", "email": "user@example.com", "userUniqueName": "user@example.com", "key": "invalid-json-example"}`
+  - note: Internal error-reporting hook: fields are only forwarded to a viaSocket webhook; nothing is validated.
+- **POST forecast/fore-cast-data** (json) · required: accountUniqueNames, granularity, analysisPeriod, forecastLength · source: frontend apps/web-giddh/src/app/budget-forecasting/utility/budget-forecasting.model.ts:27
+  - example: `{"accountUniqueNames": ["cash"], "granularity": "DAILY", "analysisPeriod": "LAST_3_MONTHS", "forecastLength": 60}`
+  - note: Body is an untyped JsonNode; keys come from ForecastService/AccountService reads. forecastLength is required in practice because validation checks isInt() before the controller default applies. Account 'cash' is illustrative.
+- **POST logs/get-company-logs** (json) · required: none · source: capture 946-audit-logs-v1
+  - example: `{"fromDate": "01-08-2026", "toDate": "23-10-2026", "operation": "", "userUniqueName": "", "accountUniqueName": ""}`
+  - note: Page number is the page query param. Invalid operation/entity values throw InvalidParameterException.
+- **PUT purchase-bill/update-invoice-email** (json) · required: none · source: frontend apps/web-giddh/src/app/services/purchase-order.service.ts:177 (shape); values backend types
+  - example: `{"emailAddress": "purchases@example.com"}`
+  - note: A JSON body is required (even {} to delete).
+- **POST save-authorization-code/save-authorization-code** (json) · required: code · source: frontend apps/web-giddh/src/app/auth-hmrc/auth-hmrc.component.ts:61
+  - example: `{"code": "<HMRC authorization code>"}`
+  - note: Only 'code' is read; the panel also sends timestamp and Gov-Client-* keys, which are ignored. Requires super-admin role and an X-Forwarded-For header. Map<String,String>: all values must be strings.
+- **POST entry/upload-file-for-ledger** (multipart) · required: none · parts: file, entries · source: frontend services/common.service.ts:187 (FormData file + entries; type as ?type= query)
+  - example: `null`
+  - note: The request must be multipart: a JSON body returned 415 (capture 1327). type (default 'ledger') and branchUniqueName are query params. Which microservice serves this path is not proven.
+- **POST banking/importpdf** (multipart) · required: none · parts: file, pdfpassword · source: frontend apps/web-giddh/src/app/services/ledger.service.ts:694
+  - example: `null`
+  - note: accountUniqueName (required) and entity are query params (frontend uses ?entity=pdf&accountUniqueName=...). Sending JSON returns 415 (capture 937-import-pdf-stmt-probe).
+- **POST import/create-import-request** (multipart) · required: none · parts: file · source: backend types
+  - example: `null`
+  - note: Must be multipart (capture 1265 with JSON got MEDIA_TYPE_NOT_SUPPORTED). Query param type is required and binds to enum ImportType: TALLY_MASTERS, TALLY_ENTRIES, MASTER_IMPORT, ENTRIES_IMPORT, INVENTORY_IMPORT, BANK_TRANSACTIONS_IMPORT, CONVERT_FILE, ACCOUNT_WISE_VOUCHER_IMPORT, VOUCHER_WISE_VOUCHER
+- **POST import/upload-a-bank-statement-file-pdf-or-excel-csv-to-initiate-reconciliation-** (multipart) · required: none · parts: file · source: backend types
+  - example: `null`
+  - note: Capture 1263 with JSON got MEDIA_TYPE_NOT_SUPPORTED. accountUniqueName, from, to, password (encrypted PDFs), lang, sameDebitCreditColumn and branchUniqueName are query/form params, not file parts.
+- **POST ledger/upload-file-for-ledger** (multipart) · required: none · parts: file, entries, type · source: frontend apps/web-giddh/src/app/services/common.service.ts:186
+  - example: `null`
+  - note: entries/type are @RequestParam so they work as query params or form fields. The accounting-microservice variant also takes branchUniqueName and has no type param.
+- **POST subscription/verify-owner-ship** (text) · required: none · source: frontend apps/web-giddh/src/app/services/subscriptions.service.ts:340 (sends model.reason as raw body)
+  - example: `"The subscription should stay with the current owner."`
+  - note: Body is a raw string, not JSON; with application/json any quotes become part of the reason. When reject=false the body is ignored, so omitting it is fine.
+
+## No body (backend reads none)
+
+- POST voucher/cancel-einvoice — No body. The required inputs are query params cnlRsn (cancel reason code) and cnlRem (remarks). An empty JSON body with Content-Type application/json is harmles
+- POST inventory/get-adjustment-report — POST with no body read. All filters are query params (page, count, from, to, inventoryType, sortBy, sort, q, searchBy, branchUniqueName). Captures 217, 261 and 
+- POST reports/get-report-mode-status — reportType is a required query param validated against FinancialReportType. WITHOUT_CHALLAN was rejected (capture 1399). The frontend sends {} (tl-pl.service.ts
+- POST magic-link/generate-magic-link — from and to are required query params (dd-MM-yyyy). Captures 348 and 349 succeeded both with no body and with {}.
+- PUT other-apis/generate-auth-key — Regenerating the key invalidates the session or key in use (capture 1217 shows the session being killed), so call it carefully.
+- PATCH subscription/update-default-subscription-payment-info — Backend reads no body. Actual message is the 'success.subscription.payment.info.default' text, which may differ from 'Saved successfully.'.
+- POST auth/authenticate-gsp-session — 
+- POST banking/create-end-user-agreement-and-requisitions — 
+- POST banking/fetch-account-details — 
+- POST gst/save-gstr1data — 
+- POST gst/save-gstr3bdata — 
+- POST vat/get-vat-obligations — 
+- POST vat/submit-vat-return — 
+- POST vat/view-vat-return — 
+- POST vat/retrieve-vat-payments — 
+- POST vat/retrieve-vat-liabilities — 
+- PATCH trigger/update-patch — PATCH only toggles the trigger between active and inactive. The frontend (campaign.integration.service.ts:221) sends a body, but the backend ignores it.
+- POST payment/capture-order — 
+- PUT user/generate-auth-key — 
+- PUT user/increment-user-session — Frontend authentication.service.ts:306 sends PUT with a null body. The Session-Id header is used.
+- PUT user/forgot-password — Only the path uniqueKey (user email/unique key) is read. Send no body and no Content-Type.
+- PATCH company/update-domain — Inputs are path domainUniqueName and query operation (delete or set-primary per Javadoc).
+- POST company/create-gsp-session — All inputs are query params; gsp defaults to whitebooks.
+- PATCH template/set-default-template — Query param type (default invoice) selects the template kind. The ':.+' in the path is a Spring regex, not part of the URL.
+- POST business-documents/cancel — No body or query params; uniqueName is the business document to cancel.
+- POST business-documents/cancel-business-document — No body or query params; uniqueName is the business document to cancel.
+- POST financial-year/create-future-financial-year — No body is read. The Giddh panel posts {fromYear} (settings.financial-year.service.ts:119) but the handler ignores it; the next financial year is derived from e
+- POST financial-year/create-future-financial-year-1 — No body is read. The Giddh panel posts {fromYear} (settings.financial-year.service.ts:119) but the handler ignores it; the next financial year is derived from e
+- PATCH warehouse/set-default-warehouse — No body; the warehouse is chosen by the path.
+- POST e-invoice/cancel-einvoice — No body; cnlRsn and cnlRem are required query params. The page already declares a Content-Type, which is harmless.
+- POST e-invoice/cancel-einvoice-for-voucher — No body; voucherType, cnlRsn and cnlRem are query params.
+
+## Success examples that look wrong (not changed here)
+
+- POST voucher/cancel-einvoice: Body is the raw message key 'success.einvoice.irn.canceled.voucher'. The handler returns the resolved text of a different key, success.einvoice.irn.cancelled.invoice: 'E-Invoice Cancelled Successfully for the Invoice'.
+- PUT voucher/update-invoice-email: 'Email deleted Successfully.' is only the response when emailAddress is null or omitted. With an address set, the body is the 'company.email.invoice.confirmation' message.
+- PATCH voucher/update-recurring-voucher: {reference:'recurring'} is a placeholder. The handler returns a RecurringVoucherDetailsResource object (voucherNumber, duration, nextCronDate, cronEndDate, ...).
+- PATCH voucher/patch-voucher-v4: {reference:'voucher'} is a placeholder. The handler returns the patched VoucherResource object.
+- POST voucher/bulk-generate-vouchers: Handler returns 'Vouchers created successfully.', not 'Saved successfully.'
+- POST voucher/invoice-action-on-voucher: Live/accounting handler returns 'Voucher updated.', not 'Saved successfully.'
+- POST inventory/create-inventory-entry: Success example is null. The handler returns HTTP 201 with the created InventoryEntryResource (uniqueName, inventoryEntryDate, description, transactions[]).
+- POST inventory/create-inventory-user: Success example is null. The handler returns HTTP 201 with {name, uniqueName}.
+- POST inventory/create-inventory: Live response is 'Inventory adjustment reason created successfully.', not 'Inventory adjustment request submitted successfully.'
+- POST reports/add-comment: Success example is null. The handler returns the saved ReportCommentResource {uniqueName, description}.
+- POST reports/get-report-mode-status: {status:'string'} is a placeholder. The handler returns ReportModeStatusResponse {mode:boolean, fromDate, toDate}, or a null body when nothing is saved.
+- POST customer-portal/get-invoice-payment-request: Example has no body. The handler returns a VoucherPaymentRequest {company, currency, totalAmount, voucherUniqueNames, vouchers[{content, amount, status, canPay, message, number, dueDate, uniqueName...}], paymentId?}.
+- POST magic-link/generate-magic-link: Success example is null. Live capture 233 returned {status:'success', body:{magicLink:'https://m.9m.io/...'}}.
+- PUT other-apis/generate-auth-key: {reference:'newAuthKey'} is a placeholder. The handler returns the AuthKeyModel object (the new auth key).
+- POST entry/upload-file-for-ledger: Matches api-v2 (FileAttachmentResource {uniqueName,url,...}). If routed to accounting-microservice, the body is the string 'Attachment uploaded successfully.'.
+- POST banking/create-end-user-agreement-and-requisitions: Placeholder {"status":"string"}; handler returns GoCardlessBankIntegrationRequisitionsDetails (id, requisitionId, institutionId, agreementId, created, redirect, status, reference, accounts).
+- POST banking/fetch-account-details: Placeholder {"status":"string"}; handler returns a GoCardless Requisitions object.
+- POST banking/importpdf: Shows an export-job message ('export-job-queued'); the handler returns the result of processBankImportRequest for the parsed statement, not an export job.
+- POST vat/get-vat-obligations: Shows 'Saved successfully.'; the handler returns the HMRC obligations object from getUKVatObligations, not a save message.
+- POST vat/submit-vat-return: Empty {}; the handler returns the HMRC submission response passed through VatService.submitVatReturn.
+- POST vat/view-vat-return: Empty {}; the handler returns the HMRC VAT return wrapped in ApiResponse.
+- POST vat/retrieve-vat-payments: Empty {}; the handler returns HMRC payments data.
+- POST vat/retrieve-vat-liabilities: Empty {}; the handler returns HMRC liabilities data.
+- PATCH trigger/update-patch: Placeholder {"reference":"response"}; the handler returns a string message (trigger activated / deactivated).
+- POST payment/add-payu-user: Null; the handler returns HTTP 201 with a success message string.
+- POST payment/add-paypal-account: Null; the handler returns HTTP 201 with a success message string.
+- POST payment/capture-order: Null; the handler returns HTTP 201 with body 'success'.
+- POST payment/add-razor-pay-account: Null; the handler returns HTTP 201 with a success message string.
+- PUT payment/update-or-map-razor-pay-account: Shows {connected, accountId}; the handler returns a success message string.
+- PUT user/generate-auth-key: Placeholder {"reference":"newAuthKey"}; the handler returns AuthKeyModel (uniqueName, authKey, role, user...).
+- POST purchase-register/get-all-versions-of-a-particular-purchase-record-with-provided-purchase-recor-: Placeholder {"status":"string"}; handler returns a paginated result of PurchaseRecordVersionResource.
+- POST stock-unit/create-stock-unit: Placeholder null; handler returns HTTP 201 with the created StockUnitResource (name, code, group{name,uniqueName}, uniqueName, mappings).
+- PUT stock-unit/update-stock-unit: Placeholder {"type":"StockUnitGroupResource"}; handler returns StockUnitResource, e.g. capture 1241 {name, code, group{name,uniqueName}, uniqueName}.
+- POST stock-unit/create-stock-unit-group: Says "Saved successfully."; handler returns HTTP 201 with StockUnitGroupResource {name, uniqueName}.
+- PUT stock-unit/update-stock-unit-group: Says "Saved successfully."; handler returns StockUnitGroupResource {name, uniqueName}.
+- POST import/create-import-request: Placeholder null; handler returns HTTP 201 with the created ImportRequest record.
+- POST import/upload-a-bank-statement-file-pdf-or-excel-csv-to-initiate-reconciliation-: Placeholder null; handler returns HTTP 201 with ReconciliationUploadResponse.
+- POST discount/assigned-discounts: Shape mismatch: handler returns a map keyed by accountUniqueName ({"<accountUniqueName>": [AssignedDiscounts...]}), not {discounts, accounts}.
+- POST e-way-bill/generate-eway-bill: Placeholder null; handler returns HTTP 201 with EwayBillResponse.
+- POST e-way-bill/authenticate-user: Placeholder null; handler returns HTTP 201 with the string "E-way bill user account successfully saved".
+- PUT e-way-bill/cancel-eway-bill: Shape mismatch: handler returns a plain string body (e.g. "E-Way Bill cancelled and deleted successfully."), not {success, code}.
+- PUT e-way-bill/update-vehicle-number: Shape mismatch: handler returns VehicleUpdateResponse {vehUpdDate, validUpto}, not {success, code}.
+- POST e-way-bill/validate-invoice: Shape mismatch: handler returns EwayBillInvoiceValidationModel {errorMessage, stockTransactionsSize}, not {valid, message}.
+- POST business-documents/cancel: Placeholder {"status":"string"}; handler returns the updated BusinessDocumentResource.
+- POST business-documents/generate-via-estimate: Placeholder null; handler returns HTTP 201 with a BusinessDocumentResource.
+- POST business-documents/generate-business-document-via-estimate: Placeholder null; handler returns HTTP 201 with a BusinessDocumentResource.
+- POST business-documents/cancel-business-document: Placeholder null; handler returns the updated BusinessDocumentResource.
+- PATCH custom-field/update-custom-field: fieldType shape is wrong: NameType has {name, type}, not {name, uniqueName}; modules, dataRange and status are also missing from what the resource returns.
+- POST financial-year/create-financial-year: Placeholder null; handler returns HTTP 201 with FinancialYearResponse (companyUniqueName, companyName, period, financialYears[]).
+- PUT financial-year/update-financial-year: Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.
+- PATCH financial-year/lock-financial-year: Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.
+- PATCH financial-year/unlock-financial-year: Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.
+- PATCH financial-year/unlock-financial-year-1: Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.
+- POST permission/create-role: Shown as null. Handler returns 201 with the created RoleV2Resource {name, uniqueName, isFixed, scopes[]}.
+- PUT permission/update-role: Permissions render as empty objects ({}); likely trimmed by the roleV2 JsonView. Low concern.
+- PUT invoice/update-invoice-email: Shows the delete-path message only. When emailAddress is set the handler returns a confirmation message naming the address.
+- POST ledger/upload-file-for-ledger: Response is FileAttachmentResource {name, uniqueName, fileType, uploadedFile}; the example's 'url' field does not exist.
+- PUT tags/update-tag: Placeholder {"status":"string"}. Handler returns the updated TagResource {name, description}.
+- POST transporters/add-transporter: Shown as null. Handler returns 201 with TransporterResource {transporterId, transporterName}.
+- PUT transporters/update-transporter: Shape {success, code} does not match; handler returns TransporterResource {transporterId, transporterName}.
+- POST e-invoice/cancel-einvoice: Shows the raw voucher message key 'success.einvoice.irn.canceled.voucher'; this handler returns the resolved text of success.einvoice.irn.cancelled.invoice.
+- POST e-invoice/cancel-einvoice-for-voucher: Shows a raw message key; the API returns the resolved text of success.einvoice.irn.cancelled.voucher.
+- POST state-details/update-last-state: Shown as null. Handler returns 201 with body "state details saved".
+- POST exception/generate-invoice-invalid-json: Shows "Saved successfully."; handler returns body "OK".
+- POST forecast/fore-cast-data: Shows "Saved successfully."; handler returns a list of ForecastResponseModel objects.
+- PUT purchase-bill/update-invoice-email: Shows the delete-path message only. When emailAddress is set the handler returns a confirmation message.
+- POST save-authorization-code/save-authorization-code: Placeholder {"status":"string"}. On success the body is "Access token generated and saved successfully."
