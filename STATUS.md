@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-20 · **Reviewed up to commit:** `a29ff51e50`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-20 · **Reviewed up to commit:** `bb43137fe9`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -117,6 +117,9 @@ Feature work merged after the brief, not scored against it:
 - 2026-11-20 · Claude · Added request bodies to 64 DocStar POST/PUT/PATCH pages (58 JSON with Content-Type, 5 form-data uploads, 1 text) and published · Public API docs 🟡
 - 2026-11-20 · Claude · Restored 13 hand-written body-field notes on DocStar Get All Vouchers from published history and published; temporary token revoked · Public API docs 🟡
 - 2026-11-17 · walkover-rishabh (logged by Claude) · `e91fc17949` voucher, estimate/proforma and purchase-order lists stop on error responses instead of reading a missing body · Voucher list (no row)
+- 2026-11-19 · walkover-rishabh (logged by Claude) · `7466c0fd50` subscription contact edit: a failed email/mobile save resets that field's OTP verification so it can be corrected and verified again · Subscription UI
+- 2026-11-18 · walkover-rishabh (logged by Claude) · `2d49a209e1` ledger: removed the consolidated-branch "switch to branch" banner and read-only new entry, so entries can be created in consolidated mode · Ledger (no row)
+- 2026-11-20 · Claude agent · User details email note (`email_auth_key_note`, en/hi/mr): changing email invalidates the existing Auth-Key; generate a new one · Subscription UI
 - 2026-11-17 · Cursor agent · Job Work Goods with Jobworker total also shows company currency · Job Work 🟡
 - 2026-11-17 · Cursor agent · Job Work expense total right-aligned with company currency via amount-field · Job Work 🟡
 - 2026-11-17 · Cursor agent · Job Work list totals from parallel `job-work-orders/summary` (same payload as list) · Job Work 🟡
