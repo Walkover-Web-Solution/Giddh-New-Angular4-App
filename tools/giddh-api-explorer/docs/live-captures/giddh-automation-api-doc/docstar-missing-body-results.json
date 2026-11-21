@@ -1,0 +1,3839 @@
+[
+ {
+  "page": "voucher/cancel-einvoice",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/invoice/{invoiceUniqueName}/cancel-einvoice",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/InvoiceController.java:302 (only @PathVariable + @RequestParam cnlRsn, cnlRem; no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Body is the raw message key 'success.einvoice.irn.canceled.voucher'. The handler returns the resolved text of a different key, success.einvoice.irn.cancelled.invoice: 'E-Invoice Cancelled Successfully for the Invoice'.",
+  "notes": "No body. The required inputs are query params cnlRsn (cancel reason code) and cnlRem (remarks). An empty JSON body with Content-Type application/json is harmless. Live probes on /invoice/{uniqueName}/cancel-einvoice returned 404 (captures 244, 362, 434), so routing is unproven. The account-scoped variant /accounts/{a}/vouchers/cancel-einvoice is a different endpoint that takes a JSON body.",
+  "ids": [
+   "0uRgyxtV3yZC",
+   "-xWo0s6PanVN"
+  ]
+ },
+ {
+  "page": "voucher/update-invoice-email",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/invoice-setting",
+  "verdict": "json",
+  "bodyType": "CompanyEmail",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/InvoiceSettingController.java:42 (@RequestBody CompanyEmail); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/models/CompanyEmail.java:12; service services/CompanySettingsService.java:113",
+  "example": {
+   "emailAddress": "billing@example.com"
+  },
+  "fields": [
+   {
+    "path": "emailAddress",
+    "type": "string",
+    "required": false,
+    "description": "Email address that sends invoices. It is format-checked when present. Omit it or send null to delete the configured email, and a confirmation mail is sent when it is set."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend services/invoice.service.ts:281 ({ emailAddress: emailId }); capture 827-invoice-setting-put used {} (delete path, 200)",
+  "successExampleIssue": "'Email deleted Successfully.' is only the response when emailAddress is null or omitted. With an address set, the body is the 'company.email.invoice.confirmation' message.",
+  "notes": null,
+  "ids": [
+   "_e3kk83oFVu9",
+   "FnWQF1Xbnjh2"
+  ]
+ },
+ {
+  "page": "voucher/update-recurring-voucher",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/recurring-voucher/{recurringVoucherUniqueName}",
+  "verdict": "json",
+  "bodyType": "RecurringVoucherRequest",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/RecurringVoucherController.java:91 (@RequestBody @Valid RecurringVoucherRequest); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/models/RecurringVoucherRequest.java:12; service services/RecurringVoucherService.java:326",
+  "example": {
+   "duration": "MONTHLY",
+   "nextCronDate": "01-12-2026",
+   "cronEndDate": "31-03-2027"
+  },
+  "fields": [
+   {
+    "path": "duration",
+    "type": "string",
+    "required": false,
+    "description": "Recurrence frequency (case-insensitive). Allowed values: MONTHLY, YEARLY, QUARTERLY, HALFYEARLY, WEEKLY, DAILY, MONTHLY_MOBILE (DurationType)."
+   },
+   {
+    "path": "nextCronDate",
+    "type": "string (dd-MM-yyyy)",
+    "required": false,
+    "description": "Date of the next generated voucher. It is validated against the original voucher date."
+   },
+   {
+    "path": "cronEndDate",
+    "type": "string (dd-MM-yyyy)",
+    "required": false,
+    "description": "Date after which no more vouchers are generated. It must be after nextCronDate."
+   },
+   {
+    "path": "voucherNumber",
+    "type": "string",
+    "required": false,
+    "description": "Bound by the DTO but not used by the update."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend services/recurring-voucher.service.ts:61 ({duration,nextCronDate,cronEndDate}); values from backend types",
+  "successExampleIssue": "{reference:'recurring'} is a placeholder. The handler returns a RecurringVoucherDetailsResource object (voucherNumber, duration, nextCronDate, cronEndDate, ...).",
+  "notes": "Every field is optional: only the fields you send are updated. This legacy api-v2 route (/recurring-voucher/, singular) returned 404 Not Found live (capture 1345), so it may not be routed in production. The live recurring API is PATCH /company/{c}/recurring-vouchers/{id}?status=STOP|RESUME|EXPIRE, which takes no body.",
+  "ids": []
+ },
+ {
+  "page": "voucher/patch-voucher-v4",
+  "method": "PATCH",
+  "path": "/v4/company/{companyUniqueName}/vouchers/{voucherUniqueName}",
+  "verdict": "json",
+  "bodyType": "VoucherResource (partial)",
+  "evidence": "giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/controllers/VoucherController.java:244 (PATCH /v4/company/{c}/vouchers, @RequestBody VoucherResource); DTO giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/models/VoucherResource.java:49 (uniqueName :61, attachedFiles :78/setter :301); service services/VoucherFacadeService.java updatePatch",
+  "example": {
+   "uniqueName": "rrftm1792675101875",
+   "attachedFiles": [
+    "img1792738825001"
+   ]
+  },
+  "fields": [
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Unique name of the voucher to patch. Without it the voucher lookup fails with 'Please provide unique name to search' (capture 1420)."
+   },
+   {
+    "path": "attachedFiles",
+    "type": "string[]",
+    "required": false,
+    "description": "Unique names of uploaded attachments (from POST /company/{c}/ledger/upload) to attach. Only the first non-blank value is kept."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend vouchers/preview/preview.component.ts:643 ({uniqueName, attachedFiles:[upload uniqueName]}) via services/voucher.service.ts:1190",
+  "successExampleIssue": "{reference:'voucher'} is a placeholder. The handler returns the patched VoucherResource object.",
+  "notes": "Path mismatch: no backend route has /{voucherUniqueName} in the path. The real route is PATCH /v4/company/{companyUniqueName}/vouchers, and the voucher is identified by body.uniqueName. VoucherResource binds many more fields, but updatePatch only applies attachments (and voucher-number recalculation on a date change, which is not reachable because the date comes from the stored voucher). Treat this as an attachment-update API.",
+  "ids": [
+   "0tmPAgiTWhVW"
+  ]
+ },
+ {
+  "page": "voucher/bulk-generate-vouchers",
+  "method": "POST",
+  "path": "/v4/company/{companyUniqueName}/vouchers/bulk-generate",
+  "verdict": "json",
+  "bodyType": "MultiVoucherRequest",
+  "evidence": "giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/controllers/VoucherController.java:371 (@RequestBody MultiVoucherRequest, @RequestParam combined); DTO giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/models/MultiVoucherRequest.java:21",
+  "example": {
+   "entryUniqueNames": [
+    "entry-unique-name-1",
+    "entry-unique-name-2"
+   ],
+   "generateEInvoice": false
+  },
+  "fields": [
+   {
+    "path": "entryUniqueNames",
+    "type": "string[]",
+    "required": true,
+    "description": "Unique names of ledger entries to turn into vouchers. If none of them match an entry without a voucher, the handler throws 'entries not found'."
+   },
+   {
+    "path": "generateEInvoice",
+    "type": "boolean",
+    "required": false,
+    "description": "Also generate e-invoices for the created vouchers."
+   },
+   {
+    "path": "voucherNumber",
+    "type": "string",
+    "required": false,
+    "description": "Custom voucher number (JSON name for the field `number`). Rejected when the entries produce more than one voucher."
+   },
+   {
+    "path": "combined",
+    "type": "boolean",
+    "required": false,
+    "description": "Ignored. It is overwritten by the required ?combined= query param."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend vouchers/list/list.component.ts:3757 ({ entryUniqueNames: model, generateEInvoice }) via services/invoice.service.ts:90",
+  "successExampleIssue": "Handler returns 'Vouchers created successfully.', not 'Saved successfully.'",
+  "notes": "The body is an object. A JSON array fails: capture 248 sent [] and got 400 'Invalid value provided for key'. The array form [{accountUniqueName, entries}] belongs to the older api-v2 route /v4/company/{c}/accounts/{a}/vouchers/bulk-generate. The ?combined= query param is required. No successful live capture exists.",
+  "ids": []
+ },
+ {
+  "page": "voucher/invoice-action-on-voucher",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/invoices/{voucherUniqueName}/action",
+  "verdict": "json",
+  "bodyType": "AccountAmountDetails",
+  "evidence": "giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/controllers/VoucherController.java:535 (@RequestBody AccountAmountDetails); DTO giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/helpers/AccountAmountDetails.java:36 (extends helpers/AmountDetails.java), validate() in same file",
+  "example": {
+   "action": "cancel"
+  },
+  "fields": [
+   {
+    "path": "action",
+    "type": "string",
+    "required": true,
+    "description": "Action to apply (case-insensitive). validate() throws when it is null. Sales invoice: paid, unpaid, hold, cancel. Credit/debit notes: cancel, paid. Purchase bill: paid."
+   },
+   {
+    "path": "date",
+    "type": "string (dd-MM-yyyy)",
+    "required": false,
+    "description": "Payment date for action=paid. Defaults to today."
+   },
+   {
+    "path": "deposits[].accountUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Bank/cash account that received the payment. Required for each deposit when action=paid."
+   },
+   {
+    "path": "deposits[].amountForAccount",
+    "type": "number",
+    "required": false,
+    "description": "Amount in the account currency. Must be > 0 when action=paid, unless amountForCompany is given."
+   },
+   {
+    "path": "deposits[].amountForCompany",
+    "type": "number",
+    "required": false,
+    "description": "Amount in company currency. When present, it is converted to amountForAccount using exchangeRate."
+   },
+   {
+    "path": "exchangeRate",
+    "type": "number",
+    "required": false,
+    "description": "Exchange rate for multi-currency payments. Defaults to the voucher's rate and must be > 0."
+   },
+   {
+    "path": "description",
+    "type": "string",
+    "required": false,
+    "description": "Narration for the payment entry."
+   },
+   {
+    "path": "chequeNumber",
+    "type": "string",
+    "required": false,
+    "description": "Cheque number for the payment."
+   },
+   {
+    "path": "chequeClearanceDate",
+    "type": "string (dd-MM-yyyy)",
+    "required": false,
+    "description": "Cheque clearance date."
+   },
+   {
+    "path": "tagNames",
+    "type": "string[]",
+    "required": false,
+    "description": "Tag names to apply to the payment entry."
+   },
+   {
+    "path": "cancelReason",
+    "type": "string",
+    "required": false,
+    "description": "Reason recorded when cancelling."
+   },
+   {
+    "path": "cancelRemarks",
+    "type": "string",
+    "required": false,
+    "description": "Remarks recorded when cancelling."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 145-cancel-sales (200 'Voucher updated.'); paid shape from frontend vouchers/payment-dialog/payment-dialog.component.ts:323",
+  "successExampleIssue": "Live/accounting handler returns 'Voucher updated.', not 'Saved successfully.'",
+  "notes": "Two handlers match this path. The accounting-microservice one is live: capture 145 returned 'Voucher updated.'. The api-v2 InvoiceController.payInvoice (PaymentAction) returns a different message. Paid example: {\"action\":\"paid\",\"date\":\"23-10-2026\",\"deposits\":[{\"accountUniqueName\":\"cash\",\"amountForAccount\":500}],\"exchangeRate\":1}. Inherited amountForAccount, amountForCompany and type are also bindable at the top level but are not used by the action.",
+  "ids": [
+   "azLY9hh3OJV_",
+   "Tg2pxNdSmled"
+  ]
+ },
+ {
+  "page": "inventory/create-inventory-entry",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-users/{inventoryUserUniqueName}/inventory-entries",
+  "verdict": "json",
+  "bodyType": "InventoryEntryResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/InventoryEntryController.java:67 (@Valid @RequestBody InventoryEntryResource); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/InventoryEntryResource.java:19, resource/InventoryTransactionResource.java; validation services/InventoryEntryService.java validateInventoryTransactions",
+  "example": {
+   "inventoryEntryDate": "23-10-2026",
+   "description": "Sent for job work",
+   "transactions": [
+    {
+     "type": "SENDER",
+     "quantity": 5,
+     "inventoryUser": {
+      "uniqueName": "job-worker-unique-name"
+     },
+     "stock": {
+      "uniqueName": "stock-unique-name"
+     },
+     "stockUnit": {
+      "code": "nos"
+     }
+    }
+   ]
+  },
+  "fields": [
+   {
+    "path": "inventoryEntryDate",
+    "type": "string (dd-MM-yyyy)",
+    "required": false,
+    "description": "Entry date. Defaults to today."
+   },
+   {
+    "path": "description",
+    "type": "string",
+    "required": false,
+    "description": "Narration. Quote characters are stripped."
+   },
+   {
+    "path": "isManufactured",
+    "type": "boolean",
+    "required": false,
+    "description": "Treat the entry as manufacturing. This triggers recipe/linked-stock handling."
+   },
+   {
+    "path": "transactions",
+    "type": "object[]",
+    "required": true,
+    "description": "Stock movements. The service throws 'The transactions cannot be empty.'"
+   },
+   {
+    "path": "transactions[].type",
+    "type": "string",
+    "required": true,
+    "description": "Direction relative to the path inventory user. Allowed values: SENDER, RECEIVER."
+   },
+   {
+    "path": "transactions[].quantity",
+    "type": "number",
+    "required": true,
+    "description": "Quantity moved. Rejected when null or negative."
+   },
+   {
+    "path": "transactions[].inventoryUser.uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "The other inventory user (counter-party). Must exist and must differ from the path user."
+   },
+   {
+    "path": "transactions[].stock.uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Stock being moved. Must exist in the company."
+   },
+   {
+    "path": "transactions[].stockUnit.code",
+    "type": "string",
+    "required": false,
+    "description": "Unit code. Defaults to the stock's unit and must be in the stock's unit hierarchy."
+   },
+   {
+    "path": "transactions[].manufacturingDetails",
+    "type": "object",
+    "required": false,
+    "description": "Manufacturing recipe details, used only when isManufactured is true."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types (capture 1212 sent {} and failed on a bad inventory user)",
+  "successExampleIssue": "Success example is null. The handler returns HTTP 201 with the created InventoryEntryResource (uniqueName, inventoryEntryDate, description, transactions[]).",
+  "notes": "The example's uniqueName values are placeholders. The path inventoryUserUniqueName must be an existing inventory user (create one first with POST /inventory-users). The manufacturingDetails sub-fields were not expanded.",
+  "ids": [
+   "CqJ-rkfNVahz"
+  ]
+ },
+ {
+  "page": "inventory/api-for-updates-job-work-inventory-entry-description",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/inventory-users/{inventoryUserUniqueName}/inventory-entries/{inventoryEntryUniqueName}:.+/description",
+  "verdict": "json",
+  "bodyType": "InventoryEntryResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/InventoryEntryController.java:132 (@RequestBody @Valid InventoryEntryResource); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/InventoryEntryResource.java:19; service services/InventoryEntryService.java:493",
+  "example": {
+   "description": "Updated job work note"
+  },
+  "fields": [
+   {
+    "path": "description",
+    "type": "string",
+    "required": false,
+    "description": "New narration for the entry. Quote characters are stripped, and sending null clears it."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend services/inventory.service.ts:802 ({ description })",
+  "successExampleIssue": null,
+  "notes": "The DTO binds other InventoryEntryResource fields, but updateInventoryEntryV3Desc only copies description. The path in the page carries the literal regex ':.+' (inventoryEntryUniqueName:.+), so the documented path should be cleaned. Capture 1213 sent {} and got 404 for a wrong entry name, so there is no successful capture.",
+  "ids": [
+   "J46j-LhakoGg"
+  ]
+ },
+ {
+  "page": "inventory/create-inventory-user",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-users",
+  "verdict": "json",
+  "bodyType": "InventoryUserResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/InventoryUserController.java:70 (@RequestBody @Valid InventoryUserResource); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/InventoryUserResource.java:8; service services/InventoryUserService.java createInventoryUser",
+  "example": {
+   "name": "Job Worker One"
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": true,
+    "description": "Display name of the inventory user (job worker). The service throws 'The name cannot be blank.' Max 100 chars (entity @Size)."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Accepted but overwritten: the server always generates the uniqueName."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Success example is null. The handler returns HTTP 201 with {name, uniqueName}.",
+  "notes": null,
+  "ids": [
+   "RTSfU9NHkBPk"
+  ]
+ },
+ {
+  "page": "inventory/get-adjustment-report",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-adjustment/adjustment-report",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/inventory/adjustment/InventoryAdjustmentController.java:48 (only @PathVariable + @RequestParam; no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": null,
+  "notes": "POST with no body read. All filters are query params (page, count, from, to, inventoryType, sortBy, sort, q, searchBy, branchUniqueName). Captures 217, 261 and 516 sent {} and got 200.",
+  "ids": [
+   "73X8-Fpds9k6"
+  ]
+ },
+ {
+  "page": "inventory/create-inventory",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/inventory-adjustment/reason",
+  "verdict": "json",
+  "bodyType": "JsonNode",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/inventory/adjustment/InventoryAdjustmentReasonController.java:39 (@RequestBody JsonNode; reads requestBody.get(\"reason\").asText())",
+  "example": {
+   "reason": "Damaged in transit"
+  },
+  "fields": [
+   {
+    "path": "reason",
+    "type": "string",
+    "required": true,
+    "description": "Name of the new inventory-adjustment reason. The handler calls get(\"reason\") directly, so a missing key fails with a server error."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 259-inv-adjust-create-reason (200)",
+  "successExampleIssue": "Live response is 'Inventory adjustment reason created successfully.', not 'Inventory adjustment request submitted successfully.'",
+  "notes": "The page slug says create-inventory, but the endpoint creates an adjustment reason.",
+  "ids": [
+   "kHo5Ez6MdWzM"
+  ]
+ },
+ {
+  "page": "reports/add-comment",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/report-comment",
+  "verdict": "json",
+  "bodyType": "ReportCommentResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/AccountV2Controller.java:133 (@RequestBody ReportCommentResource); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/ReportCommentResource.java:14; service ReportCommentService.addComment",
+  "example": {
+   "description": "Follow up on overdue balance"
+  },
+  "fields": [
+   {
+    "path": "description",
+    "type": "string",
+    "required": true,
+    "description": "Comment text. 'Description cannot be blank.' is thrown when the account has no comment yet. Quote characters are stripped, max 100 chars (entity @Size)."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Accepted but overwritten: the server generates it for a new comment."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend services/contact.service.ts:100 ({ description })",
+  "successExampleIssue": "Success example is null. The handler returns the saved ReportCommentResource {uniqueName, description}.",
+  "notes": "Upsert: one comment per account, and a later call overwrites description. Capture 1137 sent {comment:...} and got 400 'Description cannot be blank.', which confirms the property name. The path contains the regex ':.+', which should be cleaned.",
+  "ids": [
+   "91Qs-985R7My"
+  ]
+ },
+ {
+  "page": "reports/get-report-mode-status",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/reports/entity-selection",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v2/ReportV2Controller.java:598 (@RequestParam reportType, branchUniqueName; no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "{status:'string'} is a placeholder. The handler returns ReportModeStatusResponse {mode:boolean, fromDate, toDate}, or a null body when nothing is saved.",
+  "notes": "reportType is a required query param validated against FinancialReportType. WITHOUT_CHALLAN was rejected (capture 1399). The frontend sends {} (tl-pl.service.ts:300).",
+  "ids": [
+   "X0z52t1nQvAt"
+  ]
+ },
+ {
+  "page": "customer-portal/get-invoice-payment-request",
+  "method": "POST",
+  "path": "/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoice-pay-request",
+  "verdict": "json",
+  "bodyType": "JsonNode -> VoucherPaymentRequest",
+  "evidence": "giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/controllers/PortalController.java:136 (@RequestBody JsonNode); parsed by giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/models/VoucherPaymentRequest.java:111 convert(JsonNode) (class at :42)",
+  "example": [
+   "yktu41792755921064"
+  ],
+  "fields": [
+   {
+    "path": "[] (array form)",
+    "type": "string[]",
+    "required": false,
+    "description": "Simplest form: a bare JSON array of voucher unique names, which becomes voucherUniqueNames. Use it when no gateway is chosen; it returns voucher PDFs/balances only."
+   },
+   {
+    "path": "voucherUniqueNames",
+    "type": "string[]",
+    "required": false,
+    "description": "Object form: unique names of the vouchers to pay."
+   },
+   {
+    "path": "paymentGatewayType",
+    "type": "string",
+    "required": false,
+    "description": "Object form: gateway to create a payment id for. Allowed values: RAZORPAY, PAYPAL, STRIPE, PAYU. An unknown value is rejected and an empty string is ignored."
+   },
+   {
+    "path": "name",
+    "type": "string",
+    "required": false,
+    "description": "Object form: payer name, used by PAYU validation."
+   },
+   {
+    "path": "email",
+    "type": "string",
+    "required": false,
+    "description": "Object form: payer email, used by PAYU validation."
+   },
+   {
+    "path": "contactNo",
+    "type": "string",
+    "required": false,
+    "description": "Object form: payer phone, used by PAYU validation."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 1714-portal-prod-invoice-pay-request (array body, 200)",
+  "successExampleIssue": "Example has no body. The handler returns a VoucherPaymentRequest {company, currency, totalAmount, voucherUniqueNames, vouchers[{content, amount, status, canPay, message, number, dueDate, uniqueName...}], paymentId?}.",
+  "notes": "The body may be an array or an object. Both are valid, and the example uses the captured array form. Object example: {\"voucherUniqueNames\":[\"...\"],\"paymentGatewayType\":\"RAZORPAY\"}. The object form binds other VoucherPaymentRequest fields, but this step uses only the ones listed. Required-ness is not enforced in code: an empty list just returns no vouchers.",
+  "ids": [
+   "xjZ3WpIt1dI_"
+  ]
+ },
+ {
+  "page": "customer-portal/process-voucher-payment",
+  "method": "POST",
+  "path": "/portal/company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{paymentId}/pay",
+  "verdict": "json",
+  "bodyType": "String (parsed as JSON VoucherPaymentRequest)",
+  "evidence": "giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/controllers/PortalController.java:147 (@RequestBody String payload); parsed by giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/models/VoucherPaymentRequest.java:128 convert(String,...); service VoucherFacadeService.processVoucherPayment",
+  "example": {
+   "paymentGatewayType": "RAZORPAY",
+   "razorPayPaymentId": "pay_XXXXXXXXXXXXXX"
+  },
+  "fields": [
+   {
+    "path": "paymentGatewayType",
+    "type": "string",
+    "required": true,
+    "description": "Gateway that took the payment. validatePaymentProvider() throws when it is missing. Allowed values: RAZORPAY, PAYPAL, STRIPE, PAYU."
+   },
+   {
+    "path": "razorPayPaymentId",
+    "type": "string",
+    "required": false,
+    "description": "Razorpay payment id. Needed for RAZORPAY because the payment is fetched and captured with it."
+   },
+   {
+    "path": "paymentStatus",
+    "type": "string",
+    "required": false,
+    "description": "Payment status. Overwritten from the gateway for RAZORPAY, PAYPAL and PAYU."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types (capture 1727 sent {paymentId,amount,date} and got 406, so there is no successful capture)",
+  "successExampleIssue": null,
+  "notes": "The handler declares @RequestBody String, but the payload is parsed as a JSON VoucherPaymentRequest, so send application/json. The path paymentId must be the id returned by invoice-pay-request with a gateway. The same handler serves /paypal/ipn, where the raw PayPal IPN form string is the body instead. The example id is a placeholder.",
+  "ids": [
+   "4Fn52OAvoUsJ"
+  ]
+ },
+ {
+  "page": "magic-link/generate-magic-link",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/magic-link",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/AccountController.java:254 (@RequestParam from, to, expiry, branchUniqueName, lang; no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Success example is null. Live capture 233 returned {status:'success', body:{magicLink:'https://m.9m.io/...'}}.",
+  "notes": "from and to are required query params (dd-MM-yyyy). Captures 348 and 349 succeeded both with no body and with {}.",
+  "ids": [
+   "X7cuC0aCeDez"
+  ]
+ },
+ {
+  "page": "other-apis/generate-auth-key",
+  "method": "PUT",
+  "path": "/users/{uniqueName}/generate-auth-key",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/UserController.java:79 (only @PathVariable uniqueName; no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "{reference:'newAuthKey'} is a placeholder. The handler returns the AuthKeyModel object (the new auth key).",
+  "notes": "Regenerating the key invalidates the session or key in use (capture 1217 shows the session being killed), so call it carefully.",
+  "ids": [
+   "K-BJ-PLHddJD",
+   "JV2VQwWZwbho"
+  ]
+ },
+ {
+  "page": "entry/mail-ledger-all",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/mail-ledger",
+  "verdict": "json",
+  "bodyType": "SendToOrCc",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/ImportExportController.java:208 (@RequestBody SendToOrCc); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/models/SendToOrCc.java:15",
+  "example": {
+   "recipients": [
+    "accounts@example.com"
+   ]
+  },
+  "fields": [
+   {
+    "path": "recipients",
+    "type": "string[]",
+    "required": false,
+    "description": "Email addresses the ledger export is mailed to; each one is checked by Utility.validateEmailAddresses and an invalid address is rejected."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend models/api-models/Ledger.ts:164 (MailLedgerRequest.recipients), services/ledger.service.ts:395",
+  "successExampleIssue": null,
+  "notes": "Only property bound is `recipients`. The capture 335 body {email:{to:[]},message} used the wrong shape and got 404 (with voucherVersion=2), so there is no successful live capture. Send at least one recipient; an empty list is not rejected by validation, but nothing gets mailed.",
+  "ids": [
+   "GjuZO1kkSD9T",
+   "gAYqq32GJwiO"
+  ]
+ },
+ {
+  "page": "entry/upload-file-for-ledger",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ledger/upload",
+  "verdict": "multipart",
+  "bodyType": "multipart/form-data",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/ImageController.java:147 (headers content-type=multipart/*, @RequestParam MultipartFile file, entries, type); also giddha-giddh-accounting-microservice-21ec5e126986/src/main/java/com/giddh/api/controllers/AttachmentController.java:55",
+  "example": null,
+  "fields": [],
+  "multipartParts": [
+   {
+    "name": "file",
+    "kind": "file",
+    "required": true,
+    "description": "File to attach. The api-v2 handler throws 'Attach file in request.' when it is missing, even though the annotation is required=false."
+   },
+   {
+    "name": "entries",
+    "kind": "text",
+    "required": false,
+    "description": "Comma-separated ledger entry unique names to attach the file to. It may also be sent as a query param."
+   }
+  ],
+  "exampleSource": "frontend services/common.service.ts:187 (FormData file + entries; type as ?type= query)",
+  "successExampleIssue": "Matches api-v2 (FileAttachmentResource {uniqueName,url,...}). If routed to accounting-microservice, the body is the string 'Attachment uploaded successfully.'.",
+  "notes": "The request must be multipart: a JSON body returned 415 (capture 1327). type (default 'ledger') and branchUniqueName are query params. Which microservice serves this path is not proven.",
+  "ids": [
+   "gUSfzGsewJRV",
+   "fjXfm4ELuAJn"
+  ]
+ },
+ {
+  "page": "purchase-order/change-purchase-order-status-api",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/status/change",
+  "verdict": "json",
+  "bodyType": "PurchaseOrderAction",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/purchase/order/PurchaseOrderAccountController.java:272 (@RequestBody PurchaseOrderAction); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/dao/documents/purchase/PurchaseOrderAction.java:18; validation services/purchase/PurchaseOrderService.java:913",
+  "example": {
+   "action": "cancelled",
+   "purchaseNumber": "PO-20261023-1"
+  },
+  "fields": [
+   {
+    "path": "action",
+    "type": "string",
+    "required": true,
+    "description": "New purchase order status. validateStatusRequest rejects a blank or unknown value. Allowed values: open, expired, cancelled (converted and partially-converted are rejected by updateStatus)."
+   },
+   {
+    "path": "purchaseNumber",
+    "type": "string",
+    "required": true,
+    "description": "Purchase order number (not its uniqueName). It is rejected when blank and is used to look up the order."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Bound by the DTO but ignored by this handler. Use purchaseNumber."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 681-po-status-cancel / 682-po-status-open (PATCH, 200)",
+  "successExampleIssue": null,
+  "notes": "Must be PATCH. POST returned 405 (capture 552). {uniqueNames,status} returned 406 'status cannot be blank' (capture 629). The frontend sends a pass-through payload (voucher.service.ts:1148, purchase-order.service.ts:82).",
+  "ids": [
+   "7HZ-jn67BwPi",
+   "GnGnluYl8mlN"
+  ]
+ },
+ {
+  "page": "account/mail-ledger-all",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/mail-ledger",
+  "verdict": "json",
+  "bodyType": "SendToOrCc",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/ImportExportController.java:208 (@RequestBody SendToOrCc); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/models/SendToOrCc.java:15",
+  "example": {
+   "recipients": [
+    "accounts@example.com"
+   ]
+  },
+  "fields": [
+   {
+    "path": "recipients",
+    "type": "string[]",
+    "required": false,
+    "description": "Email addresses the ledger export is mailed to; each one is checked by Utility.validateEmailAddresses and an invalid address is rejected."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend models/api-models/Ledger.ts:164 (MailLedgerRequest.recipients), services/ledger.service.ts:395",
+  "successExampleIssue": null,
+  "notes": "Only property bound is `recipients`. The capture 335 body {email:{to:[]},message} used the wrong shape and got 404 (with voucherVersion=2), so there is no successful live capture. Send at least one recipient; an empty list is not rejected by validation, but nothing gets mailed.",
+  "ids": [
+   "GjuZO1kkSD9T",
+   "gAYqq32GJwiO"
+  ]
+ },
+ {
+  "page": "account/retrieve-all-pending-transactions",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}:.+/ledgers-v2/reconcile",
+  "verdict": "json",
+  "bodyType": "ReconcileLedger",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/LedgerControllerV2.java:110 (@RequestBody(required = true) ReconcileLedger); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/models/ReconcileLedger.java:20; service LedgerCrudServiceV2.retrieveAllPendingTransactions",
+  "example": {},
+  "fields": [
+   {
+    "path": "reconcileDate",
+    "type": "string (dd-MM-yyyy)",
+    "required": false,
+    "description": "Date up to which to reconcile. Defaults to today."
+   },
+   {
+    "path": "closingBalance",
+    "type": "number",
+    "required": false,
+    "description": "Bank statement closing balance to compare against. Defaults to 0."
+   },
+   {
+    "path": "closingBalanceType",
+    "type": "string",
+    "required": false,
+    "description": "Side of the closing balance. Allowed values: CREDIT, DEBIT (case-insensitive). Derived from closingBalance when blank."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 920-reconcile-bank / 921-reconcile-cash (body {}, 200); frontend services/ledger.service.ts:232 posts {}",
+  "successExampleIssue": null,
+  "notes": "A body is required (required=true), but every property is optional, so {} works. A fuller example: {\"reconcileDate\":\"23-10-2026\",\"closingBalance\":15000,\"closingBalanceType\":\"DEBIT\"}. Java field `ClosingBalanceType` is exposed as `closingBalanceType` through its Lombok getter/setter. The account must be an asset or liability account. The frontend's from, to and chequeNumber query params are not declared by this handler.",
+  "ids": [
+   "6XPllHEy4EeH"
+  ]
+ },
+ {
+  "page": "account/change-purchase-order-status-api",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/status/change",
+  "verdict": "json",
+  "bodyType": "PurchaseOrderAction",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/purchase/order/PurchaseOrderAccountController.java:272 (@RequestBody PurchaseOrderAction); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/dao/documents/purchase/PurchaseOrderAction.java:18; validation services/purchase/PurchaseOrderService.java:913",
+  "example": {
+   "action": "cancelled",
+   "purchaseNumber": "PO-20261023-1"
+  },
+  "fields": [
+   {
+    "path": "action",
+    "type": "string",
+    "required": true,
+    "description": "New purchase order status. validateStatusRequest rejects a blank or unknown value. Allowed values: open, expired, cancelled (converted and partially-converted are rejected by updateStatus)."
+   },
+   {
+    "path": "purchaseNumber",
+    "type": "string",
+    "required": true,
+    "description": "Purchase order number (not its uniqueName). It is rejected when blank and is used to look up the order."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Bound by the DTO but ignored by this handler. Use purchaseNumber."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 681-po-status-cancel / 682-po-status-open (PATCH, 200)",
+  "successExampleIssue": null,
+  "notes": "Must be PATCH. POST returned 405 (capture 552). {uniqueNames,status} returned 406 'status cannot be blank' (capture 629). The frontend sends a pass-through payload (voucher.service.ts:1148, purchase-order.service.ts:82).",
+  "ids": [
+   "7HZ-jn67BwPi",
+   "GnGnluYl8mlN"
+  ]
+ },
+ {
+  "page": "account/get-all-versions-of-a-particular-purchase-order-with-provided-purchase-number",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-order/versions/all",
+  "verdict": "json",
+  "bodyType": "PurchaseOrderAction",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/purchase/order/PurchaseOrderAccountController.java:344 (@RequestBody PurchaseOrderAction); DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/dao/documents/purchase/PurchaseOrderAction.java:18; service services/purchase/PurchaseOrderService.java:952",
+  "example": {
+   "purchaseNumber": "PO-20261023-1"
+  },
+  "fields": [
+   {
+    "path": "purchaseNumber",
+    "type": "string",
+    "required": true,
+    "description": "Purchase order number whose version history to list. validatePurchaseNumber rejects a blank value."
+   },
+   {
+    "path": "action",
+    "type": "string",
+    "required": false,
+    "description": "Bound by the DTO but ignored here."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Bound by the DTO but ignored here."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 550-po-versions (200)",
+  "successExampleIssue": null,
+  "notes": "page and count are query params.",
+  "ids": [
+   "FBH4Jkct2gAX"
+  ]
+ },
+ {
+  "page": "subscription/verify-owner-ship",
+  "method": "POST",
+  "path": "/v2/subscription/verify/ownership",
+  "verdict": "text",
+  "bodyType": "String (text/plain), optional",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/SubscriptionControllerV2.java:86 (@RequestBody(required=false) String rejectionReason); giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/SubscriptionServiceV2.java:281",
+  "example": "The subscription should stay with the current owner.",
+  "fields": [
+   {
+    "path": "(body)",
+    "type": "string",
+    "required": false,
+    "description": "Plain-text rejection reason; only used (emailed to the previous owner) when reject=true. Send with Content-Type: text/plain."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/subscriptions.service.ts:340 (sends model.reason as raw body)",
+  "successExampleIssue": null,
+  "notes": "Body is a raw string, not JSON; with application/json any quotes become part of the reason. When reject=false the body is ignored, so omitting it is fine.",
+  "ids": [
+   "l-N4G9BbVBaV"
+  ]
+ },
+ {
+  "page": "subscription/update-subscription-billing-account",
+  "method": "PATCH",
+  "path": "/v2/subscription/billing-account/{billingAccountUniqueName}",
+  "verdict": "json",
+  "bodyType": "SubscriptionBillingAccountResource (re-read as raw JSON by the service)",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/SubscriptionControllerV2.java:111; DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/SubscriptionBillingAccountResource.java; logic giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/SubscriptionServiceV2.java:440",
+  "example": {
+   "billingName": "Acme Traders",
+   "companyName": "Acme Traders Pvt Ltd",
+   "email": "billing@example.com",
+   "pincode": "452001",
+   "mobileNumber": "919876543210",
+   "country": {
+    "name": "India",
+    "code": "IN"
+   },
+   "state": {
+    "name": "Madhya Pradesh",
+    "code": "MP"
+   },
+   "address": "12 MG Road, Indore"
+  },
+  "fields": [
+   {
+    "path": "billingName",
+    "type": "string",
+    "required": false,
+    "description": "Billing name; if the key is sent it must not be empty or null."
+   },
+   {
+    "path": "companyName",
+    "type": "string",
+    "required": false,
+    "description": "Company name on the billing account; if sent it must not be empty or null."
+   },
+   {
+    "path": "taxNumber",
+    "type": "string",
+    "required": false,
+    "description": "Tax number (e.g. GSTIN/VAT); validated against the billing account's country format."
+   },
+   {
+    "path": "email",
+    "type": "string",
+    "required": false,
+    "description": "Billing email address."
+   },
+   {
+    "path": "pincode",
+    "type": "string",
+    "required": false,
+    "description": "Postal / PIN code."
+   },
+   {
+    "path": "mobileNumber",
+    "type": "string",
+    "required": false,
+    "description": "Contact number with country code, digits only; validated for the account's country."
+   },
+   {
+    "path": "address",
+    "type": "string",
+    "required": false,
+    "description": "Billing address, max 500 characters."
+   },
+   {
+    "path": "country.name",
+    "type": "string",
+    "required": false,
+    "description": "Country name (informational)."
+   },
+   {
+    "path": "country.code",
+    "type": "string",
+    "required": false,
+    "description": "ISO alpha-2 country code. When country is sent: GB requires county.code, any other country requires state.code."
+   },
+   {
+    "path": "state.name",
+    "type": "string",
+    "required": false,
+    "description": "State name (informational)."
+   },
+   {
+    "path": "state.code",
+    "type": "string",
+    "required": false,
+    "description": "State code for the country; required when country.code is not GB. Must exist for that country."
+   },
+   {
+    "path": "county.name",
+    "type": "string",
+    "required": false,
+    "description": "County name (informational, UK only)."
+   },
+   {
+    "path": "county.code",
+    "type": "string",
+    "required": false,
+    "description": "County code; required when country.code is GB. Must exist for that country."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/subscription/change-billing/change-billing.component.ts:514",
+  "successExampleIssue": null,
+  "notes": "Partial update: only keys present are changed. The service parses the raw body (cached request stream) with Gson, so unknown keys are ignored. State code format (e.g. 'MP' vs GST numeric code) not verified against the states table; taxNumber left out of the example because it is format-validated.",
+  "ids": [
+   "Js5pEhr3V531"
+  ]
+ },
+ {
+  "page": "subscription/get-subscriptions",
+  "method": "POST",
+  "path": "/v2/subscription/list",
+  "verdict": "json",
+  "bodyType": "Map<String,String>, optional",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/SubscriptionControllerV2.java:120 (@RequestBody(required=false) Map<String,String>); filters giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/util/SubscriptionUtilService.java:798",
+  "example": {
+   "companyName": "Acme",
+   "status": "active"
+  },
+  "fields": [
+   {
+    "path": "companyName",
+    "type": "string",
+    "required": false,
+    "description": "Keep subscriptions that have a company whose name contains this text (case-insensitive)."
+   },
+   {
+    "path": "subscriptionId",
+    "type": "string",
+    "required": false,
+    "description": "Keep subscriptions whose ID contains this text."
+   },
+   {
+    "path": "billingAccountName",
+    "type": "string",
+    "required": false,
+    "description": "Filter by billing account name (contains, case-insensitive)."
+   },
+   {
+    "path": "subscriberName",
+    "type": "string",
+    "required": false,
+    "description": "Filter by subscriber name (contains, case-insensitive)."
+   },
+   {
+    "path": "countryName",
+    "type": "string",
+    "required": false,
+    "description": "Filter by country name or country code (contains)."
+   },
+   {
+    "path": "planName",
+    "type": "string",
+    "required": false,
+    "description": "Filter by plan name or plan unique name (contains)."
+   },
+   {
+    "path": "status",
+    "type": "string",
+    "required": false,
+    "description": "Filter by subscription status text (contains), e.g. trial, active, expired."
+   },
+   {
+    "path": "duration",
+    "type": "string",
+    "required": false,
+    "description": "Filter by billing period name (contains), e.g. MONTHLY, YEARLY."
+   },
+   {
+    "path": "region",
+    "type": "string",
+    "required": false,
+    "description": "Exact region code or region name."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/subscription/subscription-list/subscription-list.component.ts:309 (form keys)",
+  "successExampleIssue": null,
+  "notes": "Body may be omitted or {}; empty/null values are ignored. Values must be strings. Status values are not enumerated in code (substring match). Earlier captures used GET and got 404; the handler is POST.",
+  "ids": [
+   "U9boeNZp8qq6"
+  ]
+ },
+ {
+  "page": "subscription/update-default-subscription-payment-info",
+  "method": "PATCH",
+  "path": "/v2/subscription/payment-method/{paymentUniqueName}",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/SubscriptionControllerV2.java:196 (only @PathVariable)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": null,
+  "notes": "Backend reads no body. Actual message is the 'success.subscription.payment.info.default' text, which may differ from 'Saved successfully.'.",
+  "ids": [
+   "apgy-SlSyMMK"
+  ]
+ },
+ {
+  "page": "auth/authenticate-gsp-session",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/authenticate-gsp-session",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v2/GstReturnV2Controller.java:370 (gstin, userName, otp, gsp are @RequestParam)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": null,
+  "notes": null,
+  "ids": [
+   "qCv4F9zKN3dd"
+  ]
+ },
+ {
+  "page": "banking/create-end-user-agreement-and-requisitions",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/gocardless/agreement-requisitions",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/GoCardlessBankIntegrationController.java:69 (lang, institutionId @RequestParam)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Placeholder {\"status\":\"string\"}; handler returns GoCardlessBankIntegrationRequisitionsDetails (id, requisitionId, institutionId, agreementId, created, redirect, status, reference, accounts).",
+  "notes": null,
+  "ids": [
+   "W7qA-B7iCImK"
+  ]
+ },
+ {
+  "page": "banking/fetch-account-details",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/gocardless/requisitions/{reference}",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/GoCardlessBankIntegrationController.java:92 (lang @RequestParam, reference path)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Placeholder {\"status\":\"string\"}; handler returns a GoCardless Requisitions object.",
+  "notes": null,
+  "ids": [
+   "ktzm8fVV_J4Z"
+  ]
+ },
+ {
+  "page": "banking/importpdf",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/imports/import-pdf/bank-statement",
+  "verdict": "multipart",
+  "bodyType": "multipart/form-data",
+  "evidence": "giddha-giddh-import-microservice-eb3f6ae25db5/src/main/java/com/giddh/api/controllers/ImportController.java:192 (headers content-type=multipart/*); giddha-giddh-import-microservice-eb3f6ae25db5/src/main/java/com/giddh/api/services/ImportService.java:2624",
+  "example": null,
+  "fields": [],
+  "multipartParts": [
+   {
+    "name": "file",
+    "kind": "file",
+    "required": true,
+    "description": "Bank statement PDF with a .pdf extension. Declared optional, but the service throws when it is missing or empty."
+   },
+   {
+    "name": "pdfpassword",
+    "kind": "text",
+    "required": true,
+    "description": "Password to open the PDF (required parameter; can be a form field or a query param)."
+   }
+  ],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/ledger.service.ts:694",
+  "successExampleIssue": "Shows an export-job message ('export-job-queued'); the handler returns the result of processBankImportRequest for the parsed statement, not an export job.",
+  "notes": "accountUniqueName (required) and entity are query params (frontend uses ?entity=pdf&accountUniqueName=...). Sending JSON returns 415 (capture 937-import-pdf-stmt-probe).",
+  "ids": [
+   "HTDDuJYIuSeC"
+  ]
+ },
+ {
+  "page": "gst/save-gstr1data",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/save-gstr1",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v2/GstReturnV2Controller.java:280 (all inputs @RequestParam)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": null,
+  "notes": null,
+  "ids": [
+   "7wLRZsk19hOf"
+  ]
+ },
+ {
+  "page": "gst/save-gstr3bdata",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/save-gstr3b",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v2/GstReturnV2Controller.java:337 (all inputs @RequestParam)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": null,
+  "notes": null,
+  "ids": [
+   "6_-zbfHnp0n6"
+  ]
+ },
+ {
+  "page": "vat/get-vat-obligations",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/uk/vat-obligations",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/ukvat/UKVatReturnController.java:211 (all inputs @RequestParam)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Shows 'Saved successfully.'; the handler returns the HMRC obligations object from getUKVatObligations, not a save message.",
+  "notes": null,
+  "ids": [
+   "Lce2awypp0We"
+  ]
+ },
+ {
+  "page": "vat/submit-vat-return",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/uk/submit-vat-return",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/ukvat/UKVatReturnController.java:241 (all inputs @RequestParam; report built server-side)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Empty {}; the handler returns the HMRC submission response passed through VatService.submitVatReturn.",
+  "notes": null,
+  "ids": [
+   "aPUIg49v8cJg"
+  ]
+ },
+ {
+  "page": "vat/view-vat-return",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/uk/view-vat-return",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/ukvat/UKVatReturnController.java:266",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Empty {}; the handler returns the HMRC VAT return wrapped in ApiResponse.",
+  "notes": null,
+  "ids": [
+   "_cKZBrP1ykGR"
+  ]
+ },
+ {
+  "page": "vat/retrieve-vat-payments",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/uk/retrieve-vat-payments",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/ukvat/UKVatReturnController.java:282",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Empty {}; the handler returns HMRC payments data.",
+  "notes": null,
+  "ids": [
+   "bqrfTOXKY12o"
+  ]
+ },
+ {
+  "page": "vat/retrieve-vat-liabilities",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/uk/retrieve-vat-liabilities",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/ukvat/UKVatReturnController.java:297",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Empty {}; the handler returns HMRC liabilities data.",
+  "notes": null,
+  "ids": [
+   "pY8OOp1-T_lI"
+  ]
+ },
+ {
+  "page": "trigger/update-patch",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/communication/trigger/{triggerUniqueName}",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/CommunicationController.java:203; giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/CommunicationService.java:570",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Placeholder {\"reference\":\"response\"}; the handler returns a string message (trigger activated / deactivated).",
+  "notes": "PATCH only toggles the trigger between active and inactive. The frontend (campaign.integration.service.ts:221) sends a body, but the backend ignores it.",
+  "ids": [
+   "s0-ar-Q7TQ4V"
+  ]
+ },
+ {
+  "page": "payment/add-payu-user",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/payu",
+  "verdict": "json",
+  "bodyType": "JsonNode",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/PayuController.java:46; giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/PayuService.java:107; validation giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/PayuUtilService.java:98",
+  "example": {
+   "merchantKey": "YOUR_PAYU_MERCHANT_KEY",
+   "merchantSalt": "YOUR_PAYU_MERCHANT_SALT",
+   "accountUniqueName": "payu-receipts"
+  },
+  "fields": [
+   {
+    "path": "merchantKey",
+    "type": "string",
+    "required": true,
+    "description": "PayU merchant key; validate() throws when empty."
+   },
+   {
+    "path": "merchantSalt",
+    "type": "string",
+    "required": true,
+    "description": "PayU merchant salt; validate() throws when empty."
+   },
+   {
+    "path": "accountUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the Giddh account that PayU receipts are linked to; must be an active account if sent."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:798 (payuForm keys)",
+  "successExampleIssue": "Null; the handler returns HTTP 201 with a success message string.",
+  "notes": "Backend checks the key/salt with PayU before saving, so placeholder credentials will fail. POST also updates (upserts the active PayU user).",
+  "ids": [
+   "VW7AWYqi-UOe"
+  ]
+ },
+ {
+  "page": "payment/add-paypal-account",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/paypal",
+  "verdict": "json",
+  "bodyType": "PaypalUserResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/PaypalController.java:45; DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/PaypalUserResource.java:9; giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/PaypalService.java:72",
+  "example": {
+   "email": "payments@example.com",
+   "account": {
+    "uniqueName": "paypal-receipts"
+   }
+  },
+  "fields": [
+   {
+    "path": "email",
+    "type": "string",
+    "required": false,
+    "description": "PayPal account email (5-250 characters)."
+   },
+   {
+    "path": "account.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the Giddh account to link; empty/null unlinks."
+   },
+   {
+    "path": "account.name",
+    "type": "string",
+    "required": false,
+    "description": "Account name; sent by the panel but not used."
+   },
+   {
+    "path": "isActive",
+    "type": "integer",
+    "required": false,
+    "description": "Internal active flag (0 = active); do not send."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:628",
+  "successExampleIssue": "Null; the handler returns HTTP 201 with a success message string.",
+  "notes": "Fails with ALREADY_EXIST if the company already has a PayPal account. The backend does not check email on create (the panel does). The panel also sends 'message', which is ignored.",
+  "ids": [
+   "uj7nf3_GLGIZ"
+  ]
+ },
+ {
+  "page": "payment/update-paypal-account",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/paypal",
+  "verdict": "json",
+  "bodyType": "PaypalUserResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/PaypalController.java:72; DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/PaypalUserResource.java:9; giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/PaypalService.java:112",
+  "example": {
+   "email": "payments@example.com",
+   "account": {
+    "uniqueName": "paypal-receipts"
+   }
+  },
+  "fields": [
+   {
+    "path": "email",
+    "type": "string",
+    "required": true,
+    "description": "PayPal account email; the service throws when empty."
+   },
+   {
+    "path": "account.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the Giddh account to link; empty/null unlinks."
+   },
+   {
+    "path": "account.name",
+    "type": "string",
+    "required": false,
+    "description": "Account name; sent by the panel but not used."
+   },
+   {
+    "path": "isActive",
+    "type": "integer",
+    "required": false,
+    "description": "Internal active flag (0 = active); do not send."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:644",
+  "successExampleIssue": null,
+  "notes": "Needs an existing PayPal account. Send account.uniqueName null to unlink. The real message is the 'success.message.paypal' text, not necessarily 'Operation completed successfully.'.",
+  "ids": [
+   "MMf3DGORPJAS"
+  ]
+ },
+ {
+  "page": "payment/capture-order",
+  "method": "POST",
+  "path": "/subscription/paypal/order/{orderId}/capture",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/PaypalSubscriptionController.java:39 (subscriptionId @RequestParam)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Null; the handler returns HTTP 201 with body 'success'.",
+  "notes": null,
+  "ids": [
+   "GoWfV5d6CTlq"
+  ]
+ },
+ {
+  "page": "payment/add-razor-pay-account",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/razorpay",
+  "verdict": "json",
+  "bodyType": "RazorPayUserResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/RazorPayController.java:48; DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/RazorPayUserResource.java; giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/RazorPayService.java:97",
+  "example": {
+   "userName": "rzp_test_XXXXXXXXXXXX",
+   "password": "YOUR_RAZORPAY_KEY_SECRET",
+   "account": {
+    "uniqueName": "razorpay-receipts"
+   },
+   "autoCapturePayment": true
+  },
+  "fields": [
+   {
+    "path": "userName",
+    "type": "string",
+    "required": true,
+    "description": "Razorpay key ID; verified with Razorpay, then stored encrypted."
+   },
+   {
+    "path": "password",
+    "type": "string",
+    "required": true,
+    "description": "Razorpay key secret; verified with Razorpay, then stored encrypted."
+   },
+   {
+    "path": "account.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the Giddh account to link; empty/null unlinks."
+   },
+   {
+    "path": "account.name",
+    "type": "string",
+    "required": false,
+    "description": "Account name; sent by the panel but not used."
+   },
+   {
+    "path": "autoCapturePayment",
+    "type": "boolean",
+    "required": false,
+    "description": "Whether Razorpay payments are captured automatically. Defaults to false."
+   },
+   {
+    "path": "isActive",
+    "type": "integer",
+    "required": false,
+    "description": "Internal active flag (0 = active); do not send."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/models/api-models/SettingsIntegraion.ts:44 (RazorPayClass) via settings/customer-portal/customer.portal.component.ts:581",
+  "successExampleIssue": "Null; the handler returns HTTP 201 with a success message string.",
+  "notes": "userName/password marked required because RazorPayClient.verifyUser calls Razorpay with them and rejects invalid credentials. Fails if the company already has a Razorpay account.",
+  "ids": [
+   "XmclOvPAHE1v"
+  ]
+ },
+ {
+  "page": "payment/update-or-map-razor-pay-account",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/razorpay",
+  "verdict": "json",
+  "bodyType": "RazorPayUserResource",
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/RazorPayController.java:75; DTO giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/resource/RazorPayUserResource.java; giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/services/RazorPayService.java:178",
+  "example": {
+   "account": {
+    "uniqueName": "razorpay-receipts"
+   },
+   "autoCapturePayment": true
+  },
+  "fields": [
+   {
+    "path": "userName",
+    "type": "string",
+    "required": false,
+    "description": "Razorpay key ID; credentials are changed (and re-verified) only when both userName and password are non-empty."
+   },
+   {
+    "path": "password",
+    "type": "string",
+    "required": false,
+    "description": "Razorpay key secret; see userName."
+   },
+   {
+    "path": "account.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the Giddh account to link; empty/null unlinks."
+   },
+   {
+    "path": "account.name",
+    "type": "string",
+    "required": false,
+    "description": "Account name; sent by the panel but not used."
+   },
+   {
+    "path": "autoCapturePayment",
+    "type": "boolean",
+    "required": false,
+    "description": "Always overwritten: leaving it out resets auto-capture to false; null causes a server error."
+   },
+   {
+    "path": "isActive",
+    "type": "integer",
+    "required": false,
+    "description": "Internal active flag (0 = active); do not send."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/settings/customer-portal/customer.portal.component.ts:586",
+  "successExampleIssue": "Shows {connected, accountId}; the handler returns a success message string.",
+  "notes": "Needs an existing Razorpay account. Send account.uniqueName null to unlink. The panel resends the full object, including autoCapturePayment.",
+  "ids": [
+   "uPfT7jNRbbaS"
+  ]
+ },
+ {
+  "page": "user/generate-auth-key",
+  "method": "PUT",
+  "path": "/users/{uniqueName}/generate-auth-key",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/UserController.java:78 (only @PathVariable)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Placeholder {\"reference\":\"newAuthKey\"}; the handler returns AuthKeyModel (uniqueName, authKey, role, user...).",
+  "notes": null,
+  "ids": [
+   "K-BJ-PLHddJD",
+   "JV2VQwWZwbho"
+  ]
+ },
+ {
+  "page": "user/increment-user-session",
+  "method": "PUT",
+  "path": "/users/{userUniqueName}/increment-session",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddha-giddh-api-v2-57797b57402f/src/main/java/com/giddh/api/controllers/v1/UserController.java:246 (reads only the Session-Id header)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": null,
+  "notes": "Frontend authentication.service.ts:306 sends PUT with a null body. The Session-Id header is used.",
+  "ids": [
+   "xfsPS8nEp7Ma"
+  ]
+ },
+ {
+  "page": "user/forgot-password",
+  "method": "PUT",
+  "path": "/users/{uniqueKey}/forgot-password",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/UserController.java:268 forgotPassword(@PathVariable uniqueKey, HttpServletRequest)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "Only the path uniqueKey (user email/unique key) is read. Send no body and no Content-Type.",
+  "ids": [
+   "KuaDnTtornti"
+  ]
+ },
+ {
+  "page": "purchase-register/get-all-versions-of-a-particular-purchase-record-with-provided-purchase-recor-",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/accounts/{accountUniqueName}/purchase-record/versions/all",
+  "verdict": "json",
+  "bodyType": "PurchaseOrderAction",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/purchase/PurchaseAccountController.java:315 (@RequestBody PurchaseOrderAction); src/main/java/com/giddh/api/dao/documents/purchase/PurchaseOrderAction.java; PurchaseRecordService getPRVersions (line 1713)",
+  "example": {
+   "uniqueName": "<purchase-record-uniqueName>"
+  },
+  "fields": [
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Unique name of the purchase record whose versions to list; validateUniqueName() rejects blank."
+   },
+   {
+    "path": "action",
+    "type": "string",
+    "required": false,
+    "description": "Bound but not used by this endpoint."
+   },
+   {
+    "path": "purchaseNumber",
+    "type": "string",
+    "required": false,
+    "description": "Bound but not used by this endpoint."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types; frontend services/purchase-record.service.ts:125 posts this body shape",
+  "successExampleIssue": "Placeholder {\"status\":\"string\"}; handler returns a paginated result of PurchaseRecordVersionResource.",
+  "notes": "Capture 1117 (body {}) got a Spring 404 'Not Found' on this path, so the deployed route may differ; no successful capture.",
+  "ids": [
+   "vYeuSflLI5Ey"
+  ]
+ },
+ {
+  "page": "company/update-domain",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/domain/{domainUniqueName}",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/PortalWhiteLabelController.java:113 updateDomain(path vars, @RequestParam operation)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "Inputs are path domainUniqueName and query operation (delete or set-primary per Javadoc).",
+  "ids": [
+   "RmrL6hCX6vDb"
+  ]
+ },
+ {
+  "page": "company/create-gsp-session",
+  "method": "POST",
+  "path": "/v2/company/{companyUniqueName}/gsp-session",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v2/GstReturnV2Controller.java:358 createGspSession(@RequestParam gstin, userName, gsp)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "All inputs are query params; gsp defaults to whitebooks.",
+  "ids": [
+   "e58OkJ5LDF5R"
+  ]
+ },
+ {
+  "page": "stock-unit/create-stock-unit",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/stock-unit",
+  "verdict": "json",
+  "bodyType": "StockUnitResource",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/StockUnitController.java:47 (@RequestBody @Valid StockUnitResource); src/main/java/com/giddh/api/resource/StockUnitResource.java (getter/setter-only over StockUnit model); StockUnitService create/update",
+  "example": {
+   "name": "Pieces",
+   "code": "pcs2",
+   "group": {
+    "uniqueName": "maingroup"
+   }
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": true,
+    "description": "Display name of the unit; create fails with stock.unit.name.code.blank if blank."
+   },
+   {
+    "path": "code",
+    "type": "string",
+    "required": true,
+    "description": "Short unit code (e.g. pcs); trimmed and must be unique within the unit group."
+   },
+   {
+    "path": "group.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the stock unit group to place the unit in; the main group (maingroup) is used when group is omitted."
+   },
+   {
+    "path": "group.name",
+    "type": "string",
+    "required": false,
+    "description": "Group display name; accepted but ignored, the group is looked up by uniqueName."
+   },
+   {
+    "path": "mappings[].stockUnitX.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the base unit of a conversion mapping."
+   },
+   {
+    "path": "mappings[].stockUnitX.code",
+    "type": "string",
+    "required": false,
+    "description": "Code of the base unit of a conversion mapping."
+   },
+   {
+    "path": "mappings[].stockUnitX.name",
+    "type": "string",
+    "required": false,
+    "description": "Name of the base unit of a conversion mapping."
+   },
+   {
+    "path": "mappings[].stockUnitY.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the converted-to unit."
+   },
+   {
+    "path": "mappings[].stockUnitY.code",
+    "type": "string",
+    "required": false,
+    "description": "Code of the converted-to unit."
+   },
+   {
+    "path": "mappings[].stockUnitY.name",
+    "type": "string",
+    "required": false,
+    "description": "Name of the converted-to unit."
+   },
+   {
+    "path": "mappings[].quantity",
+    "type": "number",
+    "required": false,
+    "description": "How many stockUnitY make one stockUnitX."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Ignored on create; a random 20-character uniqueName is generated."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types; frontend models/api-models/Inventory.ts:429 StockUnitRequest (name, code, uniqueName, mappings)",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with the created StockUnitResource (name, code, group{name,uniqueName}, uniqueName, mappings).",
+  "notes": "On update, mappings replace the unit's existing conversion mappings. The catalog's empty field list came from the getter/setter-only DTO.",
+  "ids": [
+   "cK36nWLTAOcm"
+  ]
+ },
+ {
+  "page": "stock-unit/update-stock-unit",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/stock-unit/{stockUnitUniqueName}",
+  "verdict": "json",
+  "bodyType": "StockUnitResource",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/StockUnitController.java:59 (@RequestBody @Valid StockUnitResource); src/main/java/com/giddh/api/resource/StockUnitResource.java (getter/setter-only over StockUnit model); StockUnitService create/update",
+  "example": {
+   "name": "temp"
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": false,
+    "description": "Display name of the unit; optional on update, the current value is kept when blank."
+   },
+   {
+    "path": "code",
+    "type": "string",
+    "required": false,
+    "description": "Short unit code (e.g. pcs); optional on update, the current value is kept when blank."
+   },
+   {
+    "path": "group.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Accepted but ignored on update; the group cannot be changed here."
+   },
+   {
+    "path": "group.name",
+    "type": "string",
+    "required": false,
+    "description": "Accepted but ignored on update; the group cannot be changed here."
+   },
+   {
+    "path": "mappings[].stockUnitX.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the base unit of a conversion mapping."
+   },
+   {
+    "path": "mappings[].stockUnitX.code",
+    "type": "string",
+    "required": false,
+    "description": "Code of the base unit of a conversion mapping."
+   },
+   {
+    "path": "mappings[].stockUnitX.name",
+    "type": "string",
+    "required": false,
+    "description": "Name of the base unit of a conversion mapping."
+   },
+   {
+    "path": "mappings[].stockUnitY.uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of the converted-to unit."
+   },
+   {
+    "path": "mappings[].stockUnitY.code",
+    "type": "string",
+    "required": false,
+    "description": "Code of the converted-to unit."
+   },
+   {
+    "path": "mappings[].stockUnitY.name",
+    "type": "string",
+    "required": false,
+    "description": "Name of the converted-to unit."
+   },
+   {
+    "path": "mappings[].quantity",
+    "type": "number",
+    "required": false,
+    "description": "How many stockUnitY make one stockUnitX."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Ignored; the unit to update comes from the path."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 1241-put-company-stock-unit (sent name plus stockUnitUniqueName; the latter is not a bound field and is ignored)",
+  "successExampleIssue": "Placeholder {\"type\":\"StockUnitGroupResource\"}; handler returns StockUnitResource, e.g. capture 1241 {name, code, group{name,uniqueName}, uniqueName}.",
+  "notes": "On update, mappings replace the unit's existing conversion mappings. The catalog's empty field list came from the getter/setter-only DTO.",
+  "ids": [
+   "tr-JzRJ11Fpj"
+  ]
+ },
+ {
+  "page": "stock-unit/create-stock-unit-group",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/stock-unit-group",
+  "verdict": "json",
+  "bodyType": "StockUnitGroupResource",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/StockUnitGroupController.java:45 (@RequestBody @Valid StockUnitGroupResource); src/main/java/com/giddh/api/resource/StockUnitGroupResource.java; StockUnitGroupService.validateCreateRequest",
+  "example": {
+   "name": "Weight",
+   "uniqueName": "weight"
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": true,
+    "description": "Display name of the unit group (stock.unit.group.name.code.blank when blank on create)."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Unique code for the group; trimmed and must be unique in the company."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types; frontend new-inventory/component/create-unit-group/create-unit-group.component.ts:92 (form {name, uniqueName})",
+  "successExampleIssue": "Says \"Saved successfully.\"; handler returns HTTP 201 with StockUnitGroupResource {name, uniqueName}.",
+  "notes": null,
+  "ids": [
+   "45lIGMs5Lzrt"
+  ]
+ },
+ {
+  "page": "stock-unit/update-stock-unit-group",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/stock-unit-group/{stockUnitGroupUniqueName}",
+  "verdict": "json",
+  "bodyType": "StockUnitGroupResource",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/StockUnitGroupController.java:57 (@RequestBody @Valid StockUnitGroupResource); StockUnitGroupService.validateUpdateRequest",
+  "example": {
+   "name": "Weight Units"
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": false,
+    "description": "Display name of the unit group; optional on update, blank keeps the current value."
+   },
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique code for the group; optional on update, blank keeps the current value."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types; frontend services/inventory.service.ts:1475 updateStockUnitGroup (form {name, uniqueName})",
+  "successExampleIssue": "Says \"Saved successfully.\"; handler returns StockUnitGroupResource {name, uniqueName}.",
+  "notes": "A new uniqueName renames the group (must be unused). Capture 1239 used a stock-unit uniqueName and got NOT_FOUND; no successful capture.",
+  "ids": [
+   "xNc2ASBFlg8T"
+  ]
+ },
+ {
+  "page": "template/set-default-template",
+  "method": "PATCH",
+  "path": "/v2/company/{companyUniqueName}/templates/{templateUniqueName}:.+/default",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/TemplateV2Controller.java:108 setDefaultTemplate(path vars, @RequestParam type default invoice)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "Query param type (default invoice) selects the template kind. The ':.+' in the path is a Spring regex, not part of the URL.",
+  "ids": [
+   "ZIEyFJB5Jet3"
+  ]
+ },
+ {
+  "page": "import/create-import-request",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/imports/upload",
+  "verdict": "multipart",
+  "bodyType": "multipart/form-data",
+  "evidence": "giddh-import-microservice src/main/java/com/giddh/api/controllers/ImportController.java:81 (headers content-type=multipart/*, @RequestParam(name=\"file\") MultipartFile)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [
+   {
+    "name": "file",
+    "kind": "file",
+    "required": true,
+    "description": "Spreadsheet/CSV (or Tally export) to import."
+   }
+  ],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with the created ImportRequest record.",
+  "notes": "Must be multipart (capture 1265 with JSON got MEDIA_TYPE_NOT_SUPPORTED). Query param type is required and binds to enum ImportType: TALLY_MASTERS, TALLY_ENTRIES, MASTER_IMPORT, ENTRIES_IMPORT, INVENTORY_IMPORT, BANK_TRANSACTIONS_IMPORT, CONVERT_FILE, ACCOUNT_WISE_VOUCHER_IMPORT, VOUCHER_WISE_VOUCHER_IMPORT, DOCUMENT_IMPORT, MAIL_BANK_TRANSACTIONS_IMPORT; no custom converter was found, so the capture's type=sales would likely be rejected. Other @RequestParams can be query or form fields.",
+  "ids": [
+   "U9Yq_-1HRUO9"
+  ]
+ },
+ {
+  "page": "import/upload-a-bank-statement-file-pdf-or-excel-csv-to-initiate-reconciliation-",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/imports/reconciliation/upload",
+  "verdict": "multipart",
+  "bodyType": "multipart/form-data",
+  "evidence": "giddh-import-microservice src/main/java/com/giddh/api/controllers/ReconciliationController.java:66 (headers content-type=multipart/*, @RequestParam(name=\"file\") MultipartFile); ReconciliationService.upload",
+  "example": null,
+  "fields": [],
+  "multipartParts": [
+   {
+    "name": "file",
+    "kind": "file",
+    "required": true,
+    "description": "Bank statement as PDF, or xls/xlsx/csv (Excel/CSV returns headers and a 10-row preview for column mapping)."
+   }
+  ],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with ReconciliationUploadResponse.",
+  "notes": "Capture 1263 with JSON got MEDIA_TYPE_NOT_SUPPORTED. accountUniqueName, from, to, password (encrypted PDFs), lang, sameDebitCreditColumn and branchUniqueName are query/form params, not file parts.",
+  "ids": [
+   "Q-kQzqiMBAy2"
+  ]
+ },
+ {
+  "page": "discount/assigned-discounts",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/discount/assign",
+  "verdict": "json",
+  "bodyType": "AssignDiscountRequest",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/DiscountController.java:90 (@RequestBody AssignDiscountRequest); src/main/java/com/giddh/api/models/AssignDiscountRequest.java; DiscountService.linkDiscounts/validateRequestBody",
+  "example": {
+   "accountUniqueName": "apidoc-customer-three",
+   "discountUniqueNames": [
+    "apidoc-discount-10"
+   ]
+  },
+  "fields": [
+   {
+    "path": "accountUniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Sundry debtor or sundry creditor account to assign discounts to (accountUniqueName cannot be null/blank)."
+   },
+   {
+    "path": "discountUniqueNames",
+    "type": "array<string>",
+    "required": false,
+    "description": "Discount uniqueNames to assign; replaces all existing assignments, and empty or omitted removes every discount from the account."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types; frontend models/api-models/ApplyDiscount.ts:6; values are the seeded apidoc discount and customer from captures",
+  "successExampleIssue": "Shape mismatch: handler returns a map keyed by accountUniqueName ({\"<accountUniqueName>\": [AssignedDiscounts...]}), not {discounts, accounts}.",
+  "notes": "Capture 1298 (body {}) failed with accountUniqueName required, confirming the JSON body is read.",
+  "ids": [
+   "dDl543kSWppI"
+  ]
+ },
+ {
+  "page": "e-way-bill/generate-eway-bill",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ewb",
+  "verdict": "json",
+  "bodyType": "EwayBillRequest",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v4/EWayBillController.java:67 (@RequestBody @Valid EwayBillRequest); src/main/java/com/giddh/api/models/EWayBill/EwayBillRequest.java, EWayBillItemList.java; EwayBillService.java:523 generateEwayBill and generateEwayBillWithNewVersion",
+  "example": {
+   "uniqueName": "<sales-voucher-uniqueName>",
+   "invoiceNumber": "<invoice-number>",
+   "supplyType": "O",
+   "subSupplyType": "1",
+   "docType": "INV",
+   "transactionType": "1",
+   "toGstIn": "URP",
+   "toPinCode": "452001",
+   "transDistance": "10",
+   "transMode": "1",
+   "vehicleNo": "MP09AB1234",
+   "vehicleType": "R"
+  },
+  "fields": [
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Voucher uniqueName of the sales invoice; required for voucher-version-2 companies (error.ewayBill.voucher.uniqueName.notFound)."
+   },
+   {
+    "path": "invoiceNumber",
+    "type": "string",
+    "required": false,
+    "description": "Invoice number; used to find the invoice for voucher-version-1 companies and copied to docNo."
+   },
+   {
+    "path": "supplyType",
+    "type": "string",
+    "required": false,
+    "description": "Supply type: O (outward) or I (inward). The frontend always sends O."
+   },
+   {
+    "path": "subSupplyType",
+    "type": "string",
+    "required": false,
+    "description": "Sub supply type code: 1 Supply, 3 Export, 4 Job work, 9 SKD/CKD/Lots."
+   },
+   {
+    "path": "docType",
+    "type": "string",
+    "required": false,
+    "description": "Document type: INV, CHL, BIL, BOE, CNT or OTH."
+   },
+   {
+    "path": "transactionType",
+    "type": "string",
+    "required": false,
+    "description": "1 Regular, 2 Bill To-Ship To, 3 Bill From-Dispatch From, 4 Combination of 2 and 3; defaults to 1."
+   },
+   {
+    "path": "toGstIn",
+    "type": "string",
+    "required": false,
+    "description": "Buyer GSTIN, or URP for an unregistered buyer (frontend default)."
+   },
+   {
+    "path": "toPinCode",
+    "type": "number",
+    "required": false,
+    "description": "Buyer pincode."
+   },
+   {
+    "path": "transDistance",
+    "type": "string",
+    "required": false,
+    "description": "Approximate distance in km (under 4000)."
+   },
+   {
+    "path": "transMode",
+    "type": "string",
+    "required": false,
+    "description": "Mode of transport: 1 Road, 2 Rail, 3 Air, 4 Ship."
+   },
+   {
+    "path": "vehicleNo",
+    "type": "string",
+    "required": false,
+    "description": "Vehicle registration number (7-15 characters)."
+   },
+   {
+    "path": "vehicleType",
+    "type": "string",
+    "required": false,
+    "description": "R (regular) or O (over-dimensional cargo)."
+   },
+   {
+    "path": "transporterId",
+    "type": "string",
+    "required": false,
+    "description": "15-character transporter GSTIN/TRANSIN; must match a transporter saved in the company."
+   },
+   {
+    "path": "transporterName",
+    "type": "string",
+    "required": false,
+    "description": "Transporter name; filled from the saved transporter when blank and must match it when given."
+   },
+   {
+    "path": "transDocNo",
+    "type": "string",
+    "required": false,
+    "description": "Transport document number, at most 15 characters."
+   },
+   {
+    "path": "transDocDate",
+    "type": "string",
+    "required": false,
+    "description": "Transport document date (the frontend sends dd-MM-yyyy)."
+   },
+   {
+    "path": "docNo",
+    "type": "string",
+    "required": false,
+    "description": "Document number; overwritten from the invoice/voucher by the service."
+   },
+   {
+    "path": "docDate",
+    "type": "string",
+    "required": false,
+    "description": "Document date; filled from the voucher by the service."
+   },
+   {
+    "path": "fromGstin",
+    "type": "string",
+    "required": false,
+    "description": "Seller GSTIN; filled from the company/branch by the service."
+   },
+   {
+    "path": "fromTrdName",
+    "type": "string",
+    "required": false,
+    "description": "Seller trade name; filled by the service."
+   },
+   {
+    "path": "fromAddr1",
+    "type": "string",
+    "required": false,
+    "description": "Seller address line 1; filled by the service."
+   },
+   {
+    "path": "fromAddr2",
+    "type": "string",
+    "required": false,
+    "description": "Seller address line 2; filled by the service."
+   },
+   {
+    "path": "fromPlace",
+    "type": "string",
+    "required": false,
+    "description": "Seller place; filled by the service."
+   },
+   {
+    "path": "fromPinCode",
+    "type": "number",
+    "required": false,
+    "description": "Seller pincode; filled by the service."
+   },
+   {
+    "path": "fromStateCode",
+    "type": "number",
+    "required": false,
+    "description": "Seller state code; filled by the service."
+   },
+   {
+    "path": "actFromStateCode",
+    "type": "number",
+    "required": false,
+    "description": "Actual dispatch state code."
+   },
+   {
+    "path": "actToStateCode",
+    "type": "number",
+    "required": false,
+    "description": "Actual delivery state code."
+   },
+   {
+    "path": "toTrdName",
+    "type": "string",
+    "required": false,
+    "description": "Buyer trade name; filled from the voucher."
+   },
+   {
+    "path": "toAddr1",
+    "type": "string",
+    "required": false,
+    "description": "Buyer address line 1; filled from the voucher."
+   },
+   {
+    "path": "toAddr2",
+    "type": "string",
+    "required": false,
+    "description": "Buyer address line 2; filled from the voucher."
+   },
+   {
+    "path": "toPlace",
+    "type": "string",
+    "required": false,
+    "description": "Buyer place."
+   },
+   {
+    "path": "toStateCode",
+    "type": "number",
+    "required": false,
+    "description": "Buyer state code; filled from the billing address."
+   },
+   {
+    "path": "totalValue",
+    "type": "number",
+    "required": false,
+    "description": "Taxable value; computed from the voucher."
+   },
+   {
+    "path": "totInvValue",
+    "type": "number",
+    "required": false,
+    "description": "Total invoice value; computed from the voucher."
+   },
+   {
+    "path": "cgstValue",
+    "type": "number",
+    "required": false,
+    "description": "CGST amount; computed."
+   },
+   {
+    "path": "sgstValue",
+    "type": "number",
+    "required": false,
+    "description": "SGST amount; computed."
+   },
+   {
+    "path": "igstValue",
+    "type": "number",
+    "required": false,
+    "description": "IGST amount; computed."
+   },
+   {
+    "path": "cessValue",
+    "type": "number",
+    "required": false,
+    "description": "Cess amount; computed."
+   },
+   {
+    "path": "itemList[].productName",
+    "type": "string",
+    "required": false,
+    "description": "Item name; the service rebuilds itemList from the voucher's stock lines."
+   },
+   {
+    "path": "itemList[].productDesc",
+    "type": "string",
+    "required": false,
+    "description": "Item description."
+   },
+   {
+    "path": "itemList[].hsnCode",
+    "type": "number",
+    "required": false,
+    "description": "HSN code."
+   },
+   {
+    "path": "itemList[].quantity",
+    "type": "number",
+    "required": false,
+    "description": "Quantity."
+   },
+   {
+    "path": "itemList[].qtyUnit",
+    "type": "string",
+    "required": false,
+    "description": "3-letter unit code."
+   },
+   {
+    "path": "itemList[].taxableAmount",
+    "type": "number",
+    "required": false,
+    "description": "Taxable amount."
+   },
+   {
+    "path": "itemList[].sgstRate",
+    "type": "number",
+    "required": false,
+    "description": "SGST rate."
+   },
+   {
+    "path": "itemList[].cgstRate",
+    "type": "number",
+    "required": false,
+    "description": "CGST rate."
+   },
+   {
+    "path": "itemList[].igstRate",
+    "type": "number",
+    "required": false,
+    "description": "IGST rate."
+   },
+   {
+    "path": "itemList[].cessRate",
+    "type": "number",
+    "required": false,
+    "description": "Cess rate."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend invoice/eWayBill/create/eWayBill.create.component.ts:163 onSubmitEwaybill (fields of models/api-models/Invoice.ts:521 GenerateEwayBill)",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with EwayBillResponse.",
+  "notes": "For voucher-version-2 companies uniqueName is mandatory; version-1 uses invoiceNumber. Most address/tax/item fields are overwritten from the voucher, so clients normally send only transport fields. Needs saved e-way bill credentials. No successful capture.",
+  "ids": [
+   "ibS32-OCcrPJ"
+  ]
+ },
+ {
+  "page": "e-way-bill/authenticate-user",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ewb/user",
+  "verdict": "json",
+  "bodyType": "EwayBillUserResource",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v4/EWayBillController.java:103 (@RequestBody EwayBillUserResource); src/main/java/com/giddh/api/resource/EwayBillUserResource.java; EwayBillService.java:847 saveCredentials/validateUserData",
+  "example": {
+   "userName": "<ewb-portal-username>",
+   "password": "<ewb-portal-password>",
+   "gstIn": "23AAACC1206D2ZN"
+  },
+  "fields": [
+   {
+    "path": "userName",
+    "type": "string",
+    "required": true,
+    "description": "E-way bill portal API username (UserName cannot be null/blank)."
+   },
+   {
+    "path": "password",
+    "type": "string",
+    "required": true,
+    "description": "E-way bill portal API password (Password cannot be null/blank)."
+   },
+   {
+    "path": "gstIn",
+    "type": "string",
+    "required": true,
+    "description": "GSTIN registered on the e-way bill portal (Gstin cannot be null/blank)."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend models/api-models/Invoice.ts:515 EwayBillLogin (userName, password, gstIn); GSTIN from capture 1389",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with the string \"E-way bill user account successfully saved\".",
+  "notes": "Credentials are verified against the portal (VERIFICATION_FAILED) and only one user per company is allowed (ALREADY_EXISTS). company is read-only.",
+  "ids": [
+   "_jzoKRnv-5Ll"
+  ]
+ },
+ {
+  "page": "e-way-bill/cancel-eway-bill",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/ewb/cancel",
+  "verdict": "json",
+  "bodyType": "CancelEwayBill",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v4/EWayBillController.java:460 (@RequestBody CancelEwayBill); src/main/java/com/giddh/api/models/EWayBill/CancelEwayBill.java; EwayBillService.java:1520",
+  "example": {
+   "ewbNo": "<12-digit-ewb-number>",
+   "cancelRsnCode": "2",
+   "cancelRmrk": "Order cancelled"
+  },
+  "fields": [
+   {
+    "path": "ewbNo",
+    "type": "string",
+    "required": true,
+    "description": "E-way bill number; must be numeric and belong to the company."
+   },
+   {
+    "path": "cancelRsnCode",
+    "type": "string",
+    "required": true,
+    "description": "Cancellation reason: 1 Duplicate, 2 Order Cancelled, 3 Data Entry mistake, 4 Others."
+   },
+   {
+    "path": "cancelRmrk",
+    "type": "string",
+    "required": false,
+    "description": "Free-text cancellation remark."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend models/api-models/Invoice.ts:671 IEwayBillCancel",
+  "successExampleIssue": "Shape mismatch: handler returns a plain string body (e.g. \"E-Way Bill cancelled and deleted successfully.\"), not {success, code}.",
+  "notes": "Capture 1253 (body {}) failed with 'Cancel reason cannot be left blank', confirming the JSON body is read.",
+  "ids": [
+   "bptyOTWM-zC7"
+  ]
+ },
+ {
+  "page": "e-way-bill/update-vehicle-number",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/ewb/vehicle",
+  "verdict": "json",
+  "bodyType": "VehicleUpdateRequest",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v4/EWayBillController.java:477 (@RequestBody @Valid VehicleUpdateRequest); src/main/java/com/giddh/api/models/EWayBill/VehicleUpdateRequest.java; EwayBillService.java:1638 updateVehicleNumber and validateVehicleUpdateRequest",
+  "example": {
+   "ewbNo": "<12-digit-ewb-number>",
+   "vehicleNo": "MP09AB1234",
+   "fromPlace": "Indore",
+   "fromState": "23",
+   "reasonCode": "1",
+   "reasonRem": "Vehicle breakdown",
+   "transDocNo": "LR123",
+   "transDocDate": "20/11/2026",
+   "transMode": "1",
+   "vehicleType": "R"
+  },
+  "fields": [
+   {
+    "path": "ewbNo",
+    "type": "string",
+    "required": true,
+    "description": "E-way bill number; numeric and belonging to the company."
+   },
+   {
+    "path": "vehicleNo",
+    "type": "string",
+    "required": false,
+    "description": "New vehicle number; not checked by Giddh, but the portal expects it for road transport."
+   },
+   {
+    "path": "fromPlace",
+    "type": "string",
+    "required": true,
+    "description": "Place the vehicle starts from."
+   },
+   {
+    "path": "fromState",
+    "type": "string",
+    "required": true,
+    "description": "State code of fromPlace."
+   },
+   {
+    "path": "reasonCode",
+    "type": "string",
+    "required": true,
+    "description": "1 Due to Break Down, 2 Due to Transshipment, 3 Others, 4 First Time."
+   },
+   {
+    "path": "reasonRem",
+    "type": "string",
+    "required": true,
+    "description": "Reason remark."
+   },
+   {
+    "path": "transDocNo",
+    "type": "string",
+    "required": true,
+    "description": "Transport document number."
+   },
+   {
+    "path": "transDocDate",
+    "type": "string",
+    "required": true,
+    "description": "Transport document date in dd/MM/yyyy (DateUtil.parseStringV2)."
+   },
+   {
+    "path": "transMode",
+    "type": "string",
+    "required": true,
+    "description": "1 Road, 2 Rail, 3 Air, 4 Ship."
+   },
+   {
+    "path": "vehicleType",
+    "type": "string",
+    "required": true,
+    "description": "R (regular) or O (over-dimensional cargo)."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types; field set matches frontend models/api-models/Invoice.ts:540 UpdateEwayVehicle",
+  "successExampleIssue": "Shape mismatch: handler returns VehicleUpdateResponse {vehUpdDate, validUpto}, not {success, code}.",
+  "notes": "Capture 1256 (body {}) failed with 'EWB no. cannot blank/null'. Backend parses transDocDate as dd/MM/yyyy.",
+  "ids": [
+   "V4NfSHObFs4U"
+  ]
+ },
+ {
+  "page": "e-way-bill/validate-invoice",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ewb/validate-invoice",
+  "verdict": "json",
+  "bodyType": "EwbFetch",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v4/EWayBillController.java:795 (@RequestBody EwbFetch); src/main/java/com/giddh/api/models/EWayBill/EwbFetch.java; EwayBillService.java:2354",
+  "example": {
+   "invoiceNumber": "<invoice-number>"
+  },
+  "fields": [
+   {
+    "path": "invoiceNumber",
+    "type": "string",
+    "required": true,
+    "description": "Invoice number to check for stock lines (Invoice number cannot be left null/blank)."
+   },
+   {
+    "path": "ewbNo",
+    "type": "string",
+    "required": false,
+    "description": "Bound but not used by this endpoint."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend models/api-models/Company.ts:208 ValidateInvoice; services/invoice.service.ts:640",
+  "successExampleIssue": "Shape mismatch: handler returns EwayBillInvoiceValidationModel {errorMessage, stockTransactionsSize}, not {valid, message}.",
+  "notes": "Looks up the legacy (voucher v1) Invoice by number, so voucher-version-2 companies may get NOT_FOUND. Capture 1016 (body {}) failed with invoice number required.",
+  "ids": [
+   "uWDPLV03e5g9"
+  ]
+ },
+ {
+  "page": "business-documents/cancel",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/business-documents/{uniqueName}/cancel",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/businessdocument/BusinessDocumentController.java:184 cancel(path companyUniqueName, uniqueName, HttpServletRequest); it builds BusinessDocumentActionRequest(action=cancel) itself",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": "Placeholder {\"status\":\"string\"}; handler returns the updated BusinessDocumentResource.",
+  "notes": "No body or query params; uniqueName is the business document to cancel.",
+  "ids": [
+   "GRJxqxKa6v6N",
+   "hGW_RuSWCz8F"
+  ]
+ },
+ {
+  "page": "business-documents/generate-via-estimate",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/business-documents/generate-via-estimate",
+  "verdict": "json",
+  "bodyType": "Map<String,String>",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/businessdocument/BusinessDocumentController.java:73 (@RequestBody Map<String,String>); src/main/java/com/giddh/api/services/.../BusinessDocumentService generateFromEstimateNumber (line ~6479)",
+  "example": {
+   "estimateNumber": "EST-20261023-1"
+  },
+  "fields": [
+   {
+    "path": "estimateNumber",
+    "type": "string",
+    "required": true,
+    "description": "Number of an existing estimate to convert into a business document; ESTIMATE_NUMBER_REQUIRED when blank, ESTIMATE_NOT_FOUND when unknown."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types (estimate number taken from capture 137 request on the voucher estimate-conversion endpoint)",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with a BusinessDocumentResource.",
+  "notes": "Only the estimateNumber key is read; other keys are ignored. No capture of this endpoint and the frontend does not call it.",
+  "ids": [
+   "vaDRdK9iTWEl",
+   "epmbUZnS4Cis"
+  ]
+ },
+ {
+  "page": "business-documents/generate-business-document-via-estimate",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/business-documents/generate-via-estimate",
+  "verdict": "json",
+  "bodyType": "Map<String,String>",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/businessdocument/BusinessDocumentController.java:73 (@RequestBody Map<String,String>); src/main/java/com/giddh/api/services/.../BusinessDocumentService generateFromEstimateNumber (line ~6479)",
+  "example": {
+   "estimateNumber": "EST-20261023-1"
+  },
+  "fields": [
+   {
+    "path": "estimateNumber",
+    "type": "string",
+    "required": true,
+    "description": "Number of an existing estimate to convert into a business document; ESTIMATE_NUMBER_REQUIRED when blank, ESTIMATE_NOT_FOUND when unknown."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types (estimate number taken from capture 137 request on the voucher estimate-conversion endpoint)",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with a BusinessDocumentResource.",
+  "notes": "Only the estimateNumber key is read; other keys are ignored. No capture of this endpoint and the frontend does not call it.",
+  "ids": [
+   "vaDRdK9iTWEl",
+   "epmbUZnS4Cis"
+  ]
+ },
+ {
+  "page": "business-documents/cancel-business-document",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/business-documents/{uniqueName}/cancel",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/businessdocument/BusinessDocumentController.java:184 cancel(path companyUniqueName, uniqueName, HttpServletRequest); it builds BusinessDocumentActionRequest(action=cancel) itself",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": "Placeholder null; handler returns the updated BusinessDocumentResource.",
+  "notes": "No body or query params; uniqueName is the business document to cancel.",
+  "ids": [
+   "GRJxqxKa6v6N",
+   "hGW_RuSWCz8F"
+  ]
+ },
+ {
+  "page": "custom-field/create-custom-field",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/customfield",
+  "verdict": "json",
+  "bodyType": "List<CustomFieldResourceV2>",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/CustomFieldController.java:56 (@RequestBody @Valid List<CustomFieldResourceV2>); src/main/java/com/giddh/api/resource/CustomFieldResourceV2.java, NameType.java, CustomFieldDataRange.java, CustomFieldOptions.java, interfaces/NameUniqueNameImpl.java; CustomFieldService.java:262 createCustomField and validateCustomFields",
+  "example": [
+   {
+    "fieldName": "API Doc CF Note",
+    "fieldType": {
+     "name": "Text Field",
+     "type": "STRING"
+    },
+    "fieldInfo": "note",
+    "isMandatory": false,
+    "dataRange": {
+     "min": "1",
+     "max": "150"
+    },
+    "modules": [
+     {
+      "name": "Account",
+      "uniqueName": "account"
+     }
+    ],
+    "status": true
+   }
+  ],
+  "fields": [
+   {
+    "path": "[].fieldName",
+    "type": "string",
+    "required": true,
+    "description": "Name of the custom field (error.customField.name when blank)."
+   },
+   {
+    "path": "[].fieldType.type",
+    "type": "string",
+    "required": true,
+    "description": "Data type: string, number, boolean or barcode (case-insensitive; NUMERIC also maps to number)."
+   },
+   {
+    "path": "[].fieldType.name",
+    "type": "string",
+    "required": false,
+    "description": "Display label of the type."
+   },
+   {
+    "path": "[].modules[].uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Module the field applies to: account, stock, group or variant; at least one module is required."
+   },
+   {
+    "path": "[].modules[].name",
+    "type": "string",
+    "required": false,
+    "description": "Display name of the module."
+   },
+   {
+    "path": "[].dataRange.min",
+    "type": "string",
+    "required": true,
+    "description": "Minimum length (string/barcode, whole number >= 1) or minimum value (number); must be numeric. Ignored for boolean, but dataRange itself must be present."
+   },
+   {
+    "path": "[].dataRange.max",
+    "type": "string",
+    "required": true,
+    "description": "Maximum length (string/barcode, at most 150) or maximum value (number, at most 30 digits); must be >= min."
+   },
+   {
+    "path": "[].isMandatory",
+    "type": "boolean",
+    "required": false,
+    "description": "Whether a value is required wherever the field is used; defaults to false."
+   },
+   {
+    "path": "[].fieldInfo",
+    "type": "string",
+    "required": false,
+    "description": "Help text shown with the field."
+   },
+   {
+    "path": "[].status",
+    "type": "boolean",
+    "required": false,
+    "description": "Whether the field is enabled; defaults to true."
+   },
+   {
+    "path": "[].fieldOptions[].name",
+    "type": "string",
+    "required": false,
+    "description": "Option label (stored as given on create)."
+   },
+   {
+    "path": "[].fieldOptions[].sortOrder",
+    "type": "string",
+    "required": false,
+    "description": "Option order."
+   },
+   {
+    "path": "[].fieldOptions[].isDefault",
+    "type": "string",
+    "required": false,
+    "description": "Whether the option is the default."
+   },
+   {
+    "path": "[].fieldOptions[].isDeleted",
+    "type": "string",
+    "required": false,
+    "description": "Whether the option is deleted."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "current success example (capture-created 'API Doc CF Note') and frontend custom-fields/create-edit/create-edit.component.ts:24 and :202 (sends [customFieldRequest])",
+  "successExampleIssue": null,
+  "notes": "Body is a JSON array; an empty array fails (error.customField.empty). regex, isActive and uniqueName are read-only. The success example's modules [{}] looks lossy but is not a contract contradiction.",
+  "ids": [
+   "NsMoHi1YmBCZ"
+  ]
+ },
+ {
+  "page": "custom-field/update-custom-field",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/customfield/{customFieldUniqueName}:.+",
+  "verdict": "json",
+  "bodyType": "CustomFieldResourceV2",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/CustomFieldController.java:71 (@RequestBody @Valid CustomFieldResourceV2); src/main/java/com/giddh/api/dao/documents/CustomFields.java mergeCustomFieldData; CustomFieldService.java:378 updateCustomField",
+  "example": {
+   "fieldName": "API Doc CF Note",
+   "fieldType": {
+    "name": "Text Field",
+    "type": "STRING"
+   },
+   "fieldInfo": "note",
+   "isMandatory": false,
+   "dataRange": {
+    "min": "1",
+    "max": "150"
+   },
+   "modules": [
+    {
+     "name": "Account",
+     "uniqueName": "account"
+    }
+   ],
+   "status": true
+  },
+  "fields": [
+   {
+    "path": "fieldName",
+    "type": "string",
+    "required": true,
+    "description": "Name of the custom field (error.customField.name when blank). Required on update too: mergeCustomFieldData uses Optional.of(), which fails with HTTP 500 when the value is missing."
+   },
+   {
+    "path": "fieldType.type",
+    "type": "string",
+    "required": true,
+    "description": "Data type: string, number, boolean or barcode (case-insensitive; NUMERIC also maps to number). Required on update too: mergeCustomFieldData uses Optional.of(), which fails with HTTP 500 when the value is missing."
+   },
+   {
+    "path": "fieldType.name",
+    "type": "string",
+    "required": false,
+    "description": "Display label of the type."
+   },
+   {
+    "path": "modules[].uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Module the field applies to: account, stock, group or variant; at least one module is required. Required on update too: mergeCustomFieldData uses Optional.of(), which fails with HTTP 500 when the value is missing."
+   },
+   {
+    "path": "modules[].name",
+    "type": "string",
+    "required": false,
+    "description": "Display name of the module."
+   },
+   {
+    "path": "dataRange.min",
+    "type": "string",
+    "required": false,
+    "description": "Minimum length (string/barcode, whole number >= 1) or minimum value (number); must be numeric. Ignored for boolean, but dataRange itself must be present. Optional on update; the current range is kept when dataRange is omitted, and it cannot be narrowed while the field is in use."
+   },
+   {
+    "path": "dataRange.max",
+    "type": "string",
+    "required": false,
+    "description": "Maximum length (string/barcode, at most 150) or maximum value (number, at most 30 digits); must be >= min. Optional on update; the current range is kept when dataRange is omitted, and it cannot be narrowed while the field is in use."
+   },
+   {
+    "path": "isMandatory",
+    "type": "boolean",
+    "required": false,
+    "description": "Whether a value is required wherever the field is used; defaults to false."
+   },
+   {
+    "path": "fieldInfo",
+    "type": "string",
+    "required": false,
+    "description": "Help text shown with the field."
+   },
+   {
+    "path": "status",
+    "type": "boolean",
+    "required": false,
+    "description": "Whether the field is enabled; defaults to true."
+   },
+   {
+    "path": "fieldOptions[].name",
+    "type": "string",
+    "required": false,
+    "description": "Option label (stored as given on create). Ignored on update (not merged)."
+   },
+   {
+    "path": "fieldOptions[].sortOrder",
+    "type": "string",
+    "required": false,
+    "description": "Option order. Ignored on update (not merged)."
+   },
+   {
+    "path": "fieldOptions[].isDefault",
+    "type": "string",
+    "required": false,
+    "description": "Whether the option is the default. Ignored on update (not merged)."
+   },
+   {
+    "path": "fieldOptions[].isDeleted",
+    "type": "string",
+    "required": false,
+    "description": "Whether the option is deleted. Ignored on update (not merged)."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "create-custom-field success example values and frontend custom-fields/create-edit/create-edit.component.ts:220",
+  "successExampleIssue": "fieldType shape is wrong: NameType has {name, type}, not {name, uniqueName}; modules, dataRange and status are also missing from what the resource returns.",
+  "notes": "Capture 1296 (body {}) returned HTTP 500, consistent with Optional.of(null) in mergeCustomFieldData. Type cannot change while the field is used. The ':.+' in the path is a Spring regex.",
+  "ids": [
+   "M9XCq3yRU1ou"
+  ]
+ },
+ {
+  "page": "financial-year/create-financial-year",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/financial-year",
+  "verdict": "json",
+  "bodyType": "FinancialYearCreateRequest",
+  "evidence": "giddh-api-v2 src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:48 (@RequestBody FinancialYearCreateRequest); src/main/java/com/giddh/api/models/financialyear/FinancialYearCreateRequest.java; FinancialYearService.java:103 and validateFromYearToCreateFinancialYears (178)",
+  "example": {
+   "fromYear": 2025
+  },
+  "fields": [
+   {
+    "path": "fromYear",
+    "type": "integer",
+    "required": true,
+    "description": "4-digit start year to create financial years back from; must be >= 1950 and earlier than the oldest existing financial year (INVALID_FROM_YEAR otherwise)."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend services/settings.financial-year.service.ts:88 (posts {fromYear}); 2025 assumes the test company's oldest FY starts in 2026",
+  "successExampleIssue": "Placeholder null; handler returns HTTP 201 with FinancialYearResponse (companyUniqueName, companyName, period, financialYears[]).",
+  "notes": "Fails if the oldest financial year is locked. Creates every year from fromYear up to the existing oldest one.",
+  "ids": [
+   "Kr5SCFebe1mP"
+  ]
+ },
+ {
+  "page": "financial-year/update-financial-year",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/financial-year",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:67 (@RequestBody FinancialYearUpdateRequest); src/main/java/com/giddh/api/models/financialyear/FinancialYearUpdateRequest.java",
+  "example": {
+   "financialYearPeriod": "Apr-Mar"
+  },
+  "fields": [
+   {
+    "path": "financialYearPeriod",
+    "type": "string",
+    "required": true,
+    "description": "New financial year period for the company. Allowed values (case-insensitive): Apr-Mar, Jan-Dec, July-July. Must differ from the current period."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/settings.financial-year.service.ts:100",
+  "successExampleIssue": "Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.",
+  "notes": "FinancialYearService.validateFinancialYearPeriod throws 'No financial year period passed.' when missing (seen in capture 1310); update is rejected if any financial year is locked.",
+  "ids": [
+   "fI2FEEDxHrSU"
+  ]
+ },
+ {
+  "page": "financial-year/lock-financial-year",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/financial-year-lock",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:79 (@RequestBody FinancialYearLockRequest); src/main/java/com/giddh/api/models/financialyear/FinancialYearLockRequest.java",
+  "example": {
+   "uniqueName": "FY-APR2025-MAR2026",
+   "lockAll": true
+  },
+  "fields": [
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Unique name of the financial year to lock (from GET /company/{companyUniqueName}/financial-year)."
+   },
+   {
+    "path": "lockAll",
+    "type": "boolean",
+    "required": false,
+    "description": "When true (default), also locks every financial year before the given one."
+   },
+   {
+    "path": "carryForwardCB",
+    "type": "boolean",
+    "required": false,
+    "description": "Accepted but not used by the current service code (default false)."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/settings/financial-year/financial-year.component.ts:146",
+  "successExampleIssue": "Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.",
+  "notes": "CompanyService.validateFYLockRequest throws 'No financial year passed.' when uniqueName is missing (capture 1311); NotFound if it matches no company financial year. carryForwardCB is bound but never read.",
+  "ids": [
+   "vo_mp-AbsSnE"
+  ]
+ },
+ {
+  "page": "financial-year/unlock-financial-year",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/financial-year-unlock",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:91 (@RequestBody FinancialYearUnlockRequest); src/main/java/com/giddh/api/models/financialyear/FinancialYearUnlockRequest.java",
+  "example": {
+   "uniqueName": "FY-APR2026-MAR2027",
+   "unlockAll": true
+  },
+  "fields": [
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Unique name of the financial year to unlock."
+   },
+   {
+    "path": "unlockAll",
+    "type": "boolean",
+    "required": false,
+    "description": "When true (default), also unlocks every locked financial year after the given one."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.",
+  "notes": "FinancialYearService.validateFYUnlockRequest throws 'No financial year passed.' when uniqueName is missing (capture 1312). The Giddh panel sends {lockAll, uniqueName} here (financial-year.component.ts:146); lockAll is ignored and unlockAll defaults to true.",
+  "ids": [
+   "0fP-Rkw_eWr7",
+   "gDnVUwWJM1rL"
+  ]
+ },
+ {
+  "page": "financial-year/create-future-financial-year",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/future-financial-year",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:103 (createFutureFinancialYear(companyUniqueName, request) - no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "No body is read. The Giddh panel posts {fromYear} (settings.financial-year.service.ts:119) but the handler ignores it; the next financial year is derived from existing years.",
+  "ids": [
+   "gkvtVOiv2eLg",
+   "_h4LDyIa2JPr"
+  ]
+ },
+ {
+  "page": "financial-year/unlock-financial-year-1",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/financial-year-unlock",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:91 (@RequestBody FinancialYearUnlockRequest); src/main/java/com/giddh/api/models/financialyear/FinancialYearUnlockRequest.java",
+  "example": {
+   "uniqueName": "FY-APR2026-MAR2027",
+   "unlockAll": true
+  },
+  "fields": [
+   {
+    "path": "uniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Unique name of the financial year to unlock."
+   },
+   {
+    "path": "unlockAll",
+    "type": "boolean",
+    "required": false,
+    "description": "When true (default), also unlocks every locked financial year after the given one."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Handler returns a FinancialYearResponse object {companyUniqueName, companyName, financialYearPeriod, financialYears[]}, not an array of strings.",
+  "notes": "FinancialYearService.validateFYUnlockRequest throws 'No financial year passed.' when uniqueName is missing (capture 1312). The Giddh panel sends {lockAll, uniqueName} here (financial-year.component.ts:146); lockAll is ignored and unlockAll defaults to true.",
+  "ids": [
+   "0fP-Rkw_eWr7",
+   "gDnVUwWJM1rL"
+  ]
+ },
+ {
+  "page": "financial-year/create-future-financial-year-1",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/future-financial-year",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/FinancialYearController.java:103 (createFutureFinancialYear(companyUniqueName, request) - no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "No body is read. The Giddh panel posts {fromYear} (settings.financial-year.service.ts:119) but the handler ignores it; the next financial year is derived from existing years.",
+  "ids": [
+   "gkvtVOiv2eLg",
+   "_h4LDyIa2JPr"
+  ]
+ },
+ {
+  "page": "permission/create-role",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/role",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/RoleV2Controller.java:69 (@RequestBody RoleV2Resource); src/main/java/com/giddh/api/resource/RoleV2Resource.java, resource/ScopeV2Resource.java, resource/PermissionV2Resource.java; validation services/RoleV2Service.java:183, services/ScopeV2Service.java:39, services/PermissionV2Service.java:69",
+  "example": {
+   "name": "API Doc Viewer Role",
+   "scopes": [
+    {
+     "name": "INVOICE",
+     "permissions": [
+      {
+       "code": "VW"
+      },
+      {
+       "code": "ADD"
+      }
+     ]
+    },
+    {
+     "name": "REPORT",
+     "permissions": [],
+     "selectAllFields": [
+      "permissions"
+     ]
+    }
+   ]
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": true,
+    "description": "Display name of the role."
+   },
+   {
+    "path": "scopes",
+    "type": "array",
+    "required": true,
+    "description": "Modules the role grants access to; must be non-empty with unique scope names."
+   },
+   {
+    "path": "scopes[].name",
+    "type": "string",
+    "required": true,
+    "description": "Scope (module) name. Allowed: LEDGER, INVOICE, MANAGE, DASHBOARD, REPORT, SETTINGS, INVENTORY, RECURRING_ENTRY, AUDIT_LOGS, SEARCH, SHARE, PETTY_CASH_MANAGER, INTEGRATION."
+   },
+   {
+    "path": "scopes[].permissions",
+    "type": "array",
+    "required": false,
+    "description": "Permissions granted on this scope; required (non-empty) unless selectAllFields contains \"permissions\"."
+   },
+   {
+    "path": "scopes[].permissions[].code",
+    "type": "string",
+    "required": true,
+    "description": "Permission code. Allowed: VW, DLT, UPDT, ADD, SHR, VWDLT, SHRSM, SHRLWR, SHRALL, CMT, GSTVW, GSTFL. Share codes SHRALL, SHRSM, SHRLWR are only allowed on the SHARE scope."
+   },
+   {
+    "path": "scopes[].selectAllFields",
+    "type": "array<string>",
+    "required": false,
+    "description": "Put \"permissions\" here with an empty permissions list to grant every permission allowed for that scope."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/permissions/components/details/permission.details.component.ts:168",
+  "successExampleIssue": "Shown as null. Handler returns 201 with the created RoleV2Resource {name, uniqueName, isFixed, scopes[]}.",
+  "notes": "uniqueName and isFixed are read-only (no setters); the server generates uniqueName. Capture 748-role-create succeeded but its body script was not found.",
+  "ids": [
+   "ZsaBQPVQm3Om"
+  ]
+ },
+ {
+  "page": "permission/update-role",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/role/{roleUniqueName}",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/RoleV2Controller.java:80 (@RequestBody RoleV2Resource); src/main/java/com/giddh/api/resource/RoleV2Resource.java, resource/ScopeV2Resource.java, resource/PermissionV2Resource.java; validation services/RoleV2Service.java:183, services/ScopeV2Service.java:39, services/PermissionV2Service.java:69",
+  "example": {
+   "scopes": [
+    {
+     "name": "INVOICE",
+     "permissions": [
+      {
+       "code": "VW"
+      },
+      {
+       "code": "ADD"
+      }
+     ]
+    }
+   ]
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": false,
+    "description": "Bound, but update only replaces scopes; the role name is not changed by RoleV2Service.update."
+   },
+   {
+    "path": "scopes",
+    "type": "array",
+    "required": true,
+    "description": "Modules the role grants access to; must be non-empty with unique scope names."
+   },
+   {
+    "path": "scopes[].name",
+    "type": "string",
+    "required": true,
+    "description": "Scope (module) name. Allowed: LEDGER, INVOICE, MANAGE, DASHBOARD, REPORT, SETTINGS, INVENTORY, RECURRING_ENTRY, AUDIT_LOGS, SEARCH, SHARE, PETTY_CASH_MANAGER, INTEGRATION."
+   },
+   {
+    "path": "scopes[].permissions",
+    "type": "array",
+    "required": false,
+    "description": "Permissions granted on this scope; required (non-empty) unless selectAllFields contains \"permissions\"."
+   },
+   {
+    "path": "scopes[].permissions[].code",
+    "type": "string",
+    "required": true,
+    "description": "Permission code. Allowed: VW, DLT, UPDT, ADD, SHR, VWDLT, SHRSM, SHRLWR, SHRALL, CMT, GSTVW, GSTFL. Share codes SHRALL, SHRSM, SHRLWR are only allowed on the SHARE scope."
+   },
+   {
+    "path": "scopes[].selectAllFields",
+    "type": "array<string>",
+    "required": false,
+    "description": "Put \"permissions\" here with an empty permissions list to grant every permission allowed for that scope."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/permission.service.ts:54",
+  "successExampleIssue": "Permissions render as empty objects ({}); likely trimmed by the roleV2 JsonView. Low concern.",
+  "notes": "Fixed roles cannot be updated. The Giddh panel sends the whole role object (name, uniqueName, scopes); extra keys are ignored.",
+  "ids": [
+   "0xnvKWCWqFTJ"
+  ]
+ },
+ {
+  "page": "warehouse/set-default-warehouse",
+  "method": "PATCH",
+  "path": "/company/{companyUniqueName}/warehouse/{warehouseUniqueName}/default",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/WarehouseController.java:119 (setDefaultWarehouse(companyUniqueName, warehouseUniqueName, request) - no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": null,
+  "notes": "No body; the warehouse is chosen by the path.",
+  "ids": [
+   "bxXlArQ4QOWY"
+  ]
+ },
+ {
+  "page": "invoice/update-invoice-email",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/invoice-setting",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/InvoiceSettingController.java:41 (@RequestBody CompanyEmail); src/main/java/com/giddh/api/models/CompanyEmail.java; services/CompanySettingsService.java:113",
+  "example": {
+   "emailAddress": "accounts@example.com"
+  },
+  "fields": [
+   {
+    "path": "emailAddress",
+    "type": "string",
+    "required": false,
+    "description": "Email address used for sending invoices; a confirmation mail is sent to it. Omit or send null to remove the configured email."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/invoice.service.ts:281",
+  "successExampleIssue": "Shows the delete-path message only. When emailAddress is set the handler returns a confirmation message naming the address.",
+  "notes": "A JSON body is required (even {} to delete). emailAddress is format-checked when non-null.",
+  "ids": [
+   "_e3kk83oFVu9",
+   "FnWQF1Xbnjh2"
+  ]
+ },
+ {
+  "page": "ledger/upload-file-for-ledger",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/ledger/upload",
+  "verdict": "multipart",
+  "bodyType": "multipart/form-data",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/ImageController.java:145 (@RequestParam MultipartFile file, entries, type; headers content-type=multipart/*); services/ImageService.java:185; accounting-microservice src/main/java/com/giddh/api/controllers/AttachmentController.java:53",
+  "example": null,
+  "fields": [],
+  "multipartParts": [
+   {
+    "name": "file",
+    "kind": "file",
+    "required": true,
+    "description": "File to attach to ledger entries (max 2 MB). Declared optional, but the handler throws 'Attach file in request.' when missing."
+   },
+   {
+    "name": "entries",
+    "kind": "text",
+    "required": false,
+    "description": "Comma-separated entry unique names to attach the file to."
+   },
+   {
+    "name": "type",
+    "kind": "text",
+    "required": false,
+    "description": "Upload type, default 'ledger'. Allowed: ledger, logo, signature. The Giddh panel sends it as a query parameter."
+   }
+  ],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/common.service.ts:186",
+  "successExampleIssue": "Response is FileAttachmentResource {name, uniqueName, fileType, uploadedFile}; the example's 'url' field does not exist.",
+  "notes": "entries/type are @RequestParam so they work as query params or form fields. The accounting-microservice variant also takes branchUniqueName and has no type param.",
+  "ids": [
+   "gUSfzGsewJRV",
+   "fjXfm4ELuAJn"
+  ]
+ },
+ {
+  "page": "tags/create-tag",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/tags",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/TagController.java:35 (@RequestBody TagResource); src/main/java/com/giddh/api/resource/TagResource.java (getName/setName, getDescription/setDescription); validation services/TagService.java:51,110",
+  "example": {
+   "name": "api doc project tag",
+   "description": "capture batch 9"
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": true,
+    "description": "Tag name; letters, digits, spaces and !@.$'*_`|[]~- only. Stored lowercased and must be unique in the company."
+   },
+   {
+    "path": "description",
+    "type": "string",
+    "required": false,
+    "description": "Free-text description of the tag."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 981-tag-create",
+  "successExampleIssue": null,
+  "notes": "Capture also sent uniqueName, which TagResource ignores (no such property). setCompany is technically bindable but is an entity overwritten by the server; not documented.",
+  "ids": [
+   "IKqWuu9To2sn"
+  ]
+ },
+ {
+  "page": "tags/update-tag",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/tags/{tagUniqueName}",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/TagController.java:53 (@RequestBody TagResource); src/main/java/com/giddh/api/resource/TagResource.java (getName/setName, getDescription/setDescription); validation services/TagService.java:51,110",
+  "example": {
+   "name": "api doc project tag",
+   "description": "updated"
+  },
+  "fields": [
+   {
+    "path": "name",
+    "type": "string",
+    "required": true,
+    "description": "Tag name; letters, digits, spaces and !@.$'*_`|[]~- only. Stored lowercased and must be unique in the company."
+   },
+   {
+    "path": "description",
+    "type": "string",
+    "required": false,
+    "description": "Free-text description of the tag."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 982-tag-update (body shape only; that call 404'd on the path)",
+  "successExampleIssue": "Placeholder {\"status\":\"string\"}. Handler returns the updated TagResource {name, description}.",
+  "notes": "Path tagUniqueName is the existing tag's lowercased name; capture 982 used a non-existent uniqueName and got 404.",
+  "ids": [
+   "U_u2dfNI2Ygj"
+  ]
+ },
+ {
+  "page": "transporters/add-transporter",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/transporters",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/TransporterController.java:51 (@RequestBody TransporterRequest); src/main/java/com/giddh/api/models/TransporterRequest.java; validation services/TransporterService.java:180",
+  "example": {
+   "transporterId": "29ABCDE1234F1Z5",
+   "transporterName": "Speedy Logistics"
+  },
+  "fields": [
+   {
+    "path": "transporterId",
+    "type": "string",
+    "required": true,
+    "description": "Transporter GSTIN/ID; at most 15 characters, no decimal values, unique per company."
+   },
+   {
+    "path": "transporterName",
+    "type": "string",
+    "required": true,
+    "description": "Transporter name; must not be purely numeric."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Shown as null. Handler returns 201 with TransporterResource {transporterId, transporterName}.",
+  "notes": "",
+  "ids": [
+   "fTXBLZz_WT6B"
+  ]
+ },
+ {
+  "page": "transporters/update-transporter",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/transporters",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/TransporterController.java:64 (@RequestBody TransporterRequest); src/main/java/com/giddh/api/models/TransporterRequest.java; validation services/TransporterService.java:180",
+  "example": {
+   "transporterId": "29ABCDE1234F1Z5",
+   "transporterName": "Speedy Logistics Pvt Ltd"
+  },
+  "fields": [
+   {
+    "path": "transporterId",
+    "type": "string",
+    "required": true,
+    "description": "Transporter GSTIN/ID; at most 15 characters, no decimal values, unique per company."
+   },
+   {
+    "path": "transporterName",
+    "type": "string",
+    "required": true,
+    "description": "Transporter name; must not be purely numeric."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Shape {success, code} does not match; handler returns TransporterResource {transporterId, transporterName}.",
+  "notes": "The existing transporter is selected by the transporterId query param; the body transporterId is the new value.",
+  "ids": [
+   "JzcC3bfsWBeU"
+  ]
+ },
+ {
+  "page": "e-invoice/cancel-einvoice",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/invoice/{invoiceUniqueName}/cancel-einvoice",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/InvoiceController.java:301 (cancelEInvoice: path vars + @RequestParam cnlRsn, cnlRem - no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": "Shows the raw voucher message key 'success.einvoice.irn.canceled.voucher'; this handler returns the resolved text of success.einvoice.irn.cancelled.invoice.",
+  "notes": "No body; cnlRsn and cnlRem are required query params. The page already declares a Content-Type, which is harmless.",
+  "ids": [
+   "0uRgyxtV3yZC",
+   "-xWo0s6PanVN"
+  ]
+ },
+ {
+  "page": "e-invoice/cancel-einvoice-for-voucher",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/voucher/{voucherUniqueName}/cancel-einvoice",
+  "verdict": "none",
+  "bodyType": null,
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/VoucherDocController.java:148 (cancelEInvoiceForVoucher: @RequestParam voucherType, cnlRsn, cnlRem - no @RequestBody)",
+  "example": null,
+  "fields": [],
+  "multipartParts": [],
+  "exampleSource": null,
+  "successExampleIssue": "Shows a raw message key; the API returns the resolved text of success.einvoice.irn.cancelled.voucher.",
+  "notes": "No body; voucherType, cnlRsn and cnlRem are query params.",
+  "ids": [
+   "z3IilY5BIYNy"
+  ]
+ },
+ {
+  "page": "due-days-range/add-due-amount-range",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/due-days-range",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/CompanyController.java:792 (@RequestBody(required=false) DueAmountRange); src/main/java/com/giddh/api/models/DueAmountRange.java; services/DueAmountRangeService.java:44",
+  "example": {
+   "range": [
+    "15",
+    "30",
+    "45",
+    "60"
+   ]
+  },
+  "fields": [
+   {
+    "path": "range",
+    "type": "array<string>",
+    "required": true,
+    "description": "Ageing bucket boundaries in days; each value must parse as an integer. Replaces the existing ranges for that vendorCustomerType."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/agingreporting.service.ts:30 (shape {range}); values backend types",
+  "successExampleIssue": null,
+  "notes": "Body is declared optional, but the service throws 'Please provide valid range' if range is missing/empty. vendorCustomerType query must be CUSTOMER, VENDOR or INVENTORY.",
+  "ids": [
+   "gp88iao75REK"
+  ]
+ },
+ {
+  "page": "state-details/update-last-state",
+  "method": "POST",
+  "path": "/state-details",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/LastStateDetailsController.java:92 (@RequestBody LastStateDetailsResource); src/main/java/com/giddh/api/resource/LastStateDetailsResource.java; services/LastStateDetailsService.java:62",
+  "example": {
+   "companyUniqueName": "giddhain1792673422178091xos",
+   "lastState": "pages/home"
+  },
+  "fields": [
+   {
+    "path": "companyUniqueName",
+    "type": "string",
+    "required": true,
+    "description": "Company whose last visited screen is saved; the handler looks the company up from this field."
+   },
+   {
+    "path": "lastState",
+    "type": "string",
+    "required": true,
+    "description": "Route/state string of the last visited screen; must not be blank."
+   },
+   {
+    "path": "branchUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Bound but ignored; the branch comes from the branchUniqueName query parameter."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/models/api-models/Company.ts:37",
+  "successExampleIssue": "Shown as null. Handler returns 201 with body \"state details saved\".",
+  "notes": "The Giddh panel also sends currentBranchUniqueName, which is ignored. Capture 1381 failed on company lookup; the example company is the capture account's and lastState value is illustrative.",
+  "ids": [
+   "PzOAbFmY5sVR"
+  ]
+ },
+ {
+  "page": "exception/generate-invoice-invalid-json",
+  "method": "POST",
+  "path": "/exception/invalid-json",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/CustomExceptionController.java:33 (@RequestBody CustomExceptionRequest); src/main/java/com/giddh/api/models/CustomExceptionRequest.java; services/CustomExceptionService.java:32",
+  "example": {
+   "url": "/company/{companyUniqueName}/ledger",
+   "method": "POST",
+   "queryString": "page=1",
+   "email": "user@example.com",
+   "userUniqueName": "user@example.com",
+   "key": "invalid-json-example"
+  },
+  "fields": [
+   {
+    "path": "url",
+    "type": "string",
+    "required": false,
+    "description": "URL of the request that carried invalid JSON."
+   },
+   {
+    "path": "method",
+    "type": "string",
+    "required": false,
+    "description": "HTTP method of that request."
+   },
+   {
+    "path": "queryString",
+    "type": "string",
+    "required": false,
+    "description": "Query string of that request."
+   },
+   {
+    "path": "email",
+    "type": "string",
+    "required": false,
+    "description": "Email of the user who hit the error."
+   },
+   {
+    "path": "userUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Unique name of that user."
+   },
+   {
+    "path": "environment",
+    "type": "string",
+    "required": false,
+    "description": "Bound but not used; the server reports its own environment."
+   },
+   {
+    "path": "key",
+    "type": "string",
+    "required": false,
+    "description": "Free-form key forwarded with the report."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "backend types",
+  "successExampleIssue": "Shows \"Saved successfully.\"; handler returns body \"OK\".",
+  "notes": "Internal error-reporting hook: fields are only forwarded to a viaSocket webhook; nothing is validated.",
+  "ids": [
+   "pG9vfCSLuHlB"
+  ]
+ },
+ {
+  "page": "forecast/fore-cast-data",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/forecast",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/CompanyController.java:1011 (@RequestBody JsonNode payload); validation services/ForecastService.java:109,137",
+  "example": {
+   "accountUniqueNames": [
+    "cash"
+   ],
+   "granularity": "DAILY",
+   "analysisPeriod": "LAST_3_MONTHS",
+   "forecastLength": 60
+  },
+  "fields": [
+   {
+    "path": "accountUniqueNames",
+    "type": "array<string>",
+    "required": true,
+    "description": "Accounts whose closing balance is forecast; non-empty, no blank values."
+   },
+   {
+    "path": "granularity",
+    "type": "string",
+    "required": true,
+    "description": "Forecast step. Allowed: DAILY, WEEKLY, MONTHLY (case-insensitive)."
+   },
+   {
+    "path": "analysisPeriod",
+    "type": "string",
+    "required": true,
+    "description": "History window used for the forecast. Allowed: LAST_7_DAYS, LAST_30_DAYS, LAST_3_MONTHS, LAST_6_MONTHS, LAST_1_YEAR, LIFETIME."
+   },
+   {
+    "path": "forecastLength",
+    "type": "integer",
+    "required": true,
+    "description": "Number of steps to forecast; above 0 and at most 180 (DAILY), 52 (WEEKLY) or 24 (MONTHLY)."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/budget-forecasting/utility/budget-forecasting.model.ts:27",
+  "successExampleIssue": "Shows \"Saved successfully.\"; handler returns a list of ForecastResponseModel objects.",
+  "notes": "Body is an untyped JsonNode; keys come from ForecastService/AccountService reads. forecastLength is required in practice because validation checks isInt() before the controller default applies. Account 'cash' is illustrative.",
+  "ids": [
+   "ggd-QCh-cK6V"
+  ]
+ },
+ {
+  "page": "logs/get-company-logs",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/logs",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/CompanyController.java:226 (@RequestBody FilterRequest); src/main/java/com/giddh/api/models/FilterRequest.java; services/AuditLogService.java:93",
+  "example": {
+   "fromDate": "01-08-2026",
+   "toDate": "23-10-2026",
+   "operation": "",
+   "userUniqueName": "",
+   "accountUniqueName": ""
+  },
+  "fields": [
+   {
+    "path": "fromDate",
+    "type": "string",
+    "required": false,
+    "description": "Start date (dd-MM-yyyy); defaults to company creation date."
+   },
+   {
+    "path": "toDate",
+    "type": "string",
+    "required": false,
+    "description": "End date (dd-MM-yyyy); defaults to today."
+   },
+   {
+    "path": "entryDate",
+    "type": "string",
+    "required": false,
+    "description": "Only logs of entries with this entry date (dd-MM-yyyy); cannot be combined with logDate."
+   },
+   {
+    "path": "logDate",
+    "type": "string",
+    "required": false,
+    "description": "Only logs written on this date (dd-MM-yyyy); overrides fromDate/toDate."
+   },
+   {
+    "path": "operation",
+    "type": "string",
+    "required": false,
+    "description": "Operation filter, e.g. create, update, delete, share, merge, move (OperationType values)."
+   },
+   {
+    "path": "entity",
+    "type": "string",
+    "required": false,
+    "description": "Entity filter, e.g. account, group, ledger, voucher, invoice, company (EntityType values)."
+   },
+   {
+    "path": "userUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Only logs by this user."
+   },
+   {
+    "path": "groupUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Only logs for this group."
+   },
+   {
+    "path": "accountUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Only logs for this account."
+   },
+   {
+    "path": "ledgerUniqueName",
+    "type": "string",
+    "required": false,
+    "description": "Bound but not passed to the log query."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "capture 946-audit-logs-v1",
+  "successExampleIssue": null,
+  "notes": "Page number is the page query param. Invalid operation/entity values throw InvalidParameterException.",
+  "ids": [
+   "AOIwqOVvO0Ph"
+  ]
+ },
+ {
+  "page": "purchase-bill/update-invoice-email",
+  "method": "PUT",
+  "path": "/company/{companyUniqueName}/purchase-bill-setting",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/v1/PurchaseBillSettingController.java:47 (@RequestBody CompanyEmail); src/main/java/com/giddh/api/models/CompanyEmail.java; services/CompanySettingsService.java:135",
+  "example": {
+   "emailAddress": "purchases@example.com"
+  },
+  "fields": [
+   {
+    "path": "emailAddress",
+    "type": "string",
+    "required": false,
+    "description": "Email address for purchase bill settings; a confirmation mail is sent to it. Omit or send null to remove the configured email."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/services/purchase-order.service.ts:177 (shape); values backend types",
+  "successExampleIssue": "Shows the delete-path message only. When emailAddress is set the handler returns a confirmation message.",
+  "notes": "A JSON body is required (even {} to delete).",
+  "ids": [
+   "Oprl-QL-9mZH"
+  ]
+ },
+ {
+  "page": "save-authorization-code/save-authorization-code",
+  "method": "POST",
+  "path": "/company/{companyUniqueName}/save-authorization-code",
+  "verdict": "json",
+  "bodyType": "application/json",
+  "evidence": "src/main/java/com/giddh/api/controllers/ukvat/OAuthController.java:78 (@RequestBody Map<String,String>); services/OAuthClient.java:208",
+  "example": {
+   "code": "<HMRC authorization code>"
+  },
+  "fields": [
+   {
+    "path": "code",
+    "type": "string",
+    "required": true,
+    "description": "OAuth authorization code returned by HMRC to the redirect URI; exchanged for an access token."
+   }
+  ],
+  "multipartParts": [],
+  "exampleSource": "frontend apps/web-giddh/src/app/auth-hmrc/auth-hmrc.component.ts:61",
+  "successExampleIssue": "Placeholder {\"status\":\"string\"}. On success the body is \"Access token generated and saved successfully.\"",
+  "notes": "Only 'code' is read; the panel also sends timestamp and Gov-Client-* keys, which are ignored. Requires super-admin role and an X-Forwarded-For header. Map<String,String>: all values must be strings.",
+  "ids": [
+   "FcvzjE3XRUTV"
+  ]
+ }
+]
