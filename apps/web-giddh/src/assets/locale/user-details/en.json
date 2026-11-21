@@ -39,7 +39,7 @@
         "email_placeholder": "user@mail.com",
         "mobile_placeholder": "9876543210",
         "email_validation_error": "Please enter a valid email address",
-        "email_auth_key_note": "Changing your email generates a new Auth-Key and updates your user unique name to the new email. Update any API integrations using the old key or unique name.",
+        "email_auth_key_note": "Changing your email address updates your User Unique Name and invalidates your existing Auth-Key. Generate a new Auth-Key and update your API integrations with the new credentials.",
         "send_otp": "Send OTP",
         "resend_otp": "Resend OTP",
         "resend_on": "Resend on",
