@@ -1,0 +1,34 @@
+{
+  "name": "Giddh API (Try it)",
+  "description": "Shared values for Giddh public API reference TRY requests. Never store production secrets in initial values.",
+  "type": 0,
+  "variables": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.giddh.com",
+      "initialValue": "https://api.giddh.com"
+    },
+    {
+      "key": "companyUniqueName",
+      "value": "",
+      "initialValue": "",
+      "description": "Company unique name from Giddh (Settings → company profile)."
+    },
+    {
+      "key": "Auth-Key",
+      "value": "",
+      "initialValue": "",
+      "description": "Company auth key from Settings → API. Leave empty in published docs; readers fill in TRY."
+    },
+    {
+      "key": "Session-Id",
+      "value": "",
+      "initialValue": "",
+      "description": "Optional session from browser login; used instead of Auth-Key for some user routes."
+    }
+  ],
+  "publicPublishHints": {
+    "editableKeys": ["companyUniqueName", "Auth-Key", "Session-Id"],
+    "neverPublishRealValuesFor": ["Auth-Key", "Session-Id"]
+  }
+}
