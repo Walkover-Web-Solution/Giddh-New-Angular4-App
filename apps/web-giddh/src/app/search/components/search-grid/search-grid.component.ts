@@ -334,6 +334,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                     if (res?.status === 'success') {
                         let blobData = this.generalService.base64ToBlob(res?.body, 'text/xlsx', 512);
                         return saveAs(blobData, `${p.groupName}.xlsx`);
+                    } else {
+                        this.toaster.errorToast(res?.message || this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
 

@@ -108,8 +108,10 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-21 · Claude agent · Subscription contact: "Registered Mobile Number (with country code)" label on one line when a mobile number exists; stays on two lines in the empty state · Subscription UI
 - 2026-11-21 · Claude agent · Removed the email template editor row. The fix and its test were reverted in `2b6237d785`, but the merge in #17201 brought the row back. The editor's Backspace and paste-marker bug is open again · editor ⬜
 - 2026-11-20 · Claude agent · Subscription contact: mobile number format hint spans both grid columns (one line) unless the OTP hint occupies column 2 · Subscription UI
+- 2026-11-20 · Claude agent · User details contact: empty state for no mobile number (dashed box + Add Mobile Number → existing edit/OTP flow); round envelope/mobile icons before email and mobile (shown in view and edit), "(with country code)" on its own line; new `mobile_number` locale keys en/hi/mr · Subscription UI
 - 2026-11-20 · Claude agent · User details email note (`email_auth_key_note`, en/hi/mr): changing email invalidates the existing Auth-Key; generate a new one · Subscription UI
 - 2026-11-17 · Cursor agent · Job Work Goods with Jobworker total also shows company currency · Job Work 🟡
 - 2026-11-17 · Cursor agent · Job Work expense total right-aligned with company currency via amount-field · Job Work 🟡
