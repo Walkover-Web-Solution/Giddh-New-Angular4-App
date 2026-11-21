@@ -4303,7 +4303,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.isEInvoiceEnabled = setting.invoiceSettings?.gstEInvoiceEnable;
                     this.setEInvoiceColumns();
                     this.settingResponse = setting;
-                    console.log('settingResponse', this.settingResponse);
                     this.settingForm.patchValue({
                         purchaseBillSettings: setting.purchaseBillSettings || {},
                         invoiceSettings: setting.invoiceSettings || {},
