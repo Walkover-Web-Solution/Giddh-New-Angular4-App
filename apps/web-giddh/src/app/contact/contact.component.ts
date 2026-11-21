@@ -1173,6 +1173,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (res?.status === "success") {
                 let blobData = this.generalService.base64ToBlob(res?.body, "text/xlsx", 512);
                 return saveAs(blobData, `${this.groupUniqueName}.xlsx`);
+            } else {
+                this.toaster.showSnackBar("error", res?.message || this.commonLocaleData?.app_something_went_wrong);
             }
         });
 
