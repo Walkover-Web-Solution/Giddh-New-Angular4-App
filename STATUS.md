@@ -110,6 +110,7 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-21 · Claude · Deleted 1,638 old (non-live) DocStar published versions on 63 pages that held the owner's personal data or session ids (approved by the owner); live versions unchanged · Public API docs 🟡
 - 2026-11-21 · Claude · Replaced the owner's email, name and phone in published examples; added live UK VAT, GST and Session-Id examples (15 pages); listed 210 pages for manual follow-up · Public API docs 🟡
 - 2026-11-21 · Claude · Filled 17 empty-list success examples with seeded test data; corrected Patch Voucher V4 route; unpublished two customer-portal pages that are not API routes · Public API docs 🟡
 - 2026-11-21 · Claude · Replaced placeholder filter bodies on 20 GET pages (backend reads a JSON body) and published · Public API docs 🟡
