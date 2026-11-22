@@ -27,7 +27,7 @@ Statuses: **verified** — spot-checked against code or CI this run; **partial**
 | White-label / Electron env | [white-label.md](white-label.md), [README-ELECTRON-BRANCH-ENV.md](README-ELECTRON-BRANCH-ENV.md) | partial | Cross-check DEVELOPMENT for command truth. |
 | Marketing / public website SEO | n/a | n/a | This repo ships the signed-in app build, not the marketing site. |
 | Backend / data platform | n/a | n/a | No server implementation in this repository. |
-| Infrastructure / IaC | partial | [.github/workflows](../.github/workflows) | CI workflows described in VERIFICATION; no Terraform here. |
+| Infrastructure / IaC | [.github/workflows](../.github/workflows) | partial | CI workflows described in VERIFICATION; no Terraform here. |
 | Security / CSP | partial | [STATUS.md](../STATUS.md) (CSP rows), [postbuild](../tools/web/postbuild.js) | Client CSP headers; not a full security program doc. |
 | Performance budgets | partial | [VERIFICATION.md](VERIFICATION.md) | Bundle warning recorded; no ongoing perf gate. |
 | Measurement / analytics | partial | Preservation notes in VISION/STATUS | Event catalog not centralized. |
