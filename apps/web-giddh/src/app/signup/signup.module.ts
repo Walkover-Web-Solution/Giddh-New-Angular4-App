@@ -7,6 +7,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { SignupRoutingModule } from './signup.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { PasswordVisibilityInputComponent } from '../shared/password-visibility-input/password-visibility-input.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         SignupRoutingModule,
         LaddaModule.forRoot({ style: 'slide-left', spinnerSize: 30 }),
         SharedModule,
-        FormFieldsModule
+        FormFieldsModule,
+        PasswordVisibilityInputComponent
     ],
     declarations: [
         SignupComponent

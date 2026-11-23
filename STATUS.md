@@ -108,9 +108,11 @@ Feature work merged after the brief, not scored against it:
 | Delivery Challan settings tab | 🟡 | Voucher API v2 Settings tab after Invoice in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only, like Invoice), Custom Delivery Challan# (branch prefix / challan prefix / initial no.). `settingForm.deliveryChallanSettings` reads and writes `deliveryChallanSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. V1 `app-invoice-setting` unchanged. Build passes; not exercised against a signed-in company. |
 | Receipt Note settings tab | 🟡 | Voucher API v2 purchase Settings tab after Pur. Bill in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only), Custom Receipt Note# (branch prefix / receipt note prefix / initial no.). `settingForm.receiptNoteSettings` reads and writes `receiptNoteSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. Not exercised against a signed-in company. |
 | Voucher list error responses | 🟡 | `e91fc17949`: last-vouchers, proforma/estimate and PO list stores stop reading `body` on error responses (special-character search). Not verified here. |
+| Login and signup password visibility | 🟡 | Shared `password-visibility-input` on login, signup, and login forgot-reset; masked by default; fixture browser smoke passes. |
 
 ## Change log
 
+- 2026-11-23 · Cursor agent · Login/signup password fields: eye toggle via shared `password-visibility-input` (keyboard `aria-label`/`aria-pressed`); login reset new-password included · Login and signup password visibility 🟡
 - 2026-11-21 · Claude agent · Subscription contact: "Registered Mobile Number (with country code)" label on one line when a mobile number exists; stays on two lines in the empty state · Subscription UI
 - 2026-11-21 · Claude agent · Removed the email template editor row. The fix and its test were reverted in `2b6237d785`, but the merge in #17201 brought the row back. The editor's Backspace and paste-marker bug is open again · editor ⬜
 - 2026-11-20 · Claude agent · Subscription contact: mobile number format hint spans both grid columns (one line) unless the OTP hint occupies column 2 · Subscription UI

@@ -94,14 +94,12 @@
                                     >
                                         <div class="clear-both form-group">
                                             <input class="form-control mb-2" type="text" formControlName="email" placeholder="Email Id" />
-                                            <input
-                                                class="form-control"
-                                                type="password"
+                                            <password-visibility-input
                                                 formControlName="password"
                                                 name="password"
                                                 placeholder="Password"
-                                                [minlength]="8"
-                                                [maxlength]="20"
+                                                [minLength]="8"
+                                                [maxLength]="20"
                                                 autocomplete="false"
                                             />
                                             <button
