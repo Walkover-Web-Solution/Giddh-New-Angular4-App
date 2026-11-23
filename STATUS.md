@@ -112,6 +112,7 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-23 · Cursor agent · Fixed a review-flagged regression: returning to the login form from "Forgot password?" left a previously revealed password rendered as plain text, because `resetForgotPasswordProcess()` never reset the new visibility signals. Now resets `isLoginPasswordVisible`/`isNewPasswordVisible` to `false` there, re-masking on return; verified with Playwright · Password visibility toggle on login/signup ✅
 - 2026-11-23 · Cursor agent · Added independent eye-button password visibility toggles to login (password, reset-password new password) and signup (password), via a shared standalone `password-visibility-toggle` component; masked by default, keyboard-accessible, `aria-label`/`aria-pressed`, preserves value and form state. Verified with Playwright screenshots/video against a local build. Recorded a pre-existing, unrelated gap: the signup password form has no UI control to reach it (see [REVIEW](docs/REVIEW.md#existing-findings-retained-for-focused-follow-up)) · Password visibility toggle on login/signup ✅
 - 2026-11-21 · Claude agent · Subscription contact: "Registered Mobile Number (with country code)" label on one line when a mobile number exists; stays on two lines in the empty state · Subscription UI
 - 2026-11-21 · Claude agent · Removed the email template editor row. The fix and its test were reverted in `2b6237d785`, but the merge in #17201 brought the row back. The editor's Backspace and paste-marker bug is open again · editor ⬜
