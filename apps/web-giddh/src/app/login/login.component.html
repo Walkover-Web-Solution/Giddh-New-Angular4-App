@@ -37,13 +37,19 @@
                                                 placeholder="Email Id"
                                                 autocomplete="new-email"
                                             />
-                                            <input
-                                                class="form-control"
-                                                type="password"
-                                                formControlName="password"
-                                                placeholder="Password"
-                                                autocomplete="new-password"
-                                            />
+                                            <div class="position-relative">
+                                                <input
+                                                    class="form-control password-input"
+                                                    [type]="isLoginPasswordVisible() ? 'text' : 'password'"
+                                                    formControlName="password"
+                                                    placeholder="Password"
+                                                    autocomplete="new-password"
+                                                />
+                                                <password-visibility-toggle
+                                                    [visible]="isLoginPasswordVisible()"
+                                                    (toggled)="isLoginPasswordVisible.set(!isLoginPasswordVisible())"
+                                                ></password-visibility-toggle>
+                                            </div>
                                             <button
                                                 matButton="filled"
                                                 class="mt-2"
@@ -151,14 +157,20 @@
                                                             required
                                                             autocomplete="new-verification"
                                                         />
-                                                        <input
-                                                            class="form-control mt-2"
-                                                            formControlName="newPassword"
-                                                            type="password"
-                                                            placeholder="New Password"
-                                                            required
-                                                            autocomplete="new-password"
-                                                        />
+                                                        <div class="position-relative">
+                                                            <input
+                                                                class="form-control mt-2 password-input"
+                                                                formControlName="newPassword"
+                                                                [type]="isNewPasswordVisible() ? 'text' : 'password'"
+                                                                placeholder="New Password"
+                                                                required
+                                                                autocomplete="new-password"
+                                                            />
+                                                            <password-visibility-toggle
+                                                                [visible]="isNewPasswordVisible()"
+                                                                (toggled)="isNewPasswordVisible.set(!isNewPasswordVisible())"
+                                                            ></password-visibility-toggle>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

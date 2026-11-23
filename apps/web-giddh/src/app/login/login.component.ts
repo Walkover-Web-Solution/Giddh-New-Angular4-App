@@ -7,7 +7,7 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, signal, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { TemplateRef } from "@angular/core";
@@ -109,6 +109,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     public brandLogoUrl: string = '';
     /** Partner callback URL from query (?redirect_url=). When set, Google auth uses partner bridge-token mode. */
     public partnerRedirectUrl: string = '';
+    /** Whether the login password field is showing plain text */
+    public isLoginPasswordVisible = signal(false);
+    /** Whether the reset-password "new password" field is showing plain text */
+    public isNewPasswordVisible = signal(false);
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,

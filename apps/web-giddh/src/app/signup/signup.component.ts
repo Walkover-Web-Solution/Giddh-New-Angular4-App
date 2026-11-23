@@ -1,7 +1,7 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, signal, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
@@ -89,6 +89,8 @@ export class SignupComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** Partner callback URL from query (?redirect_url=). When set, Google auth uses partner bridge-token mode. */
     public partnerRedirectUrl: string = '';
+    /** Whether the signup password field is showing plain text */
+    public isSignupPasswordVisible = signal(false);
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,

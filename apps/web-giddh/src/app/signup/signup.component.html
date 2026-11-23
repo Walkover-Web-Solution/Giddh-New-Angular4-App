@@ -94,16 +94,22 @@
                                     >
                                         <div class="clear-both form-group">
                                             <input class="form-control mb-2" type="text" formControlName="email" placeholder="Email Id" />
-                                            <input
-                                                class="form-control"
-                                                type="password"
-                                                formControlName="password"
-                                                name="password"
-                                                placeholder="Password"
-                                                [minlength]="8"
-                                                [maxlength]="20"
-                                                autocomplete="false"
-                                            />
+                                            <div class="position-relative">
+                                                <input
+                                                    class="form-control password-input"
+                                                    [type]="isSignupPasswordVisible() ? 'text' : 'password'"
+                                                    formControlName="password"
+                                                    name="password"
+                                                    placeholder="Password"
+                                                    [minlength]="8"
+                                                    [maxlength]="20"
+                                                    autocomplete="false"
+                                                />
+                                                <password-visibility-toggle
+                                                    [visible]="isSignupPasswordVisible()"
+                                                    (toggled)="isSignupPasswordVisible.set(!isSignupPasswordVisible())"
+                                                ></password-visibility-toggle>
+                                            </div>
                                             <button
                                                 matButton="filled"
                                                 class="mt-2"

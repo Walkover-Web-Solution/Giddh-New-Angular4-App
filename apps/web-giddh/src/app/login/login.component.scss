@@ -86,6 +86,10 @@ button.close {
     color: var(--color-black) !important;
 }
 
+.password-input {
+    padding-right: 40px;
+}
+
 .btn-text-primary:hover {
     color: var(--color-white) !important;
     border-color: var(--theme-primary-color);

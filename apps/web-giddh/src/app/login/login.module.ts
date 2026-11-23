@@ -8,6 +8,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { SharedModule } from '../shared/shared.module';
 import { LoaderModule } from '../loader/loader.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PasswordVisibilityToggleComponent } from '../shared/password-visibility-toggle/password-visibility-toggle.component';
 @NgModule({
     imports: [
         MatButtonModule,
@@ -18,7 +19,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         LaddaModule.forRoot({ style: 'slide-left', spinnerSize: 30 }),
         SharedModule,
         LoaderModule,
-        MatDialogModule
+        MatDialogModule,
+        PasswordVisibilityToggleComponent
     ],
     declarations: [
         LoginComponent
