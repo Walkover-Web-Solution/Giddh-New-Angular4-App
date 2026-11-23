@@ -532,6 +532,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.resetPasswordForm.reset();
         this.forgotStep = 1;
         this.userUniqueKey = null;
+        // Re-mask on return to login so a password revealed before leaving isn't shown in plain text
+        this.isLoginPasswordVisible.set(false);
+        this.isNewPasswordVisible.set(false);
     }
 
     /**
