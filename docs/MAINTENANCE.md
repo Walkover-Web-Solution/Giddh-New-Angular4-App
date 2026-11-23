@@ -2,7 +2,7 @@
 
 **Repository role:** Angular web client and Electron shell for Giddh accounting; the API backend is outside this checkout.
 
-**Last maintenance run:** 2026-11-22 (req_57252ad7) · **Reviewed `giddh-2.0` through commit:** `9c43124ff9`
+**Last maintenance run:** 2026-11-23 (req_57252ad7) · **Reviewed `giddh-2.0` through commit:** `9c43124ff9`
 
 Middleware-owned content stays under `docs/guidance/` and the `<!-- middleware:guidance -->` block in [AGENTS.md](../AGENTS.md); this file is the human/agent maintenance ledger for everything else in the map.
 
@@ -28,14 +28,14 @@ Statuses: **verified** — spot-checked against code or CI this run; **partial**
 | Marketing / public website SEO | n/a | n/a | This repo ships the signed-in app build, not the marketing site. |
 | Backend / data platform | n/a | n/a | No server implementation in this repository. |
 | Infrastructure / IaC | [.github/workflows](../.github/workflows) | partial | CI workflows described in VERIFICATION; no Terraform here. |
-| Security / CSP | partial | [STATUS.md](../STATUS.md) (CSP rows), [postbuild](../tools/web/postbuild.js) | Client CSP headers; not a full security program doc. |
-| Performance budgets | partial | [VERIFICATION.md](VERIFICATION.md) | Bundle warning recorded; no ongoing perf gate. |
-| Measurement / analytics | partial | Preservation notes in VISION/STATUS | Event catalog not centralized. |
+| Security / CSP | [STATUS.md](../STATUS.md), [postbuild](../tools/web/postbuild.js) | partial | Client CSP headers; not a full security program doc. |
+| Performance budgets | [VERIFICATION.md](VERIFICATION.md) | partial | Bundle warning recorded; no ongoing perf gate. |
+| Measurement / analytics | [VISION.md](VISION.md), [STATUS.md](../STATUS.md) | partial | Event catalog not centralized. |
 | `llms.txt` / public agent discovery | missing | — | Not used in this repo; AGENTS.md is the discovery entry. |
 
 ## Changes since `7f49fe07c9` (prior STATUS review)
 
-Reviewed merge history on `giddh-2.0` (27 non-merge commits listed by `status:check`). Documentation impact:
+Reviewed merge history on `giddh-2.0` through `9c43124ff9` (27 non-merge commits between `7f49fe07c9` and `9c43124ff9` per `status:check`). No new commits on `giddh-2.0` after `9c43124ff9` at the 2026-11-23 run. Documentation impact:
 
 | Change | Doc action this run |
 | --- | --- |
@@ -60,5 +60,5 @@ Reviewed merge history on `giddh-2.0` (27 non-merge commits listed by `status:ch
 | Check | Result |
 | --- | --- |
 | `npm run check:docs` | Passed (14 map documents including this file). |
-| `npm run status:check` | Passed on branch (docs-only delta vs `9c43124ff9`). |
-| `npm run check:ai` | Not run — `typescript` missing without install; docs link check substituted. |
+| `npm run status:check` | Passed (docs-only branch vs `giddh-2.0`). |
+| `npm run check:ai` | Not run — `node_modules` not installed in agent VM; `check:docs` substituted per [VERIFICATION.md](VERIFICATION.md). |

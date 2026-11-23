@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-22 · **Reviewed up to commit:** `9c43124ff9`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-23 · **Reviewed up to commit:** `9c43124ff9`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -111,8 +111,9 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-23 · Cursor agent (docs maintenance) · Confirmed `giddh-2.0` unchanged since `9c43124ff9`; fixed MAINTENANCE coverage-map columns for Security, Performance, and Measurement · Agent map and docs 🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · FLOWS §2 branch-tab gate matches `showAllBranches` (`branchCount > 1` and `unarchivedBranchCount >= 1`); fix MAINTENANCE coverage table Infrastructure row · Agent map and docs 🟡
-- 2026-11-22 · Cursor agent (docs maintenance) · Added [docs/MAINTENANCE.md](docs/MAINTENANCE.md), AGENTS task row, FLOWS §2 branch-tab timing; reviewed `giddh-2.0` through `9c43124ff9` · Agent map and docs 🟡
+- 2026-11-22 · Cursor agent (docs maintenance) · Added [docs/MAINTENANCE.md](docs/MAINTENANCE.md), AGENTS task row, FLOWS §2 branch-tab timing; reviewed `giddh-2.0` through `9c43124ff9` · Agent map and docs  🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · Recorded `5298e5a7a3` company picker Branch tab after branch list load; `2d49a209e1` ledger create entry in consolidated branch · Company/branch UI 🟡
 - 2026-11-21 · Claude agent · Subscription contact: "Registered Mobile Number (with country code)" label on one line when a mobile number exists; stays on two lines in the empty state · Subscription UI
 - 2026-11-21 · Claude agent · Removed the email template editor row. The fix and its test were reverted in `2b6237d785`, but the merge in #17201 brought the row back. The editor's Backspace and paste-marker bug is open again · editor ⬜
