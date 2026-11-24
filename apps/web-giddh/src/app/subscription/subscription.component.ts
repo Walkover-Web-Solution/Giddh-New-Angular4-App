@@ -325,6 +325,42 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Unlocks the email after an OTP was sent or verified so another email can be entered (signup flow)
+     *
+     * @memberof SubscriptionComponent
+     */
+    public changeEmail(): void {
+        this.resetEmailOtpState();
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Unlocks the mobile number after an OTP was sent or verified so another number can be entered (signup flow)
+     *
+     * @memberof SubscriptionComponent
+     */
+    public changeMobile(): void {
+        this.resetMobileOtpState();
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * Discards contact edits: restores the saved email and mobile, clears OTP state and leaves edit mode
+     *
+     * @memberof SubscriptionComponent
+     */
+    public cancelContactChanges(): void {
+        this.isEditingEmail = false;
+        this.isEditingMobile = false;
+        this.email = this.originalEmail;
+        this.mobileControl.setValue(this.originalMobile ? `+${this.originalMobile}` : '', { emitEvent: false });
+        this.resetEmailOtpState();
+        this.resetMobileOtpState();
+        this.mobileControl.disable({ emitEvent: false });
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
      * Resets email OTP verification state when value changes
      *
      * @memberof SubscriptionComponent
@@ -419,6 +455,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.mobileSendOtpInProgress = false;
                 this.mobileOtpRequestId = response.requestId;
                 this.showMobileOtp = true;
+                // Lock the number while its OTP is pending; Change Mobile unlocks it
+                this.mobileControl.disable({ emitEvent: false });
                 this.refreshOtpResendChannels();
                 this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
                 this.changeDetectionRef.detectChanges();
@@ -689,6 +727,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.showMobileOtp = false;
         if (clearRequestId) {
             this.mobileOtpRequestId = '';
+        }
+        if (this.isEditingMobile) {
+            this.mobileControl.enable({ emitEvent: false });
         }
     }
 
