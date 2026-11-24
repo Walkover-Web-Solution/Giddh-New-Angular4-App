@@ -1,0 +1,439 @@
+<div appTranslate [file]="'gst'" (localeData)="setLocaleData($event)" (commonLocaleData)="commonLocaleData.set($event)">
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper">
+        <tax-sidebar (navigateEvent)="handleNavigation()" class="gst-sidebar"></tax-sidebar>
+    </div>
+    <hamburger-menu [pageHeading]="imsLocale()?.page_heading"></hamburger-menu>
+
+    <div class="column content-column gst-filing-container navs-list">
+        <div class="tax-engine">
+            <div class="column list-column expanded-list-column transactions-list">
+                <!-- Header: same layout as the GSTR-1 / GSTR-2 filing header -->
+                <div class="list-header">
+                    <div class="list-filter">
+                        <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15">
+                            <div>
+                                <a [routerLink]="['/pages/gstfiling']" [attr.aria-label]="commonLocaleData()?.app_back" class="ember-view">
+                                    <img [src]="imgPath + 'gst/back.svg'" class="icon icon-sm image-as-icon-color text-middle" alt="" />
+                                </a>
+                                <img [src]="imgPath + 'gst/bag.svg'" class="icon gstr-icon image-as-icon-color text-middle" alt="" />
+                                <div class="text-vertical-align-middle nav-top">
+                                    <div class="text-vertical-align-middle head-font-weight d-flex align-items-center column-gap-1">
+                                        <h1 class="font-size-16 font-weight-medium mb-0">{{ imsLocale()?.page_heading }}</h1>
+                                        @if (hasTaxNumbers()) {
+                                            <giddh-datepicker
+                                                [monthYearMode]="true"
+                                                [startView]="'multi-year'"
+                                                [cssClass]="'text-center width-150'"
+                                                [startAt]="selectedMonth()"
+                                                [placeholder]="monthLabel()"
+                                                [appearance]="'outline'"
+                                                (monthYearSelected)="setMonth($event)"
+                                            ></giddh-datepicker>
+                                        }
+                                    </div>
+                                    <div class="font-size-12 text-vertical-align-middle font-weight-regular">
+                                        {{ imsLocale()?.page_subheading }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (hasTaxNumbers()) {
+                                <div class="flex-grow-1">
+                                    <div class="d-flex flex-wrap column-gap-1 row-gap-1 justify-content-end align-items-center">
+                                        @if (customMonthSelected()) {
+                                            <button type="button" matButton="outlined" (click)="clearMonth()">
+                                                <i class="icon-cross" aria-hidden="true"></i>
+                                                {{ commonLocaleData()?.app_clear_filter }}
+                                            </button>
+                                        }
+                                        @if (isConnected()) {
+                                            <button type="button" matButton="filled" (click)="openHistory()">
+                                                {{ commonLocaleData()?.app_history }}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                matButton="filled"
+                                                [ladda]="isRefreshing()"
+                                                [disabled]="isLoading() || isRefreshing()"
+                                                (click)="loadInvoices(true)"
+                                            >
+                                                {{ imsLocale()?.refresh_from_portal }}
+                                            </button>
+                                        }
+                                        @if (canAuthenticate()) {
+                                            <button
+                                                type="button"
+                                                matButton="filled"
+                                                [class.btn-success]="isConnected()"
+                                                [disabled]="isTaxFilingRestricted() || !gstin() || isSessionLoading()"
+                                                (click)="!isConnected() && openConnectDialog()"
+                                            >
+                                                {{ isConnected() ? filingLocale()?.authenticated : filingLocale()?.authenticate }}
+                                            </button>
+                                        }
+                                    </div>
+                                    @if (canAuthenticate()) {
+                                        <div class="d-flex justify-content-end font-weight-regular">
+                                            <restricted-module-message
+                                                [restrictedModule]="restrictedModules.TaxFilling"
+                                                (onUpgradePlan)="buyPlan($event)"
+                                            ></restricted-module-message>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="nav-band">
+                    <div class="p-3">
+                        @if (!hasTaxNumbers()) {
+                            <p class="font-style-italic mb-0">{{ $any(localeData())?.gst_unavailable_message }}</p>
+                        } @else if (isSessionLoading()) {
+                            <giddh-page-loader></giddh-page-loader>
+                        } @else if (!isConnected()) {
+                            <!-- Not connected: GSP OTP session required -->
+                            <div class="filings-empty-state">
+                                <img [src]="imgPath + 'gst/nofound.svg'" [style.max-width.px]="110" alt="" />
+                                <div class="empty-msg">
+                                    <span>{{ imsLocale()?.connect_message }}</span>
+                                </div>
+                                @if (canAuthenticate()) {
+                                    <button
+                                        type="button"
+                                        matButton="filled"
+                                        [disabled]="isTaxFilingRestricted() || !gstin()"
+                                        (click)="openConnectDialog()"
+                                    >
+                                        {{ filingLocale()?.authenticate }}
+                                    </button>
+                                }
+                            </div>
+                        } @else if (isLoading() || isRefreshing()) {
+                            <giddh-page-loader></giddh-page-loader>
+                        } @else if (isEmptySnapshot()) {
+                            <div class="filings-empty-state">
+                                <img [src]="imgPath + 'gst/nofound.svg'" [style.max-width.px]="110" alt="" />
+                                <div class="empty-msg">
+                                    <span>{{ imsLocale()?.empty_snapshot }}</span>
+                                </div>
+                                <button type="button" matButton="filled" (click)="loadInvoices(true)">
+                                    {{ imsLocale()?.refresh_from_portal }}
+                                </button>
+                            </div>
+                        } @else if (loadError()) {
+                            <div class="border border-radius-4 ims-error p-2" role="alert">{{ loadError() }}</div>
+                        } @else {
+                            <div class="transactions-overview">
+                                <!-- Summary count boxes (same look as the customer list); display only, filtering is the status dropdown below -->
+                                <div class="gstr-transactions-summary">
+                                    <div class="d-flex w-100 overflow-x-auto">
+                                        @for (row of summaryRows(); track row.status; let last = $last) {
+                                            <div class="total-details-box" [class]="row.boxClass" [class.mr-1]="!last">
+                                                <h5>
+                                                    {{ row.status ? statusLabel(row.status) : imsLocale()?.total_invoices }}
+                                                    <div>
+                                                        <span class="d-inline-flex number-total">{{ row.count }}</span>
+                                                    </div>
+                                                </h5>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Invoices -->
+                                <div class="gstr-transactions-summary">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap column-gap-2 row-gap-1 mb-3">
+                                        <div class="text-uppercase title">{{ imsLocale()?.invoice_details }}</div>
+                                        <div class="ims-status-filter">
+                                            <reactive-dropdown-field
+                                                [label]="commonLocaleData()?.app_status"
+                                                [placeholder]="commonLocaleData()?.app_status"
+                                                [options]="statusFilterOptions()"
+                                                [labelValue]="statusFilterLabel()"
+                                                (selectedOption)="selectStatusFilter($event)"
+                                            ></reactive-dropdown-field>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bulk action bar -->
+                                    @if (selectedRows().length) {
+                                        <div
+                                            class="d-flex flex-wrap align-items-center column-gap-1 row-gap-1 border border-radius-4 sky-blue-bg p-2 mb-3"
+                                        >
+                                            <strong class="font-size-14 mr-2">{{ selectedText() }}</strong>
+                                            <button
+                                                type="button"
+                                                matButton="filled"
+                                                [disabled]="isSaveInProgress()"
+                                                (click)="applyAction('ACCEPTED')"
+                                            >
+                                                {{ imsLocale()?.accept }}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                matButton="outlined"
+                                                [disabled]="isSaveInProgress()"
+                                                (click)="applyAction('REJECTED')"
+                                            >
+                                                {{ imsLocale()?.reject }}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                matButton="outlined"
+                                                [disabled]="isSaveInProgress()"
+                                                (click)="applyAction('PENDING')"
+                                            >
+                                                {{ imsLocale()?.mark_pending }}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                matButton="outlined"
+                                                [disabled]="isSaveInProgress()"
+                                                (click)="applyAction('RESET')"
+                                            >
+                                                {{ commonLocaleData()?.app_reset }}
+                                            </button>
+                                        </div>
+                                    }
+
+                                    @if (!invoices().length) {
+                                        <div class="filings-empty-state">
+                                            <img [src]="imgPath + 'gst/nofound.svg'" [style.max-width.px]="110" alt="" />
+                                            <div class="empty-msg">
+                                                <span>{{ filingLocale()?.no_result_found }}</span>
+                                            </div>
+                                        </div>
+                                    } @else {
+                                        <div class="table-responsive">
+                                            <table mat-table [dataSource]="invoices()" class="table transactions-table w-100">
+                                                <ng-container matColumnDef="select">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            [checked]="isAllSelected()"
+                                                            [indeterminate]="selectedRows().length > 0 && !isAllSelected()"
+                                                            [aria-label]="imsLocale()?.select_all"
+                                                            (change)="toggleAll($event.checked)"
+                                                        ></mat-checkbox>
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            [checked]="selectedKeys().has(invoiceKey(row))"
+                                                            [aria-label]="row.docNumber"
+                                                            (change)="toggleRow(row)"
+                                                        ></mat-checkbox>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="section">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-uppercase">
+                                                        {{ imsLocale()?.section }}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">{{ row.section }}</td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="supplier">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-uppercase">
+                                                        {{ imsLocale()?.supplier_gstin }}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <span class="d-block">{{ row.supplierName }}</span>
+                                                        <span class="d-block font-size-12 light-gray">{{ row.supplierGstin }}</span>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="document">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-uppercase">
+                                                        {{ imsLocale()?.doc_no_date }}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">{{ row.docNumber }} / {{ row.docDate }}</td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="taxableValue">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
+                                                        {{ commonLocaleData()?.app_taxable_value }}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                                        <i class="icon-rupees icon-font-11" aria-hidden="true"></i>
+                                                        <span class="d-inline-flex">
+                                                            <amount-field
+                                                                [amount]="row.taxableValue"
+                                                                [currencySymbol]="false"
+                                                                [currencyCode]="false"
+                                                            ></amount-field>
+                                                        </span>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="tax">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
+                                                        {{ commonLocaleData()?.app_tax }}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                                        <i class="icon-rupees icon-font-11" aria-hidden="true"></i>
+                                                        <span class="d-inline-flex">
+                                                            <amount-field
+                                                                [amount]="taxTotal(row)"
+                                                                [currencySymbol]="false"
+                                                                [currencyCode]="false"
+                                                            ></amount-field>
+                                                        </span>
+                                                    </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="imsStatus">
+                                                    <!-- Centred so the badge does not sit against the right-aligned Tax amount -->
+                                                    <th mat-header-cell *matHeaderCellDef class="text-center text-uppercase">
+                                                        {{ imsLocale()?.ims_status }}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row" class="text-center">
+                                                        <span class="ims-badge" [class]="'ims-badge-' + row.imsStatus">
+                                                            {{ statusLabel(row.imsStatus) }}
+                                                        </span>
+                                                    </td>
+                                                </ng-container>
+
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                            </table>
+                                        </div>
+                                        @if (totalResults() > pageSizeOptions[0]) {
+                                            <mat-paginator
+                                                [showFirstLastButtons]="true"
+                                                [pageSizeOptions]="pageSizeOptions"
+                                                [pageIndex]="page() - 1"
+                                                [pageSize]="count()"
+                                                [length]="totalResults()"
+                                                (page)="pageChanged($event)"
+                                            ></mat-paginator>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- ITC disclaimer: always shown -->
+                        @if (hasTaxNumbers()) {
+                            <p class="font-size-12 font-style-italic light-gray px-3 mb-custom-80">{{ note() || imsLocale()?.itc_note }}</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GSP OTP dialog (shared with GSTR filing) -->
+<ng-template #connectDialog>
+    <gst-aside-menu
+        [returnType]="gstReport.Ims"
+        (cancelConfirmationEvent)="openCancelConfirmationDialog()"
+        (closeAsideEvent)="connectDialogRef?.close()"
+        [localeData]="localeData()"
+        [commonLocaleData]="commonLocaleData()"
+    ></gst-aside-menu>
+</ng-template>
+
+<ng-template #cancelConfirmationDialog>
+    <confirm-modal
+        [body]="$any(localeData()?.filing)?.cancel_title"
+        [permanentlyDeleteMessage]="' '"
+        (successCallBack)="cancelConfirmationDialogRef?.close(); connectDialogRef?.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef?.close()"
+    ></confirm-modal>
+</ng-template>
+
+<!-- Accept dialog: ITC details for ITC sections -->
+<ng-template #acceptDialog>
+    <!-- Plain dialog-header like the other GST dialogs: mat-dialog-title would override its white text -->
+    <div class="dialog-header">
+        <span id="ims-accept-dialog-title">{{ imsLocale()?.accept_title }}</span>
+        <button type="button" matIconButton [attr.aria-label]="commonLocaleData()?.app_close" (click)="acceptDialogRef?.close()">
+            <i class="icon-cross" aria-hidden="true"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <form [formGroup]="acceptForm" class="p-3" (ngSubmit)="confirmAccept()">
+            <p class="font-size-12 light-gray mb-3">{{ imsLocale()?.itc_sections_note }}</p>
+            <label id="ims-itc-red-req" class="d-block mb-2">{{ imsLocale()?.itc_red_req }}</label>
+            <mat-radio-group formControlName="itcRedReq" class="d-flex column-gap-2 mb-3" aria-labelledby="ims-itc-red-req">
+                <mat-radio-button color="primary" value="N">{{ commonLocaleData()?.app_no }}</mat-radio-button>
+                <mat-radio-button color="primary" value="Y">{{ commonLocaleData()?.app_yes }}</mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ imsLocale()?.remarks }}</mat-label>
+                <textarea matInput formControlName="remarks" rows="3" [required]="acceptForm.controls.itcRedReq.value === 'N'"></textarea>
+            </mat-form-field>
+            <div class="d-flex column-gap-1 justify-content-end mt-3">
+                <button type="button" matButton="outlined" (click)="acceptDialogRef?.close()">{{ commonLocaleData()?.app_cancel }}</button>
+                <button type="submit" matButton="filled">{{ imsLocale()?.accept }}</button>
+            </div>
+        </form>
+    </mat-dialog-content>
+</ng-template>
+
+<!-- Reset confirmation -->
+<ng-template #resetConfirmDialog>
+    <confirm-modal
+        [body]="resetConfirmText()"
+        [permanentlyDeleteMessage]="' '"
+        (successCallBack)="confirmReset()"
+        (cancelCallBack)="resetConfirmDialogRef?.close()"
+    ></confirm-modal>
+</ng-template>
+
+<!-- Upload history aside -->
+<ng-template #historyDialog>
+    <div class="aside-dialog-wrapper">
+        <div class="dialog-header">
+            <span>{{ imsLocale()?.upload_history }}</span>
+            <button
+                type="button"
+                mat-icon-button
+                class="ml-auto"
+                [attr.aria-label]="commonLocaleData()?.app_close"
+                (click)="historyDialogRef?.close()"
+            >
+                <i class="icon-cross" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="dialog-body p-3">
+            @if (isHistoryLoading()) {
+                <giddh-page-loader></giddh-page-loader>
+            } @else if (!historyRows().length) {
+                <p>{{ commonLocaleData()?.app_no_data_found }}</p>
+            } @else {
+                <table mat-table [dataSource]="historyRows()" class="w-100">
+                    <ng-container matColumnDef="referenceId">
+                        <th mat-header-cell *matHeaderCellDef>{{ $any(localeData()?.filing)?.reference_id }}</th>
+                        <td mat-cell *matCellDef="let row">{{ row.referenceId }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData()?.app_date }}</th>
+                        <td mat-cell *matCellDef="let row">{{ row.filingDateTime }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData()?.app_status }}</th>
+                        <td mat-cell *matCellDef="let row" class="text-right">
+                            <button
+                                type="button"
+                                matButton="outlined"
+                                [disabled]="checkingReferenceId() === row.referenceId"
+                                (click)="checkReferenceStatus(row.referenceId)"
+                            >
+                                {{ $any(localeData()?.filing)?.get_status }}
+                            </button>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="historyColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: historyColumns"></tr>
+                </table>
+                <p class="font-size-12 font-style-italic light-gray mt-2">{{ imsLocale()?.history_note }}</p>
+            }
+        </div>
+    </div>
+</ng-template>

@@ -26,5 +26,6 @@
     "rate_wise": "रेट वाइज",
     "account_wise": "खातावार",
     "vat_liabilities": "वैट देनदारियाँ",
-    "vat_payments":"वैट भुगतान"
+    "vat_payments":"वैट भुगतान",
+    "ims": "IMS"
 }

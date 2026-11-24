@@ -23,6 +23,20 @@ For ordinary voucher creation, `VoucherService.generateVoucher` posts to `v4/com
 
 [GiddhErrorHandler.HandleCatch](../apps/web-giddh/src/app/services/catchManager/catchmanger.ts) often converts HTTP errors into emitted response objects, so consumers check `status`, not only the RxJS error channel. `SESSION_EXPIRED_OR_INVALID` dispatches logout. Offline handling can complete without a response, or emit `status: 'no-network'` when requested by the body. Preserve these distinctions when changing service return types or loaders.
 
+## GST IMS
+
+Client: [GSTR_API](../apps/web-giddh/src/app/services/apiurls/gst-r.api.ts) (`IMS_INVOICES`, `SAVE_IMS`, `SAVE_IMS_STATUS`, `IMS_REFERENCE_IDS`) + [ImsService](../apps/web-giddh/src/app/services/ims.service.ts) + [Ims.ts](../apps/web-giddh/src/app/models/api-models/Ims.ts). Sources: the backend "IMS Frontend Implementation Guide" (branch `clickup-14zkq6be6jd-dev`) and its Postman collection; neither is checked in and no call was made against a server from this repository.
+
+| Call | Client sends | Client reads |
+| --- | --- | --- |
+| `GET v2/company/:c/session?gstin=` (existing) | Through `GstReconcileActions.GetGSPSession`; `gstR.gstAuthenticated` gates the page | `whitebooks` flag via `ACTIVE_GSP_SESSION_KEY` |
+| `GET v2/company/:c/ims-invoices` | `gstin`, `monthYear` (MM-yyyy), `refresh`, optional `status` (`ACCEPTED`/`REJECTED`/`PENDING`/`NO_ACTION`), `page` (1-based), `count`, `gsp` | `body.summary`, `body.invoices`, `body.totalResults`, `body.note`; error `code` `error.ims.data.notFound` shows the refresh prompt |
+| `POST v2/company/:c/save-ims?gstin&monthYear&reset&gsp&currentDateTime` | `{ actions: [{ status?, section, supplierGstin, docNumber, docDate, hash?, itcRedReq?, remarks? }] }`; `status` omitted when `reset=true`; ITC fields only for `IMS_ITC_SECTIONS` on ACCEPTED | `body.referenceId` (recorded sample), else `body.data.reference_id` / `body.data.int_tran_id` (guide) |
+| `GET v2/company/:c/save-ims-status` | `referenceId`, `gstin`, `retPeriod` (MMyyyy), `gsp` | `status_cd` / `err_cd` / `err_msg` from `body.gstResponseString` (recorded sample), `body.data` (guide) or directly on `body` (observed 2026-11-24: `{ transTypCd, status_cd, proc_cnt, err_cnt }`), else `body.gstErrorCode`. Called once per **Get status** click (no polling). `IP` shows still processing; `P`/`REC`/`1` success; anything else is shown as failure |
+| `GET v2/company/:c/ims-referenceIds` | `gstin`, `monthYear` | `body[]` of `{ retPeriod, referenceId, gstin, filingDateTime, type }` |
+
+The guide and the recorded sample disagree on the save/status response shape and on the meaning of `P`; the client reads both shapes and follows the existing GSTR-1 code meaning (`P` processed). Separate `ims-summary`, `ims-refresh` and `reset-ims` calls from the older Postman collection are not used.
+
 ## Select All filters
 
 [selected-all.ts](../apps/web-giddh/src/app/shared/helpers/selected-all.ts) owns the sentinel and normalization. `GeneralService.replaceSelectedAllOptions` and the `app.constant` exports remain the public entry points. For example:

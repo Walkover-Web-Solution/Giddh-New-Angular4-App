@@ -83,6 +83,18 @@
                             <span>{{ localeData?.gstr2_label }}</span>
                         </a>
                     </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        routerLinkActive
+                        #ims="routerLinkActive"
+                        [class.active]="ims.isActive"
+                        [routerLink]="['/pages/gstfiling/ims']"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{ localeData?.ims }}</span>
+                        </a>
+                    </mat-list-item>
                 </mat-list>
                 <mat-list>
                     <mat-list-item
