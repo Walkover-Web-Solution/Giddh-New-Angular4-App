@@ -825,6 +825,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === "success") {
                     this.updateCommentIdx = null;
+                } else if (res?.status === 'error' && res?.message) {
+                    this.toaster.showSnackBar('error', res.message);
                 }
             });
         }, 500);
@@ -889,6 +891,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (res?.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body?.description);
+                } else if (res?.status === 'error' && res?.message) {
+                    this.toaster.showSnackBar('error', res.message);
                 }
             });
         }, 500);

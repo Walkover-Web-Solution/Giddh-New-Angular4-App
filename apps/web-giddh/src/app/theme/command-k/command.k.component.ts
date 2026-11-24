@@ -4,6 +4,7 @@ import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { DOWN_ARROW, ENTER, ESCAPE, UP_ARROW, BACKSPACE, TAB, RIGHT_ARROW, LEFT_ARROW, CAPS_LOCK, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_META, MAC_WK_CMD_RIGHT } from '@angular/cdk/keycodes';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { GeneralService } from '../../services/general.service';
+import { ToasterService } from '../../services/toaster.service';
 import { CommandKService } from '../../services/commandk.service';
 import { CommandKRequest } from '../../models/api-models/Common';
 import { remove } from '../../lodash-optimized';
@@ -107,6 +108,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private commandKService: CommandKService,
+        private toaster: ToasterService,
         private changeDetection: ChangeDetectorRef,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private generalAction: GeneralActions
@@ -292,7 +294,14 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
 
-            if (res && res.body && res.body.results && res.body.results.length > 0) {
+            if (res?.status === 'error' && res?.message) {
+                this.toaster.showSnackBar('error', res.message);
+                this.allowLoadMore = false;
+                if (this.searchedItems?.length === 0) {
+                    this.noResultsFound = true;
+                }
+                this.changeDetection.detectChanges();
+            } else if (res && res.body && res.body.results && res.body.results.length > 0) {
 
                 // Create new array reference for proper change detection
                 this.searchedItems = [...(this.searchedItems || []), ...res.body.results];
