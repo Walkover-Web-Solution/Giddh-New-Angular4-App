@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-23 · **Reviewed up to commit:** `9c43124ff9`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-24 · **Reviewed up to commit:** `d92de88b2d`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -108,9 +108,12 @@ Feature work merged after the brief, not scored against it:
 | Delivery Challan settings tab | 🟡 | Voucher API v2 Settings tab after Invoice in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only, like Invoice), Custom Delivery Challan# (branch prefix / challan prefix / initial no.). `settingForm.deliveryChallanSettings` reads and writes `deliveryChallanSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. V1 `app-invoice-setting` unchanged. Build passes; not exercised against a signed-in company. |
 | Receipt Note settings tab | 🟡 | Voucher API v2 purchase Settings tab after Pur. Bill in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only), Custom Receipt Note# (branch prefix / receipt note prefix / initial no.). `settingForm.receiptNoteSettings` reads and writes `receiptNoteSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. Not exercised against a signed-in company. |
 | Voucher list error responses | 🟡 | `e91fc17949`: last-vouchers, proforma/estimate and PO list stores stop reading `body` on error responses (special-character search). Not verified here. |
+| Panel account search and report-comment API errors | 🟡 | Invoice/bill ([voucher.component.ts](apps/web-giddh/src/app/voucher/voucher.component.ts)), ledger and ledger entry panel show `ToasterService` error snackbar when account-search returns `status: error` (e.g. invalid HTML/script in `q`). Contact report-comment add/delete show the same. Command-K (`cmdk`) search shows API `message` on `INVALID_PARAMETERS` and similar errors. Not verified against production. |
 
 ## Change log
 
+- 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 🟡
+- 2026-11-24 · Cursor agent · Panel account-search (invoice/bill, ledger, ledger entry) and report-comment add/delete show API `message` when `GiddhErrorHandler` returns `status: error` · Panel account search and report-comment API errors 🟡
 - 2026-11-23 · Cursor agent (docs maintenance) · Confirmed `giddh-2.0` unchanged since `9c43124ff9`; fixed MAINTENANCE coverage-map columns for Security, Performance, and Measurement · Agent map and docs 🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · FLOWS §2 branch-tab gate matches `showAllBranches` (`branchCount > 1` and `unarchivedBranchCount >= 1`); fix MAINTENANCE coverage table Infrastructure row · Agent map and docs 🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · Added [docs/MAINTENANCE.md](docs/MAINTENANCE.md), AGENTS task row, FLOWS §2 branch-tab timing; reviewed `giddh-2.0` through `9c43124ff9` · Agent map and docs  🟡
