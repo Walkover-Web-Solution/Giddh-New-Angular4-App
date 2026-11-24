@@ -1830,6 +1830,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 this.isCustomerSelected = true;
                                 this.invFormData.accountDetails.name = '';
                             }
+                        } else if (data?.status === 'error' && data?.message) {
+                            this.toaster.showSnackBar('error', data.message);
                         }
                     });
                 }
@@ -7019,6 +7021,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 this.defaultItemResultsPaginationData.page = data.body.page;
                             }
                         }
+                    } else if (data?.status === 'error' && data?.message) {
+                        this.toaster.showSnackBar('error', data.message);
                     }
                 });
             } else {
@@ -7048,6 +7052,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                     this.defaultItemResultsPaginationData.page = data.body.page;
                                 }
                             }
+                        } else if (data?.status === 'error' && data?.message) {
+                            this.toaster.showSnackBar('error', data.message);
                         }
                     });
                 }

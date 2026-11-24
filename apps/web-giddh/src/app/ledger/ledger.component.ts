@@ -2218,6 +2218,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
                         }
                         this.cdRf.detectChanges();
+                    } else if (data?.status === 'error' && data?.message) {
+                        this.toaster.showSnackBar('error', data.message);
                     }
                 });
             }
