@@ -24,6 +24,8 @@ export class VerifyEmailResponseModel {
     public user: UserDetails;
     public session?: Session;
     public authKey?: string;
+    /** Login region (e.g. IN, UK); picks the session cookie name */
+    public loggedInRegion?: string;
     public isNewUser: boolean;
     public contactNumber: string;
     public countryCode: string;
@@ -110,4 +112,6 @@ export interface UpdateUserContactResponse {
     isVerified: boolean;
     mobileVerified: boolean;
     authKey?: string;
+    /** New session issued after the contact change; replaces the current session id and expiry */
+    session?: Session;
 }

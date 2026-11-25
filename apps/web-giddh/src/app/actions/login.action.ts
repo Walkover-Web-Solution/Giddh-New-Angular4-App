@@ -5,6 +5,7 @@ import {
     PartnerGoogleAuthResponse,
     SignupwithEmaillModel,
     SignupWithMobile,
+    UpdateUserContactResponse,
     UserDetails,
     VerifyEmailModel,
     VerifyEmailResponseModel,
@@ -95,6 +96,8 @@ export class LoginActions {
 
     public static renewSessionRequest = 'renewSessionRequest';
     public static renewSessionResponse = 'renewSessionResponse';
+    /** Contact (email/mobile) saved: merge user fields and the new session into the session store */
+    public static UpdateUserContactSuccess = 'UpdateUserContactSuccess';
 
     public static AutoLoginWithPasswdResponse = 'AutoLoginWithPasswdResponse';
 
@@ -909,6 +912,25 @@ export class LoginActions {
         return {
             type: LoginActions.VerifyAddNewMobileNoResponse,
             payload: value
+        };
+    }
+
+    /**
+     * Stores the saved contact details and the new session returned by the contact update API,
+     * so later requests send the new Session-Id. Also refreshes the region session cookie.
+     *
+     * @param {UpdateUserContactResponse} body Contact update response body
+     * @param {string} loggedInRegion Region of the current login, used for the session cookie name
+     * @returns {CustomActions}
+     * @memberof LoginActions
+     */
+    public UpdateUserContactSuccess(body: UpdateUserContactResponse, loggedInRegion: string): CustomActions {
+        if (body?.session?.id) {
+            this._generalService.setCookie(this._generalService.getRegionSessionCookieName(loggedInRegion), body.session.id, 30);
+        }
+        return {
+            type: LoginActions.UpdateUserContactSuccess,
+            payload: body
         };
     }
 
