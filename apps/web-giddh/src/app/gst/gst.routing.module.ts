@@ -9,6 +9,7 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { FilingStatusComponent } from './filing-status/filing-status.component';
 import { GstSettingComponent } from './gst-setting/gst-setting.component';
+import { ImsComponent } from './ims/ims.component';
 
 const GST_ROUTES: Routes = [
     { path: '', component: GstComponent },
@@ -23,7 +24,8 @@ const GST_ROUTES: Routes = [
     },
     { path: 'unit-mapping', component: UnitMappingComponent },
     { path: 'gst-setting', component: GstSettingComponent },
-    { path: 'filing-status', component: FilingStatusComponent }
+    { path: 'filing-status', component: FilingStatusComponent },
+    { path: 'ims', component: ImsComponent }
 ];
 
 @NgModule({

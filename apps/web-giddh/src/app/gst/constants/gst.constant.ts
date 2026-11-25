@@ -2,7 +2,8 @@
 export enum GstReport {
     Gstr1 = 'gstr1',
     Gstr2 = 'gstr2',
-    Gstr3b = 'gstr3b'
+    Gstr3b = 'gstr3b',
+    Ims = 'ims'
 }
 
 /** Enum for tax service */
@@ -38,3 +39,15 @@ export function buildGspSessionResponse(gsp: string): Record<string, boolean> {
 
 /** Type for tax service */
 export type TaxServiceType = `${TaxServiceEnum}`;
+
+/**
+ * IMS sections that carry ITC fields (itcRedReq, remarks) on Accept.
+ * B2B has none. B2BCN is the credit-note code seen in the recorded sandbox save.
+ */
+export const IMS_ITC_SECTIONS: readonly string[] = ['B2BA', 'DNA', 'CN', 'CNA', 'ECOMA', 'B2BCN'];
+
+/** Portal status codes that mean a save is still being processed */
+export const IMS_IN_PROGRESS_STATUS_CODES: readonly string[] = ['IP'];
+
+/** Portal status codes that mean a save was processed successfully */
+export const IMS_SUCCESS_STATUS_CODES: readonly string[] = ['P', 'REC', '1'];
