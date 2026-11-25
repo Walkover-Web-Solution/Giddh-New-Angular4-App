@@ -1,0 +1,42 @@
+// IMS-only styles: status badges and the status filter width. Summary boxes use the global total-details-box classes. Layout comes from the shared GSTR filing classes (tax-engine, list-filter, transactions-overview).
+
+.head-font-weight {
+    font-weight: 500 !important;
+}
+
+// Fixed width for the status filter dropdown beside the Invoice Details title
+.ims-status-filter {
+    width: 220px;
+}
+
+.ims-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: var(--font-size-12);
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: var(--color-dark-gray);
+    background-color: var(--color-light-gray);
+}
+
+.ims-badge-ACCEPTED {
+    color: var(--color-green);
+    background-color: var(--color-green-light);
+}
+
+.ims-badge-REJECTED {
+    color: var(--color-red);
+    background-color: var(--color-red-light);
+}
+
+.ims-badge-PENDING {
+    color: var(--color-orange);
+    background-color: var(--color-orange-light);
+}
+
+.ims-error {
+    color: var(--color-red);
+    background-color: var(--color-danger-light);
+}
