@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-24 · **Reviewed up to commit:** `d92de88b2d`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-25 · **Reviewed up to commit:** `e6f6bd4cac`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -109,9 +109,11 @@ Feature work merged after the brief, not scored against it:
 | Receipt Note settings tab | 🟡 | Voucher API v2 purchase Settings tab after Pur. Bill in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only), Custom Receipt Note# (branch prefix / receipt note prefix / initial no.). `settingForm.receiptNoteSettings` reads and writes `receiptNoteSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. Not exercised against a signed-in company. |
 | Voucher list error responses | 🟡 | `e91fc17949`: last-vouchers, proforma/estimate and PO list stores stop reading `body` on error responses (special-character search). Not verified here. |
 | Panel account search and report-comment API errors | 🟡 | Invoice/bill ([voucher.component.ts](apps/web-giddh/src/app/voucher/voucher.component.ts)), ledger and ledger entry panel show `ToasterService` error snackbar when account-search returns `status: error` (e.g. invalid HTML/script in `q`). Contact report-comment add/delete show the same. Command-K (`cmdk`) search shows API `message` on `INVALID_PARAMETERS` and similar errors. Not verified against production. |
+| User details contact (email / mobile) | 🟡 | [User details](apps/web-giddh/src/app/subscription/subscription.component.html) Contact Details tab follows the sign-up verify pattern: email and mobile shown as read-only fields with **Change Email** / **Change Mobile** buttons (Add Mobile Number empty state kept). Changing a value → Send OTP → verify (MSG91) → **Save Changes** posts `users/{uniqueName}/contact`; **Cancel** beside Save discards edits and OTP state. Locale keys `change_email` / `change_mobile` en/hi/mr. Not exercised against a signed-in account. |
 
 ## Change log
 
+- 2026-11-25 · Claude agent · User details contact: read-only email/mobile fields with Change Email / Change Mobile buttons (sign-up style) and Cancel beside Save Changes; reviewed up to `e6f6bd4cac` (`26b2d95577`, `9601a30fd4` already logged 2026-11-24) · User details contact (email / mobile) 🟡
 - 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 🟡
 - 2026-11-24 · Cursor agent · Panel account-search (invoice/bill, ledger, ledger entry) and report-comment add/delete show API `message` when `GiddhErrorHandler` returns `status: error` · Panel account search and report-comment API errors 🟡
 - 2026-11-23 · Cursor agent (docs maintenance) · Confirmed `giddh-2.0` unchanged since `9c43124ff9`; fixed MAINTENANCE coverage-map columns for Security, Performance, and Measurement · Agent map and docs 🟡

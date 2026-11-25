@@ -61,7 +61,9 @@
 		"new_auth_key_message": "तुमची Auth-Key अपडेट झाली आहे. जुनी की वापरणारे API इंटिग्रेशन अपडेट करा.",
 		"no_mobile_added": "मोबाइल नंबर जोडलेला नाही",
 		"no_mobile_added_description": "महत्त्वाचे अपडेट मिळवण्यासाठी आणि तुमचे खाते सुरक्षित ठेवण्यासाठी तुमचा मोबाइल नंबर जोडा.",
-		"add_mobile_number": "मोबाइल नंबर जोडा"
+		"add_mobile_number": "मोबाइल नंबर जोडा",
+		"change_email": "ईमेल बदला",
+		"change_mobile": "मोबाइल बदला"
 	},
 	"session": {
 		"tab_heading": "सत्र",

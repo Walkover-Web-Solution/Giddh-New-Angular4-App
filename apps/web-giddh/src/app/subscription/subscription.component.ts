@@ -646,6 +646,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Discards unsaved email/mobile edits and OTP state, and returns both fields to read-only
+     *
+     * @memberof SubscriptionComponent
+     */
+    public cancelContactChanges(): void {
+        this.patchContactFieldsFromUser(true);
+    }
+
+    /**
      * Clears OTP verification of the fields sent in a failed save so the user can
      * correct the value and verify again (e.g. "email already exists")
      *

@@ -61,7 +61,9 @@
         "new_auth_key_message": "Your Auth-Key has been updated. Please update any API integrations using the old key.",
         "no_mobile_added": "No mobile number added",
         "no_mobile_added_description": "Add your mobile number to receive important updates and secure your account.",
-        "add_mobile_number": "Add Mobile Number"
+        "add_mobile_number": "Add Mobile Number",
+        "change_email": "Change Email",
+        "change_mobile": "Change Mobile"
     },
     "session": {
         "tab_heading": "Session",
