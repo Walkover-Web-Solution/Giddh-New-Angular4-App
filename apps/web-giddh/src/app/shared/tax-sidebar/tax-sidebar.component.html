@@ -83,7 +83,9 @@
                             <span>{{ localeData?.gstr2_label }}</span>
                         </a>
                     </mat-list-item>
+                    <!-- TEMPORARY (testing): IMS only for internal email domains -->
                     <mat-list-item
+                        *ngIf="showImsMenu"
                         role="listitem"
                         routerLinkActive
                         #ims="routerLinkActive"

@@ -245,7 +245,6 @@
         "supplier_gstin": "Supplier / GSTIN",
         "doc_no_date": "Doc no. / date",
         "ims_status": "IMS status",
-        "itc_note": "IMS status and 2B availability do not by themselves confirm ITC eligibility.",
         "empty_snapshot": "No IMS data is stored for this period yet. Refresh from the GST portal to fetch it.",
         "save_success": "IMS action saved on the GST portal.",
         "save_failed": "The GST portal could not save the IMS action.",
