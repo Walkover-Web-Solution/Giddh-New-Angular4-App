@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-24 · **Reviewed up to commit:** `d92de88b2d`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-25 · **Reviewed up to commit:** `224bc916ad`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -109,10 +109,12 @@ Feature work merged after the brief, not scored against it:
 | Receipt Note settings tab | 🟡 | Voucher API v2 purchase Settings tab after Pur. Bill in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only), Custom Receipt Note# (branch prefix / receipt note prefix / initial no.). `settingForm.receiptNoteSettings` reads and writes `receiptNoteSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. Not exercised against a signed-in company. |
 | Voucher list error responses | 🟡 | `e91fc17949`: last-vouchers, proforma/estimate and PO list stores stop reading `body` on error responses (special-character search). Not verified here. |
 | Panel account search and report-comment API errors | 🟡 | Invoice/bill ([voucher.component.ts](apps/web-giddh/src/app/voucher/voucher.component.ts)), ledger and ledger entry panel show `ToasterService` error snackbar when account-search returns `status: error` (e.g. invalid HTML/script in `q`). Contact report-comment add/delete show the same. Command-K (`cmdk`) search shows API `message` on `INVALID_PARAMETERS` and similar errors. Not verified against production. |
+| Marketing site contact flows (Embarko) | 🟡 | Implementation in [`Giddh-Website`](https://github.com/Walkover-Web-Solution/Giddh-Website): Typeform → `giddh-contact.embarko.app` on Contact Us and home banner; CSP `script-src`/`frame-src`/`style-src`; single `embed.js` in `_app.js`. Map in [DESIGN](docs/DESIGN.md#marketing-website-giddhcom). Live giddh.com submit not verified until deploy. |
 
 ## Change log
 
-- 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 🟡
+- 2026-11-25 · Cursor agent · Marketing Embarko contact (CSP + Typeform removal) tracked in sibling `Giddh-Website` PR; DESIGN.md marketing section · Marketing contact 🟡
+- 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 
 - 2026-11-24 · Cursor agent · Panel account-search (invoice/bill, ledger, ledger entry) and report-comment add/delete show API `message` when `GiddhErrorHandler` returns `status: error` · Panel account search and report-comment API errors 🟡
 - 2026-11-23 · Cursor agent (docs maintenance) · Confirmed `giddh-2.0` unchanged since `9c43124ff9`; fixed MAINTENANCE coverage-map columns for Security, Performance, and Measurement · Agent map and docs 🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · FLOWS §2 branch-tab gate matches `showAllBranches` (`branchCount > 1` and `unarchivedBranchCount >= 1`); fix MAINTENANCE coverage table Infrastructure row · Agent map and docs 🟡
