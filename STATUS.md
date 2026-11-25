@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-24 · **Reviewed up to commit:** `d92de88b2d`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-25 · **Reviewed up to commit:** `d92de88b2d`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -108,10 +108,13 @@ Feature work merged after the brief, not scored against it:
 | Delivery Challan settings tab | 🟡 | Voucher API v2 Settings tab after Invoice in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only, like Invoice), Custom Delivery Challan# (branch prefix / challan prefix / initial no.). `settingForm.deliveryChallanSettings` reads and writes `deliveryChallanSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. V1 `app-invoice-setting` unchanged. Build passes; not exercised against a signed-in company. |
 | Receipt Note settings tab | 🟡 | Voucher API v2 purchase Settings tab after Pur. Bill in [voucher list](apps/web-giddh/src/app/vouchers/list/list.component.html): auto mail, auto WhatsApp (Giddh domain only), Custom Receipt Note# (branch prefix / receipt note prefix / initial no.). `settingForm.receiptNoteSettings` reads and writes `receiptNoteSettings` in the same invoice-settings GET/PUT; tab hidden and field not sent when GET omits that object. Not exercised against a signed-in company. |
 | Voucher list error responses | 🟡 | `e91fc17949`: last-vouchers, proforma/estimate and PO list stores stop reading `body` on error responses (special-character search). Not verified here. |
+| Settings → Permission: add user with multiple roles | 🟡 | Add-user form on [Settings → Permission](apps/web-giddh/src/app/settings/permissions/setting.permission.component.html) uses a multi-select for roles (`allowMultipleRoles`). One `role/:roleUniqueName/assign` call: body `roleUniqueName` is the selected roles as a comma-separated string (backend-requested format), path carries the first selected role. Edit user and other share modals still send one role. Not exercised against the API ([open question](docs/OPEN_QUESTIONS.md)). |
 | Panel account search and report-comment API errors | 🟡 | Invoice/bill ([voucher.component.ts](apps/web-giddh/src/app/voucher/voucher.component.ts)), ledger and ledger entry panel show `ToasterService` error snackbar when account-search returns `status: error` (e.g. invalid HTML/script in `q`). Contact report-comment add/delete show the same. Command-K (`cmdk`) search shows API `message` on `INVALID_PARAMETERS` and similar errors. Not verified against production. |
 
 ## Change log
 
+- 2026-11-25 · Claude agent · Settings → Permission add user: `roleUniqueName` sent as comma-separated string (backend request) instead of array · Settings → Permission: add user with multiple roles 🟡
+- 2026-11-25 · Claude agent · Settings → Permission add user: multiple roles sent in one assign call (`roleUniqueName` array) instead of one call per role · Settings → Permission: add user with multiple roles 🟡
 - 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 🟡
 - 2026-11-24 · Cursor agent · Panel account-search (invoice/bill, ledger, ledger entry) and report-comment add/delete show API `message` when `GiddhErrorHandler` returns `status: error` · Panel account search and report-comment API errors 🟡
 - 2026-11-23 · Cursor agent (docs maintenance) · Confirmed `giddh-2.0` unchanged since `9c43124ff9`; fixed MAINTENANCE coverage-map columns for Security, Performance, and Measurement · Agent map and docs 🟡

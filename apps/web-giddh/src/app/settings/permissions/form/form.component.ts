@@ -44,6 +44,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     @Input() public entityType: string;
     /** Optional entity unique name override when form is reused for branch/warehouse share */
     @Input() public entityUniqueName: string;
+    /** True to pick several roles when adding a user (Settings → Permission only); all roles go in one assign call */
+    @Input() public allowMultipleRoles: boolean = false;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -161,8 +163,15 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                     (module) => module?.moduleName === this.restrictedModules.Users
                 );
                 this.isUserRestricted = !module?.remainingUsers;
+                const rolesControl = this.permissionForm.get('roleUniqueNames');
                 if (this.isUserRestricted) {
-                    this.permissionForm.get('roleUniqueName').patchValue('');
+                    rolesControl?.disable({ emitEvent: false });
+                } else {
+                    rolesControl?.enable({ emitEvent: false });
+                }
+                if (this.isUserRestricted) {
+                    this.permissionForm.get('roleUniqueName')?.patchValue('');
+                    this.permissionForm.get('roleUniqueNames')?.patchValue([]);
                 }
             }
         });
@@ -278,7 +287,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
                 entity: [permissionEntity.entity],
                 entityUniqueName: [permissionEntity.entityUniqueName],
-                roleUniqueName: [null, [Validators.required]],
+                ...(this.allowMultipleRoles
+                    ? { roleUniqueNames: [[], [Validators.required]] }
+                    : { roleUniqueName: [null, [Validators.required]] }),
                 periodOptions: [DATE_RANGE],
                 from: [null],
                 to: [null],
@@ -431,8 +442,12 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.dateRangePickerValue = [];
         obj.data = form;
         if (obj.action === 'create') {
-            this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
-            this.onSubmitForm.emit(obj);
+            if (this.allowMultipleRoles) {
+                this.shareWithRoles(form, this.permissionForm.get('roleUniqueNames')?.value ?? []);
+            } else {
+                this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
+                this.onSubmitForm.emit(obj);
+            }
         } else if (obj.action === 'update') {
             if ((obj.data.from && obj.data.from) === this.localeData?.invalid_date || (obj.data.to && obj.data.to) === this.localeData?.invalid_date) {
                 delete obj.data.from;
@@ -449,6 +464,24 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 this.onSubmitForm.emit(obj);
             });
         }
+    }
+
+    /**
+     * Shares the entity with the user for all selected roles in a single assign call.
+     * `roleUniqueName` in the body carries the selected roles as a comma-separated string
+     * (backend contract); the URL path keeps the first selected role because the route requires one.
+     *
+     * @private
+     * @param {ShareRequestForm} form Form value to share
+     * @param {string[]} roleUniqueNames Selected roles
+     * @memberof SettingPermissionFormComponent
+     */
+    private shareWithRoles(form: ShareRequestForm, roleUniqueNames: string[]): void {
+        const shareForm = { ...form } as ShareRequestForm & { roleUniqueNames?: string[] };
+        delete shareForm.roleUniqueNames;
+        const body: ShareRequestForm = { ...shareForm, roleUniqueName: roleUniqueNames.join(',') };
+        this.store.dispatch(this._accountsAction.shareEntity(body, roleUniqueNames[0]));
+        this.onSubmitForm.emit({ action: 'create', data: shareForm });
     }
 
     public methodForToggleSection(id: string) {

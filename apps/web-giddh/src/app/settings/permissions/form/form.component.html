@@ -25,17 +25,31 @@
                 ></input-field>
             </div>
             <div>
-                <reactive-dropdown-field
-                    [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''"
-                    [name]="'roles'"
-                    [placeholder]="localeData?.role_name_placeholder"
-                    [options]="allRoles"
-                    formControlName="roleUniqueName"
-                    [required]="true"
-                    [readonly]="isUserRestricted"
-                    [disabled]="isUserRestricted"
-                    [showError]="isFormInvalid && permissionForm?.get('roleUniqueName').invalid"
-                ></reactive-dropdown-field>
+                @if (isUpdtCase || !allowMultipleRoles) {
+                    <reactive-dropdown-field
+                        [label]="isUserRestricted ? '' : isLblShow ? localeData?.role_name_label : ''"
+                        [name]="'roles'"
+                        [placeholder]="localeData?.role_name_placeholder"
+                        [options]="allRoles"
+                        formControlName="roleUniqueName"
+                        [required]="true"
+                        [readonly]="isUserRestricted"
+                        [disabled]="isUserRestricted"
+                        [showError]="isFormInvalid && permissionForm?.get('roleUniqueName').invalid"
+                    ></reactive-dropdown-field>
+                } @else {
+                    <!-- Add user on Settings → Permission: one or more roles for the same user -->
+                    <multi-select-dropdown
+                        [label]="isLblShow && !isUserRestricted ? localeData?.role_name_label : localeData?.role_name_placeholder"
+                        [name]="'roles'"
+                        [placeholder]="localeData?.role_name_placeholder"
+                        [options]="allRoles"
+                        formControlName="roleUniqueNames"
+                        [required]="true"
+                        [disabled]="isUserRestricted"
+                        [showError]="isFormInvalid && permissionForm?.get('roleUniqueNames')?.invalid"
+                    ></multi-select-dropdown>
+                }
             </div>
             <!-- time span -->
             <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
