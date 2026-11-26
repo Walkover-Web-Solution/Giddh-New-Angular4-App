@@ -8,6 +8,11 @@
         }
     }
 
+    & > .permission-entity-field {
+        flex: 0 0 140px;
+        max-width: 140px;
+    }
+
     &.permission-update-mode {
         .action-button {
             flex-basis: auto !important;

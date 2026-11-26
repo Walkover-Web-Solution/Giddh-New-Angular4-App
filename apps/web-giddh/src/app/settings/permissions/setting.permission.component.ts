@@ -41,6 +41,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public hasUnsavedChanges: boolean = false;
     /** Instance of advance search modal dialog */
     public editDialogRef: any;
+    /** True when organization is in company mode (entity column is company-mode only) */
+    public isCompanyMode: boolean = false;
 
     constructor(
         private settingsPermissionActions: SettingsPermissionActions,
@@ -62,14 +64,16 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.generalService.currentOrganizationType === OrganizationType.Company) {
+            if (response && this.isCompanyMode) {
                 this.setUsersList(response);
             }
         });
     }
 
     public getInitialData() {
+        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.pipe(take(1)).subscribe(s => {
             this.selectedCompanyUniqueName = s.session.companyUniqueName;
@@ -180,6 +184,34 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         pastPeriodDuration = pastPeriodDuration?.replace("[DURATION]", user.duration);
         pastPeriodDuration = pastPeriodDuration?.replace("[PERIOD]", user.period);
         return pastPeriodDuration;
+    }
+
+    /**
+     * Entity options for the company-mode entity dropdown
+     *
+     * @readonly
+     * @type {Array<{ label: string; value: string }>}
+     * @memberof SettingPermissionComponent
+     */
+    public get entityOptions(): Array<{ label: string; value: string }> {
+        return [
+            { label: this.commonLocaleData?.app_company, value: 'COMPANY' },
+            { label: this.commonLocaleData?.app_branch, value: 'BRANCH' },
+            { label: this.commonLocaleData?.app_warehouse, value: 'WAREHOUSE' }
+        ];
+    }
+
+    /**
+     * Localized label for permission entity type (company / branch / warehouse)
+     *
+     * @param {string} entity
+     * @returns {string}
+     * @memberof SettingPermissionComponent
+     */
+    public getEntityLabel(entity: string): string {
+        const key = entity?.toUpperCase();
+        const matched = this.entityOptions.find(option => option.value === key);
+        return matched?.label || entity;
     }
 
     /**

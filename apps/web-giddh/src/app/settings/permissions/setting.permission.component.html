@@ -44,8 +44,8 @@
                                             *ngFor="let user of usrGrp.rows; let i = index"
                                         >
                                             <div class="row">
-                                                <div class="col-12 col-lg-4 col-md-12 col-sm-12">
-                                                    <div class="form-group">
+                                                <div class="col-auto">
+                                                    <div class="form-group permission-role-field">
                                                         <input-field
                                                             [label]="localeData?.role_name_label"
                                                             [defaultValue]="user.roleName"
@@ -54,6 +54,22 @@
                                                         ></input-field>
                                                     </div>
                                                 </div>
+
+                                                @if (isCompanyMode && user.entity) {
+                                                    <div class="col-auto">
+                                                        <div class="form-group permission-entity-field">
+                                                            <reactive-dropdown-field
+                                                                [label]="commonLocaleData?.app_entity"
+                                                                [options]="entityOptions"
+                                                                [labelValue]="getEntityLabel(user.entity)"
+                                                                [ngModel]="user.entity"
+                                                                [ngModelOptions]="{ standalone: true }"
+                                                                [disabled]="true"
+                                                                [readonly]="true"
+                                                            ></reactive-dropdown-field>
+                                                        </div>
+                                                    </div>
+                                                }
 
                                                 <div
                                                     class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
