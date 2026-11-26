@@ -304,22 +304,26 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Enables email editing
+     * Enables email editing. Also used after an OTP is sent or verified to edit the
+     * email again, which discards that OTP and its verification.
      *
      * @memberof SubscriptionComponent
      */
     public enableEmailEdit(): void {
         this.isEditingEmail = true;
+        this.resetEmailOtpState();
         this.changeDetectionRef.detectChanges();
     }
 
     /**
-     * Enables mobile editing
+     * Enables mobile editing. Also used after an OTP is sent or verified to edit the
+     * number again, which discards that OTP and its verification.
      *
      * @memberof SubscriptionComponent
      */
     public enableMobileEdit(): void {
         this.isEditingMobile = true;
+        this.resetMobileOtpState();
         this.mobileControl.enable({ emitEvent: false });
         this.changeDetectionRef.detectChanges();
     }
@@ -419,6 +423,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.mobileSendOtpInProgress = false;
                 this.mobileOtpRequestId = response.requestId;
                 this.showMobileOtp = true;
+                // Lock the number the OTP was sent to; "Change Mobile" unlocks it
+                this.mobileControl.disable({ emitEvent: false });
                 this.refreshOtpResendChannels();
                 this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
                 this.changeDetectionRef.detectChanges();
@@ -668,6 +674,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
         if (payload.mobile) {
             this.resetMobileOtpState();
+            this.mobileControl.enable({ emitEvent: false });
         }
     }
 
