@@ -10072,14 +10072,15 @@ body {
     }
 }
 
+/* Fake chatbot for non-production environment Just to check design issue like it overlay other elements */
 .fake-chatbot {
     position: fixed;
     bottom: 18px !important;
     right: 18px !important;
-    width: 58px;
-    height: 58px;
+    width: 48px;
+    height: 48px;
     z-index: 9999;
-    background: #ffa01b;
+    background: #ffffff;
     border-radius: 50%;
 }
 
