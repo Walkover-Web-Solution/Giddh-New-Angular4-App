@@ -98,6 +98,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isEditingMobile: boolean = false;
     /** MSG91 mobile resend channels (VOICE / SMS / WHATSAPP), excludes email channel 3 */
     public otpResendChannels: Msg91OtpChannel[] = [];
+    /** Login region of the current session; picks the session cookie name when the session is replaced */
+    private loggedInRegion: string = '';
 
 
     constructor(private store: Store<AppState>,
@@ -177,6 +179,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (user) {
                 this.user = cloneDeep(user.user);
                 this.userSessionId = cloneDeep(user.session?.id);
+                this.loggedInRegion = user.loggedInRegion ?? '';
                 this.patchContactFieldsFromUser();
             }
         });
@@ -641,6 +644,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     this.isEditingEmail = false;
                     this.isEditingMobile = false;
                     this.mobileControl.disable({ emitEvent: false });
+                    // Contact change issues a new session: store it so later calls send the new Session-Id
+                    this.store.dispatch(this.loginAction.UpdateUserContactSuccess(body, this.loggedInRegion));
+                    if (body.session?.id) {
+                        // Session tab: refresh so "current" points at the new session
+                        this.store.dispatch(this.sessionAction.getAllSession());
+                    }
                 }
                 this.store.dispatch(this.loginAction.FetchUserDetails());
             } else {
