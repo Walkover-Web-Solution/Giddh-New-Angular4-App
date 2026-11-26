@@ -140,6 +140,11 @@ export class CompanyResponse {
     public baseCurrencySymbol?: string;
     public companyTotals: CompanyTotals;
     public branches?: Array<any>;
+    /** True company branch total from companies list (not accessible-branches length) */
+    public branchCount?: number;
+    /** Unarchived branch total from companies list */
+    public unarchivedBranchCount?: number;
+    public voucherVersion?: number;
     public parentBranch?: ParentBranch;
     public warehouseResource?: Array<any>;
     public showOnSubscription?: boolean;

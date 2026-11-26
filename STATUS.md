@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-26 · **Reviewed up to commit:** `c938657f61`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-26 · **Reviewed up to commit:** `27682a3198`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -95,7 +95,7 @@ Feature work merged after the brief, not scored against it:
 
 | Item | Status | Notes |
 | --- | --- | --- |
-| Branch and warehouse sharing | 🟡 | `a4c4c94613`; not verified here. |
+| Branch and warehouse sharing | 🟡 | `a4c4c94613`. Company vs Branch mode uses companies-list `branchCount` (not accessible `settings.branches.length`); shared single accessible branch of a multi-branch company enters Branch mode. Company-mode Users list/edit show share-with `entity` as small disabled dropdown (Company/Branch/Warehouse); update keeps row entity. Permission Users list uses signals + OnPush for list/locale/entity mode CD. Not verified against a signed-in shared-branch user. |
 | Manufacturing batch details in payload | 🟡 | `239b5631e6`. |
 | Stock create/edit warehouse handling | 🟡 | `28f1a838f4`. |
 | Financial report CSV organization address | 🟡 | `171cf5a36a`. |
@@ -118,24 +118,26 @@ Feature work merged after the brief, not scored against it:
 ## Change log
 
 - 2026-11-26 · Claude agent · User details contact: Change Email / Change Mobile also shown, directly beside the field, while an OTP is pending and after verification; field locks once the OTP is sent and Change discards that OTP; reviewed up to `c938657f61` · User details contact (email / mobile) 🟡
+- 2026-11-26 · Cursor agent · Permission Users list: reactive fields → signals, entityOptions computed, OnPush · Branch and warehouse sharing 🟡
+- 2026-11-25 · Cursor agent · Company-mode permission entity shown as small disabled dropdown (list + update); update preserves row entity · Branch and warehouse sharing 🟡
+- 2026-11-25 · Cursor agent · Shared single branch: mode from companies-list `branchCount`; auto-enter Branch mode when only one branch is accessible on a multi-branch company · Branch and warehouse sharing 🟡
 - 2026-11-25 · Claude agent · IMS sidebar menu temporarily limited to companies created by an `INTERNAL_EMAILS_DOMAINS` email (testing; remove later); reviewed up to `e6f6bd4cac` (`26b2d95577`, `9601a30fd4` already logged 2026-11-24) · GST IMS invoice review 🟡
 - 2026-11-25 · Claude agent · User details contact: read-only email/mobile fields with Change Email / Change Mobile buttons (sign-up style) and Cancel beside Save Changes; reviewed up to `e6f6bd4cac` (`26b2d95577`, `9601a30fd4` already logged 2026-11-24) · User details contact (email / mobile) 🟡
-- 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 🟡
-- 2026-11-24 · Cursor agent · Panel account-search (invoice/bill, ledger, ledger entry) and report-comment add/delete show API `message` when `GiddhErrorHandler` returns `status: error` · Panel account search and report-comment API errors 🟡
 - 2026-11-24 · Claude agent · IMS invoice list: IMS status column centred so its badge no longer touches the right-aligned Tax amount · GST IMS invoice review 🟡
 - 2026-11-24 · Claude agent · IMS invoice list: removed the Sync column and its "Failed - Retry" button (and the unused sync locale keys); `syncState` stays in the client type · GST IMS invoice review 🟡
 - 2026-11-24 · Claude agent · IMS: removed `save-ims-status` polling. Save calls `save-ims` once and updates row status and summary counts in place on success; History **Get status** calls `save-ims-status` once. Status is also read from `status_cd` directly on the response body (the shape seen on test), which previously looked "in progress" and kept polling · GST IMS invoice review 🟡
 - 2026-11-24 · Claude agent · IMS Accept with ITC details dialog: title shows white on the blue header (removed `mat-dialog-title`, added close button like other GST dialogs) and Cancel/Accept no longer touch the Remarks field · GST IMS invoice review 🟡
 - 2026-11-24 · Claude agent · IMS status filter: choosing **All** after a status filter now clears it (the "All" option had an empty value, which the dropdown re-created on reload treated as unchanged) · GST IMS invoice review 🟡
 - 2026-11-24 · Claude agent · IMS summary: count table replaced by customer-list style count boxes (Total as a bordered white count box like the inventory Group Count, Accepted green, Rejected red, Pending orange, No action grey; not clickable) and a separate Status dropdown beside Invoice Details for filtering · GST IMS invoice review 🟡
+- 2026-11-24 · Cursor agent · Command-K `cmdk` search shows error snackbar when API returns `status: error` (e.g. `INVALID_PARAMETERS` for `<` in `q`) · Panel account search and report-comment API errors 🟡
+- 2026-11-24 · Cursor agent · Panel account-search (invoice/bill, ledger, ledger entry) and report-comment add/delete show API `message` when `GiddhErrorHandler` returns `status: error` · Panel account search and report-comment API errors 🟡
 - 2026-11-23 · Claude agent · IMS page restyled to the GSTR-1/GSTR-2 filing layout: filing header with Authenticate button (GSTR gating), overall-summary table with count filters, GSTR empty states · GST IMS invoice review 🟡
 - 2026-11-23 · Claude agent · GST IMS invoice review page and sidebar item (session gate, list/summary/filter, Accept/Reject/Pending/Reset, ITC dialog, status polling, history); IMS client contract and open questions recorded · GST IMS invoice review 🟡
-- 2026-11-23 · Claude agent · Recorded teammate commits `2d49a209e1` (consolidated-branch ledger entry), `3806e0eff9`/
+- 2026-11-23 · Claude agent · Recorded teammate commits `2d49a209e1` (consolidated-branch ledger entry), `3806e0eff9`/`5a84bf0188` (group export error toast), `7466c0fd50` (contact OTP reset); reviewed up to `9c43124ff9` · tracker 🟡
 - 2026-11-23 · Cursor agent (docs maintenance) · Confirmed `giddh-2.0` unchanged since `9c43124ff9`; fixed MAINTENANCE coverage-map columns for Security, Performance, and Measurement · Agent map and docs 🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · FLOWS §2 branch-tab gate matches `showAllBranches` (`branchCount > 1` and `unarchivedBranchCount >= 1`); fix MAINTENANCE coverage table Infrastructure row · Agent map and docs 🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · Added [docs/MAINTENANCE.md](docs/MAINTENANCE.md), AGENTS task row, FLOWS §2 branch-tab timing; reviewed `giddh-2.0` through `9c43124ff9` · Agent map and docs  🟡
 - 2026-11-22 · Cursor agent (docs maintenance) · Recorded `5298e5a7a3` company picker Branch tab after branch list load; `2d49a209e1` ledger create entry in consolidated branch · Company/branch UI 🟡
-`5a84bf0188` (group export error toast), `7466c0fd50` (contact OTP reset); reviewed up to `9c43124ff9` · tracker 🟡
 - 2026-11-21 · Claude agent · Subscription contact: "Registered Mobile Number (with country code)" label on one line when a mobile number exists; stays on two lines in the empty state · Subscription UI
 - 2026-11-21 · Claude agent · Removed the email template editor row. The fix and its test were reverted in `2b6237d785`, but the merge in #17201 brought the row back. The editor's Backspace and paste-marker bug is open again · editor ⬜
 - 2026-11-20 · Claude agent · Subscription contact: mobile number format hint spans both grid columns (one line) unless the OTP hint occupies column 2 · Subscription UI
@@ -203,6 +205,7 @@ Feature work merged after the brief, not scored against it:
 - 2026-11-12 · Fix Record Return action payload · GET order then map `documentItems` OUTPUT/INPUT (stock/variant/qty/batches) + warehouse into RETURN · Job Work 🟡
 - 2026-11-11 · Cherry-pick Job Work onto test · Inventory Job Work create/list/report + batch support; STATUS folded into Beyond the plan · Job Work 🟡
 - 2026-11-11: Prod readiness pass — preserve edit stock/unit options after search, send `stockUnitUniqueName`, tighten GSTIN/date/warehouse validation, restore list filters without date overwrite, bind list to `body.items`, scrap rate/unit seeding, mobile-number-input on create.
+- 2026-11-26: Select Batches aside hides floating chat widget while open so Save/Cancel is not covered · shared BatchSelectDialog · Vouchers/inventory batch pickers 🟡
 - 2026-11-07: Added Job Work create batch support (finished inbound, raw outbound, scrap inbound) via shared BatchChipList / BatchSelectDialog when inventory batch management is enabled.
 - 2026-11-07: Migrated Job Work create to Angular 21 (`inject`, `signal`/`computed`, `toSignal`, `DestroyRef`/`takeUntilDestroyed`).
 - 2026-11-07: Aligned Job Work create layout with Manufacturing (same card/table/button patterns; dropped one-off valuation/table classes).
