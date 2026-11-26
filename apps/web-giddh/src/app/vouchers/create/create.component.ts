@@ -2423,7 +2423,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }else if (this.voucherType === VoucherTypeEnum.deliveryChallan) {
                     this.useCustomVoucherNumber = settings?.deliveryChallanSettings?.useCustomDeliveryChallanNumber;
                 }else if (this.voucherType === VoucherTypeEnum.receiptNote) {
-                    this.useCustomVoucherNumber = settings?.receiptNoteSettings?.useCustomReceiptNoteNumber;
+                    this.useCustomVoucherNumber = true;
                 }
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
 
