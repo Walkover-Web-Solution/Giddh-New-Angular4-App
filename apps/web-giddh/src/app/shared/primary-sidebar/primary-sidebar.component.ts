@@ -657,7 +657,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private getVisibleMenuItems(): void {
         this.allItems.set(this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData()?.items));
         const flattenedItems: AllItems[] = [];
-        this.allItems()?.filter(item => item.items.length > 0 && !item.hide
+        this.allItems()?.filter(item => !item.hide
         )?.forEach((menu, index) => {
             menu['expandable'] = menu?.items?.length > 0;
             menu['level'] = 0;
