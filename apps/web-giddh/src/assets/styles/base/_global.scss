@@ -5163,7 +5163,8 @@ body {
     }
 
     &.hide-chat-widget {
-        chat-widget {
+        chat-widget,
+        .fake-chatbot {
             display: none !important;
         }
     }
@@ -10045,7 +10046,8 @@ body {
     }
 
     &.hide-chat-widget {
-        chat-widget {
+        chat-widget,
+        .fake-chatbot {
             display: none !important;
         }
     }

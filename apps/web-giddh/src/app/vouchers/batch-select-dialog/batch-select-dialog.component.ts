@@ -85,6 +85,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public ngOnInit(): void {
+        document.querySelector("body")?.classList.add("hide-chat-widget");
         this.searchQuery$.pipe(
             debounceTime(400),
             distinctUntilChanged(),
@@ -732,6 +733,7 @@ export class BatchSelectDialogComponent implements OnInit, OnDestroy {
      * @memberof BatchSelectDialogComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector("body")?.classList.remove("hide-chat-widget");
         this.searchQuery$.complete();
         this.destroyed$.next(true);
         this.destroyed$.complete();
