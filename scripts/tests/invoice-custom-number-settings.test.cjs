@@ -48,6 +48,21 @@ test('keeps invoice prefixes when useCustomInvoiceNumber is true', () => {
     assert.equal(formToSave.invoiceSettings.initialInvoiceNumber, 5);
 });
 
+test('clears payment branch prefix when useCustomPaymentNumber is false', () => {
+    const formToSave = {
+        invoiceSettings: {
+            useCustomPaymentNumber: false,
+            branchPaymentNumberPrefix: 'PAY-',
+            paymentNumberPrefix: 'P',
+            initialPaymentNumber: 2,
+        },
+    };
+    clearInactiveCustomNumberPrefixesOnSettingsSave(formToSave);
+    assert.equal(formToSave.invoiceSettings.branchPaymentNumberPrefix, null);
+    assert.equal(formToSave.invoiceSettings.paymentNumberPrefix, null);
+    assert.equal(formToSave.invoiceSettings.initialPaymentNumber, null);
+});
+
 test('clears purchase order prefix when useCustomPONumber is false', () => {
     const formToSave = {
         purchaseBillSettings: {

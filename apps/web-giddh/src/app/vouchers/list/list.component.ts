@@ -4215,6 +4215,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             initialDebitNoteNumber: [null],
             initialPaymentNumber: [null],
             initialPurchaseNumber: [null],
+            branchPaymentNumberPrefix: [null],
             paymentNumberPrefix: [null],
             purchaseNumberPrefix: [null]
         });

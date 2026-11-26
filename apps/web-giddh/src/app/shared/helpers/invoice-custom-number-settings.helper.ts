@@ -28,7 +28,7 @@ const INVOICE_SETTINGS_CUSTOM_NUMBER_RULES: readonly CustomNumberPrefixRule[] = 
     },
     {
         enabledKey: 'useCustomPaymentNumber',
-        prefixKeys: ['paymentNumberPrefix', 'initialPaymentNumber'],
+        prefixKeys: ['branchPaymentNumberPrefix', 'paymentNumberPrefix', 'initialPaymentNumber'],
     },
     {
         enabledKey: 'useCustomContraNumber',
