@@ -148,10 +148,12 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
     }
 
-    public updatePermission(model: ShareRequestForm, event: any) {
+    public async updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
         let newPermission = event.value;
         data.roleUniqueName = newPermission;
+        let activeGrp = await this.activeGroup$.pipe(first()).toPromise();
+        data.entityUniqueName = activeGrp?.uniqueName
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }
 

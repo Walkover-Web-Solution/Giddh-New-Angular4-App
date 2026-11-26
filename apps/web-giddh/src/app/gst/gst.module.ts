@@ -52,6 +52,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
+import { MatRadioModule } from '@angular/material/radio';
+import { ImsComponent } from './ims/ims.component';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -59,7 +61,7 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent, FilingStatusComponent, GstSettingComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent, FilingStatusComponent, GstSettingComponent, ImsComponent],
     imports: [
         GstRoutingModule,
         Daterangepicker,
@@ -96,6 +98,7 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         MatPaginatorModule,
         MatMenuModule,
         MatListModule,
+        MatRadioModule,
         GiddhDatePipe
     ],
     providers: [],
