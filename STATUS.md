@@ -95,7 +95,7 @@ Feature work merged after the brief, not scored against it:
 
 | Item | Status | Notes |
 | --- | --- | --- |
-| Branch and warehouse sharing | 🟡 | `a4c4c94613`. Company vs Branch mode uses companies-list `branchCount` (not accessible `settings.branches.length`); shared single accessible branch of a multi-branch company enters Branch mode. Company-mode Users list/edit show share-with `entity` as small disabled dropdown (Company/Branch/Warehouse); update keeps row entity. Not verified against a signed-in shared-branch user. |
+| Branch and warehouse sharing | 🟡 | `a4c4c94613`. Company vs Branch mode uses companies-list `branchCount` (not accessible `settings.branches.length`); shared single accessible branch of a multi-branch company enters Branch mode. Company-mode Users list/edit show share-with `entity` as small disabled dropdown (Company/Branch/Warehouse); update keeps row entity. Permission Users list uses signals + OnPush for list/locale/entity mode CD. Not verified against a signed-in shared-branch user. |
 | Manufacturing batch details in payload | 🟡 | `239b5631e6`. |
 | Stock create/edit warehouse handling | 🟡 | `28f1a838f4`. |
 | Financial report CSV organization address | 🟡 | `171cf5a36a`. |
@@ -116,6 +116,7 @@ Feature work merged after the brief, not scored against it:
 ## Change log
 
 - 2026-11-25 · Claude agent · IMS sidebar menu temporarily limited to companies created by an `INTERNAL_EMAILS_DOMAINS` email (testing; remove later); reviewed up to `e6f6bd4cac` (`26b2d95577`, `9601a30fd4` already logged 2026-11-24) · GST IMS invoice review 🟡
+- 2026-11-26 · Cursor agent · Permission Users list: reactive fields → signals, entityOptions computed, OnPush · Branch and warehouse sharing 🟡
 - 2026-11-25 · Cursor agent · Company-mode permission entity shown as small disabled dropdown (list + update); update preserves row entity · Branch and warehouse sharing 🟡
 - 2026-11-25 · Cursor agent · Shared single branch: mode from companies-list `branchCount`; auto-enter Branch mode when only one branch is accessible on a multi-branch company · Branch and warehouse sharing 🟡
 - 2026-11-24 · Claude agent · IMS invoice list: IMS status column centred so its badge no longer touches the right-aligned Tax amount · GST IMS invoice review 🟡
