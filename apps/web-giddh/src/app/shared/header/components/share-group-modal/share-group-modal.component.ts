@@ -145,6 +145,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     }
 
     public async unShareGroup(entryUniqueName: string, groupUniqueName: string) {
+        let activeGrp = await this.activeGroup$.pipe(first()).toPromise();
+        groupUniqueName = activeGrp?.uniqueName;
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
     }
 
