@@ -1,6 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { delay, take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { clearInactiveCustomNumberPrefixesOnSettingsSave } from 'apps/web-giddh/src/app/shared/helpers/invoice-custom-number-settings.helper';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
@@ -329,6 +330,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             this.formToSave.invoiceSettings.autoPaid = 'never';
         }
 
+        clearInactiveCustomNumberPrefixesOnSettingsSave(this.formToSave);
         this.formToSave.companyCashFreeSettings = cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
         if (!isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {

@@ -17,6 +17,7 @@ import { InventoryService } from "../../services/inventory.service";
 import { InventoryAction } from "../../actions/inventory/inventory.actions";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
+import { clearInactiveCustomNumberPrefixesOnSettingsSave } from "../../shared/helpers/invoice-custom-number-settings.helper";
 import { CreditDebitNoteTableColumnsEnum, EstimateTableColumnsEnum, MULTI_CURRENCY_MODULES, PaymentTableColumnsEnum, ProformaTableColumnsEnum, PurchaseBillTableColumnsEnum, PurchaseOrderTableColumnsEnum, ReceiptTableColumnsEnum, SalesTableColumnsEnum, VoucherReportFilterModuleEnum, VoucherTypeEnum } from "../utility/vouchers.const";
 import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, isSelectedAllOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, SELECTED_ALL_OPTION, SubVoucher } from "../../app.constant";
 import { cloneDeep, forEach, groupBy, orderBy } from "../../lodash-optimized";
@@ -4440,6 +4441,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
 
         }
+        clearInactiveCustomNumberPrefixesOnSettingsSave(this.formToSave);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
     }
 

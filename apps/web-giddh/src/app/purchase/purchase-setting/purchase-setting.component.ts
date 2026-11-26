@@ -11,6 +11,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { clearInactiveCustomNumberPrefixesOnSettingsSave } from '../../shared/helpers/invoice-custom-number-settings.helper';
 import { AppState } from '../../store';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -153,6 +154,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
             formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
+        clearInactiveCustomNumberPrefixesOnSettingsSave(formToSave);
         this.invoiceService.UpdateInvoiceSetting(formToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 this.toaster.successToast(response.body);
