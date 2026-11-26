@@ -40,35 +40,28 @@
                                     <i class="icon-envelope font-size-14 text-primary"></i>
                                 </span>
                                 <div class="flex-grow-1 min-width-0">
-                                    @if (isEditingEmail) {
-                                        <input-field
-                                            [name]="'registeredEmail'"
-                                            [type]="'email'"
-                                            [label]="localeData?.mobile_number?.registered_email_address"
-                                            [placeholder]="localeData?.mobile_number?.email_placeholder"
-                                            [(ngModel)]="email"
-                                            (ngModelChange)="onEmailInputChange()"
-                                        ></input-field>
-                                    } @else {
-                                        <p class="font-size-12 text-light line-height-16 mb-1">
-                                            {{ localeData?.mobile_number?.registered_email_address }}
-                                        </p>
-                                        <p class="font-size-15 line-height-20 word-break-break-all mb-0">{{ email }}</p>
-                                    }
+                                    <!-- Read-only until "Change Email", and again once an OTP is sent or verified, like the sign-up verify step -->
+                                    <input-field
+                                        [name]="'registeredEmail'"
+                                        [type]="'email'"
+                                        [label]="localeData?.mobile_number?.registered_email_address"
+                                        [placeholder]="localeData?.mobile_number?.email_placeholder"
+                                        [disabled]="!isEditingEmail || showEmailOtp || isEmailVerified"
+                                        [(ngModel)]="email"
+                                        (ngModelChange)="onEmailInputChange()"
+                                    ></input-field>
                                 </div>
                             </div>
-                            <div class="grid-col-2 grid-row-1 d-flex align-items-center min-h-50">
-                                @if (!isEditingEmail) {
+                            <div class="grid-col-2 grid-row-1 d-flex align-items-center flex-wrap column-gap-3 row-gap-1 min-h-50">
+                                <!-- Change Email sits right beside the field: read-only, OTP sent, and verified states -->
+                                @if (!isEditingEmail || showEmailOtp || isEmailVerified) {
                                     <button
                                         type="button"
                                         matButton="outlined"
+                                        [disabled]="emailResendOtpInProgress || emailVerifyOtpInProgress || isSavingContact"
                                         (click)="enableEmailEdit()"
-                                        [attr.aria-label]="
-                                            commonLocaleData?.app_edit + ' ' + localeData?.mobile_number?.registered_email_address
-                                        "
                                     >
-                                        <i class="icon-edit-pencil mr-1" aria-hidden="true"></i>
-                                        {{ commonLocaleData?.app_edit }}
+                                        {{ localeData?.mobile_number?.change_email }}
                                     </button>
                                 }
                                 @if (isEditingEmail && isEmailChanged() && !isEmailVerified && !showEmailOtp) {
@@ -81,7 +74,7 @@
                                     </button>
                                 }
                                 @if (showEmailOtp && !isEmailVerified) {
-                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap w-100">
+                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap">
                                         <input-field
                                             class="min-w-150 max-w-150 flex-shrink-0"
                                             [name]="'emailOtp'"
@@ -144,7 +137,8 @@
                                     <i class="icon-mobile font-size-20 text-primary"></i>
                                 </span>
                                 <div class="flex-grow-1 min-width-0">
-                                    @if (isEditingMobile) {
+                                    <!-- Read-only (control disabled) until "Change Mobile", and again once an OTP is sent or verified, like the sign-up verify step -->
+                                    @if (isEditingMobile || originalMobile) {
                                         <mobile-number-input
                                             [formControl]="mobileControl"
                                             [label]="localeData?.mobile_number?.registered_mobile_number"
@@ -153,55 +147,47 @@
                                             [useImageFlags]="true"
                                         ></mobile-number-input>
                                     } @else {
+                                        <!-- Empty state: label stacked on two lines -->
                                         <p class="font-size-12 text-light line-height-16 mb-1">
-                                            <!-- One line when a number is shown below; stacked in the empty state -->
-                                            <span [class]="originalMobile ? 'd-inline mr-1' : 'd-block'">
+                                            <span class="d-block">
                                                 {{ localeData?.mobile_number?.registered_mobile_number_label }}
                                             </span>
-                                            <span [class]="originalMobile ? 'd-inline' : 'd-block'">
+                                            <span class="d-block">
                                                 {{ localeData?.mobile_number?.with_country_code }}
                                             </span>
                                         </p>
-                                        @if (originalMobile) {
-                                            <p class="font-size-15 line-height-20 word-break-break-all mb-0">+{{ originalMobile }}</p>
-                                        }
                                     }
                                 </div>
                             </div>
                             <div class="grid-col-2 grid-row-1 d-flex align-items-center flex-wrap column-gap-3 row-gap-1 min-h-50">
-                                @if (!isEditingMobile) {
-                                    @if (originalMobile) {
-                                        <button
-                                            type="button"
-                                            matButton="outlined"
-                                            (click)="enableMobileEdit()"
-                                            [attr.aria-label]="
-                                                commonLocaleData?.app_edit + ' ' + localeData?.mobile_number?.registered_mobile_number
-                                            "
-                                        >
-                                            <i class="icon-edit-pencil mr-1" aria-hidden="true"></i>
-                                            {{ commonLocaleData?.app_edit }}
-                                        </button>
-                                    } @else {
-                                        <!-- Empty state: no mobile number saved yet -->
-                                        <div
-                                            class="sky-blue-bg border border-dashed border-color-primary border-radius-8 px-4 py-2 text-center flex-grow-1 max-w-500"
-                                        >
-                                            <p
-                                                class="d-flex align-items-center justify-content-center column-gap-1 font-weight-semibold mb-1"
-                                            >
-                                                <i class="icon-mobile font-size-16 text-primary" aria-hidden="true"></i>
-                                                {{ localeData?.mobile_number?.no_mobile_added }}
-                                            </p>
-                                            <p class="font-size-12 text-light line-height-20 mb-0">
-                                                {{ localeData?.mobile_number?.no_mobile_added_description }}
-                                            </p>
-                                        </div>
-                                        <button type="button" matButton="filled" (click)="enableMobileEdit()">
-                                            <i class="icon-plus mr-1" aria-hidden="true"></i>
-                                            {{ localeData?.mobile_number?.add_mobile_number }}
-                                        </button>
-                                    }
+                                <!-- Change Mobile sits right beside the field: read-only, OTP sent, and verified states -->
+                                @if ((!isEditingMobile && originalMobile) || showMobileOtp || isMobileVerified) {
+                                    <button
+                                        type="button"
+                                        matButton="outlined"
+                                        [disabled]="mobileVerifyOtpInProgress || mobileResendOtpInProgress || isSavingContact"
+                                        (click)="enableMobileEdit()"
+                                    >
+                                        {{ localeData?.mobile_number?.change_mobile }}
+                                    </button>
+                                }
+                                @if (!isEditingMobile && !originalMobile) {
+                                    <!-- Empty state: no mobile number saved yet -->
+                                    <div
+                                        class="sky-blue-bg border border-dashed border-color-primary border-radius-8 px-4 py-2 text-center flex-grow-1 max-w-500"
+                                    >
+                                        <p class="d-flex align-items-center justify-content-center column-gap-1 font-weight-semibold mb-1">
+                                            <i class="icon-mobile font-size-16 text-primary" aria-hidden="true"></i>
+                                            {{ localeData?.mobile_number?.no_mobile_added }}
+                                        </p>
+                                        <p class="font-size-12 text-light line-height-20 mb-0">
+                                            {{ localeData?.mobile_number?.no_mobile_added_description }}
+                                        </p>
+                                    </div>
+                                    <button type="button" matButton="filled" (click)="enableMobileEdit()">
+                                        <i class="icon-plus mr-1" aria-hidden="true"></i>
+                                        {{ localeData?.mobile_number?.add_mobile_number }}
+                                    </button>
                                 }
                                 @if (isEditingMobile && isMobileChanged() && !isMobileVerified && !showMobileOtp) {
                                     <button type="button" matButton="filled" [disabled]="mobileSendOtpInProgress" (click)="sendMobileOtp()">
@@ -213,7 +199,7 @@
                                     </button>
                                 }
                                 @if (showMobileOtp && !isMobileVerified) {
-                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap w-100">
+                                    <div class="d-flex align-items-center column-gap-1 row-gap-1 flex-wrap">
                                         <input-field
                                             class="min-w-150 max-w-150 flex-shrink-0"
                                             [name]="'mobileOtp'"
@@ -284,7 +270,7 @@
                         </div>
 
                         @if (isEditingEmail || isEditingMobile) {
-                            <div class="d-flex justify-content-start border-top pt-3 mb-4">
+                            <div class="d-flex justify-content-start column-gap-2 border-top pt-3 mb-4">
                                 <button
                                     type="button"
                                     matButton="filled"
@@ -297,6 +283,9 @@
                                     } @else {
                                         {{ localeData?.mobile_number?.save_changes }}
                                     }
+                                </button>
+                                <button type="button" matButton="outlined" [disabled]="isSavingContact" (click)="cancelContactChanges()">
+                                    {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>
                         }
