@@ -210,7 +210,7 @@ Feature work merged after the brief, not scored against it:
 - 2026-11-12 · Fix Record Return action payload · GET order then map `documentItems` OUTPUT/INPUT (stock/variant/qty/batches) + warehouse into RETURN · Job Work 🟡
 - 2026-11-11 · Cherry-pick Job Work onto test · Inventory Job Work create/list/report + batch support; STATUS folded into Beyond the plan · Job Work 🟡
 - 2026-11-11: Prod readiness pass — preserve edit stock/unit options after search, send `stockUnitUniqueName`, tighten GSTIN/date/warehouse validation, restore list filters without date overwrite, bind list to `body.items`, scrap rate/unit seeding, mobile-number-input on create.
-- 2026-11-26: Select Batches aside hides floating chat widget while open so Save/Cancel is not covered · shared BatchSelectDialog · Vouchers/inventory batch pickers 🟡
+- 2026-11-26: Lower chat launcher z-index below aside/dialog overlays so Select Batches Save/Cancel stays clickable · global styles · Vouchers/inventory batch pickers 🟡
 - 2026-11-07: Added Job Work create batch support (finished inbound, raw outbound, scrap inbound) via shared BatchChipList / BatchSelectDialog when inventory batch management is enabled.
 - 2026-11-07: Migrated Job Work create to Angular 21 (`inject`, `signal`/`computed`, `toSignal`, `DestroyRef`/`takeUntilDestroyed`).
 - 2026-11-07: Aligned Job Work create layout with Manufacturing (same card/table/button patterns; dropped one-off valuation/table classes).

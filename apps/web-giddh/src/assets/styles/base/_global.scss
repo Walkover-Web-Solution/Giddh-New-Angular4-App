@@ -10072,6 +10072,12 @@ body {
     }
 }
 
+/* Chat launchers sit below Material/CDK dialog overlays (base z-index 1000). */
+#hello-chatbot-launcher-icon,
+.fake-chatbot {
+    z-index: 900 !important;
+}
+
 /* Fake chatbot for non-production environment Just to check design issue like it overlay other elements */
 .fake-chatbot {
     position: fixed;
@@ -10079,7 +10085,6 @@ body {
     right: 18px !important;
     width: 48px;
     height: 48px;
-    z-index: 9999;
     background: #ffffff;
     border-radius: 50%;
 }
