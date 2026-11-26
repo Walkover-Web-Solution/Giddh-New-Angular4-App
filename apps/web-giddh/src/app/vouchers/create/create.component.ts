@@ -2398,7 +2398,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash].includes(this.voucherType as VoucherTypeEnum)) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                     this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomInvoiceNumber;
-                    console.log("this.useCustomVoucherNumber",this.useCustomVoucherNumber);
                 } else if ([VoucherTypeEnum.purchase, VoucherTypeEnum.cashBill].includes(this.voucherType as VoucherTypeEnum)) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                     this.useCustomVoucherNumber = true;
@@ -2422,11 +2421,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                     this.applyRoundOff = settings.purchaseBillSettings?.purchaseOrderRoundOff;
                 }else if (this.voucherType === VoucherTypeEnum.deliveryChallan) {
-                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomInvoiceNumber;
-                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                    this.useCustomVoucherNumber = settings?.deliveryChallanSettings?.useCustomDeliveryChallanNumber;
                 }else if (this.voucherType === VoucherTypeEnum.receiptNote) {
-                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomInvoiceNumber;
-                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                    this.useCustomVoucherNumber = settings?.receiptNoteSettings?.useCustomReceiptNoteNumber;
                 }
                 this.invoiceForm.get("roundOffApplicable")?.patchValue(this.applyRoundOff);
 

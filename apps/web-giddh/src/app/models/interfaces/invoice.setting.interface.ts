@@ -19,6 +19,26 @@ export interface InvoiceSetting {
     companyEmailSettings: CompanyEmailSettings;
     companyCashFreeSettings: CompanyCashFreeSettings;
     companyInventorySettings: CompanyInventorySettings;
+    deliveryChallanSettings?: DeliveryChallanSettings;
+    receiptNoteSettings?: ReceiptNoteSettings;
+}
+
+export interface DeliveryChallanSettings {
+    useCustomDeliveryChallanNumber: boolean;
+    deliveryChallanNumberPrefix?: string;
+    initialDeliveryChallanNumber?: string;
+    branchDeliveryChallanNumberPrefix?: string;
+    autoMail?: boolean;
+    autoWhatsApp?: boolean;
+}
+
+export interface ReceiptNoteSettings {
+    useCustomReceiptNoteNumber: boolean;
+    receiptNoteNumberPrefix?: string;
+    initialReceiptNoteNumber?: string;
+    branchReceiptNoteNumberPrefix?: string;
+    autoMail?: boolean;
+    autoWhatsApp?: boolean;
 }
 
 export class CompanyInventorySettings {
