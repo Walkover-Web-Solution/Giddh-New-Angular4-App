@@ -120,9 +120,11 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
                         if (this.companyBranches) {
+                            // Keep companies-list branchCount/unarchivedBranchCount; only refresh accessible list
                             this.companyBranches.branches = this.branchList;
-                            this.companyBranches.branchCount = response?.length
-                            this.companyBranches.unarchivedBranchCount = this.branchList?.length;
+                            const counts = this.getCompanyBranchCounts(this.companyBranches);
+                            this.companyBranches.branchCount = counts.branchCount;
+                            this.companyBranches.unarchivedBranchCount = counts.unarchivedBranchCount;
                         }
                         this.changeDetectorRef.detectChanges();
                     }
@@ -291,8 +293,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                     this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
-                    this.companyBranches.branchCount = response?.body?.length;
-                    this.companyBranches.unarchivedBranchCount = this.branchList?.length;
+                    // Preserve true company counts from companies list; do not use accessible branches length
+                    const counts = this.getCompanyBranchCounts(company);
+                    this.companyBranches.branchCount = counts.branchCount;
+                    this.companyBranches.unarchivedBranchCount = counts.unarchivedBranchCount;
                     this.branchRefreshInProcess = false;
 
                     if (this.searchBranch) {
@@ -305,8 +309,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                     this.branchList = [];
                     company.branches = this.branchList;
                     this.companyBranches = company;
-                    this.companyBranches.branchCount = this.branchList?.length;
-                    this.companyBranches.unarchivedBranchCount = this.branchList?.length;
+                    const counts = this.getCompanyBranchCounts(company);
+                    this.companyBranches.branchCount = counts.branchCount;
+                    this.companyBranches.unarchivedBranchCount = counts.unarchivedBranchCount;
                     this.branchRefreshInProcess = false;
 
                     this.changeDetectorRef.detectChanges();
@@ -325,14 +330,42 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     public showAllBranches(company: any): void {
-        const branchCount = this.companyBranches?.branchCount ?? company?.branchCount;
-        const unarchivedBranchCount = this.companyBranches?.unarchivedBranchCount ?? company?.unarchivedBranchCount;
+        const counts = this.getCompanyBranchCounts(company);
+        const branchCount = counts.branchCount;
+        const unarchivedBranchCount = counts.unarchivedBranchCount;
+        const accessibleUnarchived = this.branchList?.length ?? 0;
+        const singleAccessibleBranchUniqueName = accessibleUnarchived === 1 ? this.branchList[0]?.uniqueName : '';
 
         if (branchCount > 1 && unarchivedBranchCount >= 1) {
-            this.selectBranchTab();
+            // Multi-branch company with only one accessible branch (shared permission): enter Branch mode
+            if (singleAccessibleBranchUniqueName
+                && (company?.uniqueName !== this.activeCompany?.uniqueName
+                    || this.generalService.currentBranchUniqueName !== singleAccessibleBranchUniqueName)) {
+                this.changeCompany(company, singleAccessibleBranchUniqueName, false);
+            } else {
+                this.selectBranchTab();
+            }
         } else if (company?.uniqueName !== this.activeCompany?.uniqueName) {
             this.changeCompany(company, '', false);
         }
+    }
+
+    /**
+     * Resolves true company branch counts from the companies list API payload.
+     * Accessible branches from the branches API must not replace these values.
+     *
+     * @private
+     * @param {*} company
+     * @return {{ branchCount: number; unarchivedBranchCount: number }}
+     * @memberof CompanyBranchComponent
+     */
+    private getCompanyBranchCounts(company: any): { branchCount: number; unarchivedBranchCount: number } {
+        const fromList = this.companyList?.find(item => item?.uniqueName === company?.uniqueName)
+            ?? this.companyListForFilter?.find(item => item?.uniqueName === company?.uniqueName);
+        return {
+            branchCount: fromList?.branchCount ?? company?.branchCount ?? 0,
+            unarchivedBranchCount: fromList?.unarchivedBranchCount ?? company?.unarchivedBranchCount ?? 0
+        };
     }
 
     /**

@@ -84,7 +84,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyService: CompanyService,
         private uiSettingsService: UiSettingsService
     ) {
-        this.isProdMode = environment.production;
+        this.isProdMode = environment.PRODUCTION_ENV;
         this.isElectron = Configuration.isElectron;
 
         this.initializeUiSettings();
@@ -123,7 +123,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 // Hard redirect to giddh.com/login only when running on the production books domain
                 const isProductionBooksDomain = window.location.hostname === new URL(GiddhUiDomain.PRODUCTION).hostname;
 
-                if (environment.production && !Configuration.isElectron && !isLocalHost && isProductionBooksDomain) {
+                if (environment.PRODUCTION_ENV && !Configuration.isElectron && !isLocalHost && isProductionBooksDomain) {
                     // Hard redirect only for GiddhUiDomain.PRODUCTION (books.giddh.com)
                     const currentUrl = path + search;
                     let returnUrl = '';
