@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-25 · **Reviewed up to commit:** `e6f6bd4cac`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-26 · **Reviewed up to commit:** `b01dd98f5e`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -97,7 +97,7 @@ Feature work merged after the brief, not scored against it:
 | --- | --- | --- |
 | Branch and warehouse sharing | 🟡 | `a4c4c94613`. Company vs Branch mode uses companies-list `branchCount` (not accessible `settings.branches.length`); shared single accessible branch of a multi-branch company enters Branch mode. Company-mode Users list/edit show share-with `entity` as small disabled dropdown (Company/Branch/Warehouse); update keeps row entity. Not verified against a signed-in shared-branch user. |
 | Manufacturing batch details in payload | 🟡 | `239b5631e6`. |
-| Stock create/edit warehouse handling | 🟡 | `28f1a838f4`. |
+| Stock create/edit warehouse handling | 🟡 | Variant tab opening-balance link label is **Add batch and opening balance** (`add_opening_balance` locale). `28f1a838f4`. |
 | Financial report CSV organization address | 🟡 | `171cf5a36a`. |
 | Ledger create-aside selections | 🟡 | `a6daf2902f`. |
 | CSP HTTP header + frame-ancestors on web app | 🟡 | PHP CSP / X-Frame-Options in [postbuild.js](tools/web/postbuild.js); merged policy in [content-security-policy.js](tools/web/content-security-policy.js) + index meta (OTP/hCaptcha + CookieYes/Clarity/Facebook/OpenAI CDN). |
@@ -115,6 +115,7 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-26 · Cursor agent · Stock create/edit variant tab: `add_opening_balance` label is **Add batch and opening balance** (en/hi/mr locales) · Stock create/edit warehouse handling 🟡
 - 2026-11-25 · Claude agent · IMS sidebar menu temporarily limited to companies created by an `INTERNAL_EMAILS_DOMAINS` email (testing; remove later); reviewed up to `e6f6bd4cac` (`26b2d95577`, `9601a30fd4` already logged 2026-11-24) · GST IMS invoice review 🟡
 - 2026-11-25 · Cursor agent · Company-mode permission entity shown as small disabled dropdown (list + update); update preserves row entity · Branch and warehouse sharing 🟡
 - 2026-11-25 · Cursor agent · Shared single branch: mode from companies-list `branchCount`; auto-enter Branch mode when only one branch is accessible on a multi-branch company · Branch and warehouse sharing 🟡
