@@ -22,7 +22,7 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../store";
 import { AgingReportActions } from "../../actions/aging-report.actions";
 import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
-import { merge, Observable, of, ReplaySubject, Subject } from "rxjs";
+import { combineLatest, merge, Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, skip, take, takeUntil } from "rxjs/operators";
 import * as dayjs from "dayjs";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
@@ -144,6 +144,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public isConsolidatedBranch: boolean;
     /** Contact module types */
     public ContactsModule = ContactsModule;
+    /** Max search string length enforced by due-amount-report API */
+    private readonly searchTextMaxLength = 100;
 
     constructor(
         public dialog: MatDialog,
@@ -170,25 +172,26 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public getDueAmountreportData() {
-        this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
-            if (data && data.results) {
-                this.isLoading.set(false);
+        combineLatest([
+            this.store.pipe(select(s => s.agingreport.data)),
+            this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight)),
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(([data, inFlight]) => {
+            this.isLoading.set(inFlight);
+            if (data?.results) {
                 this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
                 this.totalDueAmounts = data.overAllDueAmount;
                 this.totalFutureDueAmounts = data.overAllFutureDueAmount;
-            } else {
-                this.isLoading.set(true);
-            }
-            this.dueAmountReportData$ = of(data);
-            if (data) {
                 lodashMap(data.results, (obj: any) => {
                     obj.depositAmount = obj.currentAndPastDueAmount[0].dueAmount;
                     obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
                     obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
                     obj.dueAmount3 = obj.currentAndPastDueAmount[3].dueAmount;
                 });
+            } else {
+                this.agingReportDataSource.data = [];
             }
+            this.dueAmountReportData$ = of(data ?? null);
             setTimeout(() => {
                 this.detectChanges();
             }, 60000);
@@ -196,7 +199,18 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public getDueReport() {
+        if (!this.isSearchQueryAllowed(this.dueAmountReportRequest.q)) {
+            return;
+        }
         this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest, this.currentBranch?.uniqueName, this.vendorCustomerType));
+    }
+
+    private isSearchQueryAllowed(query: string): boolean {
+        if (query && query.length > this.searchTextMaxLength) {
+            this.toaster.showSnackBar("error", this.commonLocaleData?.app_search_text_limit);
+            return false;
+        }
+        return true;
     }
 
     public detectChanges() {
@@ -223,6 +237,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(({ restoredQ, vendorCustomerType }) => {
             if (restoredQ !== undefined && restoredQ !== null) {
+                if (!this.isSearchQueryAllowed(restoredQ)) {
+                    return;
+                }
                 this.dueAmountReportRequest.q = restoredQ;
                 this.vendorCustomerType = vendorCustomerType;
                 this.getDueReport();
@@ -282,7 +299,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         ).pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams.tab === 'purchase-aging-report' || queryParams.tab === 'sales-aging-report') {
                 this.resetAdvanceSearch(false);
-                const restoredQ = queryParams.searchText || '';
+                let restoredQ = queryParams.searchText || '';
+                if (restoredQ && restoredQ.length > this.searchTextMaxLength) {
+                    this.toaster.showSnackBar("error", this.commonLocaleData?.app_search_text_limit);
+                    restoredQ = '';
+                    this.generalService.saveRouteQueryFilters({ searchText: null });
+                }
                 this.searchStr = restoredQ;
                 this.searchedName.setValue(restoredQ, { emitEvent: false });
                 this.showNameSearch = restoredQ ? true : false;
@@ -307,6 +329,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined && searchedText.length > this.searchTextMaxLength) {
+                this.toaster.showSnackBar("error", this.commonLocaleData?.app_search_text_limit);
+                return;
+            }
             this.generalService.saveRouteQueryFilters({ searchText: searchedText || null });
         });
 
