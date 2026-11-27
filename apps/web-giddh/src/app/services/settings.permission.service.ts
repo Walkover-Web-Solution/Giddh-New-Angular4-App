@@ -44,4 +44,32 @@ export class SettingsPermissionService {
         }), catchError((e) => this.errorHandler.HandleCatch<IUpdatePermissionResponse, ShareRequestForm>(e, model)));
     }
 
+    /**
+     * Gets users shared with company, or with a branch/warehouse when entityType is passed
+     *
+     * @param {('branch' | 'warehouse')} [entityType] Entity type (omit for company mode)
+     * @param {string} [uniqueName] Branch/warehouse unique name (required with entityType)
+     * @returns {Observable<BaseResponse<ShareRequestForm[], string>>}
+     * @memberof SettingsPermissionService
+     */
+    public getEntitySharedWith(entityType?: 'branch' | 'warehouse', uniqueName?: string): Observable<BaseResponse<ShareRequestForm[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        const apiUrl = SETTINGS_PERMISSION_API.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        const params: { entityType?: string; entityUniqueName?: string } = {};
+
+        if (entityType && uniqueName) {
+            params.entityType = entityType;
+            params.entityUniqueName = uniqueName;
+        }
+
+        return this.http.get(this.config.apiUrl + apiUrl, params).pipe(
+            map((res) => {
+                let data: BaseResponse<ShareRequestForm[], string> = res;
+                data.queryString = params;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<ShareRequestForm[], string>(e))
+        );
+    }
+
 }

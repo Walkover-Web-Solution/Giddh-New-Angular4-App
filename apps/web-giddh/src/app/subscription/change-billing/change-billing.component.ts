@@ -374,7 +374,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
                 code: event.value
             });
             this.changeBillingForm.get('taxNumber')?.setValue('');
-            this.changeBillingForm.get('state')?.setValue(null);
+            this.changeBillingForm.get('state')?.patchValue({ name: '', code: '' });
             this.selectedState = "";
             this.selectedStateCode = "";
             this.disabledState = false;

@@ -253,11 +253,11 @@
                         </span>
                     </p>
                 </div>
-                <div class="align-self-center text-center" *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
+                <div class="align-self-center text-center" *ngIf="shouldShowTaxControl">
                     <label class="icon-plus"></label>
                 </div>
                 <!-- Tax -->
-                <div *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields" (click)="$event.stopPropagation()">
+                <div *ngIf="shouldShowTaxControl" (click)="$event.stopPropagation()">
                     <common-tax
                         (click)="hideAllDropdown(ledgerDropdownTypeEnum.TAX)"
                         id="ledger-tax"

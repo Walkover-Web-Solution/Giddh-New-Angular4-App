@@ -1069,7 +1069,7 @@ export class GeneralService {
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherApiVersion) {
+            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherApiVersion || menuItem.link && !apiItems.find(apiItem => apiItem?.uniqueName === menuItem.link)) {
                 visibleMenuItems[menuIndex].hide = true;
             } else {
                 visibleMenuItems[menuIndex].itemIndex = index;
@@ -1262,6 +1262,17 @@ export class GeneralService {
      */
     public addVoucherVersion(url: string, voucherVersion: number): string {
         return this.appendQueryParam(url, 'voucherVersion', voucherVersion);
+    }
+
+    /**
+     * Adds branch unique name to request's URL
+     *
+     * @param {string} url API URL
+     * @param {string} branchUniqueName Branch unique name
+     * @memberof GeneralService
+     */
+    public addBranchUniqueName(url: string, branchUniqueName: string): string {
+        return this.appendQueryParam(url, 'branchUniqueName', branchUniqueName);
     }
 
     /**

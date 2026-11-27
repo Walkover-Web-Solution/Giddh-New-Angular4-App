@@ -22,7 +22,8 @@ export const LOGIN_API = {
     RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
     GET_USER_DETAILS_FROM_SESSION_ID: 'v2/user',
     LOGIN_WITH_OTP: 'v2/auth-login',
-    LOGIN_WITH_APPLE: 'v2/signup-with-apple'
+    LOGIN_WITH_APPLE: 'v2/signup-with-apple',
+    UPDATE_CONTACT: 'users/:userUniqueName/contact'
 };
 
 export const GMAIL_API = {

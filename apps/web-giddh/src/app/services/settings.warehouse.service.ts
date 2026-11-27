@@ -60,8 +60,8 @@ export class SettingsWarehouseService {
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':page', params.page)
             }`;
-        if (branchUniqueName) {
-            contextPath = contextPath.concat(`&&branchUniqueName=${branchUniqueName}`);
+        if (branchUniqueName || params?.branchUniqueName) {
+            contextPath = contextPath.concat(`&&branchUniqueName=${branchUniqueName || params.branchUniqueName}`);
         }
         if (Number.isInteger(params.count)) {
             contextPath = contextPath.concat(`&count=${params.count}`);

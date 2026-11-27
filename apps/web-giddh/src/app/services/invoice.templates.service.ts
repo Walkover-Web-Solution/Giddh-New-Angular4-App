@@ -82,7 +82,7 @@ export class InvoiceTemplatesService {
                 return data;
             }), catchError((e) => {
                 let object = this.errorHandler.HandleCatch<any, string>(e);
-                return object.pipe(map(p => p.body));
+                return object;
             }));
     }
 

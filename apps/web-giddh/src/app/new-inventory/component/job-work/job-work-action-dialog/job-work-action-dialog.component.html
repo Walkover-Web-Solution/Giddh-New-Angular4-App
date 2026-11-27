@@ -1,0 +1,247 @@
+<div class="job-work-action-dialog d-flex flex-column">
+    <div class="dialog-header">
+        <span id="job-work-action-dialog-title">{{ title() }}</span>
+        <button mat-icon-button type="button" class="close-btn" (click)="close()" [attr.aria-label]="commonLocaleData()?.app_close">
+            <i class="icon-cross" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="p-3" role="region" aria-labelledby="job-work-action-dialog-title" [attr.aria-busy]="isLoading() || isSubmitting()">
+        @if (isLoading() || isSubmitting()) {
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+        } @else {
+            @if (data.action === 'ADJUST') {
+                <div class="d-flex flex-wrap align-items-center column-gap-3 row-gap-2 mb-3">
+                    <mat-slide-toggle color="primary" [ngModel]="increaseAssetValue()" (ngModelChange)="increaseAssetValue.set($event)">
+                        {{ localeData()?.increase_value }}
+                    </mat-slide-toggle>
+                    <mat-checkbox color="primary" [ngModel]="claimItc()" (ngModelChange)="claimItc.set($event)">
+                        {{ localeData()?.claim_itc }}
+                    </mat-checkbox>
+                </div>
+            }
+
+            @if (data.action === 'RETURN') {
+                <div class="table-responsive">
+                    <table class="w-100 job-work-action-table border border-radius-4 bg-table-background-color" [attr.aria-label]="title()">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-select">
+                                    <mat-checkbox
+                                        color="primary"
+                                        [checked]="allReturnSelected()"
+                                        [indeterminate]="someReturnSelected()"
+                                        (change)="toggleSelectAllReturn($event.checked)"
+                                        [attr.aria-label]="
+                                            allReturnSelected() ? commonLocaleData()?.app_unselect_all : commonLocaleData()?.app_select_all
+                                        "
+                                    ></mat-checkbox>
+                                </th>
+                                <th scope="col">{{ localeData()?.type }}</th>
+                                <th scope="col">{{ localeData()?.item_stock_variant }}</th>
+                                <th scope="col">{{ localeData()?.batch }}</th>
+                                <th scope="col">{{ commonLocaleData()?.app_quantity }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (row of returnLines(); track row.stockUniqueName + row.lineRole + row.variantUniqueName) {
+                                <tr>
+                                    <td class="col-select">
+                                        <mat-checkbox
+                                            color="primary"
+                                            [ngModel]="row.selected"
+                                            (ngModelChange)="setReturnSelected(row, $event)"
+                                            [attr.aria-label]="
+                                                (commonLocaleData()?.app_select || '') + ' ' + (row.stockName || row.stockUniqueName)
+                                            "
+                                        ></mat-checkbox>
+                                    </td>
+                                    <td>{{ row.lineRole }}</td>
+                                    <td>
+                                        <div class="font-weight-medium">{{ row.stockName || row.stockUniqueName }}</div>
+                                        @if (row.variantName || row.variantUniqueName) {
+                                            <div class="font-size-12 text-light">
+                                                {{ row.variantName || row.variantUniqueName }}
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="min-width-160">
+                                        @if (getJobWorkBatches(row.batches)?.length) {
+                                            <batch-chip-list
+                                                class="d-block my-2"
+                                                [compact]="true"
+                                                [batches]="row.batches"
+                                                [isInbound]="true"
+                                                [localeData]="localeData()"
+                                                [commonLocaleData]="commonLocaleData()"
+                                                [showEdit]="batchTrackingEnabled() && row.selected"
+                                                (edit)="openReturnBatchDialog(row, $event)"
+                                            ></batch-chip-list>
+                                        } @else {
+                                            <span aria-hidden="true">—</span>
+                                        }
+                                    </td>
+                                    <td class="col-input">
+                                        <div class="d-block width-150 my-2">
+                                            <input-field
+                                                [type]="'number'"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [name]="'returnQty' + row.stockUniqueName + row.lineRole"
+                                                [label]="localeData()?.return_qty"
+                                                [placeholder]="'0'"
+                                                [matSuffix]="row.unitCode || row.unitName || ''"
+                                                [(ngModel)]="row.quantity"
+                                                [disabled]="!row.selected"
+                                            ></input-field>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            @if (data.action === 'MARK_SCRAP') {
+                <div class="table-responsive">
+                    <table class="w-100 job-work-action-table border border-radius-4 bg-table-background-color" [attr.aria-label]="title()">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-select">
+                                    <mat-checkbox
+                                        color="primary"
+                                        [checked]="allScrapSelected()"
+                                        [indeterminate]="someScrapSelected()"
+                                        (change)="toggleSelectAllScrap($event.checked)"
+                                        [attr.aria-label]="
+                                            allScrapSelected() ? commonLocaleData()?.app_unselect_all : commonLocaleData()?.app_select_all
+                                        "
+                                    ></mat-checkbox>
+                                </th>
+                                <th scope="col">{{ localeData()?.item_stock_variant }}</th>
+                                <th scope="col">{{ localeData()?.batch }}</th>
+                                <th scope="col">{{ commonLocaleData()?.app_quantity }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (row of scrapLines(); track row.stockUniqueName + row.variantUniqueName) {
+                                <tr>
+                                    <td class="col-select">
+                                        <mat-checkbox
+                                            color="primary"
+                                            [ngModel]="row.selected"
+                                            (ngModelChange)="setScrapSelected(row, $event)"
+                                            [attr.aria-label]="
+                                                (commonLocaleData()?.app_select || '') + ' ' + (row.stockName || row.stockUniqueName)
+                                            "
+                                        ></mat-checkbox>
+                                    </td>
+                                    <td>
+                                        <div class="font-weight-medium">{{ row.stockName || row.stockUniqueName }}</div>
+                                        @if (row.variantName || row.variantUniqueName) {
+                                            <div class="font-size-12 text-light">
+                                                {{ row.variantName || row.variantUniqueName }}
+                                            </div>
+                                        }
+                                    </td>
+                                    <td class="min-width-160">
+                                        @if (getJobWorkBatches(row.batches)?.length) {
+                                            <batch-chip-list
+                                                class="d-block my-2"
+                                                [compact]="true"
+                                                [batches]="row.batches"
+                                                [isInbound]="true"
+                                                [localeData]="localeData()"
+                                                [commonLocaleData]="commonLocaleData()"
+                                                [showEdit]="batchTrackingEnabled() && row.selected"
+                                                (edit)="openScrapBatchDialog(row, $event)"
+                                            ></batch-chip-list>
+                                        } @else {
+                                            <span aria-hidden="true">—</span>
+                                        }
+                                    </td>
+                                    <td class="col-input">
+                                        <div class="d-block width-150 my-2">
+                                            <input-field
+                                                [type]="'number'"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [name]="'scrapQty' + row.stockUniqueName"
+                                                [label]="commonLocaleData()?.app_quantity"
+                                                [placeholder]="'0'"
+                                                [matSuffix]="row.unitCode || ''"
+                                                [(ngModel)]="row.quantity"
+                                                [disabled]="!row.selected"
+                                            ></input-field>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            @if (data.action === 'ADJUST') {
+                <div class="table-responsive">
+                    <table class="w-100 job-work-action-table border border-radius-4 bg-table-background-color" [attr.aria-label]="title()">
+                        <thead>
+                            <tr>
+                                <th scope="col">{{ localeData()?.from_account }}</th>
+                                <th scope="col">{{ localeData()?.to_account }}</th>
+                                <th scope="col">{{ localeData()?.tax }}</th>
+                                <th scope="col" class="text-right">{{ commonLocaleData()?.app_amount }}</th>
+                                <th scope="col" class="text-right">{{ localeData()?.input_tax_credit }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (row of expenseLines(); track row.fromAccountUniqueName + row.toAccountUniqueName) {
+                                <tr>
+                                    <td>{{ row.fromAccountName || row.fromAccountUniqueName }}</td>
+                                    <td>{{ row.toAccountName || row.toAccountUniqueName }}</td>
+                                    <td>{{ row.tax || '—' }}</td>
+                                    <td class="col-input">
+                                        <div class="d-block width-150 my-2">
+                                            <input-field
+                                                [type]="'number'"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [cssClass]="'text-right'"
+                                                [name]="'expenseAmount' + row.fromAccountUniqueName"
+                                                [label]="commonLocaleData()?.app_amount"
+                                                [placeholder]="'0'"
+                                                [(ngModel)]="row.amount"
+                                            ></input-field>
+                                        </div>
+                                    </td>
+                                    <td class="col-input">
+                                        <div class="d-block width-150 my-2">
+                                            <input-field
+                                                [type]="'number'"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [cssClass]="'text-right'"
+                                                [name]="'expenseTax' + row.fromAccountUniqueName"
+                                                [label]="localeData()?.input_tax_credit"
+                                                [placeholder]="'0'"
+                                                [(ngModel)]="row.taxAmount"
+                                            ></input-field>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+
+    @if (!isLoading()) {
+        <div class="d-flex justify-content-end column-gap-2 p-2 border-top" role="group" [attr.aria-label]="title()">
+            <button matButton="outlined" type="button" (click)="close()" [disabled]="isSubmitting()">
+                {{ commonLocaleData()?.app_cancel }}
+            </button>
+            <button matButton="filled" color="primary" type="button" (click)="submit()" [disabled]="isSubmitting()">
+                {{ commonLocaleData()?.app_save }}
+            </button>
+        </div>
+    }
+</div>

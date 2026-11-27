@@ -17,6 +17,8 @@ The install command was verified for web analysis with lifecycle scripts disable
 
 `npm run check:browser` starts its own localhost server from built files, intercepts every external request, and stores its screenshot and results in `dist/browser-checks`. Its API responses are fixtures.
 
+`npm run status:check` compares the branch with `giddh-2.0` (override with `STATUS_BASE`). It fails when files under `apps/`, `libs/`, `xplat/`, `scripts/`, `tools/` or `.github/workflows/` changed, including uncommitted and untracked files, but [STATUS.md](../STATUS.md) did not, unless a commit message on the branch contains `[no status]`. It always lists code commits since STATUS.md's "Reviewed up to commit" hash, so that hash must exist on the base branch. The [status workflow](../.github/workflows/status-check.yml) runs it on every pull request with full history.
+
 `npm run check:ai` runs the documentation checker and focused Node regression tests. It does not replace Angular integration, browser, or accounting journey checks. `npm test` currently has no Angular test target; `npm run lint` currently fails because Nx is absent. Keep these gaps visible instead of reporting an all-green application.
 
 ## Environment and preview
