@@ -61,7 +61,9 @@
 		"new_auth_key_message": "आपका Auth-Key अपडेट हो गया है। पुरानी कुंजी का उपयोग करने वाले API इंटीग्रेशन अपडेट करें।",
 		"no_mobile_added": "कोई मोबाइल नंबर नहीं जोड़ा गया",
 		"no_mobile_added_description": "महत्वपूर्ण अपडेट पाने और अपना खाता सुरक्षित रखने के लिए अपना मोबाइल नंबर जोड़ें।",
-		"add_mobile_number": "मोबाइल नंबर जोड़ें"
+		"add_mobile_number": "मोबाइल नंबर जोड़ें",
+		"change_email": "ईमेल बदलें",
+		"change_mobile": "मोबाइल बदलें"
 	},
 	"session": {
 		"tab_heading": "अधिवेशन",

@@ -6,7 +6,7 @@ export class VerifyEmailModel {
 /** Request payload for Google auth; optional redirectUrl enables partner bridge-token mode. */
 export interface GoogleAuthRequest {
     accessToken: string;
-    /** Absolute partner callback URL. When set, API returns a bridge token instead of a session. */
+    /** Absolute partner callback URL from website (?redirect_url=). When set, appended on signup-with-google. */
     redirectUrl?: string;
 }
 
@@ -24,6 +24,8 @@ export class VerifyEmailResponseModel {
     public user: UserDetails;
     public session?: Session;
     public authKey?: string;
+    /** Login region (e.g. IN, UK); picks the session cookie name */
+    public loggedInRegion?: string;
     public isNewUser: boolean;
     public contactNumber: string;
     public countryCode: string;
@@ -110,4 +112,6 @@ export interface UpdateUserContactResponse {
     isVerified: boolean;
     mobileVerified: boolean;
     authKey?: string;
+    /** New session issued after the contact change; replaces the current session id and expiry */
+    session?: Session;
 }

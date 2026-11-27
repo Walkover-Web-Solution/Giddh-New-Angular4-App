@@ -32,7 +32,7 @@
         "two_way_auth_content": "You will need to enter verification code at the time of login.",
         "mobile_number_validation_error": "Please enter a valid mobile number with country code",
         "registered_email_address": "Registered Email Address",
-        "registered_mobile_number": "Registered Mobile Number (with country code)",
+        "registered_mobile_number": "Registered Mobile Number",
         "registered_mobile_number_label": "Registered Mobile Number",
         "with_country_code": "(with country code)",
         "email_format": "Format should be like user@mail.com",
@@ -61,7 +61,9 @@
         "new_auth_key_message": "Your Auth-Key has been updated. Please update any API integrations using the old key.",
         "no_mobile_added": "No mobile number added",
         "no_mobile_added_description": "Add your mobile number to receive important updates and secure your account.",
-        "add_mobile_number": "Add Mobile Number"
+        "add_mobile_number": "Add Mobile Number",
+        "change_email": "Change Email",
+        "change_mobile": "Change Mobile"
     },
     "session": {
         "tab_heading": "Session",

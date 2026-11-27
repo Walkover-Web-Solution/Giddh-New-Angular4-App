@@ -10,6 +10,7 @@ import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import {
     SignupWithMobile,
+    UpdateUserContactResponse,
     UserDetails,
     VerifyEmailModel,
     VerifyEmailResponseModel,
@@ -697,6 +698,25 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 return Object.assign({}, state, newState);
             }
             return state;
+        case LoginActions.UpdateUserContactSuccess: {
+            const contact: UpdateUserContactResponse = action.payload;
+            if (!contact || !state?.user) {
+                return state;
+            }
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    session: contact.session?.id ? { ...state.user.session, ...contact.session } : state.user.session,
+                    user: {
+                        ...state.user.user,
+                        email: contact.email,
+                        contactNo: contact.contactNo,
+                        uniqueName: contact.uniqueName || state.user.user?.uniqueName
+                    }
+                }
+            };
+        }
         case LoginActions.FetchUserDetailsResponse:
             let userResp: BaseResponse<UserDetails, string> = action.payload;
             if (userResp?.status === 'success') {
