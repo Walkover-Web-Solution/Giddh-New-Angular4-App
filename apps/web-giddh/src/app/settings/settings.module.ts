@@ -12,6 +12,7 @@ import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
+import { ShareEntityModalComponent } from '../shared/header/components/share-entity-modal/share-entity-modal.component';
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingsComponent } from './settings.component';
 import { SettingRountingModule } from './settings.routing.module';
@@ -95,6 +96,7 @@ import { GiddhDatePipe } from '../shared/pipes/giddh-date.pipe';
         FinancialYearComponent,
         SettingPermissionComponent,
         SettingPermissionFormComponent,
+        ShareEntityModalComponent,
         BranchComponent,
         DiscountComponent,
         CompanyAuthKeyComponent,

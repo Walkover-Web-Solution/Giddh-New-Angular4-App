@@ -44,5 +44,8 @@
     "hierarchy_view": "पदानुक्रम दृश्य",
     "parent_branch": "पालक शाखा",
     "select_parent_branch": "पालक शाखा निवडा",
-    "consolidated": "एकत्रित"
+    "consolidated": "एकत्रित",
+    "share_branch": "शाखा सामायिक करा",
+    "share_with": "सह सामायिक करा",
+    "permission_role_name": "भूमिका निवडा"
 }

@@ -31,6 +31,10 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
+import {
+    ShareEntityModalComponent,
+    ShareEntityModalData
+} from '../../shared/header/components/share-entity-modal/share-entity-modal.component';
 
 /**
  * Warehouse component
@@ -442,6 +446,29 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     successCallback();
                 }
             }
+        });
+    }
+
+    /**
+     * Opens share permission dialog for a warehouse
+     *
+     * @param {*} warehouse
+     * @memberof WarehouseComponent
+     */
+    public shareWarehouse(warehouse: any): void {
+        if (!warehouse?.uniqueName) {
+            return;
+        }
+        const dialogData: ShareEntityModalData = {
+            entity: 'warehouse',
+            entityUniqueName: warehouse.uniqueName,
+            entityName: warehouse.name,
+            commonLocaleData: this.commonLocaleData
+        };
+        this.dialog.open(ShareEntityModalComponent, {
+            panelClass: 'mat-dialog-xl',
+            disableClose: true,
+            data: dialogData
         });
     }
 

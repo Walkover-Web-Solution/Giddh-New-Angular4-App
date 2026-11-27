@@ -24,5 +24,8 @@
 	"delete_user_permission": "क्या आप वाकई इस उपयोगकर्ता की अनुमति को हटाना चाहते हैं?",
 	"past_period_duration": "पिछला [DURATION] [PERIOD]S",
 	"invalid_date": "अमान्य तिथि",
-	"add_custom_role": "कस्टम भूमिका"
+	"add_custom_role": "कस्टम भूमिका",
+	"share_warehouse": "[NAME] वेयरहाउस साझा करें",
+	"share_branch": "[NAME] शाखा साझा करें",
+	"no_shared_permission": "कोई साझा अनुमति नहीं मिली"
 }

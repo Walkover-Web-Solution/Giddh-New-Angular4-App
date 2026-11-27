@@ -44,5 +44,8 @@
     "hierarchy_view": "पदानुक्रम दृश्य",
     "parent_branch": "मूल शाखा",
     "select_parent_branch": "मूल शाखा का चयन करें",
-    "consolidated": "समेकित"
+    "consolidated": "समेकित",
+    "share_branch": "शाखा साझा करें",
+    "share_with": "के साथ शेयर करें",
+    "permission_role_name": "भूमिका चुनें"
 }

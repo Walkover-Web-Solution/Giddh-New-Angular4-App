@@ -19,5 +19,8 @@
     "confirm_archive_title": "क्या आप वाकई वेयरहाउस को संग्रहित करना चाहते हैं?",
     "confirm_unarchive_title": "क्या आप वाकई वेयरहाउस को अनारक्षित करना चाहते हैं?",
     "archive_notallowed": "डिफ़ॉल्ट वेयरहाउस संग्रहित नहीं किया जा सकता.",
-    "address_created": "पता सफलतापूर्वक बनाया गया"
+    "address_created": "पता सफलतापूर्वक बनाया गया",
+    "share_warehouse": "वेयरहाउस साझा करें",
+    "share_with": "के साथ शेयर करें",
+    "permission_role_name": "भूमिका चुनें"
 }
