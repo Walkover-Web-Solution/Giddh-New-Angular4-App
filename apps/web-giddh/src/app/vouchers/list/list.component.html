@@ -4872,15 +4872,24 @@
                                                 <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_delivery_challan }}
                                                 </p>
-                                                <mat-slide-toggle
-                                                    aria-label="delivery challan auto mail"
-                                                    name="deliveryChallanAutoMail"
-                                                    class="disable-toggle slide-toggle d-block mb-3"
-                                                    color="primary"
-                                                    formControlName="autoMail"
-                                                >
-                                                    {{ localeData?.auto_mail_update }}
-                                                </mat-slide-toggle>
+                                                <div class="mb-3 d-flex align-items-center">
+                                                    <mat-slide-toggle
+                                                        aria-label="delivery challan auto mail"
+                                                        name="deliveryChallanAutoMail"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="autoMail"
+                                                    >
+                                                        {{ localeData?.auto_mail_update }}
+                                                    </mat-slide-toggle>
+                                                    <a
+                                                        href="javascript:;"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
+                                                        (click)="openCustomEmailDialog(voucherTypeEnum.deliveryChallan)"
+                                                    >
+                                                        {{ commonLocaleData?.app_custom_email }}
+                                                    </a>
+                                                </div>
                                                 @if (generalService.isGiddhDomain()) {
                                                     <mat-slide-toggle
                                                         aria-label="delivery challan auto whatsapp"
@@ -5507,15 +5516,24 @@
                                             <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ commonLocaleData?.app_receipt_note }}
                                             </p>
-                                            <mat-slide-toggle
-                                                aria-label="receipt note auto mail"
-                                                name="receiptNoteAutoMail"
-                                                class="disable-toggle slide-toggle d-block mb-3"
-                                                color="primary"
-                                                formControlName="autoMail"
-                                            >
-                                                {{ localeData?.auto_mail_update }}
-                                            </mat-slide-toggle>
+                                            <div class="mb-3 d-flex align-items-center">
+                                                <mat-slide-toggle
+                                                    aria-label="receipt note auto mail"
+                                                    name="receiptNoteAutoMail"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="autoMail"
+                                                >
+                                                    {{ localeData?.auto_mail_update }}
+                                                </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:;"
+                                                    class="cursor-pointer ml-3 text-underline theme-primary-color"
+                                                    (click)="openCustomEmailDialog(voucherTypeEnum.receiptNote)"
+                                                >
+                                                    {{ commonLocaleData?.app_custom_email }}
+                                                </a>
+                                            </div>
                                             @if (generalService.isGiddhDomain()) {
                                                 <mat-slide-toggle
                                                     aria-label="receipt note auto whatsapp"
