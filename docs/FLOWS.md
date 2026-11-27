@@ -73,7 +73,16 @@ The user selects a certificate and supplies a PIN. New/changed PINs re-read the 
 
 **Verify when changed:** All versus subset versus empty selection, list totals/export agreement, API failure, existing role restrictions, and unchanged filter controls after copy-mode normalization. Focused payload tests pass; authenticated list/export behavior remains unverified without a live test account.
 
-## 7. Review IMS invoices (GST)
+## 7. Approve a pending petty-cash entry
+
+1. Pending petty cash opens from the expenses route into [PendingListComponent](../apps/web-giddh/src/app/expenses/components/pending-list/pending-list.component.ts). Choosing a row loads [ExpenseDetailsComponent](../apps/web-giddh/src/app/expenses/components/expense-details/expense-details.component.ts).
+2. [ExpenseService.getPettycashEntry](../apps/web-giddh/src/app/services/expences.service.ts) reads `GET company/:companyUniqueName/pettycash-manager/ledger/:accountUniqueName`. The detail screen shows that entry's description twice: the top field and the description inside [UpdateLedgerEntryPanelComponent](../apps/web-giddh/src/app/ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component.ts). Both edit `description` on the same entry.
+3. HTML tags, script tags and `javascript:` URLs fail [containsHtmlOrScript](../apps/web-giddh/src/app/shared/helpers/html-script-validation.ts) on both fields. The message is `app_html_script_not_allowed`. Approve stays closed, and [saveLedgerTransaction](../apps/web-giddh/src/app/ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component.ts) does not build a request.
+4. A plain description, including comparisons such as `5 < 10`, continues to [ExpenseService.actionPettycashReports](../apps/web-giddh/src/app/services/expences.service.ts) as the existing approve payload. The description property is unchanged aside from the text the user edited.
+
+**Verify when changed:** pending entry whose description is plain text, a tag, a script, and a comparison; the top field and the ledger field show the same text; approve is blocked only for markup; rejection and the entry-against account check still run. Voucher, new-ledger, account and group descriptions are separate fields and are not covered here.
+
+## 8. Review IMS invoices (GST)
 
 1. Tax sidebar **IMS** (between GSTR-2 and E-way Bill) opens `/pages/gstfiling/ims` ([ImsComponent](../apps/web-giddh/src/app/gst/ims/ims.component.ts)). The active GSTIN comes from `gstR.activeCompanyGst` (set by the tax sidebar); with no GSTIN on any address the page shows the existing "add GSTIN" message.
 2. The page uses the GSTR-1/GSTR-2 filing layout (header with back link, title, month picker and **Authenticate**/**Authenticated**). The page dispatches the existing `GetGSPSession`. **Authenticate** follows the GSTR header rule: shown for a company or consolidated branch on voucher API v2, disabled when the plan restricts Tax filing. Without a session the body shows the connect message and **Authenticate**, which opens the shared [gst-aside-menu](../apps/web-giddh/src/app/gst/modals/gst-aside-menu/gst-aside-menu.component.ts) OTP flow (`gsp-session` → `authenticate-gsp-session`). For `returnType` `ims` the aside closes once authenticated and the list loads.

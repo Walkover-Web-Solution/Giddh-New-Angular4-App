@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-27 · **Reviewed up to commit:** `ffe5c4ff1d`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-27 · **Reviewed up to commit:** `1c297271fe`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -115,10 +115,13 @@ Feature work merged after the brief, not scored against it:
 | Ledger entry in consolidated branch | 🟡 | `2d49a209e1` removed the go-to-branch banner and read-only blank entry in consolidated branch mode. Not verified here. |
 | Contact / search group export errors | 🟡 | `3806e0eff9`, `5a84bf0188`: failed group export shows the API message (or generic error) instead of failing silently. Not verified here. |
 | Subscription contact OTP after failed save | 🟡 | `7466c0fd50`: a failed contact save clears email/mobile OTP state so the user can correct and verify again. Not verified here. |
+| Petty cash description rejects HTML/script | 🟡 | Pending detail and the ledger description it saves show `app_html_script_not_allowed` and block approve. Focused helper test passes. Not checked in a signed-in company. Voucher, new-ledger, account and group descriptions are unchanged. |
 
 ## Change log
 
+- 2026-11-27 · Cursor agent · Resolved STATUS.md / FLOWS.md merge conflict after pull from `giddh-2.0`; kept petty-cash HTML/script validation with Job Work, IMS, and production-sync rows · Petty cash description rejects HTML/script 🟡
 - 2026-11-27 · Cursor agent · Resolved STATUS.md merge conflict after pull from `giddh-2.0`; kept stock variant-tab label, production sync, and contact/session rows · tracker 🟡
+- 2026-11-05 · Cursor agent · Pending petty-cash descriptions reject HTML/script and block approve · Helper and template wiring covered by [html-script-validation.test.cjs](scripts/tests/html-script-validation.test.cjs); live company not available
 - 2026-11-27 · Cursor agent · Production sync branch: restore `giddh-2.0` app/share UI onto production; keep production `.github/workflows`, `token-verify.component.ts`, `loginModels.ts`, electron release scripts/docs · Branch and warehouse sharing 🟡
 - 2026-11-26 · Cursor agent · Stock create/edit variant tab: `add_opening_balance` label is **Add batch and opening balance** (en/hi/mr locales) · Stock create/edit warehouse handling 🟡
 - 2026-11-26 · Claude agent · Voucher create: Delivery Challan / Receipt Note number field follows their own Custom # setting instead of Custom Invoice#; `InvoiceSetting` gains optional `deliveryChallanSettings` / `receiptNoteSettings` types · Delivery Challan settings tab 🟡, Receipt Note settings tab 🟡
