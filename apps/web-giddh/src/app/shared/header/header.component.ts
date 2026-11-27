@@ -1291,7 +1291,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.router.navigate(['/pages', 'user-details'], {
                 queryParams: {
                     tab: 'subscriptions',
-                    tabIndex: 3,
+                    tabIndex: 2,
                     showPlans: true
                 }
             });

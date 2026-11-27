@@ -1,6 +1,6 @@
 # Status
 
-**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-26 · **Reviewed up to commit:** `27682a3198`
+**Plan:** Preparation brief (Pushpendra, 2026-10-23), as recorded in [VISION](docs/VISION.md#approved-development-direction), [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md) and [VERIFICATION](docs/VERIFICATION.md) · **Last updated:** 2026-11-27 · **Reviewed up to commit:** `073f425a6e`
 
 The brief's original text is not in this repository. Rows below score what the repository records of it. Keep "Reviewed up to commit" on a commit that exists on `giddh-2.0`; `npm run status:check` lists every code commit after it.
 
@@ -95,7 +95,7 @@ Feature work merged after the brief, not scored against it:
 
 | Item | Status | Notes |
 | --- | --- | --- |
-| Branch and warehouse sharing | 🟡 | `a4c4c94613`. Company vs Branch mode uses companies-list `branchCount` (not accessible `settings.branches.length`); shared single accessible branch of a multi-branch company enters Branch mode. Company-mode Users list/edit show share-with `entity` as small disabled dropdown (Company/Branch/Warehouse); update keeps row entity. Permission Users list uses signals + OnPush for list/locale/entity mode CD. Not verified against a signed-in shared-branch user. |
+| Branch and warehouse sharing | 🟡 | Restored onto production from `giddh-2.0` (share-entity-modal, branch/warehouse/permission share UI) while keeping production Electron workflows, login token-verify/loginModels, and electron release docs/scripts. Company vs Branch mode uses companies-list `branchCount`; shared single accessible branch of a multi-branch company enters Branch mode. Permission Users list uses signals + OnPush. Not verified against a signed-in shared-branch user. |
 | Manufacturing batch details in payload | 🟡 | `239b5631e6`. |
 | Stock create/edit warehouse handling | 🟡 | `28f1a838f4`. |
 | Financial report CSV organization address | 🟡 | `171cf5a36a`. |
@@ -118,6 +118,7 @@ Feature work merged after the brief, not scored against it:
 
 ## Change log
 
+- 2026-11-27 · Cursor agent · Production sync branch: restore `giddh-2.0` app/share UI onto production; keep production `.github/workflows`, `token-verify.component.ts`, `loginModels.ts`, electron release scripts/docs · Branch and warehouse sharing 🟡
 - 2026-11-26 · Claude agent · Voucher create: Delivery Challan / Receipt Note number field follows their own Custom # setting instead of Custom Invoice#; `InvoiceSetting` gains optional `deliveryChallanSettings` / `receiptNoteSettings` types · Delivery Challan settings tab 🟡, Receipt Note settings tab 🟡
 - 2026-11-26 · Claude agent · Contact update stores the new session (`id`, `expiresAt`) from the response, refreshes session cookie and Session tab · User contact update replaces session 🟡
 - 2026-11-26 · Claude agent · User details contact: Change Email / Change Mobile also shown, directly beside the field, while an OTP is pending and after verification; field locks once the OTP is sent and Change discards that OTP; reviewed up to `c938657f61` · User details contact (email / mobile) 🟡

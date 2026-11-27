@@ -65,6 +65,9 @@
                                         <button mat-menu-item (click)="editWarehouse(warehouse)" *ngIf="voucherApiVersion === 2">
                                             {{ commonLocaleData?.app_edit }}
                                         </button>
+                                        <button mat-menu-item (click)="shareWarehouse(warehouse)">
+                                            {{ commonLocaleData?.app_share }}
+                                        </button>
                                         <button mat-menu-item (click)="confirmStatusUpdate(warehouse)">
                                             {{ warehouse?.isArchived ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
                                         </button>
