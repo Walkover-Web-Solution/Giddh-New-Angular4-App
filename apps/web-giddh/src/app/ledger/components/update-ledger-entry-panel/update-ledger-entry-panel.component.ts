@@ -1683,6 +1683,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
                         }
                         this.changeDetectorRef.detectChanges();
+                    } else if (data?.status === 'error' && data?.message) {
+                        this.toaster.showSnackBar('error', data.message);
                     }
                 });
             }

@@ -120,7 +120,7 @@
     "create_custom_batch": "कस्टम बैच नंबर बनाने के लिए टाइप करें",
     "batch_required_fields": "कृपया बैच के सभी आवश्यक फ़ील्ड भरें",
     "edit_opening_balance": "प्रारंभिक शेष संपादित करें",
-    "add_opening_balance": "प्रारंभिक शेष जोड़ें",
+    "add_opening_balance": "बैच और प्रारंभिक शेष जोड़ें",
     "add_warehouse": "वेयरहाउस जोड़ें",
     "track_by_batch": "बैच से ट्रैक करें",
     "not_set": "सेट नहीं",

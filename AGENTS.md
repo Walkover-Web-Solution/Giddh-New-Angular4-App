@@ -17,6 +17,7 @@ Kept by the middleware (version 046fbf2131b2). Read these before changing anythi
 | Propose a UI experiment | [Experiments](docs/EXPERIMENTS.md) |
 | Understand a tradeoff or missing fact | [Decisions](docs/DECISIONS.md), [open questions](docs/OPEN_QUESTIONS.md) |
 | See what is built, proven or blocked | [Status](STATUS.md) |
+| Weekly docs maintenance (coverage map, reviewed commit, gaps) | [Maintenance](docs/MAINTENANCE.md) |
 
 ## Essential boundaries
 

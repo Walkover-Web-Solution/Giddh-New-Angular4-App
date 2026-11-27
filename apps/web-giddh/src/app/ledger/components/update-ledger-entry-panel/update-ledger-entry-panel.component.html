@@ -1761,7 +1761,9 @@
                                             class="form-control border"
                                             [placeholder]="commonLocaleData?.app_description"
                                             [attr.aria-invalid]="ledgerDescriptionHasHtmlOrScript"
-                                            [attr.aria-describedby]="ledgerDescriptionHasHtmlOrScript ? 'update-ledger-description-error' : null"
+                                            [attr.aria-describedby]="
+                                                ledgerDescriptionHasHtmlOrScript ? 'update-ledger-description-error' : null
+                                            "
                                         ></textarea>
                                     </mat-form-field>
                                     @if (ledgerDescriptionHasHtmlOrScript) {
@@ -1869,7 +1871,9 @@
                                                         decimalDigitsDirective
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
                                                         [readonly]="true"
-                                                        [label]="`${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`"
+                                                        [label]="
+                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
+                                                        "
                                                     ></input-field>
                                                     <input-field
                                                         [readonly]="isEinvoiceGenerated"
@@ -1884,7 +1888,9 @@
                                                         (blur)="adjustedInvoiceAmountChange()"
                                                         *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                                        [label]="`${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`"
+                                                        [label]="
+                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
+                                                        "
                                                     ></input-field>
                                                 </div>
                                             </div>

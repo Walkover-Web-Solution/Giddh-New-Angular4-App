@@ -26,5 +26,6 @@
     "rate_wise": "Rate Wise",
     "account_wise": "Account Wise",
     "vat_liabilities": "Vat Liabilities",
-    "vat_payments":"Vat Payments"
+    "vat_payments":"Vat Payments",
+    "ims": "IMS"
 }

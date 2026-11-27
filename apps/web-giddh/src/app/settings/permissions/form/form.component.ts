@@ -89,6 +89,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     /** To check form is invalid */
     public isFormInvalid: boolean = false;
+    /** True when organization is in company mode (entity field is company-mode only) */
+    public isCompanyMode: boolean = false;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -110,6 +112,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
@@ -242,7 +245,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.permissionForm = this._fb.group({
                 uniqueName: [data.uniqueName],
                 emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
-                entity: [data.entity || permissionEntity.entity],
+                entity: [(data.entity || permissionEntity.entity)?.toUpperCase()],
                 entityUniqueName: [data.entityUniqueName || permissionEntity.entityUniqueName],
                 roleUniqueName: [data.roleUniqueName, [Validators.required]],
                 periodOptions: this.getPeriodFromData(data),
@@ -382,7 +385,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             return;
         }
         let obj: any = {};
-        let form: ShareRequestForm = cloneDeep(this.permissionForm?.value);
+        // getRawValue keeps disabled controls (entity) in update payload
+        let form: ShareRequestForm = cloneDeep(this.permissionForm?.getRawValue());
         let CidrArr = [];
         let IpArr = [];
 
@@ -423,9 +427,12 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             form.duration = null;
         }
 
-        const permissionEntity = this.getPermissionEntity();
-        form.entity = permissionEntity.entity;
-        form.entityUniqueName = permissionEntity.entityUniqueName;
+        // Create uses org/input entity; update keeps the row's existing entity (company/branch/warehouse)
+        if (!this.isUpdtCase) {
+            const permissionEntity = this.getPermissionEntity();
+            form.entity = permissionEntity.entity;
+            form.entityUniqueName = permissionEntity.entityUniqueName;
+        }
 
         obj.action = (this.isUpdtCase) ? 'update' : 'create';
         this.dateRangePickerValue = [];
@@ -497,5 +504,33 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      */
     public handleTimeSpanChange(value: string): void {
         this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
+    }
+
+    /**
+     * Entity options for the company-mode entity dropdown
+     *
+     * @readonly
+     * @type {Array<{ label: string; value: string }>}
+     * @memberof SettingPermissionFormComponent
+     */
+    public get entityOptions(): Array<{ label: string; value: string }> {
+        return [
+            { label: this.commonLocaleData?.app_company, value: 'COMPANY' },
+            { label: this.commonLocaleData?.app_branch, value: 'BRANCH' },
+            { label: this.commonLocaleData?.app_warehouse, value: 'WAREHOUSE' }
+        ];
+    }
+
+    /**
+     * Localized label for permission entity type (company / branch / warehouse)
+     *
+     * @param {string} entity
+     * @returns {string}
+     * @memberof SettingPermissionFormComponent
+     */
+    public getEntityLabel(entity: string): string {
+        const key = entity?.toUpperCase();
+        const matched = this.entityOptions.find(option => option.value === key);
+        return matched?.label || entity;
     }
 }

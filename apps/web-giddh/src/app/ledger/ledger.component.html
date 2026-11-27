@@ -15,23 +15,6 @@
                         : ''
                 "
             ></hamburger-menu>
-            @if (
-                !isShowLedgerColumnarReportTable &&
-                showBranchSwitcher &&
-                currentCompanyBranches?.length > 2 &&
-                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-            ) {
-                <go-to-branch
-                    [title]="
-                        currentOrganizationType === 'COMPANY'
-                            ? commonLocaleData?.app_you_in_company_mode
-                            : commonLocaleData?.app_you_in_consolidate_mode
-                    "
-                    [message]="localeData?.go_to_branch_message"
-                    [buttonLabel]="commonLocaleData?.switch_to_branch"
-                    [cssClass]="'pt-3'"
-                ></go-to-branch>
-            }
             <section class="container-fluid ledger-section pt-3" [hidden]="isShowLedgerColumnarReportTable">
                 <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isTabletScreen && ledgerView == ledgerViewEnum.TView">
                     <ul class="nav nav-tabs pt-0">
@@ -1244,10 +1227,6 @@
                                                                     [blankLedger]="item"
                                                                     [currentTxn]="lc.currentBlankTxn"
                                                                     [needToReCalculate]="needToReCalculate"
-                                                                    [isReadOnly]="
-                                                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                                                        currentCompanyBranches?.length > 2
-                                                                    "
                                                                     [selectedCurrency]="selectedCurrency"
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     [baseCurrencyDetails]="baseCurrencyDetails"
@@ -1493,10 +1472,6 @@
                                                                     [needToReCalculate]="needToReCalculate"
                                                                     [baseCurrencyDetails]="baseCurrencyDetails"
                                                                     [foreignCurrencyDetails]="foreignCurrencyDetails"
-                                                                    [isReadOnly]="
-                                                                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                                                        currentCompanyBranches?.length > 2
-                                                                    "
                                                                     [selectedCurrency]="selectedCurrency"
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     (changeTransactionType)="toggleTransactionType($event)"
@@ -3082,7 +3057,6 @@
                     class="w-100 mat-form-field-clean"
                     [cssClass]="'bg-transparent pl-2 pr-2 ' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
                     (keydown.enter)="$event.preventDefault()"
-                    [disabled]="(currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && currentCompanyBranches?.length > 2"
                     [placeholder]="
                         isLedgerEntry
                             ? txn?.type === transactionType.Debit
@@ -3099,7 +3073,6 @@
                     [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleScrollEnd()"
-                    [readonly]="(currentOrganizationType === 'COMPANY' || isConsolidatedBranch) && currentCompanyBranches?.length > 2"
                     (selectedOption)="
                         isTotalChanged = false;
                         addBrowserConfirmation();

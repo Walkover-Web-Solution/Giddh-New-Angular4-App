@@ -106,8 +106,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** True if account has unsaved changes */
     public hasUnsavedChanges = signal<boolean>(false);
     public commandkDialogRef: MatDialogRef<any>;
-    /** Holds true if company has no branch */
+    /** Holds true if company has no branch (companies-list branchCount === 1) */
     public isCompanyWithoutBranch = signal<boolean>(false);
+    /** True when companies-list branchCount > 1 (true company structure, not accessible-branches length) */
+    public hasMultipleBranches = signal<boolean>(false);
     /** True if consolidated branch */
     public isConsolidatedBranch = signal<boolean>(false);
     /** Holds generic aside menu account dialog Ref */
@@ -234,6 +236,20 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Sets company/branch UI mode from companies-list branchCount (not accessible branches length).
+     *
+     * @private
+     * @param {{ uniqueName?: string; branchCount?: number }} company
+     * @memberof PrimarySidebarComponent
+     */
+    private updateCompanyBranchModeSignals(company: { uniqueName?: string; branchCount?: number }): void {
+        const fromList = this.companyList()?.find(item => item?.uniqueName === company?.uniqueName);
+        const branchCount = fromList?.branchCount ?? company?.branchCount ?? 1;
+        this.isCompanyWithoutBranch.set(branchCount === 1);
+        this.hasMultipleBranches.set(branchCount > 1);
+    }
+
+    /**
      * Initializes the component
      *
      * @memberof PrimarySidebarComponent
@@ -261,6 +277,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.selectedCompanyDetails.set(selectedCmp);
                 this.companyInitials.set(this.generalService.getInitialsFromString(selectedCmp.name));
+                this.updateCompanyBranchModeSignals(selectedCmp);
 
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -286,7 +303,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
-                this.isCompanyWithoutBranch.set(response?.length === 1);
                 this.currentCompanyBranches.set(response);
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch.set(response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {});
@@ -308,6 +324,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
             let orderedCompanies = orderBy(companies, 'name');
             this.companyList.set(orderedCompanies);
+            const activeCompany = orderedCompanies.find(company => company?.uniqueName === this.generalService.companyUniqueName);
+            if (activeCompany) {
+                this.updateCompanyBranchModeSignals(activeCompany);
+            }
         });
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
@@ -606,12 +626,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }).then(() => {
                 // Now add the item
                 let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-                let branches = [];
-                this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
-                    branches = response || [];
-                });
                 this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                    this.currentOrganizationType() === OrganizationType.Company && branches?.length > 1).then((res) => {
+                    this.currentOrganizationType() === OrganizationType.Company && this.hasMultipleBranches()).then((res) => {
                         this.findListFromDb(res);
                     }, (err: any) => {
 
@@ -641,7 +657,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     private getVisibleMenuItems(): void {
         this.allItems.set(this.generalService.getVisibleMenuItems("sidebar", this.apiMenuItems, this.localeData()?.items));
         const flattenedItems: AllItems[] = [];
-        this.allItems()?.filter(item => !item.hide)?.forEach((menu, index) => {
+        this.allItems()?.filter(item => !item.hide
+        )?.forEach((menu, index) => {
             menu['expandable'] = menu?.items?.length > 0;
             menu['level'] = 0;
             menu['isExpanded'] = false;
