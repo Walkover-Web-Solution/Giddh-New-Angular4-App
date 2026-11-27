@@ -137,12 +137,16 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     }
 
     public async unShareAccount(entryUniqueName: string, accountUniqueName: string) {
+        let activeAct = await this.activeAccount$.pipe(first()).toPromise();
+        accountUniqueName = activeAct?.uniqueName;
         this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', accountUniqueName));
     }
 
-    public updatePermission(model: ShareRequestForm, event: any) {
+    public async updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
         let newPermission = event.value;
+        let activeAct = await this.activeAccount$.pipe(first()).toPromise();
+        data.entityUniqueName = activeAct?.uniqueName;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));
     }

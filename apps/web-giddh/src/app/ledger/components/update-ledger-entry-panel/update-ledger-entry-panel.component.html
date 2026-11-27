@@ -1860,7 +1860,9 @@
                                                         decimalDigitsDirective
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
                                                         [readonly]="true"
-                                                        [label]="`${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`"
+                                                        [label]="
+                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
+                                                        "
                                                     ></input-field>
                                                     <input-field
                                                         [readonly]="isEinvoiceGenerated"
@@ -1875,7 +1877,9 @@
                                                         (blur)="adjustedInvoiceAmountChange()"
                                                         *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
                                                         [(ngModel)]="item.adjustmentAmount.amountForAccount"
-                                                        [label]="`${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`"
+                                                        [label]="
+                                                            `${commonLocaleData?.app_amount} ${item.voucherType === 'sales' ? `(${commonLocaleData?.app_inclusive_tax})` : ''}`
+                                                        "
                                                     ></input-field>
                                                 </div>
                                             </div>

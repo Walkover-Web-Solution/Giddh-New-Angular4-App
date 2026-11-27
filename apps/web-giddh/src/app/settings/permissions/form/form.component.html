@@ -37,6 +37,18 @@
                     [showError]="isFormInvalid && permissionForm?.get('roleUniqueName').invalid"
                 ></reactive-dropdown-field>
             </div>
+            @if (isCompanyMode && isUpdtCase && userdata?.entity) {
+                <div class="permission-entity-field">
+                    <reactive-dropdown-field
+                        [label]="isLblShow ? commonLocaleData?.app_entity : ''"
+                        [options]="entityOptions"
+                        [labelValue]="getEntityLabel(userdata.entity)"
+                        formControlName="entity"
+                        [disabled]="true"
+                        [readonly]="true"
+                    ></reactive-dropdown-field>
+                </div>
+            }
             <!-- time span -->
             <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true" (clickOutside)="methodForToggleSection('timeSpanSection')">
                 <button
@@ -227,17 +239,17 @@
                     </mat-menu>
                 </div>
             </div>
-            <div class="action-button" [ngClass]="{ 'text-xl-right': isUpdtCase }">
+            <div class="flex-lg-fill" [ngClass]="{ 'text-xl-right': isUpdtCase }">
                 <button matButton="filled" [ladda]="createPermissionInProcess$ | async" [disabled]="isUserRestricted" class="mr-2">
                     <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                     <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
                 </button>
-                <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" matButton="outlined" type="button">
+                <button *ngIf="isUpdtCase || isOpenedInModal" (click)="closeDialog.emit(false)" matButton="outlined" type="button">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </div>
-        <div class="ml-auto" *ngIf="isSuperAdminCompany">
+        <div class="ml-auto" *ngIf="isSuperAdminCompany && !isOpenedInModal">
             <button
                 matButton="filled"
                 type="button"

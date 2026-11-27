@@ -1721,3 +1721,70 @@
     min-width: $width;
     max-width: $width;
 }
+
+/**
+ * Places an item on a grid column
+ *
+ * @param {Number|String} $column - Column line (1-based) or keyword such as auto
+ */
+@mixin grid-column($column) {
+    grid-column: #{$column} !important;
+}
+
+/**
+ * Places an item on a grid row
+ *
+ * @param {Number|String} $row - Row line (1-based) or keyword such as auto
+ */
+@mixin grid-row($row) {
+    grid-row: #{$row} !important;
+}
+
+/**
+ * Sets grid-template-columns
+ *
+ * @param {String} $columns - Template value, for example 1fr or repeat(2, 1fr)
+ */
+@mixin grid-template-columns($columns) {
+    grid-template-columns: #{$columns} !important;
+}
+
+/**
+ * Grid placement utilities
+ * Creates .grid-col-1..4, .grid-row-1..4, .grid-row-auto, .grid-cols-1, .grid-cols-fixed-fluid
+ * Below small-desktop, .grid-stack-small-desktop stacks children into one column
+ */
+@mixin grid-placement-utilities() {
+    @for $index from 1 through 4 {
+        .grid-col-#{$index} {
+            @include grid-column($index);
+        }
+
+        .grid-row-#{$index} {
+            @include grid-row($index);
+        }
+    }
+
+    .grid-row-auto {
+        @include grid-row(auto);
+    }
+
+    .grid-cols-1 {
+        @include grid-template-columns(1fr);
+    }
+
+    .grid-cols-fixed-fluid {
+        @include grid-template-columns(minmax(280px, 380px) minmax(0, 1fr));
+    }
+
+    @include media-breakpoint-down('small-desktop') {
+        .grid-stack-small-desktop {
+            @include grid-template-columns(1fr);
+
+            > * {
+                @include grid-column(1);
+                @include grid-row(auto);
+            }
+        }
+    }
+}

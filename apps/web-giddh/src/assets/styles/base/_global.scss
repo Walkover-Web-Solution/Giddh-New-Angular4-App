@@ -5163,7 +5163,8 @@ body {
     }
 
     &.hide-chat-widget {
-        chat-widget {
+        #hello-chatbot-launcher-icon,
+        .fake-chatbot {
             display: none !important;
         }
     }
@@ -5970,6 +5971,11 @@ hamburger-menu {
 .mat-dialog-lg {
     width: 1024px !important;
     max-width: 80vw !important;
+}
+
+.mat-dialog-xl {
+    width: 1250px !important;
+    max-width: 90vw !important;
 }
 
 .custom-cdk-overlay-wrapper {
@@ -10040,7 +10046,8 @@ body {
     }
 
     &.hide-chat-widget {
-        chat-widget {
+        #hello-chatbot-launcher-icon,
+        .fake-chatbot {
             display: none !important;
         }
     }
@@ -10065,14 +10072,20 @@ body {
     }
 }
 
+/* Chat launchers sit below Material/CDK dialog overlays (base z-index 1000). */
+#hello-chatbot-launcher-icon,
+.fake-chatbot {
+    z-index: 900 !important;
+}
+
+/* Fake chatbot for non-production environment Just to check design issue like it overlay other elements */
 .fake-chatbot {
     position: fixed;
     bottom: 18px !important;
     right: 18px !important;
-    width: 58px;
-    height: 58px;
-    z-index: 9999;
-    background: #ffa01b;
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
     border-radius: 50%;
 }
 

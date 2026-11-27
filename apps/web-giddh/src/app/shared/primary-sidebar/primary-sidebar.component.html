@@ -8,14 +8,14 @@
     <div class="primary-sidebar py-3 position-relative" (clickOutside)="hidePrimarySidebarCompanyList()">
         <div
             class="company-branch-block pl-4 pr-4 position-relative"
-            [ngClass]="{ 'padding-14': !currentBranch() && (currentCompanyBranches$ | async)?.length > 1 }"
+            [ngClass]="{ 'padding-14': !currentBranch() && hasMultipleBranches() }"
         >
             <ul
                 class="list-style-none branch-connection dropdown-toggle"
                 id="button-company-branch"
                 (click)="openCompanyBranchDropdown(); isGoToBranch = false"
             >
-                <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
+                <span class="outer-span" *ngIf="hasMultipleBranches()">
                     <span class="inner-span"></span>
                 </span>
                 <li class="company-name position-relative">
@@ -27,13 +27,10 @@
                                     <span class="company-ellipsis" [matTooltip]="selectedCompanyDetails()?.name" matTooltipPosition="above">
                                         {{ selectedCompanyDetails()?.name }}
                                     </span>
-                                    <span class="branch-ellipsis" *ngIf="currentBranch() && (currentCompanyBranches$ | async)?.length > 1">
+                                    <span class="branch-ellipsis" *ngIf="currentBranch() && hasMultipleBranches()">
                                         <span>{{ currentBranch()?.name }}</span>
                                     </span>
-                                    <i
-                                        class="icon-branch-connect"
-                                        *ngIf="currentBranch() && (currentCompanyBranches$ | async)?.length > 1"
-                                    ></i>
+                                    <i class="icon-branch-connect" *ngIf="currentBranch() && hasMultipleBranches()"></i>
                                 </span>
                                 <button matIconButton class="ml-1 toggle-btn text-color-inherit">
                                     <i
@@ -274,9 +271,7 @@
                                             <span
                                                 class="ml-auto create-new"
                                                 *ngIf="canShowCreateNew(node)"
-                                                (click)="
-                                                    $event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)
-                                                "
+                                                (click)="$event.stopPropagation(); navigateToCreateNew(node?.additional?.createNew?.link)"
                                             >
                                                 {{ node?.additional?.createNew?.label }}
                                             </span>

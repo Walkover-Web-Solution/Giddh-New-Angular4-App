@@ -11,8 +11,6 @@ export const LOGIN_API = {
     CLEAR_SESSION: 'users/:userUniqueName/destroy-session',
     SET_SETTINGS: 'users/:userUniqueName/settings',
     FETCH_DETAILS: 'users/:sessionId',
-    GET_AUTH_KEY: 'users/:uniqueName/get-auth-key',
-    REGENERATE_AUTH_KEY: 'users/:userEmail/generate-auth-key',
     GET_SESSION: 'users/:userEmail/sessions',
     GET_USER_SUBSCRIPTION_PLAN_API: 'subscriptions/all?countryCode=:countryCode',
     DELETE_SESSION: 'users/:userEmail/destroy-session',
@@ -22,7 +20,8 @@ export const LOGIN_API = {
     RENEW_SESSION: 'users/:userUniqueName/increment-session', // PUT
     GET_USER_DETAILS_FROM_SESSION_ID: 'v2/user',
     LOGIN_WITH_OTP: 'v2/auth-login',
-    LOGIN_WITH_APPLE: 'v2/signup-with-apple'
+    LOGIN_WITH_APPLE: 'v2/signup-with-apple',
+    UPDATE_CONTACT: 'users/:userUniqueName/contact'
 };
 
 export const GMAIL_API = {

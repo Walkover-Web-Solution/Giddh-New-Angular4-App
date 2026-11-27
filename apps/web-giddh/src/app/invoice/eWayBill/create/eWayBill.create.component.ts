@@ -98,7 +98,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
-        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : '';
+        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.account?.billingDetails?.gstNumber : '';
         this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
         this.generateEwayBillform.transactionType = '1'; // transactionType is default 1 for Regular
     }
@@ -127,16 +127,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
         this.transporterFilterRequest.page = 1;
         this.transporterFilterRequest.count = PAGINATION_LIMIT;
-        this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.status === 'success') {
-                this.isUserlogedIn = true;
-                if (res.body && res.body?.gstIn) {
-                    this.invoiceBillingGstinNo = this.generateEwayBillform.toGstIn = res.body.gstIn;
-                }
-            } else {
-                this.isUserlogedIn = false;
-            }
-        });
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.selectedInvoices = this._invoiceService.getSelectedInvoicesList;
 
@@ -152,12 +142,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
         this.invoiceNumber = this.selectedInvoices?.length ? this.selectedInvoices[0]?.voucherNumber : '';
-        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
-        if (this.invoiceBillingGstinNo) {
-            this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
-        } else {
-            this.generateEwayBillform.toGstIn = 'URP';
-        }
+        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.account?.billingDetails?.gstNumber : null;
+        this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
         if (this.selectedInvoices?.length === 0) {
             this.redirectToSalesInvoice();
         }
@@ -168,30 +154,31 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    // generate Eway
-    public onSubmitEwaybill(generateBillform: NgForm) {
+    /**
+     * Checks e-Way Bill credentials on save, then generates bill or opens credentials modal
+     *
+     * @param {NgForm} generateBillform Generate e-Way Bill form
+     * @memberof EWayBillCreateComponent
+     */
+    public onSubmitEwaybill(generateBillform: NgForm): void {
         this._invoiceService.IsUserLoginEwayBill().pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.status === 'success') {
-                this.isUserlogedIn = true;
-            } else {
-                this.isUserlogedIn = false;
-            }
-        });
-        if (this.isUserlogedIn) {
-            this.generateBill = generateBillform?.value;
-            this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
-            this.generateBill['invoiceNumber'] = this.invoiceNumber;
-            this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
-            this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
-            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
+            this.isUserlogedIn = res?.status === 'success' && !!res.body;
+            if (this.isUserlogedIn) {
+                this.generateBill = generateBillform?.value;
+                this.generateBill['supplyType'] = 'O'; // O is for Outward in case of invoice
+                this.generateBill['invoiceNumber'] = this.invoiceNumber;
+                this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
+                this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format(GIDDH_DATE_FORMAT_DD_MM_YYYY) : null;
+                this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
 
-            if (generateBillform.valid) {
-                this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
+                if (generateBillform.valid) {
+                    this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
+                }
+            } else {
+                this.toggleEwayBillCredentialsPopup();
             }
-        } else {
-            this.toggleEwayBillCredentialsPopup();
-        }
-        this.detectChanges();
+            this.detectChanges();
+        });
     }
 
     public onCancelGenerateBill() {

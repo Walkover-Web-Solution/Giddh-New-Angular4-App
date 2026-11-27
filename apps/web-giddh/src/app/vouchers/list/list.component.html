@@ -4861,6 +4861,74 @@
                                         </ng-container>
                                     </mat-tab>
                                     <!-- invoice-content-end -->
+                                    <!-- delivery-challan-content-start -->
+                                    <mat-tab *ngIf="activeTabGroup === 0 && settingResponse?.deliveryChallanSettings">
+                                        <ng-template mat-tab-label>
+                                            <i class="icon-share"></i>
+                                            {{ commonLocaleData?.app_delivery_challan }}
+                                        </ng-template>
+                                        <ng-container formGroupName="deliveryChallanSettings">
+                                            <div class="tabs-box-content py-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
+                                                    {{ commonLocaleData?.app_delivery_challan }}
+                                                </p>
+                                                <mat-slide-toggle
+                                                    aria-label="delivery challan auto mail"
+                                                    name="deliveryChallanAutoMail"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    formControlName="autoMail"
+                                                >
+                                                    {{ localeData?.auto_mail_update }}
+                                                </mat-slide-toggle>
+                                                @if (generalService.isGiddhDomain()) {
+                                                    <mat-slide-toggle
+                                                        aria-label="delivery challan auto whatsapp"
+                                                        name="deliveryChallanAutoWhatsApp"
+                                                        class="disable-toggle slide-toggle d-block mb-3"
+                                                        color="primary"
+                                                        formControlName="autoWhatsApp"
+                                                    >
+                                                        {{ getWhatsappSettingLabel('delivery challan') }}
+                                                    </mat-slide-toggle>
+                                                }
+                                                <div class="mb-3 d-flex align-items-center column-gap-15">
+                                                    <mat-slide-toggle
+                                                        name="useCustomDeliveryChallanNumber"
+                                                        aria-label="custom delivery challan number"
+                                                        class="disable-toggle slide-toggle d-block"
+                                                        color="primary"
+                                                        formControlName="useCustomDeliveryChallanNumber"
+                                                    >
+                                                        {{ localeData?.custom_delivery_challan_no }}
+                                                    </mat-slide-toggle>
+                                                    @if (settingForm.get('deliveryChallanSettings.useCustomDeliveryChallanNumber')?.value) {
+                                                        <input-field
+                                                            [name]="'branchDeliveryChallanNumberPrefix'"
+                                                            [label]="localeData?.branch_prefix"
+                                                            formControlName="branchDeliveryChallanNumberPrefix"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'deliveryChallanNumberPrefix'"
+                                                            [label]="localeData?.challan_prefix"
+                                                            formControlName="deliveryChallanNumberPrefix"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                        <input-field
+                                                            [name]="'initialDeliveryChallanNumber'"
+                                                            [label]="localeData?.initial_no"
+                                                            formControlName="initialDeliveryChallanNumber"
+                                                            [placeholder]="'00'"
+                                                            [type]="'text'"
+                                                        ></input-field>
+                                                    }
+                                                </div>
+                                                <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </mat-tab>
+                                    <!-- delivery-challan-content-end -->
                                     <!-- receipt-content-start -->
                                     <mat-tab *ngIf="activeTabGroup === 3">
                                         <ng-template mat-tab-label>
@@ -5428,6 +5496,74 @@
                                     </div>
                                 </mat-tab>
                                 <!-- purchase-bill-content-end -->
+                                <!-- receipt-note-content-start -->
+                                <mat-tab *ngIf="activeTabGroup === 2 && settingResponse?.receiptNoteSettings">
+                                    <ng-template mat-tab-label>
+                                        <i class="icon-download1"></i>
+                                        {{ commonLocaleData?.app_receipt_note }}
+                                    </ng-template>
+                                    <ng-container formGroupName="receiptNoteSettings">
+                                        <div class="tabs-box-content py-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
+                                                {{ commonLocaleData?.app_receipt_note }}
+                                            </p>
+                                            <mat-slide-toggle
+                                                aria-label="receipt note auto mail"
+                                                name="receiptNoteAutoMail"
+                                                class="disable-toggle slide-toggle d-block mb-3"
+                                                color="primary"
+                                                formControlName="autoMail"
+                                            >
+                                                {{ localeData?.auto_mail_update }}
+                                            </mat-slide-toggle>
+                                            @if (generalService.isGiddhDomain()) {
+                                                <mat-slide-toggle
+                                                    aria-label="receipt note auto whatsapp"
+                                                    name="receiptNoteAutoWhatsApp"
+                                                    class="disable-toggle slide-toggle d-block mb-3"
+                                                    color="primary"
+                                                    formControlName="autoWhatsApp"
+                                                >
+                                                    {{ getWhatsappSettingLabel('receipt note') }}
+                                                </mat-slide-toggle>
+                                            }
+                                            <div class="mb-3 d-flex align-items-center column-gap-15">
+                                                <mat-slide-toggle
+                                                    name="useCustomReceiptNoteNumber"
+                                                    aria-label="custom receipt note number"
+                                                    class="disable-toggle slide-toggle d-block"
+                                                    color="primary"
+                                                    formControlName="useCustomReceiptNoteNumber"
+                                                >
+                                                    {{ localeData?.custom_receipt_note_no }}
+                                                </mat-slide-toggle>
+                                                @if (settingForm.get('receiptNoteSettings.useCustomReceiptNoteNumber')?.value) {
+                                                    <input-field
+                                                        [name]="'branchReceiptNoteNumberPrefix'"
+                                                        [label]="localeData?.branch_prefix"
+                                                        formControlName="branchReceiptNoteNumberPrefix"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                    <input-field
+                                                        [name]="'receiptNoteNumberPrefix'"
+                                                        [label]="localeData?.receipt_note_prefix"
+                                                        formControlName="receiptNoteNumberPrefix"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                    <input-field
+                                                        [name]="'initialReceiptNoteNumber'"
+                                                        [label]="localeData?.initial_no"
+                                                        formControlName="initialReceiptNoteNumber"
+                                                        [placeholder]="'00'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                }
+                                            </div>
+                                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                                        </div>
+                                    </ng-container>
+                                </mat-tab>
+                                <!-- receipt-note-content-end -->
                                 <!-- payment-content-start -->
                                 <mat-tab *ngIf="activeTabGroup === 4">
                                     <ng-template mat-tab-label>
@@ -5578,7 +5714,6 @@
                                         *ngIf="!template.isDefault"
                                         class="default-wrap font-size-12 p-2 cursor-pointer"
                                         (click)="
-                                            template.isDefault = true;
                                             setTemplateAsDefault(
                                                 template.uniqueName,
                                                 template.type === voucherTypeEnum.invoice
