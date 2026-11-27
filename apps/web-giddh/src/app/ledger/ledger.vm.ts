@@ -443,6 +443,7 @@ export class BlankLedgerVM {
     public generateEInvoice?: boolean;
     public salesPersonUniqueName?: string;
     public salesPersonName?: string;
+    public branchUniqueName?: string;
 }
 
 export class IInvoiceLinkingRequest {

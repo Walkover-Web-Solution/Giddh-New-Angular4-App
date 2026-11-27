@@ -53,6 +53,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public showGstMenus: boolean = false;
     /** True if we need to show Tax menus */
     public showTaxMenus: boolean = false;
+    /** TEMPORARY (testing): IMS menu only for companies created by an INTERNAL_EMAILS_DOMAINS email; remove when IMS goes live */
+    public showImsMenu: boolean = false;
     /** True if we need to show Sales Tax menus */
     public showSalesTaxMenus: boolean = false;
     /** Holds Tax Type Translated Label for sidebar menu */
@@ -123,6 +125,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
                 this.isKenyaCompany = activeCompany?.country === "Kenya";
                 this.isUSCompany = activeCompany.countryV2?.alpha2CountryCode === "US";
+                // TEMPORARY (testing): IMS menu only for INTERNAL_EMAILS_DOMAINS company creators
+                this.showImsMenu = this.generalService.isInternalEmailDomain();
 
                 this.showGstMenus = false;
                 this.showTaxMenus = false;

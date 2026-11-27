@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, takeUntil } from "rxjs";
@@ -220,6 +220,18 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     private skipNextSearchEmit: string | null = null;
     /** True when get-all is triggered from user search input */
     private isUserSearchRequest: boolean = false;
+     /** Handles Ctrl + P / Cmd + P keyboard shortcut to print the current invoice */
+    @HostListener('window:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent): void {
+        if (
+            (event.metaKey || event.ctrlKey) &&
+            event.key.toLowerCase() === 'p'
+        ) {
+            event.preventDefault();
+            event.stopPropagation();
+            this.printInvoice();
+        }
+    }
 
     constructor(
         private router: Router,
@@ -1883,30 +1895,33 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public printInvoice(): void {
-        if (this.isVoucherDownloading || this.isVoucherDownloadError) {
-            return;
-        }
-        if (this.pdfContainer) {
-            const window = this.pdfContainer?.nativeElement?.contentWindow;
-            if (window) {
+    if (this.isVoucherDownloading || this.isVoucherDownloadError) {
+        return;
+    }
+    if (this.pdfContainer) {
+        const iframeWindow = this.pdfContainer?.nativeElement?.contentWindow;
+        if (iframeWindow) {
+            setTimeout(() => {
+                iframeWindow.print();
                 window.focus();
-                setTimeout(() => {
-                    window.print();
-                }, 200);
-            }
-        } else if (this.attachedDocumentPreview) {
-            const windowWidth = window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth
-                || 0;
-            const left = (windowWidth / 2) - 450;
-            const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+            }, 200);
+        }
+    } else if (this.attachedDocumentPreview) {
+        const windowWidth = window.innerWidth 
+             || document.documentElement.clientWidth 
+             || document.body.clientWidth 
+             || 0;
+        const left = (windowWidth / 2) - 450;
+        const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+        if (printWindow) {
             printWindow.document.write((this.attachedDocumentPreview?.nativeElement as HTMLElement).innerHTML);
             printWindow.document?.close();
             printWindow?.focus();
             printWindow?.print();
+            printWindow?.close();
         }
     }
+}
 
     /**
      * This will use for thermal print

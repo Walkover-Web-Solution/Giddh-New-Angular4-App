@@ -1,0 +1,49 @@
+:host {
+    display: block;
+}
+
+.job-work-action-dialog {
+    .job-work-action-table {
+        border-collapse: collapse;
+        table-layout: fixed;
+
+        th,
+        td {
+            padding: 10px 12px;
+            vertical-align: middle;
+            word-break: break-word;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        th {
+            font-weight: 700;
+            background: var(--color-transparent);
+            color: var(--color-dark-gray);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .col-select {
+            width: 48px;
+        }
+
+        .col-input {
+            width: 180px;
+        }
+
+        input-field {
+            display: block;
+            width: 100%;
+        }
+
+        ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+            display: none;
+        }
+
+        ::ng-deep .mat-mdc-form-field-infix {
+            min-width: 0;
+        }
+    }
+}
