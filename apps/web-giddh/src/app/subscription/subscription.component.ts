@@ -98,6 +98,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public isEditingMobile: boolean = false;
     /** MSG91 mobile resend channels (VOICE / SMS / WHATSAPP), excludes email channel 3 */
     public otpResendChannels: Msg91OtpChannel[] = [];
+    /** Login region of the current session; picks the session cookie name when the session is replaced */
+    private loggedInRegion: string = '';
 
 
     constructor(private store: Store<AppState>,
@@ -177,6 +179,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (user) {
                 this.user = cloneDeep(user.user);
                 this.userSessionId = cloneDeep(user.session?.id);
+                this.loggedInRegion = user.loggedInRegion ?? '';
                 this.patchContactFieldsFromUser();
             }
         });
@@ -304,22 +307,26 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Enables email editing
+     * Enables email editing. Also used after an OTP is sent or verified to edit the
+     * email again, which discards that OTP and its verification.
      *
      * @memberof SubscriptionComponent
      */
     public enableEmailEdit(): void {
         this.isEditingEmail = true;
+        this.resetEmailOtpState();
         this.changeDetectionRef.detectChanges();
     }
 
     /**
-     * Enables mobile editing
+     * Enables mobile editing. Also used after an OTP is sent or verified to edit the
+     * number again, which discards that OTP and its verification.
      *
      * @memberof SubscriptionComponent
      */
     public enableMobileEdit(): void {
         this.isEditingMobile = true;
+        this.resetMobileOtpState();
         this.mobileControl.enable({ emitEvent: false });
         this.changeDetectionRef.detectChanges();
     }
@@ -419,6 +426,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.mobileSendOtpInProgress = false;
                 this.mobileOtpRequestId = response.requestId;
                 this.showMobileOtp = true;
+                // Lock the number the OTP was sent to; "Change Mobile" unlocks it
+                this.mobileControl.disable({ emitEvent: false });
                 this.refreshOtpResendChannels();
                 this.toasty.successToast(this.localeData?.mobile_number?.otp_sent);
                 this.changeDetectionRef.detectChanges();
@@ -635,6 +644,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     this.isEditingEmail = false;
                     this.isEditingMobile = false;
                     this.mobileControl.disable({ emitEvent: false });
+                    // Contact change issues a new session: store it so later calls send the new Session-Id
+                    this.store.dispatch(this.loginAction.UpdateUserContactSuccess(body, this.loggedInRegion));
+                    if (body.session?.id) {
+                        // Session tab: refresh so "current" points at the new session
+                        this.store.dispatch(this.sessionAction.getAllSession());
+                    }
                 }
                 this.store.dispatch(this.loginAction.FetchUserDetails());
             } else {
@@ -643,6 +658,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
             this.changeDetectionRef.detectChanges();
         });
+    }
+
+    /**
+     * Discards unsaved email/mobile edits and OTP state, and returns both fields to read-only
+     *
+     * @memberof SubscriptionComponent
+     */
+    public cancelContactChanges(): void {
+        this.patchContactFieldsFromUser(true);
     }
 
     /**
@@ -659,6 +683,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
         if (payload.mobile) {
             this.resetMobileOtpState();
+            this.mobileControl.enable({ emitEvent: false });
         }
     }
 

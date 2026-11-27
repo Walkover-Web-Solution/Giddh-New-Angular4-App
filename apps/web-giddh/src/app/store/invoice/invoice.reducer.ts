@@ -294,6 +294,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 newState.settings.proformaSettings = form.proformaSettings;
                 newState.settings.purchaseBillSettings = form.purchaseBillSettings;
                 newState.settings.companyInventorySettings = form.companyInventorySettings;
+                // Without these, Cancel after a save re-reads the store and restores the pre-save values
+                newState.settings.deliveryChallanSettings = form.deliveryChallanSettings;
+                newState.settings.receiptNoteSettings = form.receiptNoteSettings;
                 const broadcast = new BroadcastChannel("tabs");
                 broadcast.postMessage({ autoGenerateVoucherFromEntry: form.invoiceSettings.autoGenerateVoucherFromEntry });
                 const broadcastSettings = new BroadcastChannel("settings");
