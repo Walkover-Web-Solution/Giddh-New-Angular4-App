@@ -13,6 +13,7 @@ Kept by the middleware (version 046fbf2131b2). Read these before changing anythi
 | --- | --- |
 | Change a user journey | [Flows](docs/FLOWS.md), [contracts](docs/CONTRACTS.md) |
 | Change a screen or shared control | [Design](docs/DESIGN.md), existing [Angular/CSS rules](.cursor/rules/angular-giddh-coding-rules.mdc) |
+| Run the web app locally on port 3000 (no env or cookies needed) | [Run locally](docs/RUN_LOCALLY.md) |
 | Run, test, or prepare a release | [Development](docs/DEVELOPMENT.md), [verification](docs/VERIFICATION.md), [review findings](docs/REVIEW.md) |
 | Propose a UI experiment | [Experiments](docs/EXPERIMENTS.md) |
 | Understand a tradeoff or missing fact | [Decisions](docs/DECISIONS.md), [open questions](docs/OPEN_QUESTIONS.md) |
