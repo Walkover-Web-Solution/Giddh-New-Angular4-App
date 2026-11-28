@@ -33,7 +33,7 @@ Local defaults contact the test primary API but **the UK API default is producti
 npm start
 ```
 
-The web serve target in [angular.json](../angular.json) uses `http://localhost:3000`. Once compilation succeeds, compare login, company/branch selection, report filters, and the changed flow against the baseline. Exercise empty/error responses and allowed/denied permissions. For UI changes, follow [design verification](DESIGN.md). The local build and fixture login checks pass; see [verification](VERIFICATION.md) for remaining gaps.
+The web serve target in [angular.json](../angular.json) uses `http://localhost:3000`. Step-by-step agent runbook: [Run locally](RUN_LOCALLY.md). Once compilation succeeds, compare login, company/branch selection, report filters, and the changed flow against the baseline. Exercise empty/error responses and allowed/denied permissions. For UI changes, follow [design verification](DESIGN.md). The local build and fixture login checks pass; see [verification](VERIFICATION.md) for remaining gaps.
 
 ## Release and recovery
 
